@@ -1,0 +1,15 @@
+
+# comitium
+app/config/*
+app/logs/*
+
+# Mac
+.DS_Store
+
+# node/npm
+node_modules
+npm-debug.log
+.sass-cache
+
+# VS Code
+settings.json

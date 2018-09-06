@@ -1,0 +1,19 @@
+// Fonts
+@import url("https://use.typekit.net/nko2zib.css");
+
+// Global styles
+html {
+  height: 100%;
+  font-size: 10px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: 'Lato';
+  font-size: 1.6rem;
+  text-rendering: optimizeLegibility;
+}
+
+// Primary nav

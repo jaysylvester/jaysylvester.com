@@ -1,0 +1,113 @@
+// Baseline styles
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+	line-height: 1;
+  word-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+h1 { font-size: 140%; }
+h2 { font-size: 130%; }
+h3 { font-size: 105%; }
+h4, h5, h6 { font-size: 100%; }
+
+ul,
+ol {
+  margin: 1.2rem 0 1.8rem 3rem;
+  line-height: 1.5;
+}
+
+dl {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 1.2rem 1.8rem;
+  line-height: 1.5;
+}
+dt {
+  flex: 0 0 30%;
+
+  &::after {
+    content: ':';
+  }
+}
+dd {
+  flex: 0 0 70%;
+  word-break: break-word;
+}
+
+nav {
+	ul {
+		margin: 0;
+		list-style: none;
+	}
+}
+
+p {
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+img {
+  display: block;
+  -ms-interpolation-mode: bicubic;
+}
+
+q::before,
+q::after {
+  content: '';
+}
+
+input,
+select,
+textarea {
+  appearance: none;
+  border: none;
+  border-radius: 0;
+}
+
+input:not([type="checkbox"]),
+input:not([type="radio"]) {
+  line-height: 1;
+}
+
+b,
+strong {
+  font-weight: 600;
+  font-style: normal;
+
+  i,
+  em {
+    font-weight: 600;
+    font-style: italic;
+  }
+}
+
+i,
+em {
+  font-weight: 400;
+  font-style: italic;
+
+  b,
+  strong {
+    font-weight: 600;
+    font-style: italic;
+  }
+}
