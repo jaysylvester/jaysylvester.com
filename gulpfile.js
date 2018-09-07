@@ -1,11 +1,12 @@
 'use strict'
 
 var autoprefixer  = require('autoprefixer'),
-    gulp          = require('gulp'),
     concat        = require('gulp-concat'),
     cssnano       = require('gulp-cssnano'),
-    postcss       = require('gulp-postcss'),
+    filter        = require('gulp-filter'),
+    gulp          = require('gulp'),
     livereload    = require('gulp-livereload'),
+    postcss       = require('gulp-postcss'),
     sass          = require('gulp-sass'),
     sourcemaps    = require('gulp-sourcemaps'),
     uglify        = require('gulp-uglify')
@@ -19,6 +20,7 @@ gulp.task('css', function () {
              .pipe(concat('site.css'))
              .pipe(sourcemaps.write('../min'))
              .pipe(gulp.dest('web/min/'))
+             .pipe(filter('**/*.css'))
              .pipe(livereload())
 })
 
