@@ -13,8 +13,8 @@
   },
   "main": "index",
   "scripts": {
-    "start-dev": "node ./app/start-dev.js",
-    "start-prod": "node ./app/start-prod.js"
+    "start-local": "node ./app/start-local.js",
+    "start": "node ./app/start.js"
   },
   "dependencies": {
     "citizen": "~0.8.6",

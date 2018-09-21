@@ -12,7 +12,7 @@ var autoprefixer  = require('autoprefixer'),
     uglify        = require('gulp-uglify')
 
 gulp.task('css', function () {
-  return gulp.src(['web/source/scss/baseline.scss', 'web/source/scss/**/**.scss'])
+  return gulp.src(['web/source/scss/baseline.scss', 'web/source/scss/global.scss', 'web/source/scss/**/**.scss'])
              .pipe(sourcemaps.init())
              .pipe(sass().on('error', sass.logError))
              .pipe(postcss([autoprefixer({ browsers: 'last 2 versions' })]))
