@@ -1,18 +1,23 @@
-<article class="case-study">
-  <h1>Case Study / <span class="client">{{client}}</span></h1>
-  <img src="/images/case-studies/{{client_url}}/callout.jpg" alt="{{client}} samples on various devices (phones, tablets, computers, etc.)">
-  <h2>{{attributes}}</h2>
-  <p class="summary">
-    {{summary}}
-  </p>
-  <nav class="actions">
-    <ul>
-      <li>
-        <a href="/case-study/client/{{client_url}}" title="Read the full {{client}} case study.">Read the case study</a>
-      </li>
-      <li>
-        <a href="/case-studies">See more case studies</a>
-      </li>
-    </ul>
-  </nav>
-</article>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Sylvester — UX Case Study: {{client_name}}</title>
+    <meta name="description" content="{{meta_description}}">
+    <meta name="keywords" content="{{meta_keywords}}">
+    <link rel="stylesheet" type="text/css" href="/min/site.css">
+  </head>
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+    {{{include.header}}}
+    <main>
+      <img class="logo" src="/images/case-studies/{{client_name}}/{{client_name}}-logo.png" alt="{{client_name}} logo">
+      <h1><span>Case Study:</span> {{title}}</h1>
+      {{{attributes}}}
+      <p class="tagline">{{tagline}}</p>
+      <p class="summary">{{summary}}</p>
+      <img class="devices" src="/images/case-studies/{{client_name}}/{{client_name}}-devices.jpg" alt="{{client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      {{{content}}}
+    </main>
+  </body>
+</html>

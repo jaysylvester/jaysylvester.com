@@ -1,4 +1,4 @@
-// _case-study-summary model
+// _case-study model
 
 'use strict'
 

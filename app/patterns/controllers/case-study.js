@@ -1,4 +1,4 @@
-// _case-study-summary controller
+// _case-study controller
 
 'use strict'
 
@@ -16,7 +16,12 @@ function handler(params, context, emitter) {
   }, function (output) {
     if ( output.caseStudy ) {
       emitter.emit('ready', {
-        content: output.caseStudy
+        content: output.caseStudy,
+        include: {
+          header: {
+            controller: '_header'
+          }
+        }
       })
     } else {
       emitter.emit('error', {
