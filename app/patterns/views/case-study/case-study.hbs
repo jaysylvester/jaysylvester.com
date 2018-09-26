@@ -3,21 +3,32 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — UX Case Study: {{client_name}}</title>
-    <meta name="description" content="{{meta_description}}">
-    <meta name="keywords" content="{{meta_keywords}}">
+    <title>Jay Sylvester — UX Case Study: {{case.client_name}}</title>
+    <meta name="description" content="{{case.meta_description}}">
+    <meta name="keywords" content="{{case.meta_keywords}}">
     <link rel="stylesheet" type="text/css" href="/min/site.css">
   </head>
   <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
     {{{include.header}}}
     <main>
-      <img class="logo" src="/images/case-studies/{{client_name}}/{{client_name}}-logo.png" alt="{{client_name}} logo">
-      <h1><span>Case Study:</span> {{title}}</h1>
-      {{{attributes}}}
-      <p class="tagline">{{tagline}}</p>
-      <p class="summary">{{summary}}</p>
-      <img class="devices" src="/images/case-studies/{{client_name}}/{{client_name}}-devices.jpg" alt="{{client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-      {{{content}}}
+      <img class="logo" src="/images/case-studies/{{case.client_name}}/{{case.client_name}}-logo.png" alt="{{case.client_name}} logo">
+      <h1><span>Case Study:</span> {{case.title}}</h1>
+      <ul class="attributes">
+        <li class="domain">
+          {{{case.domain}}}
+        </li>
+        <li class="platform">
+          {{{case.platform}}}
+        </li>
+        <li class="expertise">
+          {{{case.expertise}}}
+        </li>
+      </ul>
+      <p class="tagline">{{case.tagline}}</p>
+      <p class="summary">{{case.summary}}</p>
+      <img class="devices" src="/images/case-studies/{{case.client_name}}/{{case.client_name}}-devices.jpg" alt="{{case.client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      {{{case.content}}}
     </main>
+    {{{include.footer}}}
   </body>
 </html>

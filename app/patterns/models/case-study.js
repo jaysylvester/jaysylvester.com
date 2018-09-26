@@ -24,7 +24,7 @@ function content(clientUrl, emitter) {
       } else {
         client.query({
           name: 'case_study',
-          text: 'select id, client_name, client_url, title, attributes, summary, content from case_studies where client_url = $1;',
+          text: 'select id, client_name, client_url, title, tagline, domain, platform, expertise, summary, content from case_studies where client_url = $1;',
           values: [ clientUrl ]
         },
           function (err, result) {

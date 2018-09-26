@@ -16,10 +16,15 @@ function handler(params, context, emitter) {
   }, function (output) {
     if ( output.caseStudy ) {
       emitter.emit('ready', {
-        content: output.caseStudy,
+        content: {
+          case: output.caseStudy
+        },
         include: {
           header: {
             controller: '_header'
+          },
+          footer: {
+            controller: '_footer'
           }
         }
       })

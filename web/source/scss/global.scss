@@ -1,5 +1,28 @@
 // Fonts
-@import url("https://use.typekit.net/nko2zib.css");
+@font-face {
+  font-family: 'Lato';
+  src:  url('/fonts/Lato/LatoLatin-Regular.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Lato Bold';
+  src:  url('/fonts/Lato/LatoLatin-Bold.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Lato Bold Italic';
+  src:  url('/fonts/Lato/LatoLatin-BoldItalic.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-BoldItalic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Lato Light';
+  font-weight: 300;
+  src:  url('/fonts/Lato/LatoLatin-Light.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-Light.woff') format('woff');
+}
 
 // Global styles
 html {
@@ -10,47 +33,67 @@ html {
 body {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   height: 100%;
   font-family: 'Lato', sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   text-rendering: optimizeLegibility;
+
+  > * {
+    width: 100%;
+  }
+}
+
+h2 {
+  margin: 4rem 0 0;
+  font-size: 2.2rem;
+  font-family: 'Lato Bold', sans-serif;
+  text-align: center;
 }
 
 // Main header
 body > header {
   display: flex;
-  flex: 1 0 auto;
-  flex-wrap: wrap;
-  font-size: 1.6rem;
+  flex-direction: column;
+  flex: 0 0 auto;
+  padding: 0.8rem 0;
+  background-color: #fafafa;
+  background-image: linear-gradient(-180deg, #FFFFFF 33%, #F7F7F7 100%);
   border-top: 0.4rem solid #FF3377;
-  border-bottom: 0.1rem solid #EBEBEB;
 
   h1 {
-    padding: 1.8rem 1.5rem 1.8rem 3rem;
-    font-size: 1.8rem;
-    font-weight: bold;
+    padding: 1.4rem;
+    font-size: 2.8rem;
+    font-family: 'Lato Bold', sans-serif;
     line-height: 1;
+    text-align: center;
     text-transform: uppercase;
-    color: #595959;
+
+    a {
+      color: #595959;
+      text-decoration: none;
+    }
   }
 
   nav {
-    &.content {
-      order: 3;
-    }
-    &.contact {
-      order: 2;
-    }
     ul {
       display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     li {
       a {
         display: block;
-        padding: 2rem 1.5rem 1.9rem;
+        padding: 1rem;
+        font-size: 2rem;
         text-decoration: none;
-        color: #808080;
+        color: #737373;
       }
     }
   }
+}
+
+// Main content
+main {
+  color: #333333;
 }

@@ -14,6 +14,9 @@ function handler(params, context, emitter) {
       header: {
         controller: '_header'
       },
+      footer: {
+        controller: '_footer'
+      },
       caseStudy: {
         route: '/case-study/client/Vidyo',
         view: 'callout'
