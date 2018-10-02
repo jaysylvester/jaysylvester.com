@@ -25,15 +25,15 @@ gulp.task('css', function () {
 })
 
 gulp.task('js', function () {
-  return gulp.src(['web/source/js/lib/modernizr.js',
-                   'web/source/js/site/immediate.js',
-                   'web/source/js/site/**.js'
+  return gulp.src([
+                   'web/source/js/immediate.js',
+                   'web/source/js/**.js'
                   ])
              .pipe(sourcemaps.init())
              .pipe(uglify())
-             .pipe(concat('min.js'))
-             .pipe(sourcemaps.write(''))
-             .pipe(gulp.dest('web/themes/default'))
+             .pipe(concat('site.js'))
+             .pipe(sourcemaps.write('../min'))
+             .pipe(gulp.dest('web/min'))
              .pipe(livereload())
 })
 
