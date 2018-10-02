@@ -18,10 +18,22 @@
 }
 
 @font-face {
+  font-family: 'Lato Italic';
+  src:  url('/fonts/Lato/LatoLatin-Italic.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-Italic.woff') format('woff');
+}
+
+@font-face {
   font-family: 'Lato Light';
   font-weight: 300;
   src:  url('/fonts/Lato/LatoLatin-Light.woff2') format('woff2'),
         url('/fonts/Lato/LatoLatin-Light.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Lato Semibold';
+  src:  url('/fonts/Lato/LatoLatin-Semibold.woff2') format('woff2'),
+        url('/fonts/Lato/LatoLatin-Semibold.woff') format('woff');
 }
 
 // Global styles
@@ -33,7 +45,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
   height: 100%;
   font-family: 'Lato', sans-serif;
   font-size: 1.6rem;
@@ -45,55 +57,260 @@ body {
 }
 
 h2 {
-  margin: 4rem 0 0;
+  margin: 4rem 0 2rem;
   font-size: 2.2rem;
   font-family: 'Lato Bold', sans-serif;
   text-align: center;
 }
 
+h3 {
+  margin: 3rem 0 0.5rem;
+  font-family: 'Lato Bold', sans-serif;
+}
+
+a.primary-action {
+  display: block;
+  max-width: 30rem;
+  margin: auto;
+  padding: 1.6rem 2rem 1.8rem;
+  font-family: 'Lato Semibold', sans-serif;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 0.1rem 0.2rem #80192B;
+  background-image: linear-gradient(-180deg, #FF3377 0%, #D92B48 100%);
+  border-radius: 0.4rem;
+}
+
 // Main header
-body > header {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  padding: 0.8rem 0;
-  background-color: #fafafa;
-  background-image: linear-gradient(-180deg, #FFFFFF 33%, #F7F7F7 100%);
-  border-top: 0.4rem solid #FF3377;
+body {
+  > header {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    padding: 0.8rem 0;
+    font-size: 1.8rem;
+    background-color: #fafafa;
+    background-image: linear-gradient(-180deg, #FFFFFF 33%, #F7F7F7 100%);
+    border-top: 0.4rem solid #FF3377;
+    border-bottom: 0.1rem solid #f0f0f0;
 
-  h1 {
-    padding: 1.4rem;
-    font-size: 2.8rem;
-    font-family: 'Lato Bold', sans-serif;
-    line-height: 1;
-    text-align: center;
-    text-transform: uppercase;
+    h1 {
+      padding: 1.4rem;
+      font-size: 2.8rem;
+      font-family: 'Lato Bold', sans-serif;
+      line-height: 1;
+      text-align: center;
+      text-transform: uppercase;
 
-    a {
-      color: #595959;
-      text-decoration: none;
+      a {
+        color: #595959;
+        text-decoration: none;
+      }
+    }
+
+    nav {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      li {
+        margin: 0 0.2rem;
+
+        a {
+          display: block;
+          padding: 1rem 1.4rem;
+          text-decoration: none;
+          color: #737373;
+        }
+      }
     }
   }
 
-  nav {
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    li {
-      a {
-        display: block;
-        padding: 1rem;
-        font-size: 2rem;
-        text-decoration: none;
-        color: #737373;
-      }
-    }
+  &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a {
+    color: #ffffff;
+    background: #999999;
+    border-radius: 0.6rem;
   }
 }
 
 // Main content
 main {
+  flex: 1 1 auto;
   color: #333333;
+}
+
+// Mask for zoomed images
+#mask {
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: hsla(0,0%,0%,0.95);
+
+  // Close button
+  #mask-close {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    cursor: pointer;
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &.enabled {
+    width: 100%;
+    height: 100%;
+    padding-top: 6rem;
+    padding-bottom: 5rem;
+    z-index: 1000;
+    opacity: 1;
+  }
+
+  &.closing {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  a.open-tab {
+    display: block;
+    font-size: 1.2rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    padding: 10px;
+    border-radius: 3px;
+    transition: border-color 0.2s;
+
+    svg {
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      vertical-align: middle;
+      margin-left: 0.5rem;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+span.zoom {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+
+  span.zoom-button {
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    top: calc(50% - 2rem);
+    left: calc(50% - 2rem);
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    svg {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+
+  img {
+    transition: filter 0.2s;
+  }
+
+  &:hover {
+    span.zoom-button {
+      opacity: 1;
+    }
+    img {
+      filter: brightness(50%);
+    }
+  }
+}
+
+// 768px and up
+@media only screen and (min-width: 768px) {
+  body {
+    font-size: 1.8rem;
+  }
+
+  // Main header
+  body > header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 6rem;
+    padding: 0 calc((100% - 140rem) / 2);
+    font-size: 1.6rem;
+
+    h1 {
+      margin: 0 3rem;
+      padding: 1rem;
+      font-size: 1.8rem;
+    }
+
+    nav {
+      ul {
+        margin-right: 3rem;
+
+        li {
+          a {
+            padding: 1rem 1.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  html.js {
+    body {
+      > header {
+        position: fixed;
+        z-index: 500;
+        transition: margin 0.3s;
+      }
+      &.hidden-header > header {
+        margin-top: -6rem; // Header height
+      }
+    }
+
+    main {
+      padding-top: 6rem !important;
+    }
+  }
+}
+
+// 1024px and up
+@media only screen and (min-width: 1024px) {
+  body > header {
+    padding: 0 calc((100% - 104rem) / 2);
+  }
+
+  h2 {
+    margin: 8rem 0 4rem;
+  }
+
+  h3 {
+    margin-top: 4rem;
+  }
 }

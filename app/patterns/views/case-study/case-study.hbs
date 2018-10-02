@@ -7,6 +7,7 @@
     <meta name="description" content="{{case.meta_description}}">
     <meta name="keywords" content="{{case.meta_keywords}}">
     <link rel="stylesheet" type="text/css" href="/min/site.css">
+    <script type="text/javascript" src="/min/site.js"></script>
   </head>
   <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
     {{{include.header}}}
@@ -27,7 +28,54 @@
       <p class="tagline">{{case.tagline}}</p>
       <p class="summary">{{case.summary}}</p>
       <img class="devices" src="/images/case-studies/{{case.client_name}}/{{case.client_name}}-devices.jpg" alt="{{case.client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-      {{{case.content}}}
+      <section class="content">
+        {{{case.content}}}
+<section class="samples">
+<h2>Samples / Mockups</h2>
+<p>Below are various samples of my team's output.</p>
+<figure role="group" class="screens">
+<section>
+<figure>
+<img src="/images/case-studies/Vidyo/samples/VidyoCore-1.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<img src="/images/case-studies/Vidyo/samples/VidyoCore-2.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<img src="/images/case-studies/Vidyo/samples/VidyoCore-3.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<img src="/images/case-studies/Vidyo/samples/VidyoCore-4.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+</section>
+<figcaption>VidyoCore conference management suite</figcaption>
+</figure>
+<figure role="group" class="devices">
+<section>
+<figure class="desktop">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-desktop-1.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure class="mobile">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-mobile-1.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure class="desktop">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-desktop-2.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure class="mobile">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-mobile-2.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure class="desktop">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-desktop-3.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure class="mobile">
+<img src="/images/case-studies/Vidyo/samples/VidyoConnect-mobile-3.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+</section>
+<figcaption>VidyoConnect desktop and mobile mockups</figcaption>
+</figure>
+</section>
+      </section>
+      <a class="primary-action" href="/case-studies">Read more case studies</a>
     </main>
     {{{include.footer}}}
   </body>
