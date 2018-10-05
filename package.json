@@ -1,7 +1,7 @@
 {
   "name": "jaysylvester.com",
   "version": "3.0.0",
-  "description": "jaysylvester.com",
+  "description": "Source code from my personal site: jaysylvester.com",
   "author": {
     "name": "Jay Sylvester",
     "email": "jay@jaysylvester.com",
@@ -12,10 +12,6 @@
     "url": "https://github.com/jaysylvester/jaysylvester.com"
   },
   "main": "index",
-  "scripts": {
-    "start-local": "node ./app/start-local.js",
-    "start": "node ./app/start.js"
-  },
   "dependencies": {
     "citizen": "~0.8.6",
     "nodemailer": "~4.6.8",
