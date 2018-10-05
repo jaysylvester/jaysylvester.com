@@ -5,8 +5,7 @@
     "browser": true
   },
   "globals": {
-    "JAY": true,
-    "Modernizr": true
+    "JAY": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {

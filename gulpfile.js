@@ -9,7 +9,7 @@ var autoprefixer  = require('autoprefixer'),
     postcss       = require('gulp-postcss'),
     sass          = require('gulp-sass'),
     sourcemaps    = require('gulp-sourcemaps'),
-    uglify        = require('gulp-uglify')
+    uglify        = require('gulp-uglify-es').default
 
 gulp.task('css', function () {
   return gulp.src(['web/source/scss/baseline.scss', 'web/source/scss/global.scss', 'web/source/scss/**/**.scss'])
