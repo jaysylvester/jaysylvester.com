@@ -6,9 +6,15 @@ body[data-controller="case-study"][data-view="case-study"] {
   main {
     padding: 0 1rem 1rem;
 
+    section.logo {
+      display: flex;
+      align-content: center;
+      height: 12rem;
+    }
+
     img.logo {
-      height: 10rem;
-      padding: 3rem 0;
+      max-width: 28rem;
+      max-height: 4rem;
       margin: auto;
     }
 
@@ -62,13 +68,14 @@ body[data-controller="case-study"][data-view="case-study"] {
     }
 
     p.summary {
+      margin: 0 auto 3rem;
       line-height: 1.6;
       text-align: center;
     }
     
     img.devices {
       width: 100%;
-      margin: 3rem 0;
+      margin: 0 auto 3rem;
     }
 
     figure:not([role="group"]) {
@@ -94,7 +101,6 @@ body[data-controller="case-study"][data-view="case-study"] {
 
       section {
         display: flex;
-        align-items: flex-start;
         overflow-x: scroll;
         -webkit-overflow-scrolling: touch;
         padding: 1rem;
@@ -103,7 +109,6 @@ body[data-controller="case-study"][data-view="case-study"] {
           content: '';
           flex: 0 0 1rem;
           display: block;
-          width: 1rem;
           height: 1rem;
         }
       }
@@ -120,11 +125,16 @@ body[data-controller="case-study"][data-view="case-study"] {
           margin: 0;
         }
 
-        &.mobile {
-          flex: 0 0 28vw;
-        }
+
 
         img {
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+
+      &.devices {
+        figure {
           border-radius: 0;
           box-shadow: none;
         }
@@ -134,6 +144,10 @@ body[data-controller="case-study"][data-view="case-study"] {
         margin-top: 0;
       }
     }
+
+    a.primary-action {
+      margin: 2rem auto;
+    }
   }
 
   // 768px and up
@@ -141,9 +155,13 @@ body[data-controller="case-study"][data-view="case-study"] {
     main {
       padding: 0 2rem 4rem;
 
-      img.logo {
+      section.logo {
         height: 18rem;
-        padding: 6rem 0;
+      }
+  
+      img.logo {
+        max-width: 45rem;
+        max-height: 6rem;
       }
 
       h1 {
@@ -166,15 +184,14 @@ body[data-controller="case-study"][data-view="case-study"] {
 
       p.summary {
         max-width: 64rem;
-        margin: 0 auto 4rem;
+        margin-bottom: 4rem;
         font-size: 2.2rem;
       }
 
       img.devices {
         width: auto;
-        max-width: 100%;
-        max-height: 35rem;
-        margin: 3rem auto 6rem;
+        height: 27.5rem;
+        margin-bottom: 6rem;
       }
 
       section.content {
@@ -182,13 +199,57 @@ body[data-controller="case-study"][data-view="case-study"] {
         margin: auto;
       }
 
-      figure {
-        max-width: 80rem;
+      figure:not([role="group"]) {
+        max-width: 85%;
         margin: 3rem auto 6rem;
       }
 
       figcaption {
         margin-top: 2rem;
+      }
+
+      figure[role="group"] {
+        margin: 6rem 0 6rem -2rem;
+
+        section {
+          padding: 2rem;
+
+          &::after {
+            flex-basis: 2rem;
+          }
+        }
+
+        figure {
+          flex-basis: 45rem;
+          height: 28rem;
+        }
+      }
+    }
+  }
+
+  // Get rid of figure scroll at 840px and above (width of main with padding)
+  @media only screen and (min-width: 840px) {
+    main {
+      figure[role="group"] {
+        width: 100%;
+        margin-left: 0;
+
+        section {
+          flex-wrap: wrap;
+          justify-content: space-between;
+          padding: 1rem 0.3rem 0;
+          overflow: visible;
+
+          &::after {
+            display: none;
+          }
+        }
+
+        figure {
+          flex-basis: 23%;
+          height: 14rem;
+          margin: 0 0 2rem 0;
+        }
       }
     }
   }
@@ -239,6 +300,10 @@ body[data-controller="case-study"][data-view="case-study"] {
       p.summary {
         max-width: none;
         margin-bottom: 8rem;
+      }
+
+      img.devices {
+        height: 35rem;
       }
 
       section.content {

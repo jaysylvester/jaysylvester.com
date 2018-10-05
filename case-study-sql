@@ -1,0 +1,506 @@
+delete from case_studies;
+
+insert into case_studies
+( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
+values
+( 'Vidyo', 'Vidyo', 'Vidyo Remote Collaboration Solutions', 'Video conferencing and collaboration that goes well beyond the typical Skype call', 'Video Conferencing &amp; Collaboration', 'Desktop / Mobile / Web', 'UX Design / Team Management', 'Vidyo had a complex suite of video conferencing apps that spanned many platforms, but a lack of design standards made the experience inconsistent across devices. I defined crucial UX processes and led the design team in establishing a unified presentation across the entire product line.', '<p>Vidyo built their brand on breakthrough technology that enables high-quality, low bandwidth video conferencing with hundreds of participants across pretty much any device you can imagine: phones, tablets, computers, and even multi-screen conference room systems. The superiority of the underlying technology was enough to drive their initial success, but today’s customers expect great technology to be paired with great design. Recognizing that crucial need, Vidyo hired me to establish UX process, manage and grow the UX team, and drive the adoption of user-centered design across the organization.</p>
+
+
+<section>
+<h2>Broken process</h2>
+
+<p>Vidyo’s original video conferencing applications, VidyoDesktop and VidyoMobile, had languished for years, and their replacement, the Vidyo Neo software suite, was an attempt to address the bulk of their outstanding issues in one fell swoop. Being new to the company and the project, I was asked to supplement the existing design team as a UX designer, with the UX team reporting to the engineering lead. It was an odd arrangement, but there was a tight deadline and heavy pressure to complete the work, and I wanted to help however I could.</p>
+
+<p>Vidyo Neo ended up serving as an unfortunate case study on how not to implement a redesign for a bevy of reasons:</p>
+
+<h3>Product- and Engineering-driven design workflow</h3>
+<p>A designer expects their designs to be subject to review to ensure the requirements are met and implementation is feasible. However, the product manager and engineering lead on Vidyo Neo effectively acted as the design leads, overruling the design team frequently despite neither having a design background. To make matters worse, no single UX designer was assigned as the design lead, so establishing process and consistency across the UX team was difficult. Design by committee became the norm and reaching consensus involved uncomfortable, contentious meetings where the loudest and most stubborn participant got their way.</p>
+
+<h3>Insufficient design resources</h3>
+<p>The UX designers at Vidyo not only performed all design functions, but all UI development as well (myself included), so in addition to dealing with design reviews and deadlines, they were also responsible for meeting engineering production deadlines while being hammered by QA for defects at the same time. It was impossible to give design tasks the focus they deserved.</p>
+
+<h3>Lack of user and customer research</h3>
+<p>Many assumptions were made about what was lacking in VidyoDesktop and VidyoMobile because no qualitative or quantitative data existed to identify shortcomings and prioritize features, leading to no clear vision or strategy. In addition, the Vidyo Neo design was heavily influenced by Vidyo company culture and employee mindset; it was assumed our customers used our products the same way we did, leading to a false-consensus effect.</p>
+
+<h3>Overemphasis on competitive analysis</h3>
+<p>Competitive analysis has its place in any product development workflow; good design often entails a certain amount of inspiration by competitors. However, assuming that your successful competitors are doing everything right and that your customers’ goals align with their customers’ goals is a risky gamble. Rather than interviewing our customers to discover what they felt our product lacked, conducting appropriate usability studies, and creating a product based on user input, the Vidyo Neo roadmap borrowed heavily from competitors’ existing feature sets.</p>
+
+<h3>No user testing</h3>
+<p>While talented designers have good instincts, nothing can replace proper usability testing. Everything we designed went straight into the development pipeline and was released to the public. We received our first feedback from customers after the feature went into production.</p>
+
+<h3>No iteration</h3>
+<p>No room was left in the design/development workflow for user testing and iteration. Once a feature went into production, it was forgotten in favor of the next set of features.</p>
+
+<p>Not surprisingly, working on Vidyo Neo with broken or lacking process was a tough slog, and while customers told us it was an improvement over the previous generation of products, I knew we could do much better.</p>
+</section>
+
+<section>
+<h2>Redesigning design at Vidyo</h2>
+
+<p>After my experience with Vidyo Neo, I was determined to implement a proper UX process that would establish research and customer data as the primary drivers behind our feature roadmap and design decisions, while at the same time making the design/development workflow more collaborative and productive. I was afforded that opportunity when management decided to embark on a massive rebranding effort and product overhaul.</p>
+
+<p>The following products were part of the rebranding initiative:</p>
+
+<ul>
+<li>VidyoConnect (formerly Vidyo Neo), consisting of desktop, mobile, and web video conferencing clients</li>
+<li>VidyoRoom, our conference room system</li>
+<li>VidyoEngage, our customer support-oriented video conferencing platform</li>
+<li>VidyoCore, our web-based meeting resource management suite</li>
+</ul>
+
+<p>I began my new role as UX Lead fully empowered to incorporate process improvements and expand the UX team in order to undertake redesigns of all the above-mentioned products. Here is what I did:</p>
+
+<h3>Introduced a UX-driven design workflow</h3>
+<p>I was reassigned from the engineering team to the product group and given responsibility for all final design decisions. My team worked with a new group of product managers on our new projects and they focused their time on managing the roadmap and feature requirements rather than dictating design. To help explain the process changes I was proposing, I created documentation for Product/Engineering/QA and walked them through examples of healthy UX workflows.</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+<figcaption>My recommendation of a healthy design workflow within a development environment</figcaption>
+</figure>
+
+<h3>Built a tiered UX team</h3>
+<p>I was provided budget to make several new hires, which I allocated as follows: a senior designer, two mid-level designers, and a junior designer, all with varying levels of experience across different aspects of UX (research, information architecture, interaction design, visual design, etc.), giving us a well-rounded skill set. With this structure, I was able to allocate resources effectively by assigning myself or the senior designer as project lead while the mid-level and junior designers were assigned tasks based on availability. I also empowered the designers by encouraging them to take ownership of their designs and run their own review sessions with stakeholders.</p>
+
+<h3>Involved customers in the product design process</h3>
+<p>I reached out to a cross-section of our customers and requested on-site interviews and tours of their facilities so we could better understand how they used our products. We listened intently to their feedback and saw the unique and varied ways they put our products to use—some of which we hadn’t even considered as use cases. These revelations gave us a new perspective, but just as important, we established meaningful relationships with our customers, reinforcing their value to us and reassuring them that their needs were being addressed.</p>
+
+<h3>Conducted extensive usability studies</h3>
+<p>I wanted a true understanding of our competitors’ products and how we stacked up against them, so my team conducted usability studies on both our existing products and our competitors’ products. We moderated the first batch of sessions in person and conducted additional studies with remote participants. Combining the results of these studies with our customer interviews, we created a UX audit containing recommendations for Vidyo Neo enhancements.</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+<figcaption>A Vidyo Neo usability study participant attempts to search her contact list</figcaption>
+</figure>
+
+<h3>Created a style guide for design components and document templates</h3>
+<p>Even a small team of designers can struggle with consistency across many design documents covering multiple products. We created a shared UX library consisting of a simple style guide, common design elements, and UX document templates so engineering received consistent and predictable static mockups.</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of a usability study session">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of a usability study session">
+<figcaption>Part of our style guide</figcaption>
+</figure>
+
+<h3>Built prototypes and iterated designs based on research</h3>
+<p>Continuing with our new testing procedure, we iterated our static designs and built prototypes to address previously unseen usability problems and also created entirely new approaches in our rebranded products like VidyoConnect. We then built prototypes of varying complexity in order to demonstrate new features and functionality and conduct usability testing prior to implementation. In most cases, we used tools like InVision and Adobe XD to quickly convert static mockups into clickable prototypes. For the redesign of the desktop app, VidyoConnect, which involved complex user interactions and an extensive new set of features, I created an almost fully-functional prototype built in Electron that behaved as the real app would.</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of a usability study session">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
+<figcaption>VidyoConnect desktop prototype built with Electron (note the live camera capture)</figcaption>
+</figure>
+
+</section>
+<section>
+<h2>Conclusion</h2>
+
+<p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>
+
+</section>
+<section class="samples">
+<h2>Samples / Mockups</h2>
+<p>Below are various samples of my team''s output.</p>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-1.jpg" alt="A screen cap of the VidyoCore management suite">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-1.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-2.jpg" alt="A screen cap of the VidyoCore management suite">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-2.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-3.jpg" alt="A screen cap of the VidyoCore management suite">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-3.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-4.jpg" alt="A screen cap of the VidyoCore management suite">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-4.jpg" alt="A screen cap of the VidyoCore management suite">
+</figure>
+</section>
+<figcaption>VidyoCore conference management suite</figcaption>
+</figure>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-1.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-1.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-2.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-2.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-3.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-3.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-4.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-4.jpg" alt="A screen cap of the Vidyo Neo desktop app">
+</figure>
+</section>
+<figcaption>Vidyo Neo v1</figcaption>
+</figure>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-1.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-1.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-2.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-2.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-3.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-3.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-4.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-4.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
+</figure>
+</section>
+<figcaption>VidyoConnect Desktop (Vidyo Neo v2)</figcaption>
+</figure>
+<figure role="group" class="devices">
+<section>
+<figure class="mobile landscape">
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-1.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-1.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</figure>
+<figure class="mobile landscape">
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-2.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-2.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</figure>
+<figure class="mobile landscape">
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-3.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-3.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</figure>
+<figure class="mobile landscape">
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-4.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-4.jpg" alt="A screen cap of the VidyoConnect mobile app">
+</figure>
+</section>
+<figcaption>VidyoConnect Mobile</figcaption>
+</figure>
+</section>' );
+
+
+insert into case_studies
+( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
+values
+( 'Abercrombie & Fitch', 'Abercrombie-and-Fitch', 'Abercrombie &amp; Fitch Online Store', 'Four brands, thirty international sites, and one framework', 'E-commerce', 'Web', 'UI Architecture / Front End Development / Team Management', 'Abercrombie & Fitch had four distinct brands running on four distinct code bases, leading to lots of duplicate development effort. I engineered a front end framework that let them spend less time chasing problems and more time building solutions.', '<p>
+When I first joined the e-commerce team at Abercrombie &amp; Fitch, the front end code base needed a lot of work. Each of the company''s 4 brands&mdash;Abercrombie &amp; Fitch, abercrombie kids, Hollister Co., and Gilly Hicks&mdash;ran on its own set of JSPs, CSS files, and JavaScript libraries. There were different JavaScript libraries used across brands; some had jQuery, some had YUI, and some even had both being used simultaneously. Gilly Hicks, based on Flex, was entirely inconsistent with the other 3 brands. Any new feature requested by our business users required duplicated development effort. In many cases, up to 4 uniquely engineered solutions were required for the exact same feature.
+</p>
+<p>
+Process was also a challenge. Ever-changing business requirements and new requests were pouring into the e-commerce department and flooding them with tasks for their weekly releases, but there was little process in place to handle the requests. Business users were accustomed to handing off thin requirements at the last minute and developers were working at a frantic pace with a QA process that consisted only of rushed peer reviews that were little more than a rubber stamp. Customer satisfaction and code quality were low, as was developers'' morale.
+</p>
+<p>
+Working alongside the e-commerce department''s talented Java developers, my team replaced the Flex-based Gilly Hicks front end with an entirely new set of JSPs containing semantic, SEO-friendly markup, neatly organized CSS files with descriptive file names, and a new common JavaScript library standardized on jQuery. We decoupled the CSS and JavaScript from the markup, minimizing page size and cleaning up the JSPs considerably. Separating content from presentation also allowed us to create a site build that included only JavaScript and CSS libraries; we were able to deploy static changes without running a full site build, letting us respond faster to business requests. And well before &quot;responsive design&quot; had become the next hot industry buzzword, we''d constructed a front end framework that would require only CSS and JavaScript changes in order to accommodate devices of any size, e.g. smartphones, tablets, and netbooks.
+</p>
+<p>
+Following an extremely aggressive development schedule and successful launch of the Gilly Hicks e-commerce site in July 2010, we saw significant increases in organic search engine traffic and much improved app server and front end performance. With the front end framework in place, we needed some breathing room to handle the deluge of maintenance requests while maintaining the new framework we''d built, so my next priority was to establish a firm process for handling weekly release tasks.
+</p>
+<p>
+The biggest process challenge facing the e-commerce team was a failure to control and schedule incoming business requests. As long as the request came in by Wednesday, it was almost always expected to be in that week''s Thursday morning release. I introduced a simple process involving cut-off times for various stages of the release schedule and established defined roles and expectations for everyone involved in the process. Put simply, all development, feedback, and iterations had to occur on Thursday, Friday, and Monday, and all business reviews and approvals had to be received by Tuesday, allowing us one full day for internal QA and performance testing prior to the Thursday morning release. Business users were required to be more engaged in the development process and take ownership of their requests, and developers became more aware of the quality control issues caused by rushed development and QA. The success of this simple process change helped alleviate mounting frustrations and QA problems and set us on the road to implementing further process improvements to come.
+</p>
+<p>
+With both our code and our process on the road to recovery, we rolled out subsequent redesigns of the other 3 brands over the next 10 months on top of the new framework. Each brand redesign brought with it functional and design enhancements that had to be incorporated into all brands, and thanks to the streamlined framework, we were able to implement these improvements across all brands simultaneously with much less effort than separate code bases would have required. With the help of the ops team, we also introduced YUI Compressor and Closure Compiler into our build process to concatenate and minify our CSS and JavaScript libraries, further shrinking the size of our front end code and improving page performance.
+</p>
+<p>
+During my second year at Abercrombie, we implemented a series of further improvements and enhancements to our front end code, including several iterations of our JavaScript framework and the introduction of practical cross-browser HTML5 that degrades gracefully, all while tackling massive projects like complete redesigns of our checkout flow and user account section. Bottom line: we got a lot done.
+</p>
+<p>
+Today, Abercrombie''s various brands are in a much better position to tackle future e-commerce challenges thanks to the work performed by the front end team under my leadership.
+</p>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Abercrombie.jpg" alt="A screen cap of the Abercrombie home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Abercrombie.jpg" alt="A screen cap of the Abercrombie home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/abercrombie-kids.jpg" alt="A screen cap of the abercrombie kids home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/abercrombie-kids.jpg" alt="A screen cap of the abercrombie kids home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Hollister.jpg" alt="A screen cap of the Hollister home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Hollister.jpg" alt="A screen cap of the Hollister home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Gilly-Hicks.jpg" alt="A screen cap of the Gilly Hicks home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Gilly-Hicks.jpg" alt="A screen cap of the Gilly Hicks home page">
+</figure>
+</section>
+<figcaption>All four Abercrombie brands built on the same front end framework</figcaption>
+</figure>' );
+
+
+insert into case_studies
+( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
+values
+( 'hibu', 'hibu', 'hibu Marketplace Responsive Design', 'There is no such thing as the "mobile web"', 'E-commerce', 'Web', 'UX Design / UI Architecture / Team Management', 'hibu had an e-commerce platform with lots of legacy code and a design that wasn''t ready for mobile devices. My team rebuilt the UI from scratch, then devised a plan to go responsive and improve the experience for millions of mobile and tablet users.', '
+<p>
+hibu acquired Znode, an e-commerce startup, in order to use their .NET e-commerce platform as the foundation for a series of new products. One such product was the hibu Marketplace, an international online "mall" with a local focus that would allow small merchants to create online storefronts and sell their goods and services to both local and national audiences. After a hurried beta launch, the product owners wanted to take the Marketplace to the next level, at which point I was brought on board to oversee UX design and UI development.
+</p>
+<h3>
+Laying the Foundation
+</h3>
+<p>
+While the core Znode product was a capable e-commerce platform, it was weighed down by years of legacy code that were then passed on to the Marketplace. In addition, a gap in UX expertise during its rushed development resulted in a shopping experience that wasn''t up to current standards. The mobile version of the site was on a completely different platform (Java) with its own development team in another geographic location. All the technical leads agreed this was a less than ideal foundation upon which to build a flagship product.
+</p>
+<p>
+After many strategy sessions and architectural debates, the .NET technical leads decided to rebuild the Webforms-based back end using a proper MVC framework, and I took this opportunity to completely rebuild the front end framework in order to prepare it for an eventual responsive redesign. I also wanted a front end that was accessible to all users and didn''t have essential functions that were dependent on JavaScript.
+</p>
+<p>
+<a href="/case-study/client/Abercrombie-and-Fitch">Much like I''d done for Abercrombie &amp; Fitch</a> a few years before, I led the front end development team through a complete architectural redesign of the Marketplace front end framework. We rewrote most of the HTML, replacing scores of unnecessary nested containers with clean, semantic markup labeled with sensible IDs and classes. We threw out the existing CSS and replaced it with Sass, making use of variables and writing a library of reusable mixins. We removed the front end''s dependency on built-in .NET JavaScript functions and implemented a logical JavaScript framework based on the module pattern and a select few JavaScript libraries. We minimized the UI''s dependency on images by replacing all icons and image-based buttons with @font-face glyphs and CSS-based button styles; any design-related images that remained were incorporated into a single CSS sprite.
+</p>
+<p>
+By the time we wrapped up the second release, the Marketplace had a modern, forward-thinking front end code base with concatenated and minified CSS and JavaScript libraries, minimal dependence on images, far fewer HTTP requests, and accessible markup that was SEO friendly. The .NET MVC effort was equally successful in terms of performance improvements and code that was easier to maintain. The hibu Marketplace was leaner, faster, and better than it was when we started. While proud of our technical accomplishments, we knew we still had a lot of work to do.
+</p>
+<h3>
+Selling Responsive Design
+</h3>
+<p>
+Before we could begin a responsive redesign, I had to sell the idea to senior management, so I spent a few days designing and building a semi-functional home page prototype to demonstrate the possibilities of responsive design. Incorporating requests from our merchandizers, I brought product imagery to the forefront and gave them space for promotional content that was lacking in the current design. Knowing that the concept would be demonstrated to business users on phones and tablets and given the limited amount of time I had to put it together, I focused my testing on iOS and Android phones and tablets.
+</p>
+
+<figure role="group">
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+</figure>
+<figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
+</figure>
+
+<p>
+The concept was successful at demonstrating how the same content and functionality could be made to work across many different devices, and I received an enthusiastic approval to proceed with the Marketplace responsive UX design work.
+</p>
+<h3>
+Strategy &amp; Process
+</h3>
+<p>
+We had minimal strategic input from the business, but we were able to establish the following goals:
+</p>
+<ul>
+<li>
+  We would take a mobile first approach and provide all devices access to the same content, adding appropriate enhancements and fallbacks based on device capability.
+</li>
+<li>
+  The focus on local products and services should continue to be a key strategy.
+</li>
+<li>
+  Beautiful product imagery should dominate the design and provide most of the visual interest.
+</li>
+<li>
+  At the request of our merchandisers, the layout should accommodate increased merchandising content, particularly on category pages.
+</li>
+</ul>
+<p>
+I conducted a series of planning meetings with my team to identify our goals and put together a basic project plan. We started with a complete site audit, building inventories of content, functionality, and interface elements. Using that as a starting point and basing our decisions on the goals above, we decided what functionality was essential and should be maintained, what functionality could go, and what was missing. I directed one UX designer to create style tiles based on the interface inventory so that everyone could work independently, but still maintain a consistent look and feel. I assigned a UX designer to each page on the site, and it was each designer''s responsibility to come up with the initial concept and wireframes under my guidance, which we would then flesh out as a team in our daily review sessions.
+</p>
+<p>
+We spent the next round of meetings discussing the challenges of UX design on a responsive redesign project with a tight deadline. What should be our target viewport sizes and where should we set our breakpoints? Should we adopt a mobile first approach? Should we use an existing framework or roll our own? What would be our deliverables? In all our discussions, one thing was clear: after coming to a general concensus during our whiteboard sessions, we should go directly to low-fidelity prototyping in the browser. Draw it on the whiteboard, take a picture with your phone, then get back to your desk and start coding. It would be a Lean UX process based on discussing, sketching, prototyping, testing, and iterating, and the final deliverable would be low-fidelity, fully responsive HTML prototypes of the entire site.
+</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+<figcaption>hibu Marketplace home page whiteboard sketches</figcaption>
+</figure>
+
+<p>
+HTML wireframes have many advantages over flat wireframes. Our wireframes would be interactive and responsive, so they could be viewed on any device in a browser and behave  like the final product would; just toss them onto a server and give stakeholders the URL. Many interaction design decisions made during the UX process wouldn''t need to be written down in technical documentation because they would be self-evident. For example, if clicking on an anchor should cause a form to slide down and be fully visible in 250 milliseconds, it''s right there in the wireframe and its source code. The risk of details getting lost in translation from wireframe to final code is greatly reduced compared to a traditional flat wireframe. Another benefit would be easy versioning using a git repository and local branching, just like production code. And large sections of that very same code would be reusable in the production version as well.
+</p>
+
+<figure role="group">
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+</figure>
+<figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
+</figure>
+
+<p>
+Lots of teams are struggling through the complexities of UX in a responsive design, and using a Lean UX process, my team delivered on the goal of producing functional wireframes that effectively convey the requirements of responsive e-commerce. This project convinced me that responsive design is the future, and that the advantages of a mobile first approach far outweigh the IA/UX difficulties that come up during the design process.
+</p>
+<p>
+While the challenges of UX design on a responsive project are significant, we proved they''re not insurmountable.
+</p>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-home-mobile.jpg" alt="A screen cap of the Abercrombie home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-home-mobile.jpg" alt="A screen cap of the Abercrombie home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-home-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-home-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-category-mobile.jpg" alt="A screen cap of the Hollister home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-category-mobile.jpg" alt="A screen cap of the Hollister home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-category-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-category-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-search-mobile.jpg" alt="A screen cap of the Abercrombie home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-search-mobile.jpg" alt="A screen cap of the Abercrombie home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-search-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-search-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-cart-mobile.jpg" alt="A screen cap of the Hollister home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-cart-mobile.jpg" alt="A screen cap of the Hollister home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-cart-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-cart-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
+</figure>
+</section>
+<figcaption>A selection of screen caps from the hibu Marketplace responsive HTML prototype</figcaption>
+</figure>' );
+
+
+insert into case_studies
+( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
+values
+( 'OncoTracker', 'OncoTracker', 'OncoTracker Portable Medical Records', 'Cancer patients should be focused on their treatment, not their treatment records', 'Healthcare', 'Web', 'Information Architecture / UX Design / Full-Stack Development', 'OncoTracker wanted to provide an easy way for oncology patients to access their medical records anywhere. I designed a solution that walks users through the process of entering their records step by step and allows them to track the progress of their treatment.', '<p>
+OncoTracker approached me with their idea for a service to allow oncology patients to store their treatment records online. Cancer patients, already burdened with their illness, carry the stress of transporting extensive medical records from physician to physician over the course of lengthy treatment cycles. If they could store their records online, any doctor or family member with the appropriate credentials could login and view the patient''s medical history, relieving them of this additional burden. OncoTracker wanted a web site that would walk users through the process of entering their medical records and allow them to export those records when necessary. With this set of fairly open requirements and a very aggressive timeline, I got to work.
+</p>
+<p>
+The first step was coming up with a logical, friendly architecture that would guide users through the process of inputting lengthy treatment records that potentially span multiple treatment cycles from a series of physicians. Working with OncoTracker to understand the many stages of cancer treatment, I put together a site map and HTML wireframes to demonstrate how I planned to get the user from one step to the next. I broke the process down into 3 primary stages based on chronological progression:  diagnosis, treatment, and follow-up. Each stage would have multiple steps for entering specific details about that stage. Within each step, the user would be presented with a detailed description of that step''s information and a form to capture their data. Each form field also would have its own accompanying help text to assist the user in translating cryptic medical data from their paper forms into the OncoTracker interface.
+</p>
+
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+<figcaption>The OncoTracker sitemap (OmniGraffle)</figcaption>
+</figure>
+
+<p>
+Because entering such large amounts of data can be a time-consuming process, the user would be able to stop at any time, save their progress, and pick up where they left off later. Users also would be free to jump from step to step, skipping any step along the way that didn''t apply to their treatment records. Each step in a particular treatment cycle would present the number of records stored for that step and allow the user to edit those records or create additional records.
+</p>
+<p>
+The final product was an easy-to-use interface that allowed oncology patients with a lot on their minds to spend less time worrying about their medical records and more time focusing on their health.
+</p>
+<figure role="group" class="screens">
+<section>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-home.jpg" alt="A screen cap of the Abercrombie home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-home.jpg" alt="A screen cap of the Abercrombie home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-overview.jpg" alt="A screen cap of the abercrombie kids home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-overview.jpg" alt="A screen cap of the abercrombie kids home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-pathology.jpg" alt="A screen cap of the Hollister home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-pathology.jpg" alt="A screen cap of the Hollister home page">
+</figure>
+<figure>
+<noscript>
+<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-profile.jpg" alt="A screen cap of the Gilly Hicks home page">
+</noscript>
+<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-profile.jpg" alt="A screen cap of the Gilly Hicks home page">
+</figure>
+</section>
+<figcaption>Various examples of the OncoTracker interface</figcaption>
+</figure>' );

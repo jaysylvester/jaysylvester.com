@@ -68,6 +68,17 @@ h3 {
   font-family: 'Lato Bold', sans-serif;
 }
 
+p {
+  a {
+    font-family: 'Lato Bold', sans-serif;
+    color: #FF3377;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
 a.primary-action {
   display: block;
   max-width: 30rem;
@@ -118,11 +129,11 @@ body {
       }
 
       li {
-        margin: 0 0.2rem;
+        margin: 0.2rem 0.4rem;
 
         a {
           display: block;
-          padding: 1rem 1.4rem;
+          padding: 0.8rem 1.2rem;
           text-decoration: none;
           color: #737373;
         }
@@ -130,9 +141,10 @@ body {
     }
   }
 
+  &[data-controller="index"][data-view="index"] > header nav li.about a,
   &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a {
-    color: #ffffff;
-    background: #999999;
+    color: #4d4d4d;
+    background: #e6e6e6;
     border-radius: 0.6rem;
   }
 }
@@ -141,6 +153,10 @@ body {
 main {
   flex: 1 1 auto;
   color: #333333;
+
+  > * {
+    max-width: 100%;
+  }
 }
 
 // Mask for zoomed images
@@ -153,20 +169,11 @@ main {
   opacity: 0;
   transition: opacity 0.2s;
   background: hsla(0,0%,0%,0.95);
-
-  // Close button
-  #mask-close {
-    width: 2rem;
-    height: 2rem;
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    cursor: pointer;
-
-    svg {
-      width: 100%;
-      height: 100%;
-    }
+  // Use a slightly more opaque background if backdrop-filter isn't supported
+  background-color: hsla(0,0%,0%,0.9);
+  @supports(backdrop-filter: saturate(180%) blur(0.5rem)) {
+    background-color: hsla(0,0%,0%,0.8);
+    backdrop-filter: saturate(180%) blur(0.5rem);
   }
 
   img {
@@ -190,33 +197,38 @@ main {
     opacity: 0;
     transition: opacity 0.2s;
   }
+}
 
-  a.open-tab {
-    display: block;
-    font-size: 1.2rem;
-    text-align: center;
-    text-overflow: ellipsis;
-    padding: 10px;
-    border-radius: 3px;
-    transition: border-color 0.2s;
+// Open image in new tab
+#mask-open-tab {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 2rem;
+  right: 6rem;
+  background: url('/images/icons/open-new-tab.png') center no-repeat;
+  background-size: contain;
+  text-indent: 100%;
+  overflow: hidden;
+}
 
-    svg {
-      display: inline-block;
-      width: 1.6rem;
-      height: 1.6rem;
-      vertical-align: middle;
-      margin-left: 0.5rem;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+// Close mask button
+#mask-close {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: url('/images/icons/close.png') center no-repeat;
+  background-size: contain;
+  text-indent: 100%;
+  overflow: hidden;
 }
 
 span.zoom {
   display: inline-block;
   position: relative;
+  height: 100%;
   cursor: pointer;
 
   span.zoom-button {
@@ -225,13 +237,10 @@ span.zoom {
     position: absolute;
     top: calc(50% - 2rem);
     left: calc(50% - 2rem);
+    background: url('/images/icons/zoom.png') center no-repeat;
+    background-size: contain;
     opacity: 0;
     transition: opacity 0.2s;
-
-    svg {
-      width: 4rem;
-      height: 4rem;
-    }
   }
 
   img {
@@ -248,10 +257,40 @@ span.zoom {
   }
 }
 
+footer {
+  padding: 2rem;
+  font-size: 1.4rem;
+  color: #808080;
+  text-align: center;
+}
+
 // 768px and up
 @media only screen and (min-width: 768px) {
   body {
     font-size: 1.8rem;
+
+    > header nav li a:hover,
+    &[data-controller="index"][data-view="index"] > header nav li.about a,
+    &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a {
+      position: relative;
+      color: #737373;
+      background: none;
+  
+      &::after {
+        content: '';
+        display: block;
+        width: calc(100% - 3rem);
+        height: 0.3rem;
+        position: absolute;
+        bottom: 0;
+        left: 1.5rem;
+        background: #999999;
+      }
+    }
+
+    > header nav li a:hover::after {
+      background: #ff3377 !important;
+    }
   }
 
   // Main header
@@ -275,7 +314,7 @@ span.zoom {
 
         li {
           a {
-            padding: 1rem 1.5rem;
+            padding: 1.9rem 1.5rem;
           }
         }
       }

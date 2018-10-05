@@ -4,7 +4,7 @@ JAY['case-study'] = ( function () {
   var methods = {
 
 		init: function () {
-      JAY.global.imageZoom()
+      // JAY.global.imageZoom()
     }
 
   }

@@ -5,6 +5,7 @@ JAY.global = ( function () {
 
     init: function () {
       methods.header()
+      methods.imageLoad()
     },
 
     header: function () {
@@ -43,50 +44,79 @@ JAY.global = ( function () {
       // })
     },
 
-    imageZoom: function () {
-      if ( document.body.clientWidth >= 768 ) {
-        var mask = document.createElement('div')
-        mask.setAttribute('id', 'mask')
-        document.body.appendChild(mask)
+    imageLoad: function () {
+      var load = function () {
+            const images = document.querySelectorAll('img:not(.loaded)')
 
-        document.querySelectorAll('figure > img').forEach( function (item) {
-          var zoomWrapper = document.createElement('span'),
-              zoomButton = document.createElement('span'),
-              parent = item.parentNode,
-              src = item.getAttribute('src')
-          
-          zoomWrapper.classList.add('zoom')
-          parent.insertBefore(zoomWrapper, parent.querySelector('figcaption'))
-          zoomButton.classList.add('zoom-button')
-          zoomButton.innerHTML = '<svg class="icon zoom-in"><use xlink:href="themes/default/images/symbols.svg#icon-zoom-in"></use></svg>'
-          zoomWrapper.appendChild(item)
-          zoomWrapper.appendChild(zoomButton)
-
-          zoomWrapper.addEventListener('click', function () {
-            mask.innerHTML = '<div id="mask-close"><svg class="icon close"><use xlink:href="themes/default/images/symbols.svg#icon-close"></use></svg></div><img src="' + src + '"><a class="open-tab" href="' + src + '" target="_blank">' + src + '<svg class="icon arrow-up-right"><use xlink:href="themes/default/images/symbols.svg#icon-arrow-up-right"></use></svg></a>'
-            document.querySelector('html').classList.add('mask-enabled')
-            mask.classList.add('enabled')
-
-            window.addEventListener('keydown', escape)
-            mask.querySelector('#mask-close').addEventListener('click', function () {
-              close()
-            })
-
-            function escape(e) {
-              if ( e.key === 'Escape' ) {
-                close()
-              }
+            if ( images.length ) {
+              images.forEach( function (item) {
+                if ( item.dataset.src ) {
+                  var dimension = item.clientWidth ? 'w_' + item.clientWidth : 'h_' + item.clientHeight
+  
+                  // If the image is within 1.5 screen heights of the current offset, load it
+                  if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
+                    item.src = item.dataset.src.replace('[parameters]', 'f_auto,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+                    item.classList.add('loaded')
+                    if ( item.parentNode.tagName === 'FIGURE' ) {
+                      methods.imageZoom(item)
+                    }
+                  }
+                } else {
+                  item.classList.add('loaded')
+                }
+              })
+            } else {
+              window.removeEventListener('scroll', load)
             }
+          }
+      
+      load()
 
-            function close() {
-              document.querySelector('html').classList.remove('mask-enabled')
-              mask.classList.remove('enabled')
-              mask.innerHTML = ''
-              window.removeEventListener('keydown', escape)
-            }
-          })
+      window.addEventListener('scroll', load)
+    },
+
+    imageZoom: function (item) {
+      var mask = document.getElementById('mask') || document.createElement('div'),
+          zoomWrapper = document.createElement('span'),
+          zoomButton = document.createElement('span'),
+          parent = item.parentNode,
+          src = item.dataset.src.replace('[parameters]', 'f_auto,q_50,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+
+      mask.setAttribute('id', 'mask')
+      document.body.appendChild(mask)
+      zoomWrapper.classList.add('zoom')
+      parent.insertBefore(zoomWrapper, parent.querySelector('figcaption'))
+      zoomButton.classList.add('zoom-button')
+      zoomWrapper.appendChild(item)
+      zoomWrapper.appendChild(zoomButton)
+
+      zoomWrapper.addEventListener('click', function () {
+        mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a><img src="' + src + '">'
+        document.querySelector('html').classList.add('mask-enabled')
+        mask.classList.add('enabled')
+
+        window.addEventListener('keydown', escape)
+        mask.querySelector('#mask-close').addEventListener('click', function (e) {
+          e.preventDefault()
+          close()
         })
-      }
+        mask.querySelector('#mask-open-tab').addEventListener('click', function () {
+          close()
+        })
+
+        function escape(e) {
+          if ( e.key === 'Escape' ) {
+            close()
+          }
+        }
+
+        function close() {
+          document.querySelector('html').classList.remove('mask-enabled')
+          mask.classList.remove('enabled')
+          mask.innerHTML = ''
+          window.removeEventListener('keydown', escape)
+        }
+      })
     },
 
     menu: function (args) {
