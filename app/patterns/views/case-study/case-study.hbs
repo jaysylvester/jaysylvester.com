@@ -3,35 +3,57 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — UX Case Study: {{case.client_name}}</title>
-    <meta name="description" content="{{case.meta_description}}">
-    <meta name="keywords" content="{{case.meta_keywords}}">
+    <title>Jay Sylvester — UX Case Study: {{caseStudy.client_name}}</title>
+    <meta name="description" content="{{caseStudy.meta_description}}">
+    <meta name="keywords" content="{{caseStudy.meta_keywords}}">
     <link rel="stylesheet" type="text/css" href="/min/site.css">
     <script type="text/javascript" src="/min/site.js"></script>
   </head>
-  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+  <body data-client="{{caseStudy.client_url}}" data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
     {{{include.header}}}
     <main>
       <section class="logo">
-        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{case.client_url}}/{{case.client_url}}-logo.png" alt="{{case.client_name}} logo">
+        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{caseStudy.client_url}}/{{caseStudy.client_url}}-logo.png" alt="{{caseStudy.client_name}} logo">
       </section>
-      <h1><span>Case Study:</span> {{{case.title}}}</h1>
+      <h1><span>Case Study:</span> {{{caseStudy.title}}}</h1>
       <ul class="attributes">
         <li class="domain">
-          {{{case.domain}}}
+          {{{caseStudy.domain}}}
         </li>
         <li class="platform">
-          {{{case.platform}}}
+          {{{caseStudy.platform}}}
         </li>
         <li class="expertise">
-          {{{case.expertise}}}
+          {{{caseStudy.expertise}}}
         </li>
       </ul>
-      <p class="tagline">{{case.tagline}}</p>
-      <p class="summary">{{case.summary}}</p>
-      <img class="devices" data-src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,[parameters]/jaysylvester.com/case-studies/{{case.client_url}}/{{case.client_url}}-devices.png" alt="{{case.client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      <p class="tagline">{{caseStudy.tagline}}</p>
+      <p class="summary">{{caseStudy.summary}}</p>
+      <noscript>
+        <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{caseStudy.client_url}}/{{caseStudy.client_url}}-devices.png" alt="{{caseStudy.client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      </noscript>
+      <img class="devices" data-src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{caseStudy.client_url}}/{{caseStudy.client_url}}-devices.png" alt="{{caseStudy.client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
       <section class="content">
-        {{{case.content}}}
+        {{{caseStudy.content}}}
+      </section>
+      <section class="screens">
+        {{#each screens}}
+          <figure role="group" class="screens">
+            <section>
+              {{#each this.screens}}
+                <figure>
+                  <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/{{this.url}}" target="_blank" title="Open this image in a new tab">
+                    <noscript>
+                      <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{this.url}}" alt="{{this.alt}}">
+                    </noscript>
+                    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{this.url}}" alt="{{this.alt}}">
+                  </a>
+                </figure>
+              {{/each}}
+            </section>
+            <figcaption>{{{this.category}}}</figcaption>
+          </figure>
+        {{/each}}
       </section>
       <a class="primary-action" href="/case-studies">Read more case studies</a>
     </main>

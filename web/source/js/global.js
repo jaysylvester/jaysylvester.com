@@ -12,8 +12,7 @@ JAY.global = ( function () {
       var body = document.querySelector('body'),
           bodyOffset = 0,
           timer = 0,
-          header = document.querySelector('body > header'),
-          menuIcon
+          header = document.querySelector('body > header')
 
       setTimeout( function () {
         window.addEventListener('scroll', function () {
@@ -46,23 +45,27 @@ JAY.global = ( function () {
 
     imageLoad: function () {
       var load = function () {
-            const images = document.querySelectorAll('img:not(.loaded)')
-
+            const images = document.querySelectorAll('img[data-src]:not(.loaded)')
+            
             if ( images.length ) {
               images.forEach( function (item) {
-                if ( item.dataset.src ) {
-                  var dimension = item.clientWidth ? 'w_' + item.clientWidth : 'h_' + item.clientHeight
-  
-                  // If the image is within 1.5 screen heights of the current offset, load it
-                  if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-                    item.src = item.dataset.src.replace('[parameters]', 'f_auto,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
-                    item.classList.add('loaded')
-                    if ( item.parentNode.tagName === 'FIGURE' ) {
-                      methods.imageZoom(item)
-                    }
-                  }
+                // Make sure all images have an explicit width or height set in CSS for best results
+                let dimension
+                // Default to width on mobile since most images are set to 100% width
+                if ( document.body.clientWidth < 768 ) {
+                  dimension = item.clientWidth ? 'w_' + item.clientWidth : 'h_' + item.clientHeight
+                // Default to height on larger devices
                 } else {
+                  dimension = item.clientHeight ? 'h_' + item.clientHeight : 'w_' + item.clientWidth
+                }
+
+                // If the image is within 2 screen heights of the current offset, load it
+                if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 2 ) ) {
+                  item.src = item.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
                   item.classList.add('loaded')
+                  if ( item.parentNode.parentNode.tagName === 'FIGURE' ) {
+                    methods.imageZoom(item)
+                  }
                 }
               })
             } else {
@@ -77,20 +80,14 @@ JAY.global = ( function () {
 
     imageZoom: function (item) {
       var mask = document.getElementById('mask') || document.createElement('div'),
-          zoomWrapper = document.createElement('span'),
-          zoomButton = document.createElement('span'),
-          parent = item.parentNode,
-          src = item.dataset.src.replace('[parameters]', 'f_auto,q_50,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+          anchor = item.parentNode,
+          src = item.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
 
       mask.setAttribute('id', 'mask')
       document.body.appendChild(mask)
-      zoomWrapper.classList.add('zoom')
-      parent.insertBefore(zoomWrapper, parent.querySelector('figcaption'))
-      zoomButton.classList.add('zoom-button')
-      zoomWrapper.appendChild(item)
-      zoomWrapper.appendChild(zoomButton)
 
-      zoomWrapper.addEventListener('click', function () {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault()
         mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a><img src="' + src + '">'
         document.querySelector('html').classList.add('mask-enabled')
         mask.classList.add('enabled')

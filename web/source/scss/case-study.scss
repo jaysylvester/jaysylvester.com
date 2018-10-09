@@ -78,13 +78,70 @@ body[data-controller="case-study"][data-view="case-study"] {
       margin: 0 auto 3rem;
     }
 
-    figure:not([role="group"]) {
-      margin: 2rem auto 4rem;
+    figure {
+      margin: 4rem auto;
+
+      // Fitly
+      &.pricing-cta {
+        figure:nth-child(1) {
+          margin-bottom: 1rem;
+        }
+        figure:nth-child(2) {
+          margin: 0 auto 2rem;
+        }
+      }
 
       img {
         width: 100%;
         border-radius: 0.4rem;
         box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
+      }
+
+      // Screenshots
+      &.screens {
+        width: 100vw;
+        margin: 3rem 0 3rem -1rem;
+  
+        section {
+          display: flex;
+          overflow-x: scroll;
+          -webkit-overflow-scrolling: touch;
+          padding: 1rem;
+  
+          &::after {
+            content: '';
+            flex: 0 0 1rem;
+            display: block;
+            height: 1rem;
+          }
+        }
+  
+        figure {
+          flex: 0 0 82vw;
+          height: 50vw;
+          margin: 0 2rem 0 0;
+          border-radius: 0.4rem;
+          box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
+          overflow: hidden;
+          position: relative;
+  
+          &:last-child {
+            margin: 0;
+          }
+  
+          img {
+            border-radius: 0;
+            box-shadow: none;
+          }
+        }
+
+        a.new-tab {
+          position: initial;
+        }
+  
+        figcaption {
+          margin-top: 0;
+        }
       }
     }
 
@@ -95,58 +152,33 @@ body[data-controller="case-study"][data-view="case-study"] {
       text-align: center;
     }
 
-    figure[role="group"] {
-      width: 100vw;
-      margin: 3rem 0 3rem -1rem;
-
-      section {
-        display: flex;
-        overflow-x: scroll;
-        -webkit-overflow-scrolling: touch;
-        padding: 1rem;
-
-        &::after {
-          content: '';
-          flex: 0 0 1rem;
-          display: block;
-          height: 1rem;
-        }
-      }
-
-      figure {
-        flex: 0 0 82vw;
-        height: 50vw;
-        margin: 0 2rem 0 0;
-        border-radius: 0.4rem;
-        box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
-        overflow: hidden;
-
-        &:last-child {
-          margin: 0;
-        }
-
-
-
-        img {
-          border-radius: 0;
-          box-shadow: none;
-        }
-      }
-
-      &.devices {
-        figure {
-          border-radius: 0;
-          box-shadow: none;
-        }
-      }
-
-      figcaption {
-        margin-top: 0;
-      }
+    figure.device,
+    figure.device figure,
+    figure.device img {
+      border-radius: 0;
+      box-shadow: none;
     }
 
     a.primary-action {
-      margin: 2rem auto;
+      margin: 8rem auto 2rem;
+    }
+  }
+
+  &[data-client="Fitly"] main img.logo {
+    max-height: 6rem;
+  }
+
+  &[data-client="Vidyo"] {
+    main {
+      figure.screens:nth-child(4) figure {
+        margin-bottom: 0;
+        border-radius: 0;
+        box-shadow: none;
+      } 
+      figure.screens:nth-child(2) figure img,
+      figure.screens:nth-child(3) figure img{
+        height: 14rem;
+      }
     }
   }
 
@@ -199,44 +231,80 @@ body[data-controller="case-study"][data-view="case-study"] {
         margin: auto;
       }
 
-      figure:not([role="group"]) {
-        max-width: 85%;
-        margin: 3rem auto 6rem;
-      }
+      figure {
+        margin: 6rem auto;
 
-      figcaption {
-        margin-top: 2rem;
-      }
+        &.callout {
+          // Fitly
+          &.zip-code {
+            img {
+              height: 30rem;
+            }
+          }
 
-      figure[role="group"] {
-        margin: 6rem 0 6rem -2rem;
+          &.pricing-cta {
+            figure {
+              margin-bottom: 2rem;
+            }
 
-        section {
-          padding: 2rem;
+            img {
+              height: 30rem;
+            }
+          }
 
-          &::after {
-            flex-basis: 2rem;
+          img {
+            width: auto;
+            height: 45rem;
+            margin: auto;
           }
         }
 
-        figure {
-          flex-basis: 45rem;
-          height: 28rem;
+        &.screens {
+          margin: 6rem 0 6rem -2rem;
+  
+          section {
+            padding: 2rem;
+  
+            &::after {
+              flex-basis: 2rem;
+            }
+          }
+  
+          figure {
+            flex-basis: 45rem;
+            height: 28rem;
+          }
+
+          figcaption {
+            max-width: none;
+          }
         }
       }
+
+      figcaption {
+        max-width: 45rem;
+        margin: 2rem auto 0;
+      }
+    }
+
+    &[data-client="Fitly"] main img.logo {
+      max-height: 7rem;
+    }
+    &[data-client="OncoTracker"] main img.logo {
+      max-height: 4.5rem;
     }
   }
 
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
     main {
-      figure[role="group"] {
+      figure.screens {
         width: 100%;
         margin-left: 0;
 
         section {
           flex-wrap: wrap;
-          justify-content: space-between;
+          justify-content: center;
           padding: 1rem 0.3rem 0;
           overflow: visible;
 
@@ -248,7 +316,17 @@ body[data-controller="case-study"][data-view="case-study"] {
         figure {
           flex-basis: 23%;
           height: 14rem;
-          margin: 0 0 2rem 0;
+          margin: 0 2rem 2rem 0;
+
+          &:first-child,
+          &:nth-child(5) {
+            margin-left: 0;
+          }
+
+          &:nth-child(4),
+          &:last-child {
+            margin-right: 0;
+          }
         }
       }
     }

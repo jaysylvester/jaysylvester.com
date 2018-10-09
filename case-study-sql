@@ -1,12 +1,11 @@
 delete from case_studies;
+delete from screens;
 
 insert into case_studies
 ( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
 values
 ( 'Vidyo', 'Vidyo', 'Vidyo Remote Collaboration Solutions', 'Video conferencing and collaboration that goes well beyond the typical Skype call', 'Video Conferencing &amp; Collaboration', 'Desktop / Mobile / Web', 'UX Design / Team Management', 'Vidyo had a complex suite of video conferencing apps that spanned many platforms, but a lack of design standards made the experience inconsistent across devices. I defined crucial UX processes and led the design team in establishing a unified presentation across the entire product line.', '<p>Vidyo built their brand on breakthrough technology that enables high-quality, low bandwidth video conferencing with hundreds of participants across pretty much any device you can imagine: phones, tablets, computers, and even multi-screen conference room systems. The superiority of the underlying technology was enough to drive their initial success, but today’s customers expect great technology to be paired with great design. Recognizing that crucial need, Vidyo hired me to establish UX process, manage and grow the UX team, and drive the adoption of user-centered design across the organization.</p>
 
-
-<section>
 <h2>Broken process</h2>
 
 <p>Vidyo’s original video conferencing applications, VidyoDesktop and VidyoMobile, had languished for years, and their replacement, the Vidyo Neo software suite, was an attempt to address the bulk of their outstanding issues in one fell swoop. Being new to the company and the project, I was asked to supplement the existing design team as a UX designer, with the UX team reporting to the engineering lead. It was an odd arrangement, but there was a tight deadline and heavy pressure to complete the work, and I wanted to help however I could.</p>
@@ -32,9 +31,7 @@ values
 <p>No room was left in the design/development workflow for user testing and iteration. Once a feature went into production, it was forgotten in favor of the next set of features.</p>
 
 <p>Not surprisingly, working on Vidyo Neo with broken or lacking process was a tough slog, and while customers told us it was an improvement over the previous generation of products, I knew we could do much better.</p>
-</section>
 
-<section>
 <h2>Redesigning design at Vidyo</h2>
 
 <p>After my experience with Vidyo Neo, I was determined to implement a proper UX process that would establish research and customer data as the primary drivers behind our feature roadmap and design decisions, while at the same time making the design/development workflow more collaborative and productive. I was afforded that opportunity when management decided to embark on a massive rebranding effort and product overhaul.</p>
@@ -53,11 +50,13 @@ values
 <h3>Introduced a UX-driven design workflow</h3>
 <p>I was reassigned from the engineering team to the product group and given responsibility for all final design decisions. My team worked with a new group of product managers on our new projects and they focused their time on managing the roadmap and feature requirements rather than dictating design. To help explain the process changes I was proposing, I created documentation for Product/Engineering/QA and walked them through examples of healthy UX workflows.</p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+<figure class="callout ux-process">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Vidyo/ux-process.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+    </a>
 <figcaption>My recommendation of a healthy design workflow within a development environment</figcaption>
 </figure>
 
@@ -70,163 +69,65 @@ values
 <h3>Conducted extensive usability studies</h3>
 <p>I wanted a true understanding of our competitors’ products and how we stacked up against them, so my team conducted usability studies on both our existing products and our competitors’ products. We moderated the first batch of sessions in person and conducted additional studies with remote participants. Combining the results of these studies with our customer interviews, we created a UX audit containing recommendations for Vidyo Neo enhancements.</p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+<figure class="callout usability-study">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+    </a>
 <figcaption>A Vidyo Neo usability study participant attempts to search her contact list</figcaption>
 </figure>
 
 <h3>Created a style guide for design components and document templates</h3>
 <p>Even a small team of designers can struggle with consistency across many design documents covering multiple products. We created a shared UX library consisting of a simple style guide, common design elements, and UX document templates so engineering received consistent and predictable static mockups.</p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of a usability study session">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of a usability study session">
+<figure class="callout style-guide">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of the Vidyo UX style guide">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of the Vidyo UX style guide">
+    </a>
 <figcaption>Part of our style guide</figcaption>
 </figure>
 
 <h3>Built prototypes and iterated designs based on research</h3>
 <p>Continuing with our new testing procedure, we iterated our static designs and built prototypes to address previously unseen usability problems and also created entirely new approaches in our rebranded products like VidyoConnect. We then built prototypes of varying complexity in order to demonstrate new features and functionality and conduct usability testing prior to implementation. In most cases, we used tools like InVision and Adobe XD to quickly convert static mockups into clickable prototypes. For the redesign of the desktop app, VidyoConnect, which involved complex user interactions and an extensive new set of features, I created an almost fully-functional prototype built in Electron that behaved as the real app would.</p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of a usability study session">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
+<figure class="callout prototype">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
+    </a>
 <figcaption>VidyoConnect desktop prototype built with Electron (note the live camera capture)</figcaption>
 </figure>
 
-</section>
-<section>
 <h2>Conclusion</h2>
 
-<p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>
+<p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>' );
 
-</section>
-<section class="samples">
-<h2>Samples / Mockups</h2>
-<p>Below are various samples of my team''s output.</p>
-<figure role="group" class="screens">
-<section>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-1.jpg" alt="A screen cap of the VidyoCore management suite">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-1.jpg" alt="A screen cap of the VidyoCore management suite">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-2.jpg" alt="A screen cap of the VidyoCore management suite">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-2.jpg" alt="A screen cap of the VidyoCore management suite">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-3.jpg" alt="A screen cap of the VidyoCore management suite">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-3.jpg" alt="A screen cap of the VidyoCore management suite">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoCore-4.jpg" alt="A screen cap of the VidyoCore management suite">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoCore-4.jpg" alt="A screen cap of the VidyoCore management suite">
-</figure>
-</section>
-<figcaption>VidyoCore conference management suite</figcaption>
-</figure>
-<figure role="group" class="screens">
-<section>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-1.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-1.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-2.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-2.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-3.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-3.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Vidyo-Neo-4.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Vidyo-Neo-4.jpg" alt="A screen cap of the Vidyo Neo desktop app">
-</figure>
-</section>
-<figcaption>Vidyo Neo v1</figcaption>
-</figure>
-<figure role="group" class="screens">
-<section>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-1.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-1.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-2.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-2.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-3.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-3.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-4.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-4.jpg" alt="A screen cap of the VidyoConnect (Vidyo Neo 2.0) desktop app">
-</figure>
-</section>
-<figcaption>VidyoConnect Desktop (Vidyo Neo v2)</figcaption>
-</figure>
-<figure role="group" class="devices">
-<section>
-<figure class="mobile landscape">
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-1.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-1.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</figure>
-<figure class="mobile landscape">
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-2.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-2.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</figure>
-<figure class="mobile landscape">
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-3.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-3.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</figure>
-<figure class="mobile landscape">
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/VidyoConnect-mobile-4.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/VidyoConnect-mobile-4.jpg" alt="A screen cap of the VidyoConnect mobile app">
-</figure>
-</section>
-<figcaption>VidyoConnect Mobile</figcaption>
-</figure>
-</section>' );
+insert into screens
+( client, url, alt, category, sort )
+values
+( 'Vidyo', 'VidyoCore-1.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 1 ),
+( 'Vidyo', 'VidyoCore-2.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 2 ),
+( 'Vidyo', 'VidyoCore-3.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 3),
+( 'Vidyo', 'VidyoCore-4.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 4 ),
+( 'Vidyo', 'Vidyo-Neo-1.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 5 ),
+( 'Vidyo', 'Vidyo-Neo-2.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 6 ),
+( 'Vidyo', 'Vidyo-Neo-3.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 7 ),
+( 'Vidyo', 'Vidyo-Neo-4.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 8 ),
+( 'Vidyo', 'VidyoConnect-1.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 9 ),
+( 'Vidyo', 'VidyoConnect-2.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 10 ),
+( 'Vidyo', 'VidyoConnect-3.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 11 ),
+( 'Vidyo', 'VidyoConnect-4.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 12 ),
+( 'Vidyo', 'VidyoConnect-mobile-1.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 13 ),
+( 'Vidyo', 'VidyoConnect-mobile-2.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 14 ),
+( 'Vidyo', 'VidyoConnect-mobile-3.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 15 ),
+( 'Vidyo', 'VidyoConnect-mobile-4.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 16 );
 
 
 insert into case_studies
@@ -255,42 +156,21 @@ During my second year at Abercrombie, we implemented a series of further improve
 </p>
 <p>
 Today, Abercrombie''s various brands are in a much better position to tackle future e-commerce challenges thanks to the work performed by the front end team under my leadership.
-</p>
-<figure role="group" class="screens">
-<section>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Abercrombie.jpg" alt="A screen cap of the Abercrombie home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Abercrombie.jpg" alt="A screen cap of the Abercrombie home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/abercrombie-kids.jpg" alt="A screen cap of the abercrombie kids home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/abercrombie-kids.jpg" alt="A screen cap of the abercrombie kids home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Hollister.jpg" alt="A screen cap of the Hollister home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Hollister.jpg" alt="A screen cap of the Hollister home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/Gilly-Hicks.jpg" alt="A screen cap of the Gilly Hicks home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/Gilly-Hicks.jpg" alt="A screen cap of the Gilly Hicks home page">
-</figure>
-</section>
-<figcaption>All four Abercrombie brands built on the same front end framework</figcaption>
-</figure>' );
+</p>' );
+
+insert into screens
+( client, url, alt, category, sort )
+values
+( 'Abercrombie-and-Fitch', 'Abercrombie.jpg', 'Abcrombie home page', 'All four Abercrombie brands using the same front end framework', 1 ),
+( 'Abercrombie-and-Fitch', 'abercrombie-kids.jpg', 'abercrombie kids home page', 'All four Abercrombie brands using the same front end framework', 2 ),
+( 'Abercrombie-and-Fitch', 'Hollister.jpg', 'Hollister home page', 'All four Abercrombie brands using the same front end framework', 3),
+( 'Abercrombie-and-Fitch', 'Gilly-Hicks.jpg', 'Gilly Hicks home page', 'All four Abercrombie brands using the same front end framework', 4 );
 
 
 insert into case_studies
 ( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
 values
-( 'hibu', 'hibu', 'hibu Marketplace Responsive Design', 'There is no such thing as the "mobile web"', 'E-commerce', 'Web', 'UX Design / UI Architecture / Team Management', 'hibu had an e-commerce platform with lots of legacy code and a design that wasn''t ready for mobile devices. My team rebuilt the UI from scratch, then devised a plan to go responsive and improve the experience for millions of mobile and tablet users.', '
+( 'hibu', 'hibu', 'hibu Marketplace Responsive Design', 'There is no such thing as the "mobile web"', 'E-commerce', 'Responsive Web', 'UX Design / UI Architecture / Team Management', 'hibu had an e-commerce platform with lots of legacy code and a design that wasn''t ready for mobile devices. My team rebuilt the UI from scratch, then devised a plan to go responsive and improve the experience for millions of mobile and tablet users.', '
 <p>
 hibu acquired Znode, an e-commerce startup, in order to use their .NET e-commerce platform as the foundation for a series of new products. One such product was the hibu Marketplace, an international online "mall" with a local focus that would allow small merchants to create online storefronts and sell their goods and services to both local and national audiences. After a hurried beta launch, the product owners wanted to take the Marketplace to the next level, at which point I was brought on board to oversee UX design and UI development.
 </p>
@@ -316,18 +196,22 @@ Selling Responsive Design
 Before we could begin a responsive redesign, I had to sell the idea to senior management, so I spent a few days designing and building a semi-functional home page prototype to demonstrate the possibilities of responsive design. Incorporating requests from our merchandizers, I brought product imagery to the forefront and gave them space for promotional content that was lacking in the current design. Knowing that the concept would be demonstrated to business users on phones and tablets and given the limited amount of time I had to put it together, I focused my testing on iOS and Android phones and tablets.
 </p>
 
-<figure role="group">
+<figure role="group" class="callout concept">
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+    </a>
 </figure>
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+    <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" target="_blank" title="Open this image in a new tab">
+      <noscript>
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+      </noscript>
+      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+    </a>
 </figure>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
 </figure>
@@ -362,11 +246,13 @@ I conducted a series of planning meetings with my team to identify our goals and
 We spent the next round of meetings discussing the challenges of UX design on a responsive redesign project with a tight deadline. What should be our target viewport sizes and where should we set our breakpoints? Should we adopt a mobile first approach? Should we use an existing framework or roll our own? What would be our deliverables? In all our discussions, one thing was clear: after coming to a general concensus during our whiteboard sessions, we should go directly to low-fidelity prototyping in the browser. Draw it on the whiteboard, take a picture with your phone, then get back to your desk and start coding. It would be a Lean UX process based on discussing, sketching, prototyping, testing, and iterating, and the final deliverable would be low-fidelity, fully responsive HTML prototypes of the entire site.
 </p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+<figure class="callout whiteboard">
+  <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" target="_blank" title="Open this image in a new tab">
+    <noscript>
+      <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+    </noscript>
+    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+  </a>
 <figcaption>hibu Marketplace home page whiteboard sketches</figcaption>
 </figure>
 
@@ -374,18 +260,22 @@ We spent the next round of meetings discussing the challenges of UX design on a 
 HTML wireframes have many advantages over flat wireframes. Our wireframes would be interactive and responsive, so they could be viewed on any device in a browser and behave  like the final product would; just toss them onto a server and give stakeholders the URL. Many interaction design decisions made during the UX process wouldn''t need to be written down in technical documentation because they would be self-evident. For example, if clicking on an anchor should cause a form to slide down and be fully visible in 250 milliseconds, it''s right there in the wireframe and its source code. The risk of details getting lost in translation from wireframe to final code is greatly reduced compared to a traditional flat wireframe. Another benefit would be easy versioning using a git repository and local branching, just like production code. And large sections of that very same code would be reusable in the production version as well.
 </p>
 
-<figure role="group">
+<figure role="group" class="callout prototype">
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+  <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" target="_blank" title="Open this image in a new tab">
+    <noscript>
+      <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+    </noscript>
+    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+  </a>
 </figure>
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+  <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" target="_blank" title="Open this image in a new tab">
+    <noscript>
+      <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+    </noscript>
+    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+  </a>
 </figure>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
 </figure>
@@ -395,60 +285,19 @@ Lots of teams are struggling through the complexities of UX in a responsive desi
 </p>
 <p>
 While the challenges of UX design on a responsive project are significant, we proved they''re not insurmountable.
-</p>
-<figure role="group" class="screens">
-<section>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-home-mobile.jpg" alt="A screen cap of the Abercrombie home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-home-mobile.jpg" alt="A screen cap of the Abercrombie home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-home-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-home-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-category-mobile.jpg" alt="A screen cap of the Hollister home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-category-mobile.jpg" alt="A screen cap of the Hollister home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-category-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-category-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-search-mobile.jpg" alt="A screen cap of the Abercrombie home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-search-mobile.jpg" alt="A screen cap of the Abercrombie home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-search-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-search-desktop.jpg" alt="A screen cap of the abercrombie kids home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-cart-mobile.jpg" alt="A screen cap of the Hollister home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-cart-mobile.jpg" alt="A screen cap of the Hollister home page">
-</figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/eMP-cart-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/eMP-cart-desktop.jpg" alt="A screen cap of the Gilly Hicks home page">
-</figure>
-</section>
-<figcaption>A selection of screen caps from the hibu Marketplace responsive HTML prototype</figcaption>
-</figure>' );
+</p>' );
+
+insert into screens
+( client, url, alt, category, sort )
+values
+( 'hibu', 'eMP-home-mobile.jpg', 'hibu Marketplace HTML prototype (home page, mobile)', 'hibu Marketplace HTML prototype', 1 ),
+( 'hibu', 'eMP-home-desktop.jpg', 'hibu Marketplace HTML prototype (home page, desktop)', 'hibu Marketplace HTML prototype', 2 ),
+( 'hibu', 'eMP-category-mobile.jpg', 'hibu Marketplace HTML prototype (category page, mobile)', 'hibu Marketplace HTML prototype', 3 ),
+( 'hibu', 'eMP-category-desktop.jpg', 'hibu Marketplace HTML prototype (category page, desktop)', 'hibu Marketplace HTML prototype', 4 ),
+( 'hibu', 'eMP-search-mobile.jpg', 'hibu Marketplace HTML prototype (search results, mobile)', 'hibu Marketplace HTML prototype', 5 ),
+( 'hibu', 'eMP-search-desktop.jpg', 'hibu Marketplace HTML prototype (search results, desktop)', 'hibu Marketplace HTML prototype', 6 ),
+( 'hibu', 'eMP-cart-mobile.jpg', 'hibu Marketplace HTML prototype (shopping cart, mobile)', 'hibu Marketplace HTML prototype', 7 ),
+( 'hibu', 'eMP-cart-desktop.jpg', 'hibu Marketplace HTML prototype (shopping cart, desktop)', 'hibu Marketplace HTML prototype', 8 );
 
 
 insert into case_studies
@@ -461,11 +310,13 @@ OncoTracker approached me with their idea for a service to allow oncology patien
 The first step was coming up with a logical, friendly architecture that would guide users through the process of inputting lengthy treatment records that potentially span multiple treatment cycles from a series of physicians. Working with OncoTracker to understand the many stages of cancer treatment, I put together a site map and HTML wireframes to demonstrate how I planned to get the user from one step to the next. I broke the process down into 3 primary stages based on chronological progression:  diagnosis, treatment, and follow-up. Each stage would have multiple steps for entering specific details about that stage. Within each step, the user would be presented with a detailed description of that step''s information and a form to capture their data. Each form field also would have its own accompanying help text to assist the user in translating cryptic medical data from their paper forms into the OncoTracker interface.
 </p>
 
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+<figure class="callout sitemap">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+</a>
 <figcaption>The OncoTracker sitemap (OmniGraffle)</figcaption>
 </figure>
 
@@ -474,33 +325,162 @@ Because entering such large amounts of data can be a time-consuming process, the
 </p>
 <p>
 The final product was an easy-to-use interface that allowed oncology patients with a lot on their minds to spend less time worrying about their medical records and more time focusing on their health.
+</p>' );
+
+insert into screens
+( client, url, alt, category, sort )
+values
+( 'OncoTracker', 'OncoTracker-home.jpg', 'OncoTracker home page', 'OncoTracker screenshots', 1 ),
+( 'OncoTracker', 'OncoTracker-overview.jpg', 'OncoTracker treatment overview', 'OncoTracker screenshots', 2 ),
+( 'OncoTracker', 'OncoTracker-pathology.jpg', 'OncoTracker pathology report entry screen', 'OncoTracker screenshots', 3),
+( 'OncoTracker', 'OncoTracker-profile.jpg', 'OncoTracker profile overview', 'OncoTracker screenshots', 4 );
+
+
+insert into case_studies
+( client_name, client_url, title, tagline, domain, platform, expertise, summary, content )
+values
+( 'Fitly', 'Fitly', 'Fitly Online Store', 'Making it easy for busy families to plan and prepare healthy, delicious meals', 'E-commerce', 'Responsive Web', 'UX Design / UI Architecture / Front End Development', 'Fitly approached me with an e-commerce site that had some UX challenges stemming from its startup incubator roots and a complex pricing model. I was tasked with improving the user experience and rebuilding the responsive front end to reach MVP (Minimum Viable Product) status.', '
+<p>
+Fitly was my first experience with a startup. When I came on board, the existing product was the result of a startup incubator, and it was about what you would expect considering its origins: good at demonstrating the concept&mdash;choose healthy, delicious recipes and have their ingredients delivered fresh to your door&mdash;but troubled in its execution. There were significant e-commerce usability problems including unclear pricing and a confusing checkout process, and while the bootstrapped front end architecture was responsive, it was buggy. We had a small team, big ideas, and not a lot of time before launch.
 </p>
-<figure role="group" class="screens">
-<section>
+<h3>
+Design Challenges
+</h3>
+<p>
+We wanted to remain tightly focused and include only what we needed for an MVP, but there were still hard requirements that had to be met based on business needs and technical feasibility. Having worked on a number of e-commerce sites before, I knew much of the UX design would be straightforward, but there were a few requirements that made Fitly unique:
+</p>
+<ul>
+<li>
+  Our service would only be available to select zip codes at launch, so users outside those zip codes shouldn''t be allowed to place orders
+</li>
+<li>
+  Paying customers needed easy access to the recipe preparation instructions in the kitchen, but we didn''t have time or money to provide printed recipe cards with each order like our competitors
+</li>
+<li>
+  Recipes would have a tiered pricing structure based on the quantity (number of servings) purchased, so the price would change based on the number of items in the user''s shopping cart
+</li>
+</ul>
+<h3>
+Mobile First and Lean UX
+</h3>
+<p>
+Given the tight deadline, I decided that we''d produce wireframes for mobile only and then design in the browser from there, getting buy-in from the team as we went. I believed this approach would work well with my plan to follow a mobile first design process; mobile wireframes would demonstrate all functionality to the team, which would be enough to get their approval on functional concerns and give the back end developers what they needed to perform their work.
+</p>
+
+<figure class="callout sitemap">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" alt="An image of the Fitly sitemap">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" alt="An image of the Fitly sitemap">
+</a>
+<figcaption>Fitly MVP sitemap and user task flow</figcaption>
+</figure>
+
+<p>
+During the design process, the team met Monday, Wednesday, and Friday to review the wireframes as a group and provide feedback. We iterated quickly and dealt with unexpected challenges on the fly. Requirements frequently changed midstream, but with only mobile wireframes to maintain, I was able to keep up with these changes.
+</p>
+<p>
+While a true Lean UX approach would probably call for even fewer formal wireframes, I still consider our approach fairly lean because I only produced wireframes for mobile devices and they were virtually unannotated. We had no written requirements whatsoever from the stakeholders, so I felt it was necessary to codify certain requirements and get sign-off from all parties. I also wanted to provide at least a minimum technical specification for the back end developers to reference while programming.
+</p>
+
+<figure class="callout wireframes">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" alt="A thumbnail of my Fitly wireframes">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" alt="A thumbnail of my Fitly wireframes">
+</a>
+<figcaption>Fitly mobile wireframes (checkout, delivery info)</figcaption>
+</figure>
+
+<h3>
+UX Challenge #1: Delivery Zones
+</h3>
+<p>
+With the Fitly service only available to select zip codes at launch, we had to make sure that users outside those delivery areas weren''t able to place orders. During account creation, users had to provide their zip code, so users who were logged in didn''t present a problem, but anonymous visitors did. The initial solutions requested by the stakeholders were to require an account to access recipes or block the public from accessing any recipes without first providing their zip code. This also aligned with the stakeholders'' desire to protect the recipe content.
+</p>
+<p>
+I recommended against requiring an account simply to view our product due to the friction that would add to the experience. I felt Fitly''s value proposition lie not with the recipes, but with the easy meal planning and grocery delivery. I also knew we would miss out on SEO benefits if we prevented search engines from indexing our recipe content. However, I didn''t want users outside our delivery area adding items to their cart and getting all the way to checkout only to turn them away once we checked their zip code.
+</p>
+<p>
+I proposed we open our recipes to the public and simply add a zip code field above the &quot;add to cart&quot; button on the recipe detail page with a note explaining why we were asking for it. If the user''s zip code were in our service area, we''d add the item to their cart and set a cookie so we''d know they were in a valid delivery area. The zip code field would be hidden for that user from then on, and we wouldn''t ask them to create an account until they entered the checkout process. If we didn''t deliver to their zip code, we''d forward them to our newsletter signup form to collect their e-mail address and notify them when Fitly became available.
+</p>
+
+<figure class="callout zip-code">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" alt="A thumbnail of the Fitly zip code verification field">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" alt="A thumbnail of the Fitly zip code verification field">
+</a>
+<figcaption>We avoided a pile of additional requested functionality and a negative user experience by adding one extra field.</figcaption>
+</figure>
+
+<h3>
+UX Challenge #2: Preparation Instructions
+</h3>
+<p>
+Fitly''s competitors had been on the scene for significantly longer than we had, giving them more time to solve certain logistical problems and obtain significant funding. One of the nice aspects of their experience was the inclusion of printed recipe cards with each grocery delivery. When the customer received their groceries, they also received a printed set of cards with the ingredient list and preparation instructions. We had neither the time nor the funds to do the same for launch, so I had to come up with a solution to get us by.
+</p>
+<p>
+During our user research, we discovered that people sometimes use a tablet or laptop in the kitchen. It wasn''t always necessarily for cooking, but the fact that tablets and laptops have become so ubiquitous that they make appearances in the kitchen was interesting to me.
+</p>
+<p>
+If we couldn''t provide printed cards, I thought perhaps we could extend the functionality of the recipe detail page to function as a &quot;Kitchen View&quot;&mdash;ingredient lists and preparation instructions presented in big font sizes that would be easier to read from a distance and easier to interact with during the sometimes chaotic act of preparing the family meal. I designed the Kitchen View to make use of the same content present on the recipe detail page, but stripped down and increased in size using only JavaScript and CSS.
+</p>
+
+<figure class="callout device kitchen-view">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" alt="A thumbnail of the Fitly recipe kitchen view">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" alt="A thumbnail of the Fitly recipe kitchen view">
+</a>
+<figcaption>A printed recipe card isn''t necessary thanks to the easy-to-read Kitchen View.</figcaption>
+</figure>
+
+<h3>
+UX Challenge #3: Pricing
+</h3>
+<p>
+Fitly''s pricing model was complex compared to our competitors, who offered simple pricing based on a flat cost per meal (2 servings for $15, for example). We had a tiered pricing model based on the number of servings purchased with a minimum order size of 8 servings. Recipes started at $7.99 per serving, but dropped to $6.99 at 12 servings and $5.99 at 20 servings. Unlike a typical e-commerce site, we couldn''t simply display a price alongside each item because the price would change based on the number of servings in the user''s shopping cart, potentially confusing them. We also couldn''t embed the entire pricing story in every page because it was too lengthy.
+</p>
+<p>
+I figured that clear and consistent messaging throughout the shopping path was the best way to tell the pricing story, so I incorporated a pricing story CTA in a standout color and placed it on pages that contained product information. Clicking on the CTA would display the larger pricing story within the context of the current page. I also turned the tiered pricing into an upsell strategy within the shopping cart by including messaging that told the user how much they could save if they added more servings to their cart.
+</p>
+
+<figure role="group" class="callout pricing-cta">
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-home.jpg" alt="A screen cap of the Abercrombie home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-home.jpg" alt="A screen cap of the Abercrombie home page">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" alt="A thumbnail of the Fitly pricing story">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" alt="A thumbnail of the Fitly pricing story">
+</a>
 </figure>
 <figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-overview.jpg" alt="A screen cap of the abercrombie kids home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-overview.jpg" alt="A screen cap of the abercrombie kids home page">
+<a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" target="_blank" title="Open this image in a new tab">
+  <noscript>
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
+  </noscript>
+  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
+</a>
 </figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-pathology.jpg" alt="A screen cap of the Hollister home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-pathology.jpg" alt="A screen cap of the Hollister home page">
+<figcaption>The prominent orange CTA, which is visually consistent across all product pages, helps convey the story of a complex and potentially confusing pricing model.</figcaption>
 </figure>
-<figure>
-<noscript>
-<img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/OncoTracker-profile.jpg" alt="A screen cap of the Gilly Hicks home page">
-</noscript>
-<img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/OncoTracker-profile.jpg" alt="A screen cap of the Gilly Hicks home page">
-</figure>
-</section>
-<figcaption>Various examples of the OncoTracker interface</figcaption>
-</figure>' );
+
+<p>
+Designing the Fitly experience proved to be an interesting challenge not just because of our lofty goals and tight timeline, but because it had some quirks that set it apart from the typical e-commerce formula. Check out the work samples below for additional design comps.
+</p>' );
+
+insert into screens
+( client, url, alt, category, sort )
+values
+( 'Fitly', 'Fitly-recipe-detail-mobile.jpg', 'Fitly recipe detail page (mobile)', 'Fitly v2.0 online store', 1 ),
+( 'Fitly', 'Fitly-recipe-detail-tablet.jpg', 'Fitly recipe detail page (tablet)', 'Fitly v2.0 online store', 2 ),
+( 'Fitly', 'Fitly-recipe-detail-desktop.jpg', 'Fitly recipe detail page (desktop)', 'Fitly v2.0 online store', 3),
+( 'Fitly', 'Fitly-kitchen-view-tablet.jpg', 'Fitly kitchen view (tablet)', 'Fitly v2.0 online store', 4 ),
+( 'Fitly', 'Fitly-recipe-search-mobile.jpg', 'Fitly recipe search page (mobile)', 'Fitly v2.0 online store', 5 ),
+( 'Fitly', 'Fitly-recipe-search-tablet.jpg', 'Fitly recipe search page (tablet)', 'Fitly v2.0 online store', 6 ),
+( 'Fitly', 'Fitly-recipe-search-desktop.jpg', 'Fitly recipe search page (desktop)', 'Fitly v2.0 online store', 7 );

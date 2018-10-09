@@ -71,7 +71,7 @@ h3 {
 p {
   a {
     font-family: 'Lato Bold', sans-serif;
-    color: #FF3377;
+    color: #ff0055;
 
     &:hover {
       text-decoration: none;
@@ -92,6 +92,12 @@ a.primary-action {
   text-shadow: 0 0.1rem 0.2rem #80192B;
   background-image: linear-gradient(-180deg, #FF3377 0%, #D92B48 100%);
   border-radius: 0.4rem;
+}
+
+// Override default width/height caused by alt attributes in unloaded images
+img[data-src]:not(.loaded) {
+  width: 0;
+  height: 0;
 }
 
 // Main header
@@ -203,12 +209,12 @@ main {
 #mask-open-tab {
   width: 2rem;
   height: 2rem;
+  padding-left: 2rem;
   position: absolute;
   top: 2rem;
   right: 6rem;
   background: url('/images/icons/open-new-tab.png') center no-repeat;
   background-size: contain;
-  text-indent: 100%;
   overflow: hidden;
 }
 
@@ -216,22 +222,22 @@ main {
 #mask-close {
   width: 2rem;
   height: 2rem;
+  padding-left: 2rem;
   position: absolute;
   top: 2rem;
   right: 2rem;
   background: url('/images/icons/close.png') center no-repeat;
   background-size: contain;
-  text-indent: 100%;
   overflow: hidden;
 }
 
-span.zoom {
-  display: inline-block;
+a.new-tab {
+  display: block;
   position: relative;
-  height: 100%;
-  cursor: pointer;
 
-  span.zoom-button {
+  &::after {
+    content: '';
+    display: block;
     width: 4rem;
     height: 4rem;
     position: absolute;
@@ -248,7 +254,7 @@ span.zoom {
   }
 
   &:hover {
-    span.zoom-button {
+    &::after {
       opacity: 1;
     }
     img {
@@ -259,9 +265,18 @@ span.zoom {
 
 footer {
   padding: 2rem;
-  font-size: 1.4rem;
   color: #808080;
   text-align: center;
+
+  p.quote {
+    margin: 4rem auto;
+    font-family: 'Lato Italic', sans-serif;
+  }
+  
+  p.copyright {
+    margin-top: 4rem;
+    font-size: 1.4rem;
+  }
 }
 
 // 768px and up
@@ -298,7 +313,6 @@ footer {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    min-height: 6rem;
     padding: 0 calc((100% - 140rem) / 2);
     font-size: 1.6rem;
 
@@ -313,11 +327,19 @@ footer {
         margin-right: 3rem;
 
         li {
+          margin: 0;
+
           a {
-            padding: 1.9rem 1.5rem;
+            padding: 2rem 1.5rem 1.9rem;
           }
         }
       }
+    }
+  }
+
+  footer {
+    p.quote {
+      max-width: 70rem;
     }
   }
 

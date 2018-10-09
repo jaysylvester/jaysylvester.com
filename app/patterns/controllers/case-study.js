@@ -12,13 +12,14 @@ function handler(params, context, emitter) {
   app.listen({
     caseStudy: function (emitter) {
       app.models['case-study'].content(params.url.client, emitter)
+    },
+    screens: function (emitter) {
+      app.models['case-study'].screens(params.url.client, emitter)
     }
   }, function (output) {
     if ( output.caseStudy ) {
       emitter.emit('ready', {
-        content: {
-          case: output.caseStudy
-        },
+        content: output,
         include: {
           header: {
             controller: '_header'
