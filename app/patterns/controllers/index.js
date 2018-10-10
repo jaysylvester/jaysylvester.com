@@ -19,7 +19,7 @@ function handler(params, context, emitter) {
       },
       caseStudy: {
         route: '/case-study/client/Vidyo',
-        view: 'callout'
+        view: '_callout'
       }
     }
   })

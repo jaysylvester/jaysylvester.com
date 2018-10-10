@@ -1,4 +1,4 @@
-// _case-study controller
+// _case-studies controller
 
 'use strict'
 
@@ -10,17 +10,13 @@ module.exports = {
 // default action
 function handler(params, context, emitter) {
   app.listen({
-    caseStudy: function (emitter) {
-      app.models.clients.caseStudy(params.url.client, emitter)
-    },
-    screens: function (emitter) {
-      app.models.clients.screens(params.url.client, emitter)
+    caseStudies: function (emitter) {
+      app.models.clients.caseStudies(emitter)
     }
   }, function (output) {
-    if ( output.caseStudy ) {
-      output.caseStudy.screens = output.screens
+    if ( output.caseStudies ) {
       emitter.emit('ready', {
-        content: output.caseStudy,
+        content: output,
         include: {
           header: {
             controller: '_header'

@@ -79,7 +79,8 @@ p {
   }
 }
 
-a.primary-action {
+a.primary-action,
+li.primary-action a {
   display: block;
   max-width: 30rem;
   margin: auto;
@@ -148,7 +149,8 @@ body {
   }
 
   &[data-controller="index"][data-view="index"] > header nav li.about a,
-  &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a {
+  &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
+  &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a {
     color: #4d4d4d;
     background: #e6e6e6;
     border-radius: 0.6rem;
@@ -161,7 +163,8 @@ main {
   color: #333333;
 
   > * {
-    max-width: 100%;
+    margin: 0 1rem;
+    overflow-x: hidden;
   }
 }
 
@@ -286,7 +289,8 @@ footer {
 
     > header nav li a:hover,
     &[data-controller="index"][data-view="index"] > header nav li.about a,
-    &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a {
+    &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
+    &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a {
       position: relative;
       color: #737373;
       background: none;
@@ -337,6 +341,10 @@ footer {
     }
   }
 
+  main {
+    padding: 0 2rem 4rem;
+  }
+
   footer {
     p.quote {
       max-width: 70rem;
@@ -373,5 +381,12 @@ footer {
 
   h3 {
     margin-top: 4rem;
+  }
+
+  main {
+    width: 96rem;
+    margin: auto;
+    padding-left: 0;
+    padding-right: 0;
   }
 }

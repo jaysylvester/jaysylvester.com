@@ -1,85 +1,236 @@
-// Callout
+// Common styles
+.case-study {
+  section.logo {
+    display: flex;
+    align-content: center;
+  }
 
+  img.logo {
+    max-width: 28rem;
+    max-height: 4rem;
+    margin: auto;
+  }
 
-// Case study standalone
-body[data-controller="case-study"][data-view="case-study"] {
-  main {
-    padding: 0 1rem 1rem;
+  h1 {
+    font-size: 2rem;
+    font-family: 'Lato Bold', sans-serif;
+    color: #4D4D4D;
+    letter-spacing: 0.12rem;
+    text-align: center;
 
-    section.logo {
-      display: flex;
-      align-content: center;
-      height: 12rem;
+    span {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-family: 'Lato Light', sans-serif;
+      text-transform: uppercase;
     }
+  }
 
+  ul.attributes {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 1rem;
+    list-style-type: none;
+    font-size: 1.4rem;
+    color: #808080;
+    letter-spacing: 0.12rem;
+    text-align: center;
+    text-transform: uppercase;
+
+    li {
+      padding: 0.2rem 0;
+    }
+  }
+
+  p.tagline {
+    max-width: 34rem;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    font-family: 'Lato Bold Italic', sans-serif;
+    font-size: 1.8rem;
+    color: #4D4D4D;
+    text-align: center;
+
+    &::before {
+      content: '';
+      display: block;
+      max-width: 50rem;
+      height: 1px;
+      margin: 0 auto 2rem;
+      background-image: linear-gradient(-90deg, rgba(217,217,217,0.00) 0%, #D8D8D8 53%, rgba(216,216,216,0.00) 100%);
+    }
+  }
+
+  p.summary {
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  section.devices {
+    margin: 0;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &.Vidyo,
+  &.Fitly,
+  &.hibu {
+    section.devices img {
+      width: 142%;
+      margin-left: -21%;
+    }
+  }
+
+  figure.screens figure {
+    background: #f7f7f7;
+  }
+
+  @media only screen and (min-width: 768px) {
     img.logo {
-      max-width: 28rem;
-      max-height: 4rem;
-      margin: auto;
+      max-width: 45rem;
+      max-height: 6rem;
     }
 
     h1 {
-      font-size: 2rem;
-      font-family: 'Lato Bold', sans-serif;
-      color: #4D4D4D;
-      letter-spacing: 0.12rem;
-      text-align: center;
-
-      span {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-family: 'Lato Light', sans-serif;
-        text-transform: uppercase;
-      }
+      font-size: 2.4rem;
     }
-
+    
     ul.attributes {
-      display: flex;
-      flex-direction: column;
-      margin: 2rem 0;
-      list-style-type: none;
-      font-size: 1.4rem;
-      color: #808080;
-      letter-spacing: 0.12rem;
-      text-align: center;
-      text-transform: uppercase;
-
-      li {
-        padding: 0.2rem 0;
-      }
+      margin: 2rem 0 4rem;
     }
 
     p.tagline {
-      max-width: 34rem;
-      margin: 1rem auto;
-      font-family: 'Lato Bold Italic', sans-serif;
-      font-size: 1.8rem;
-      color: #4D4D4D;
-      text-align: center;
+      max-width: 50rem;
+      margin-bottom: 2rem;
+      font-size: 2.6rem;
 
       &::before {
-        content: '';
-        display: block;
-        max-width: 50rem;
-        height: 1px;
-        margin: 0 auto 2rem;
-        background-image: linear-gradient(-90deg, rgba(217,217,217,0.00) 0%, #D8D8D8 53%, rgba(216,216,216,0.00) 100%);
+        margin-bottom: 4rem;
       }
     }
 
     p.summary {
-      margin: 0 auto 3rem;
-      line-height: 1.6;
-      text-align: center;
+      max-width: 64rem;
+      margin: 0 auto 4rem;
+      font-size: 2.2rem;
     }
-    
+
     img.devices {
-      width: 100%;
-      margin: 0 auto 3rem;
+      width: auto;
+      height: 27.5rem;
+    }
+
+    &.Fitly, &.hibu, &.Vidyo {
+      section.devices img {
+        width: auto;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    h1 {
+      span {
+        display: initial;
+      }
+    }
+
+    ul.attributes {
+      flex-direction: row;
+      justify-content: center;
+      margin-top: 0.2rem;
+
+      li {
+        &::after {
+          content: '•';
+          display: inline-block;
+          padding: 0 0.8rem 0 0.6rem;
+          color: #cccccc;
+        }
+
+        &:last-child {
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+
+    p.tagline {
+      max-width: none;
+
+      &::before {
+        max-width: 80rem;
+      }
+    }
+
+    p.summary {
+      max-width: none;
+      margin-bottom: 8rem;
+    }
+
+    img.devices {
+      height: 35rem;
+    }
+  }
+}
+
+// Case studies list
+body[data-controller="case-studies"][data-view="case-studies"] {
+  .case-study {
+    margin: 4rem 0 8rem;
+    
+    h1,
+    p.tagline,
+    p.summary,
+    nav.actions li.more {
+      display: none;
+    }
+
+    section.logo {
+      height: 4rem;
+    }
+
+    ul.attributes {
+      margin-top: 1rem;
+    }
+
+    section.devices {
+      margin-bottom: 2rem;
+    }
+
+    @media only screen and (min-width: 768px) {
+      section.logo {
+        height: 10rem;
+      }
+
+      ul.attributes {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+}
+
+// Standalone case study
+body[data-controller="case-study"][data-view="case-study"] {
+  main {
+    section.logo {
+      height: 12rem;
+    }
+
+    section.devices {
+      margin-bottom: 2rem;
     }
 
     figure {
       margin: 4rem auto;
+
+      &.callout {
+        padding: 0.4rem;
+      }
 
       // Fitly
       &.pricing-cta {
@@ -125,11 +276,8 @@ body[data-controller="case-study"][data-view="case-study"] {
           overflow: hidden;
           position: relative;
   
-          &:last-child {
-            margin: 0;
-          }
-  
           img {
+            height: 100%;
             border-radius: 0;
             box-shadow: none;
           }
@@ -137,6 +285,7 @@ body[data-controller="case-study"][data-view="case-study"] {
 
         a.new-tab {
           position: initial;
+          height: 100%;
         }
   
         figcaption {
@@ -171,13 +320,9 @@ body[data-controller="case-study"][data-view="case-study"] {
   &[data-client="Vidyo"] {
     main {
       figure.screens:nth-child(4) figure {
-        margin-bottom: 0;
+        height: 42vw;
         border-radius: 0;
         box-shadow: none;
-      } 
-      figure.screens:nth-child(2) figure img,
-      figure.screens:nth-child(3) figure img{
-        height: 14rem;
       }
     }
   }
@@ -185,45 +330,12 @@ body[data-controller="case-study"][data-view="case-study"] {
   // 768px and up
   @media only screen and (min-width: 768px) {
     main {
-      padding: 0 2rem 4rem;
-
       section.logo {
         height: 18rem;
       }
-  
-      img.logo {
-        max-width: 45rem;
-        max-height: 6rem;
-      }
 
-      h1 {
-        font-size: 2.4rem;
-      }
-      
-      ul.attributes {
-        margin: 2rem 0 4rem;
-      }
-
-      p.tagline {
-        max-width: 50rem;
-        margin-bottom: 2rem;
-        font-size: 2.6rem;
-
-        &::before {
-          margin-bottom: 4rem;
-        }
-      }
-
-      p.summary {
-        max-width: 64rem;
+      section.devices {
         margin-bottom: 4rem;
-        font-size: 2.2rem;
-      }
-
-      img.devices {
-        width: auto;
-        height: 27.5rem;
-        margin-bottom: 6rem;
       }
 
       section.content {
@@ -254,7 +366,7 @@ body[data-controller="case-study"][data-view="case-study"] {
 
           img {
             width: auto;
-            height: 45rem;
+            height: 40rem;
             margin: auto;
           }
         }
@@ -274,10 +386,6 @@ body[data-controller="case-study"][data-view="case-study"] {
             flex-basis: 45rem;
             height: 28rem;
           }
-
-          figcaption {
-            max-width: none;
-          }
         }
       }
 
@@ -292,6 +400,11 @@ body[data-controller="case-study"][data-view="case-study"] {
     }
     &[data-client="OncoTracker"] main img.logo {
       max-height: 4.5rem;
+    }
+    &[data-client="Vidyo"] {
+      main figure.screens:nth-child(4) figure {
+        height: auto;
+      }
     }
   }
 
@@ -335,53 +448,8 @@ body[data-controller="case-study"][data-view="case-study"] {
   // 1024px and up
   @media only screen and (min-width: 1024px) {
     main {
-      width: 96rem;
-      margin: auto;
-      padding-left: 0;
-      padding-right: 0;
-
-      h1 {
-        span {
-          display: initial;
-        }
-      }
-
-      ul.attributes {
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 0.2rem;
-
-        li {
-          &::after {
-            content: '•';
-            display: inline-block;
-            padding: 0 0.8rem 0 0.6rem;
-            color: #cccccc;
-          }
-
-          &:last-child {
-            &::after {
-              display: none;
-            }
-          }
-        }
-      }
-
-      p.tagline {
-        max-width: none;
-
-        &::before {
-          max-width: 80rem;
-        }
-      }
-
-      p.summary {
-        max-width: none;
-        margin-bottom: 8rem;
-      }
-
-      img.devices {
-        height: 35rem;
+      section.devices {
+        margin-bottom: 6rem;
       }
 
       section.content {
@@ -389,6 +457,7 @@ body[data-controller="case-study"][data-view="case-study"] {
       }
 
       figcaption {
+        max-width: none;
         font-size: 1.8rem;
       }
     }
