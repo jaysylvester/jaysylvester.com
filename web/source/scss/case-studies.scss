@@ -248,64 +248,6 @@ body[data-controller="case-studies"][data-view="case-studies"] {
         max-width: 74rem;
         font-size: 2rem;
       }
-      // display: flex;
-      // flex-direction: column;
-
-      // &::after {
-      //   display: none;
-      // }
-
-      // section.logo {
-      //   justify-content: flex-start;
-      //   order: 1;
-      // }
-
-      // img.logo {
-      //   max-width: none;
-      //   height: 4.5rem;
-      // }
-
-      // ul.attributes {
-      //   order: 2;
-      //   flex-direction: column;
-      //   align-items: flex-start;
-      //   width: 38rem;
-
-      //   li {
-      //     padding-left: 2rem;
-      //     text-align: left;
-
-      //     &::before {
-      //       display: inline-block;
-      //       margin-left: -2.8rem;
-      //       padding-right: 0.2rem;
-      //     }
-      //   }
-      // }
-
-      // p.summary {
-      //   order: 4;
-      //   max-width: none;
-      //   margin-bottom: 0;
-      //   text-align: left;
-      // }
-
-      // section.devices {
-      //   position: absolute;
-      //   top: 6rem;
-      //   right: 0;
-      //   width: 58rem;
-
-      //   img {
-      //     height: 22rem;
-      //   }
-      // }
-
-      // > nav.actions {
-      //   order: 3;
-      //   justify-content: flex-start;
-      //   margin-bottom: 3rem;
-      // }
     }
   }
 }
