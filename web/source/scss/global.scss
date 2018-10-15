@@ -80,7 +80,8 @@ p {
 }
 
 a.primary-action,
-li.primary-action a {
+li.primary-action a,
+li.primary-action input {
   display: block;
   margin: auto;
   padding: 1.6rem 3rem 1.8rem;
@@ -149,7 +150,10 @@ body {
 
   &[data-controller="index"][data-view="index"] > header nav li.about a,
   &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
-  &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a {
+  &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a,
+  &[data-controller="portfolio"][data-view="portfolio"] > header nav li.portfolio a,
+  &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
+  &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
     color: #4d4d4d;
     background: #e6e6e6;
     border-radius: 0.6rem;
@@ -331,7 +335,10 @@ footer {
     > header nav li a:hover,
     &[data-controller="index"][data-view="index"] > header nav li.about a,
     &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
-    &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a {
+    &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a,
+    &[data-controller="portfolio"][data-view="portfolio"] > header nav li.portfolio a,
+    &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
+    &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
       position: relative;
       color: #737373;
       background: none;

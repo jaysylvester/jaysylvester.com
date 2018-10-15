@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Sylvester — Contact</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" type="text/css" href="/min/site.css">
+    <script type="text/javascript" src="/min/site.js"></script>
+  </head>
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+    {{{include.header}}}
+    <main>
+      <h1>Say hey.</h1>
+      <form id="contact-form" action="#request.content.contact.actionUrl#" method="post" novalidate>
+        <section class="data">
+          <ul>
+            <li class="name text required">
+              <label for="name">
+                Name
+              </label>
+              <input id="name" name="name" value="#form.name#" pattern="^[0-9]+" required />
+            </li>
+            <li class="email text required">
+              <label for="email">
+                E-mail
+              </label>
+              <input id="email" name="email" type="email" value="#form.email#" required />
+            </li>
+            <li class="confirm-email text required">
+              <label for="confirm-email">
+                Confirm E-mail
+              </label>
+              <input id="confirm-email" name="confirm_email" type="email" value="#form.confirm_email#" data-match-field="email" required />
+            </li>
+            <li class="message textarea required">
+              <label for="message">
+                Message
+              </label>
+              <textarea id="message" name="message" required>#form.message#</textarea>
+            </li>
+          </ul>
+        </section>
+        <section class="actions">
+          <ul>
+            <li class="submit primary-action">
+              <input id="submit" name="submit" type="submit" value="Send your message" />
+            </li>
+          </ul>
+        </section>
+      </form>
+    </main>
+    {{{include.footer}}}
+  </body>
+</html>

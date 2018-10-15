@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay Sylvester — Work History</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link rel="stylesheet" type="text/css" href="/min/site.css">
+    <script type="text/javascript" src="/min/site.js"></script>
+  </head>
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+    {{{include.header}}}
+    <main>
+      <h1>I'm pretty good at this. I've been doing it a while.</h1>
+      <p>
+        I've led and contributed to just about every phase of the web development lifecycle, including team management, project management, information architecture, UX design, interactive wireframes, HTML prototypes, and front end and back end development.
+      </p>
+      {{#each employers}}
+        {{client_url}}
+      {{/each}}
+    </main>
+    {{{include.footer}}}
+  </body>
+</html>

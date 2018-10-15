@@ -12,7 +12,7 @@ module.exports = {
 function caseStudies(emitter) {
   // See if the case study is already cached
   var cacheKey  = 'case-studies',
-      scope     = 'case_studies',
+      scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
   // If it's cached, return the cache object
@@ -54,7 +54,7 @@ function caseStudies(emitter) {
 function caseStudy(clientUrl, emitter) {
   // See if the case study is already cached
   var cacheKey  = 'case-study-' + clientUrl,
-      scope     = 'case_studies',
+      scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
   // If it's cached, return the cache object
@@ -97,7 +97,7 @@ function caseStudy(clientUrl, emitter) {
 function screens(clientUrl, emitter) {
   // See if these screens are already cached
   var cacheKey  = 'case-study-screens-' + clientUrl,
-      scope     = 'case_studies',
+      scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
   // If cached, return the cache object

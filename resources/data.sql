@@ -1,5 +1,11 @@
 delete from case_studies;
 delete from screens;
+delete from work_history;
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'Vidyo', 'Vidyo', 'UX Lead', 'Vidyo welcomed me to their growing UX team in order to build an internal design practice and help transform the company into a customer-focused organization. I established our user experience process and managed a team of designers responsible for the company’s flagship video conferencing systems, which include desktop, mobile, and conference room applications.', 'October 2015', 'February 2018' );
 
 insert into case_studies
 ( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
