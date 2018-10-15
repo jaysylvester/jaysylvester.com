@@ -48,7 +48,7 @@ body {
   justify-content: space-between;
   height: 100%;
   font-family: 'Lato', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   text-rendering: optimizeLegibility;
 
   > * {
@@ -82,9 +82,8 @@ p {
 a.primary-action,
 li.primary-action a {
   display: block;
-  max-width: 30rem;
   margin: auto;
-  padding: 1.6rem 2rem 1.8rem;
+  padding: 1.6rem 3rem 1.8rem;
   font-family: 'Lato Semibold', sans-serif;
   font-size: 16px;
   color: #FFFFFF;
@@ -166,6 +165,27 @@ main {
     margin: 0 1rem;
     overflow-x: hidden;
   }
+
+  > h1 {
+    margin: 3rem auto;
+    padding: 0 1rem;
+    font-family: 'Lato Bold', sans-serif;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  > p {
+    text-align: center;
+  }
+}
+
+@keyframes loading-indicator {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Mask for zoomed images
@@ -185,9 +205,28 @@ main {
     backdrop-filter: saturate(180%) blur(0.5rem);
   }
 
+  &.loading {
+    &::before {
+      content: '';
+      display: block;
+      width: 10rem;
+      height: 10rem;
+      position: absolute;
+      top: calc(50% - 5rem);
+      left: calc(50% - 5rem);
+      border: 0.8rem solid #efefef;
+      border-top-color: #666666;
+      border-bottom-color: #666666;
+      border-radius: 50%;
+      animation: loading-indicator 1.25s ease 8;
+    }
+  }
+
   img {
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 2;
     object-fit: contain;
   }
 
@@ -195,7 +234,7 @@ main {
     width: 100%;
     height: 100%;
     padding-top: 6rem;
-    padding-bottom: 5rem;
+    padding-bottom: 2rem;
     z-index: 1000;
     opacity: 1;
   }
@@ -267,12 +306,14 @@ a.new-tab {
 }
 
 footer {
+  margin: 4rem 0 0;
   padding: 2rem;
   color: #808080;
   text-align: center;
+  background: #f7f7f7;
 
   p.quote {
-    margin: 4rem auto;
+    margin: 2rem auto 4rem;
     font-family: 'Lato Italic', sans-serif;
   }
   
@@ -342,7 +383,15 @@ footer {
   }
 
   main {
-    padding: 0 2rem 4rem;
+    h1 {
+      margin: 4rem auto;
+    }
+
+    > p {
+      max-width: 64rem;
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
 
   footer {
@@ -383,10 +432,25 @@ footer {
     margin-top: 4rem;
   }
 
+  a.primary-action,
+  li.primary-action a {
+    padding: 1.4rem 2.4rem 1.6rem;
+  }
+
   main {
     width: 96rem;
     margin: auto;
     padding-left: 0;
     padding-right: 0;
+
+    > h1 {
+      margin: 6rem auto 2rem;
+      font-size: 2.2rem;
+    }
+
+    > p {
+      max-width: 80rem;
+      font-size: 2rem;
+    }
   }
 }

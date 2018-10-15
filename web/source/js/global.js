@@ -9,10 +9,10 @@ JAY.global = ( function () {
     },
 
     header: function () {
-      var body = document.querySelector('body'),
-          bodyOffset = 0,
-          timer = 0,
-          header = document.querySelector('body > header')
+      var body        = document.querySelector('body'),
+          bodyOffset  = 0,
+          timer       = 0,
+          header      = document.querySelector('body > header')
 
       setTimeout( function () {
         window.addEventListener('scroll', function () {
@@ -27,20 +27,6 @@ JAY.global = ( function () {
           bodyOffset = body.getBoundingClientRect().top
         })
       }, timer)
-      
-      // Create the main menu icon
-      // menuIcon = document.createElement('div')
-
-      // menuIcon.setAttribute('id', 'main-menu-icon')
-      // menuIcon.innerHTML = '<svg class="icon menu"><use xlink:href="themes/default/images/symbols.svg#icon-menu"></use></svg>'
-      // menuIcon.appendChild(document.createTextNode('Menu'))
-      // header.insertBefore(menuIcon, header.querySelector('a.home'))
-
-      // methods.menu({
-      //   menu: 'header nav',
-      //   trigger: '#main-menu-icon',
-      //   position: 'left'
-      // })
     },
 
     imageLoad: function () {
@@ -79,18 +65,27 @@ JAY.global = ( function () {
     },
 
     imageZoom: function (item) {
-      var mask = document.getElementById('mask') || document.createElement('div'),
-          anchor = item.parentNode,
-          src = item.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+      var mask    = document.getElementById('mask') || document.createElement('div'),
+          anchor  = item.parentNode,
+          img     = document.createElement('img'),
+          src     = item.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
 
       mask.setAttribute('id', 'mask')
       document.body.appendChild(mask)
 
       anchor.addEventListener('click', function (e) {
         e.preventDefault()
-        mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a><img src="' + src + '">'
+        mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a>'
         document.querySelector('html').classList.add('mask-enabled')
         mask.classList.add('enabled')
+        img.setAttribute('src', src)
+        mask.append(img)
+        // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
+        setTimeout( function () {
+          if ( img.naturalWidth === 0 ) {
+            mask.classList.add('loading')
+          }
+        }, 500)
 
         window.addEventListener('keydown', escape)
         mask.querySelector('#mask-close').addEventListener('click', function (e) {
@@ -109,62 +104,11 @@ JAY.global = ( function () {
 
         function close() {
           document.querySelector('html').classList.remove('mask-enabled')
-          mask.classList.remove('enabled')
+          mask.classList.remove('enabled', 'loading')
           mask.innerHTML = ''
           window.removeEventListener('keydown', escape)
         }
       })
-    },
-
-    menu: function (args) {
-      var body = document.querySelector('body'),
-          menu,
-          trigger = document.querySelector(args.trigger)
-
-      trigger.addEventListener('click', function () {
-        var source = document.querySelector(args.menu),
-            menuShadow = document.createElement('div')
-
-        menu = source.cloneNode(true)
-        body.appendChild(menu)
-        menuShadow.className = 'menu-shadow'
-        body.appendChild(menuShadow)
-
-        if ( args.keepClass === false ) {
-          menu.className = 'slide-menu ' + args.position
-        } else {
-          menu.className += ' slide-menu ' + args.position
-        }
-
-        if ( body.classList.contains('menu-open') ) {
-          body.classList.remove('menu-open')
-          menu.classList.remove('open')
-          body.classList.add('menu-closing')
-          setTimeout( function () {
-            body.classList.remove('menu-closing')
-          }, 200)
-        } else {
-          body.classList.add('menu-opening')
-          setTimeout( function () {
-            body.classList.remove('menu-opening')
-            body.classList.add('menu-open')
-            menu.classList.add('open')
-          }, 200)
-        }
-
-        menuShadow.addEventListener('click', function () {
-          body.classList.remove('menu-open')
-          menu.classList.remove('open')
-          body.classList.add('menu-closing')
-          setTimeout( function () {
-            body.classList.remove('menu-closing')
-            body.removeChild(menuShadow)
-            if ( menu.parentNode !== null ) {
-              body.removeChild(menu)
-            }
-          }, 200)
-        }, false)
-      }, false)
     },
 
     // ajaxFormBinding: function(options) {
@@ -231,8 +175,7 @@ JAY.global = ( function () {
   return {
     // ajaxFormBinding: methods.ajaxFormBinding,
     init:       methods.init,
-    imageZoom:  methods.imageZoom,
-    menu:       methods.menu
+    imageZoom:  methods.imageZoom
   }
 
 }(JAY))
