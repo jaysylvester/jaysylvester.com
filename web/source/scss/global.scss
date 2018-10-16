@@ -36,6 +36,13 @@
         url('/fonts/Lato/LatoLatin-Semibold.woff') format('woff');
 }
 
+@font-face {
+	font-family: 'social';
+	src: url('/images/icons/social.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
 // Global styles
 html {
   height: 100%;
@@ -315,6 +322,7 @@ footer {
   color: #808080;
   text-align: center;
   background: #f7f7f7;
+  border-top: .1rem solid #f0f0f0;
 
   p.quote {
     margin: 2rem auto 4rem;
@@ -431,12 +439,8 @@ footer {
     padding: 0 calc((100% - 104rem) / 2);
   }
 
-  h2 {
-    margin: 8rem 0 4rem;
-  }
-
   h3 {
-    margin-top: 4rem;
+    margin: 4rem 0 1rem;
   }
 
   a.primary-action,

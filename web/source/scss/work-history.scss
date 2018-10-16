@@ -1,0 +1,71 @@
+// Work history
+
+@import '_mixins';
+
+body[data-controller="work-history"] {
+  p.download {
+    margin-top: 2rem;
+  }
+
+  section.competencies {
+    @include separator;
+    margin-top: 4rem;
+  }
+
+  section.employer {
+    @include separator;
+    margin: 4rem 0;
+    padding-top: 4rem;
+
+    h2 {
+      margin: 0 0 1rem;
+    }
+
+    h3 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    p.dates {
+      font-size: 1.6rem;
+      color: #808080;
+      text-align: center;
+    }
+
+    p.description {
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 64rem;
+    }
+
+    nav.actions {
+      display: flex;
+      margin-top: 2rem;
+    }
+
+    a.primary-action {
+      display: inline-block;
+      margin: auto;
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    main {
+      > h1 {
+        br {
+          display: none;
+        }
+      }
+    }
+
+    section.competencies {
+      max-width: 64rem;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    
+  }
+}

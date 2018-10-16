@@ -4,10 +4,18 @@
 
 global.app = require('citizen')
 
+// Register Handlebars partials
+const consolidate = require('consolidate'),
+      handlebars  = require('handlebars'),
+      fs          = require('fs')
+consolidate.requires.handlebars = handlebars
+consolidate.requires.handlebars.registerPartial('caseStudyCallout', fs.readFileSync(app.views['case-study']._callout.path).toString())
+
 app.toolbox = {
   // Third party modules
-  mail: require('nodemailer').createTransport(app.config.mail),
-  pg:   require('pg')
+  mail:   require('nodemailer').createTransport(app.config.mail),
+  moment: require('moment'),
+  pg:     require('pg')
 }
 
 // Overwrite pg's default date handler to convert to GMT

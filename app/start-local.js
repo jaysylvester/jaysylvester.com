@@ -20,6 +20,7 @@ app.toolbox = {
         content: {
           from: args.from,
           to: args.to,
+          cc: args.cc,
           subject: args.subject,
           text: args.text
         },
@@ -28,7 +29,8 @@ app.toolbox = {
       })
     }
   },
-  pg: require('pg')
+  moment: require('moment'),
+  pg:     require('pg')
 }
 
 // Overwrite pg's default date handler to convert to GMT

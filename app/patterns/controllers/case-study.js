@@ -11,10 +11,10 @@ module.exports = {
 function handler(params, context, emitter) {
   app.listen({
     caseStudy: function (emitter) {
-      app.models.clients.caseStudy(params.url.client, emitter)
+      app.models['case-studies'].caseStudy(params.url.client, emitter)
     },
     screens: function (emitter) {
-      app.models.clients.screens(params.url.client, emitter)
+      app.models['case-studies'].screens(params.url.client, emitter)
     }
   }, function (output) {
     if ( output.caseStudy ) {

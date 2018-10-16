@@ -13,9 +13,10 @@
   },
   "main": "index",
   "dependencies": {
-    "citizen": "~0.8.6",
-    "nodemailer": "~4.6.8",
-    "pg": "^7.4.3"
+    "citizen": "0.8.6",
+    "moment": "2.22.2",
+    "nodemailer": "4.6.8",
+    "pg": "7.4.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.6",

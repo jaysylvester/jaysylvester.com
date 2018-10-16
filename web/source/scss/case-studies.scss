@@ -1,3 +1,6 @@
+// Case studies
+@import '_mixins';
+
 // Common styles
 .case-study {
   section.logo {
@@ -47,20 +50,13 @@
   p.tagline {
     max-width: 34rem;
     margin: 1rem auto;
-    padding: 0 1rem;
+    padding: 2rem 1rem 0;
     font-family: 'Lato Bold Italic', sans-serif;
     font-size: 2rem;
     color: #4D4D4D;
     text-align: center;
 
-    &::before {
-      content: '';
-      display: block;
-      max-width: 50rem;
-      height: 1px;
-      margin: 0 auto 2rem;
-      background-image: linear-gradient(-90deg, rgba(217,217,217,0.00) 0%, #D8D8D8 53%, rgba(216,216,216,0.00) 100%);
-    }
+    @include separator;
   }
 
   p.summary {
@@ -112,11 +108,8 @@
     p.tagline {
       max-width: 50rem;
       margin-bottom: 2rem;
+      padding-top: 4rem;
       font-size: 2.6rem;
-
-      &::before {
-        margin-bottom: 4rem;
-      }
     }
 
     p.summary {
@@ -168,10 +161,6 @@
 
     p.tagline {
       max-width: none;
-
-      &::before {
-        max-width: 80rem;
-      }
     }
 
     section.devices img {
@@ -183,19 +172,10 @@
 // Case studies list
 body[data-controller="case-studies"][data-view="case-studies"] {
   .case-study {
-    position: relative;
     margin: 4rem 0;
     padding-top: 4rem;
 
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      display: block;
-      width: 100%;
-      height: 1px;
-      background-image: linear-gradient(-90deg, rgba(217,217,217,0.00) 0%, #D8D8D8 53%, rgba(216,216,216,0.00) 100%);
-    }
+    @include separator;
     
     h1,
     p.tagline,
@@ -220,6 +200,14 @@ body[data-controller="case-studies"][data-view="case-studies"] {
         max-width: 30rem;
       }
 
+      &.hibu img.logo {
+        max-height: 5rem;
+      }
+
+      &.OncoTracker img.logo {
+        max-height: 4rem;
+      }
+
       ul.attributes {
         margin-top: 2rem;
         margin-bottom: 2rem;
@@ -239,11 +227,6 @@ body[data-controller="case-studies"][data-view="case-studies"] {
     }
 
     @media only screen and (min-width: 1024px) {
-      &::after {
-        max-width: 80rem;
-        left: 8rem;
-      }
-
       p.summary {
         max-width: 74rem;
         font-size: 2rem;
@@ -254,7 +237,7 @@ body[data-controller="case-studies"][data-view="case-studies"] {
 
 // Standalone case study
 body[data-controller="case-study"][data-view="case-study"] {
-  main {
+  .case-study {
     section.logo {
       height: 12rem;
     }
@@ -349,14 +332,12 @@ body[data-controller="case-study"][data-view="case-study"] {
     > nav.actions {
       margin: 8rem auto 4rem;
     }
-  }
-
-  &[data-client="Fitly"] main img.logo {
-    max-height: 6rem;
-  }
-
-  &[data-client="Vidyo"] {
-    main {
+  
+    &.Fitly img.logo {
+      max-height: 6rem;
+    }
+  
+    &.Vidyo {
       figure.screens:nth-child(2) figure,
       figure.screens:nth-child(3) figure {
         height: 100%;
@@ -367,11 +348,9 @@ body[data-controller="case-study"][data-view="case-study"] {
         box-shadow: none;
       }
     }
-  }
 
-  // 768px and up
-  @media only screen and (min-width: 768px) {
-    main {
+    // 768px and up
+    @media only screen and (min-width: 768px) {
       section.logo {
         height: 18rem;
       }
@@ -417,12 +396,12 @@ body[data-controller="case-study"][data-view="case-study"] {
         &.screens {
           section {
             padding: 2rem;
-  
+
             &::after {
               flex-basis: 2rem;
             }
           }
-  
+
           figure {
             flex-basis: 45rem;
             height: 28rem;
@@ -434,19 +413,14 @@ body[data-controller="case-study"][data-view="case-study"] {
         max-width: 45rem;
         margin: 2rem auto 0;
       }
+
+      &.OncoTracker img.logo {
+        max-height: 4rem;
+      }
     }
 
-    &[data-client="Fitly"] main img.logo {
-      max-height: 7rem;
-    }
-    &[data-client="OncoTracker"] main img.logo {
-      max-height: 4rem;
-    }
-  }
-
-  // Get rid of figure scroll at 840px and above (width of main with padding)
-  @media only screen and (min-width: 840px) {
-    main {
+    // Get rid of figure scroll at 840px and above (width of main with padding)
+    @media only screen and (min-width: 840px) {
       figure.screens {
         width: 100%;
         margin-left: 0;
@@ -479,11 +453,9 @@ body[data-controller="case-study"][data-view="case-study"] {
         }
       }
     }
-  }
 
-  // 1024px and up
-  @media only screen and (min-width: 1024px) {
-    main {
+    // 1024px and up
+    @media only screen and (min-width: 1024px) {
       p.summary {
         max-width: none;
         margin-bottom: 8rem;

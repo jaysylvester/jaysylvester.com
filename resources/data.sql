@@ -1,11 +1,82 @@
-delete from case_studies;
-delete from screens;
-delete from work_history;
+
+
+CREATE TABLE case_studies (
+    id SERIAL PRIMARY KEY,
+    client_name text,
+    client_url text,
+    title text,
+    summary text,
+    content text,
+    tagline text,
+    vertical text,
+    platform text,
+    expertise text,
+    sort integer
+);
+
+CREATE TABLE screens (
+    id SERIAL PRIMARY KEY,
+    client text,
+    url text,
+    alt text,
+    sort integer,
+    category text
+);
+
+CREATE TABLE work_history (
+    id SERIAL PRIMARY KEY,
+    employer_name text,
+    employer_url text,
+    job_title text,
+    job_description text,
+    employed_from date,
+    employed_to date
+);
+
+
+-- delete from case_studies;
+-- delete from screens;
+-- delete from work_history;
 
 insert into work_history
 ( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
 values
-( 'Vidyo', 'Vidyo', 'UX Lead', 'Vidyo welcomed me to their growing UX team in order to build an internal design practice and help transform the company into a customer-focused organization. I established our user experience process and managed a team of designers responsible for the company’s flagship video conferencing systems, which include desktop, mobile, and conference room applications.', 'October 2015', 'February 2018' );
+( 'Vidyo', 'Vidyo', 'UX Lead', 'Vidyo welcomed me to their growing UX team in order to build an internal design practice and help transform the company into a customer-focused organization. I defined the process for user experience research and design and managed the UX designers responsible for the company’s flagship video conferencing systems, including desktop, mobile, and conference room applications.', '2015-10-01', '2018-01-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'Fitly', 'Fitly', 'Creative Director', 'I led the responsive redesign of a startup incubator product under a tight deadline, implementing a rapid mobile first design process that started with mobile wireframes and then went straight to coding and designing on the fly in the browser. We followed up with design comps for phase two, improving the visual design and proposing feature enhancements.', '2014-02-01', '2014-07-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'hibu', 'hibu', 'UX Lead', 'While managing a blended UI team consisting of UX designers and front end developers, I promoted a user-centered design philosophy across the organization that established the needs of the customer as the primary consideration in all feature development. We produced wireframes, prototypes, and final production code for hibu web properties.', '2012-10-01', '2014-06-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'Abercrombie & Fitch', 'Abercrombie-and-Fitch', 'Manager of UI Development', 'I led a large team of UI engineers responsible for all e-commerce front end development. Building strong partnerships with stakeholders, UX architects, visual designers, and my IT colleagues, I broke down traditional silos and got us working collaboratively. My team overhauled the front end code base, drastically improving performance and maintainability.', '2010-04-01', '2012-05-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'WebLinc', 'WebLinc', 'Senior Front End Developer', 'As a hands-on developer, I performed sophisticated front end development on large-scale e-commerce platforms utilizing standards compliant HTML, CSS, and JavaScript. Leading several development projects, I mentored junior front end developers and advised designers on appropriate user interface design elements based on their technical feasibility.', '2009-05-01', '2010-04-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'NetPlus Marketing', 'NetPlus-Marketing', 'Lead Developer and SEO Manager', 'I managed the small but highly productive team responsible for all client web site programming, while also assuming responsibility for IA/UX artifacts including sitemaps, taxonomies, flowcharts, wireframes, and HTML prototypes. As SEO Manager, I authored detailed web site SEO recommendations based on extensive reviews of site content and analytics.', '2006-04-01', '2008-08-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'Ricoh Corporation', 'Ricoh-Corporation', 'Web Specialist', 'I redesigned the human resources intranet site, replacing an outdated and confusing layout with vastly improved information architecture and a contemporary look and feel. I also optimized all Ricoh subsidiaries'' sites for search engine rankings, writing meta descriptions and page content and proposing information architecture changes.', '2004-10-01', '2006-05-01' );
+
+insert into work_history
+( employer_name, employer_url, job_title, job_description, employed_from, employed_to )
+values
+( 'Panasonic Consumer Electronics', 'Panasonic-Consumer-Electronics', 'Web Producer', 'I supervised our interactive agency, reviewing and approving all sites within core product lines including TV, Home Theater, and Home Appliances. Through careful planning with product managers and the advertising department, I coordinated site updates with product introductions, promotions, and events. I also designed and coded the Panasonic Premium sales incentive web site.', '2000-05-01', '2004-10-01' );
 
 insert into case_studies
 ( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
@@ -47,7 +118,6 @@ values
 <ul>
 <li>VidyoConnect (formerly Vidyo Neo), consisting of desktop, mobile, and web video conferencing clients</li>
 <li>VidyoRoom, our conference room system</li>
-<li>VidyoEngage, our customer support-oriented video conferencing platform</li>
 <li>VidyoCore, our web-based meeting resource management suite</li>
 </ul>
 
@@ -113,7 +183,9 @@ values
 
 <h2>Conclusion</h2>
 
-<p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>', 1 );
+<p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>
+
+<p>Below are various samples of my team''s output across several Vidyo projects.</p>', 1 );
 
 insert into screens
 ( client, url, alt, category, sort )
