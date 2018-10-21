@@ -9,18 +9,27 @@ module.exports = {
 
 // default action
 function handler(params, context, emitter) {
-  emitter.emit('ready', {
-    include: {
-      header: {
-        controller: '_header'
-      },
-      footer: {
-        controller: '_footer'
-      },
-      caseStudy: {
-        route: '/case-study/client/Vidyo',
-        view: '_callout'
-      }
+  app.listen({
+    caseStudies: function (emitter) {
+      app.models['case-studies'].caseStudies(emitter)
+    }
+  }, function (output) {
+    if ( output.listen.success ) {
+      emitter.emit('ready', {
+        content: {
+          caseStudies: output.caseStudies
+        },
+        include: {
+          header: {
+            controller: '_header'
+          },
+          footer: {
+            controller: '_footer'
+          }
+        }
+      })
+    } else {
+      emitter.emit('error', output.listen)
     }
   })
 }

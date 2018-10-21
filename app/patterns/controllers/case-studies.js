@@ -14,7 +14,7 @@ function handler(params, context, emitter) {
       app.models['case-studies'].caseStudies(emitter)
     }
   }, function (output) {
-    if ( output.caseStudies ) {
+    if ( output.listen.success ) {
       emitter.emit('ready', {
         content: output,
         include: {
@@ -27,9 +27,7 @@ function handler(params, context, emitter) {
         }
       })
     } else {
-      emitter.emit('error', {
-        statusCode: 404
-      })
+      emitter.emit('error', output.listen)
     }
   })
 }

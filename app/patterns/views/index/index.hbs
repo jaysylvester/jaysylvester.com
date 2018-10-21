@@ -4,26 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jay Sylvester: UX Director &amp; Consultant</title>
-    <meta name="description" content="I'm a UX director/lead with almost 20 years experience spanning user research, user experience design, and front end development.">
+    <meta name="description" content="I'm a UX director/lead with almost 20 years experience spanning user research, user experience design, and full stack development.">
     <meta name="keywords" content="UX, UI, user experience, ux manager, ux lead, ux director, ux researcher, ux consultant">
     <link rel="stylesheet" type="text/css" href="/min/site.css">
+    <script type="text/javascript" src="/min/site.js"></script>
   </head>
   <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
     {{{include.header}}}
     <main>
-      <section class="hero">Clever tagline</section>
-      <section class="skills">
-        <ul>
-          <li>Leadership</li>
-          <li>User Research</li>
-          <li>Information Architecture</li>
-          <li>UX Design</li>
-          <li>Front End Development</li>
-        </ul>
-      </section>
-      <section class="case-study">
-        {{{include.caseStudy}}}
-      </section>
+      {{!-- <section class="hero"> --}}
+        <h1>I'm a UX designer and developer, and I lead teams who create great experiences.</h1>
+        <p>I'm what happens when UX and engineering have a baby. Don't be scared. It's the future. My goal is to make web sites and apps easier to use through careful research, inspired design, cross-functional collaboration, and thoughtful leadership.</p>
+        <p>In case you couldn't already tell, I'm not into designing fluffy landing pages.</p>
+        <h2>I like to solve complex problems.</h2>
+        <p>Here are some examples:</p>
+      {{!-- </section> --}}
+      <ul class="case-studies">
+        {{#each caseStudies}}
+          <li class="{{client_url}}">
+            <a href="/case-study/client/{{client_url}}" title="Read the {{client_name}} case study.">
+              <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_120/jaysylvester.com/case-studies/{{client_url}}/{{client_url}}-logo.png" alt="{{client_name}} logo">
+            </a>
+          </li>
+        {{/each}}
+      </ul>
     </main>
     {{{include.footer}}}
   </body>

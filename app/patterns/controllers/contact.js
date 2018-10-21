@@ -24,7 +24,7 @@ function handler(params, context, emitter) {
 
 function form(params, context, emitter) {
   if ( params.request.method !== 'POST' ) {
-    handler(params, context, emitter)
+    emitter.emit('ready', { redirect: '/contact' })
   } else {
     app.toolbox.mail.sendMail({
       from: { name: params.form.name, address: params.form.email },

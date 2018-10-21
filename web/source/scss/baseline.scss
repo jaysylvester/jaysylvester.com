@@ -94,27 +94,3 @@ input:not([type="checkbox"]),
 input:not([type="radio"]) {
   line-height: 1;
 }
-
-b,
-strong {
-  font-weight: 600;
-  font-style: normal;
-
-  i,
-  em {
-    font-weight: 600;
-    font-style: italic;
-  }
-}
-
-i,
-em {
-  font-weight: 400;
-  font-style: italic;
-
-  b,
-  strong {
-    font-weight: 600;
-    font-style: italic;
-  }
-}

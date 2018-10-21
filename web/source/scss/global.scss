@@ -244,8 +244,7 @@ main {
   &.enabled {
     width: 100%;
     height: 100%;
-    padding-top: 6rem;
-    padding-bottom: 2rem;
+    padding: 6rem 2rem 2rem;
     z-index: 1000;
     opacity: 1;
   }
@@ -330,7 +329,7 @@ footer {
   }
   
   p.copyright {
-    margin-top: 4rem;
+    margin: 4rem 0 0;
     font-size: 1.4rem;
   }
 }

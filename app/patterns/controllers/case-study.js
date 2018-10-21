@@ -17,23 +17,25 @@ function handler(params, context, emitter) {
       app.models['case-studies'].screens(params.url.client, emitter)
     }
   }, function (output) {
-    if ( output.caseStudy ) {
-      output.caseStudy.screens = output.screens
-      emitter.emit('ready', {
-        content: output.caseStudy,
-        include: {
-          header: {
-            controller: '_header'
-          },
-          footer: {
-            controller: '_footer'
+    if ( output.listen.success ) {
+      if ( output.caseStudy ) {
+        output.caseStudy.screens = output.screens
+        emitter.emit('ready', {
+          content: output.caseStudy,
+          include: {
+            header: {
+              controller: '_header'
+            },
+            footer: {
+              controller: '_footer'
+            }
           }
-        }
-      })
+        })
+      } else {
+        emitter.emit('error', { statusCode: 404 })
+      }
     } else {
-      emitter.emit('error', {
-        statusCode: 404
-      })
+      emitter.emit('error', output.listen)
     }
   })
 }

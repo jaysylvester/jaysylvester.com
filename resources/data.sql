@@ -99,13 +99,10 @@ values
 <p>Many assumptions were made about what was lacking in VidyoDesktop and VidyoMobile because no qualitative or quantitative data existed to identify shortcomings and prioritize features, leading to no clear vision or strategy. In addition, the Vidyo Neo design was heavily influenced by Vidyo company culture and employee mindset; it was assumed our customers used our products the same way we did, leading to a false-consensus effect.</p>
 
 <h3>Overemphasis on competitive analysis</h3>
-<p>Competitive analysis has its place in any product development workflow; good design often entails a certain amount of inspiration by competitors. However, assuming that your successful competitors are doing everything right and that your customers’ goals align with their customers’ goals is a risky gamble. Rather than interviewing our customers to discover what they felt our product lacked, conducting appropriate usability studies, and creating a product based on user input, the Vidyo Neo roadmap borrowed heavily from competitors’ existing feature sets.</p>
+<p>Competitive analysis has its place in any product development workflow; good design often entails a certain amount of inspiration by competitors. However, it''s a risky gamble to assume that your successful competitors are doing everything right and that your customers’ goals align with their customers’ goals. Rather than interviewing our customers to discover what they felt our product lacked, conducting appropriate usability studies, and creating a product based on user input, the Vidyo Neo roadmap was pulled almost entirely from competitors’ existing feature sets.</p>
 
-<h3>No user testing</h3>
-<p>While talented designers have good instincts, nothing can replace proper usability testing. Everything we designed went straight into the development pipeline and was released to the public. We received our first feedback from customers after the feature went into production.</p>
-
-<h3>No iteration</h3>
-<p>No room was left in the design/development workflow for user testing and iteration. Once a feature went into production, it was forgotten in favor of the next set of features.</p>
+<h3>No user testing or iteration</h3>
+<p>While talented designers have good instincts, nothing can replace proper usability testing. Everything we designed went straight into the development pipeline and was released to the public. We received our first feedback from customers after the feature went into production. Once a feature went into production, it was usually forgotten in favor of the next set of features.</p>
 
 <p>Not surprisingly, working on Vidyo Neo with broken or lacking process was a tough slog, and while customers told us it was an improvement over the previous generation of products, I knew we could do much better.</p>
 
@@ -198,10 +195,10 @@ values
 ( 'Vidyo', 'Vidyo-Neo-2.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 6 ),
 ( 'Vidyo', 'Vidyo-Neo-3.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 7 ),
 ( 'Vidyo', 'Vidyo-Neo-4.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 8 ),
-( 'Vidyo', 'VidyoConnect-1.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 9 ),
-( 'Vidyo', 'VidyoConnect-2.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 10 ),
-( 'Vidyo', 'VidyoConnect-3.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 11 ),
-( 'Vidyo', 'VidyoConnect-4.jpg', 'A screenshot of VidyoConnect (Video Neo v2.0)', 'VidyoConnect (Video Neo v2.0)', 12 ),
+( 'Vidyo', 'VidyoConnect-1.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 9 ),
+( 'Vidyo', 'VidyoConnect-2.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 10 ),
+( 'Vidyo', 'VidyoConnect-3.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 11 ),
+( 'Vidyo', 'VidyoConnect-4.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 12 ),
 ( 'Vidyo', 'VidyoConnect-mobile-1.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 13 ),
 ( 'Vidyo', 'VidyoConnect-mobile-2.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 14 ),
 ( 'Vidyo', 'VidyoConnect-mobile-3.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 15 ),

@@ -84,6 +84,10 @@ JAY.global = ( function () {
         setTimeout( function () {
           if ( img.naturalWidth === 0 ) {
             mask.classList.add('loading')
+
+            setTimeout( function () {
+              mask.classList.remove('loading')
+            }, 10000)
           }
         }, 500)
 

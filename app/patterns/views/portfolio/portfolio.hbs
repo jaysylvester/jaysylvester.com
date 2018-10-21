@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{metaData.title}}</title>
+    <meta name="description" content="{{metaData.description}}">
+    <meta name="keywords" content="{{metaData.keywords}}">
+    <link rel="stylesheet" type="text/css" href="/min/site.css">
+    <script type="text/javascript" src="/min/site.js"></script>
+  </head>
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+    {{{include.header}}}
+    <main>
+      <h1>A UX design manager's portfolio shouldn't be a bunch of pretty screens.</h1>
+      <p>In fact, it may not have any finished screens at all. It could be made up entirely of process documentation, research data, ugly sketches, plain-looking wireframes, and half-baked prototypes that informed another designer's pretty screens.</p>
+      <p>If you happen to be into the less-than-pretty side of UX—like me—here's a selection of documents from various projects:</p>
+      <h2>Screens? I got screens.</h2>
+      <p>Some of these are all me, some were started by me, some finished by me, and some are my teams' output. That's what it means to be a UX lead.</p>
+      <p>For those of you who like to dig a little deeper, I have <a href="/case-studies">case studies</a> that delve into the story and process behind all those pretty screens:</p>
+      {{{include.caseStudies}}}
+    </main>
+    {{{include.footer}}}
+  </body>
+</html>
