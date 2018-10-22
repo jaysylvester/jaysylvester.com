@@ -1,0 +1,9 @@
+<ul class="case-studies">
+  {{#each caseStudies}}
+    <li class="{{client_url}}">
+      <a href="/case-study/client/{{client_url}}" title="Read the {{client_name}} case study.">
+        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_120/jaysylvester.com/case-studies/{{client_url}}/{{client_url}}-logo.png" alt="{{client_name}} logo">
+      </a>
+    </li>
+  {{/each}}
+</ul>

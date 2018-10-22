@@ -1,0 +1,38 @@
+// Home / About
+
+body[data-controller="index"] {
+  h2 {
+    width: 100%;
+  }
+
+  section.case-studies {
+    p {
+      text-align: center;
+    }
+  }
+
+  article.endorsement {
+    margin: 2rem 0;
+  }
+
+  nav.more {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 4rem;
+  }
+
+  @media only screen and (min-width: 768px) {
+    section.endorsements {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 4rem;
+    }
+
+    article.endorsement {
+      flex: 0 0 48%;
+    }
+  }
+}

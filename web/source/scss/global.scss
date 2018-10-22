@@ -173,7 +173,8 @@ main {
   color: #333333;
 
   > * {
-    margin: 0 1rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
     overflow-x: hidden;
   }
 
@@ -181,7 +182,7 @@ main {
     margin: 3rem auto;
     padding: 0 1rem;
     font-family: 'Lato Bold', sans-serif;
-    font-size: 2rem;
+    font-size: 2.2rem;
     text-align: center;
   }
 
@@ -315,6 +316,58 @@ a.new-tab {
   }
 }
 
+article.endorsement {
+  position: relative;
+  padding: 2rem 2.5rem 4rem;
+  font-family: 'Lato Italic', sans-serif;
+  font-size: 1.6rem;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: 1;
+    width: 6rem;
+    height: 6rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &:before {
+    top: 0.5rem;
+    left: 1rem;
+    background-image: url('/images/icons/quote-open.png');
+  }
+
+  &:after {
+    right: 2rem;
+    bottom: 3rem;
+    background-image: url('/images/icons/quote-close.png');
+  }
+
+  p {
+    position: relative;
+    z-index: 2;
+  }
+
+  p:last-of-type {
+    margin: 0;
+  }
+
+  span.byline {
+    display: block;
+    position: absolute;
+    right: 2rem;
+    bottom: 0;
+    z-index: 2;
+    font-family: 'Lato Bold', sans-serif;
+    color: #666;
+    text-align: right;
+  }
+}
+
 footer {
   margin: 4rem 0 0;
   padding: 2rem;
@@ -397,7 +450,7 @@ footer {
   }
 
   main {
-    h1 {
+    > h1 {
       margin: 4rem auto;
     }
 
@@ -436,6 +489,12 @@ footer {
 @media only screen and (min-width: 1024px) {
   body > header {
     padding: 0 calc((100% - 104rem) / 2);
+  }
+
+  h1, h2 {
+    br {
+      display: none;
+    }
   }
 
   h3 {

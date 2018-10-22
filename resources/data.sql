@@ -178,8 +178,6 @@ values
 <figcaption>VidyoConnect desktop prototype built with Electron (note the live camera capture)</figcaption>
 </figure>
 
-<h2>Conclusion</h2>
-
 <p>I brought process, guidance, and years of experience to a relatively junior team who brought dedication, a willingness to try new things, and their own perspective. That combination enabled us to transform a fledgling product lineup into an example of what UX can bring when it’s correctly applied.</p>
 
 <p>Below are various samples of my team''s output across several Vidyo projects.</p>', 1 );
