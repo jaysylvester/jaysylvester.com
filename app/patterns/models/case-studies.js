@@ -17,7 +17,7 @@ function caseStudies(emitter) {
 
   // If it's cached, return the cache object
   if ( cached ) {
-    return cached
+    emitter.emit('ready', cached)
   // If it's not cached, retrieve it from the database and cache it
   } else {
     app.toolbox.dbPool.connect(function (err, client, done) {
@@ -59,7 +59,7 @@ function caseStudy(clientUrl, emitter) {
 
   // If it's cached, return the cache object
   if ( cached ) {
-    return cached
+    emitter.emit('ready', cached)
   // If it's not cached, retrieve it from the database and cache it
   } else {
     app.toolbox.dbPool.connect(function (err, client, done) {
@@ -102,7 +102,7 @@ function screens(clientUrl, emitter) {
 
   // If cached, return the cache object
   if ( cached ) {
-    return cached
+    emitter.emit('ready', cached)
   // If not cached, retrieve them from the database and cache them
   } else {
     app.toolbox.dbPool.connect(function (err, client, done) {

@@ -15,7 +15,7 @@ function employers(emitter) {
 
   // If it's cached, return the cache object
   if ( cached ) {
-    return cached
+    emitter.emit('ready', cached)
   // If it's not cached, retrieve it from the database and cache it
   } else {
     app.toolbox.dbPool.connect(function (err, client, done) {
