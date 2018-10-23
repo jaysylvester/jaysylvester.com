@@ -1,12 +1,23 @@
 // Home / About
 
 body[data-controller="index"] {
+  @media only screen and (max-width: 374px) {
+    h1 {
+      br {
+        display: none;
+      }
+    }
+  }
+
   h2 {
     width: 100%;
   }
 
   section.case-studies {
     p {
+      max-width: 80rem;
+      margin-right: auto;
+      margin-left: auto;
       text-align: center;
     }
   }
