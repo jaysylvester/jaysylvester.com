@@ -86,10 +86,6 @@
     }
   }
 
-  figure.screens figure {
-    background: #f7f7f7;
-  }
-
   > nav.actions {
     display: flex;
     justify-content: center;
@@ -173,7 +169,6 @@ body[data-controller="case-studies"][data-view="case-studies"] {
   .case-study {
     margin: 4rem 0;
     padding-top: 4rem;
-
     @include separator;
     
     h1,
@@ -235,65 +230,7 @@ body[data-controller="case-study"][data-view="case-study"] {
 
     section.devices {
       margin-bottom: 2rem;
-    }
-
-    section.screens {
-      margin: 0;
-    }
-
-    figure {
-      margin: 4rem auto;
-
-      &.callout {
-        padding: 0.4rem;
-      }
-
-      img {
-        width: 100%;
-        border-radius: 0.4rem;
-        box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
-      }
-
-      // Screenshots
-      &.screens {
-        section {
-          display: flex;
-          overflow-x: scroll;
-          -webkit-overflow-scrolling: touch;
-          padding: 1rem;
-  
-          &::after {
-            content: '';
-            flex: 0 0 1rem;
-            display: block;
-            height: 1rem;
-          }
-        }
-  
-        figure {
-          flex: 0 0 82vw;
-          height: 50vw;
-          margin: 0 2rem 0 0;
-          border-radius: 0.4rem;
-          box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
-          overflow: hidden;
-          position: relative;
-  
-          img {
-            border-radius: 0;
-            box-shadow: none;
-          }
-        }
-
-        a.new-tab {
-          position: initial;
-          height: 100%;
-        }
-  
-        figcaption {
-          margin-top: 0;
-        }
-      }
+      overflow-x: hidden;
     }
 
     &.hibu {
@@ -324,38 +261,12 @@ body[data-controller="case-study"][data-view="case-study"] {
       }
     }
 
-    figcaption {
-      margin-top: 1rem;
-      font-family: 'Lato Italic', sans-serif;
-      line-height: 1.4;
-      text-align: center;
-    }
-
-    figure.device,
-    figure.device figure,
-    figure.device img {
-      border-radius: 0;
-      box-shadow: none;
-    }
-
     > nav.actions {
       margin: 8rem auto 4rem;
     }
   
     &.Fitly img.logo {
       max-height: 6rem;
-    }
-  
-    &.Vidyo {
-      figure.screens:nth-child(2) figure,
-      figure.screens:nth-child(3) figure {
-        height: 100%;
-      }
-      figure.screens:nth-child(4) figure {
-        height: auto;
-        border-radius: 0;
-        box-shadow: none;
-      }
     }
 
     // 768px and up
@@ -369,51 +280,26 @@ body[data-controller="case-study"][data-view="case-study"] {
       }
 
       section.content {
-        max-width: 82rem;
+        max-width: 72rem;
         margin: auto;
         padding: 0 2rem;
       }
 
-      figure {
-        margin: 6rem auto;
-
-        &.callout {
-          // Fitly
-          &.zip-code {
-            img {
-              height: 30rem;
-            }
-          }
-
-          &.pricing-cta {
-            figure {
-              margin-bottom: 2rem;
-            }
-
-            img {
-              height: 30rem;
-            }
-          }
-
+      figure.callout {
+        // Fitly
+        &.zip-code {
           img {
-            width: auto;
-            height: 40rem;
-            margin: auto;
+            height: 30rem;
           }
         }
 
-        &.screens {
-          section {
-            padding: 2rem;
-
-            &::after {
-              flex-basis: 2rem;
-            }
+        &.pricing-cta {
+          figure {
+            margin-bottom: 2rem;
           }
 
-          figure {
-            flex-basis: 45rem;
-            height: 28rem;
+          img {
+            height: 24rem;
           }
         }
       }
@@ -432,50 +318,10 @@ body[data-controller="case-study"][data-view="case-study"] {
             justify-content: flex-start;
           }
         }
-      } 
-
-      figcaption {
-        max-width: 45rem;
-        margin: 2rem auto 0;
       }
 
       &.OncoTracker img.logo {
         max-height: 4rem;
-      }
-    }
-
-    // Get rid of figure scroll at 840px and above (width of main with padding)
-    @media only screen and (min-width: 840px) {
-      figure.screens {
-        width: 100%;
-        margin-left: 0;
-
-        section {
-          flex-wrap: wrap;
-          justify-content: center;
-          padding: 0;
-          overflow: visible;
-
-          &::after {
-            display: none;
-          }
-        }
-
-        figure {
-          flex-basis: 23%;
-          height: 14rem;
-          margin: 0 2rem 2rem 0;
-
-          &:first-child,
-          &:nth-child(5) {
-            margin-left: 0;
-          }
-
-          &:nth-child(4),
-          &:last-child {
-            margin-right: 0;
-          }
-        }
       }
     }
 
@@ -488,11 +334,6 @@ body[data-controller="case-study"][data-view="case-study"] {
 
       section.devices {
         margin-bottom: 6rem;
-      }
-
-      figcaption {
-        max-width: none;
-        font-size: 1.8rem;
       }
     }
   }

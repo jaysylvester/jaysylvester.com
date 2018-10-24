@@ -16,8 +16,10 @@ function handler(params, context, emitter) {
       },
       footer: {
         controller: '_footer'
+      },
+      screens: {
+        controller: '_screens'
       }
     }
   })
-
 }

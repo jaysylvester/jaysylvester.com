@@ -1,0 +1,22 @@
+// Portfolio
+
+body[data-controller="portfolio"] {
+  section.documents {
+    ul {
+      max-width: 40rem;
+      margin-right: auto;
+      margin-left: auto;
+      color: #cccccc;
+    }
+  }
+  
+  @media only screen and (min-width: 768px) {
+    section.documents p,
+    section.all-screens p {
+      max-width: 80rem;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+    }
+  }
+}

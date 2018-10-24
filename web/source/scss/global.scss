@@ -64,8 +64,8 @@ body {
 }
 
 h2 {
-  margin: 4rem 0 2rem;
-  font-size: 2.2rem;
+  margin: 5rem 0 1rem;
+  font-size: 2rem;
   font-family: 'Lato Bold', sans-serif;
   text-align: center;
 }
@@ -73,17 +73,7 @@ h2 {
 h3 {
   margin: 3rem 0 0.5rem;
   font-family: 'Lato Bold', sans-serif;
-}
-
-p {
-  a {
-    font-family: 'Lato Bold', sans-serif;
-    color: #ff0055;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
+  font-size: 1.8rem;
 }
 
 a.primary-action,
@@ -102,10 +92,15 @@ li.primary-action input {
   border-radius: 0.4rem;
 }
 
-// Override default width/height caused by alt attributes in unloaded images
+// Override default width or height caused by alt attributes in unloaded images
+// Coincides with JAY.global.imageLoad() in global.js
 img[data-src]:not(.loaded) {
-  width: 0;
-  height: 0;
+  @media only screen and (max-width: 767px) {
+    height: 0;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 0;
+  }
 }
 
 // Main header
@@ -175,7 +170,6 @@ main {
   > * {
     margin-right: 1rem;
     margin-left: 1rem;
-    overflow-x: hidden;
   }
 
   > h1 {
@@ -188,6 +182,15 @@ main {
 
   > p {
     text-align: center;
+  }
+
+  a {
+    font-family: 'Lato Bold', sans-serif;
+    color: #ff0055;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 }
 

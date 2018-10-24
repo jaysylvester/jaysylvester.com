@@ -11,22 +11,19 @@ JAY.global = ( function () {
     header: function () {
       var body        = document.querySelector('body'),
           bodyOffset  = 0,
-          timer       = 0,
           header      = document.querySelector('body > header')
 
-      setTimeout( function () {
-        window.addEventListener('scroll', function () {
-          if ( !body.classList.contains('hidden-header') && bodyOffset > body.getBoundingClientRect().top && Math.abs(body.getBoundingClientRect().top) > header.getBoundingClientRect().height ) {
-            body.classList.add('hidden-header')
-          // The minus 10 pixels is to keep the header from popping in with only slight movements (happens frequently when using touchscreens and touch input devices)
-          // The second half of the statement deals with Safari's bounceback when you scroll past the top of the page
-          } else if ( body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
-            body.classList.remove('hidden-header')
-          }
+      window.addEventListener('scroll', function () {
+        if ( !body.classList.contains('hidden-header') && bodyOffset > body.getBoundingClientRect().top && Math.abs(body.getBoundingClientRect().top) > header.getBoundingClientRect().height ) {
+          body.classList.add('hidden-header')
+        // The minus 10 pixels is to keep the header from popping in with only slight movements (happens frequently when using touchscreens and touch input devices)
+        // The second half of the statement deals with Safari's bounceback when you scroll past the top of the page
+        } else if ( body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
+          body.classList.remove('hidden-header')
+        }
 
-          bodyOffset = body.getBoundingClientRect().top
-        })
-      }, timer)
+        bodyOffset = body.getBoundingClientRect().top
+      })
     },
 
     imageLoad: function () {

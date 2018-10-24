@@ -12,14 +12,10 @@ function handler(params, context, emitter) {
   app.listen({
     caseStudy: function (emitter) {
       app.models['case-studies'].caseStudy(params.url.client, emitter)
-    },
-    screens: function (emitter) {
-      app.models['case-studies'].screens(params.url.client, emitter)
     }
   }, function (output) {
     if ( output.listen.success ) {
       if ( output.caseStudy ) {
-        output.caseStudy.screens = output.screens
         emitter.emit('ready', {
           content: output.caseStudy,
           include: {
@@ -28,6 +24,9 @@ function handler(params, context, emitter) {
             },
             footer: {
               controller: '_footer'
+            },
+            screens: {
+              route: '/_screens/company/' + params.url.client
             }
           }
         })

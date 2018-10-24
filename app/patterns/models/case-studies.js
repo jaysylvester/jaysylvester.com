@@ -4,8 +4,7 @@
 
 module.exports = {
   caseStudies: caseStudies,
-  caseStudy: caseStudy,
-  screens: screens
+  caseStudy: caseStudy
 }
 
 
@@ -85,67 +84,6 @@ function caseStudy(clientUrl, emitter) {
                 })
               }
               emitter.emit('ready', result.rows[0])
-            }
-          }
-        )
-      }
-    })
-  }
-}
-
-
-function screens(clientUrl, emitter) {
-  // See if these screens are already cached
-  var cacheKey  = 'case-study-screens-' + clientUrl,
-      scope     = 'case-studies',
-      cached    = app.cache.get({ scope: scope, key: cacheKey })
-
-  // If cached, return the cache object
-  if ( cached ) {
-    emitter.emit('ready', cached)
-  // If not cached, retrieve them from the database and cache them
-  } else {
-    app.toolbox.dbPool.connect(function (err, client, done) {
-      if ( err ) {
-        emitter.emit('error', err)
-      } else {
-        client.query({
-          name: 'case_study_screens',
-          text: 'select id, client, url, alt, category, sort from screens where client = $1;',
-          values: [ clientUrl ]
-        },
-          function (err, result) {
-            done()
-            if ( err ) {
-              emitter.emit('error', err)
-            } else {
-              // Transform the data to make it usable by the view
-              let screens = {}
-              result.rows.forEach( function (screen) {
-                if ( !screens[screen.category] ) {
-                  screens[screen.category] = {
-                    category: screen.category,
-                    screens: {}
-                  }
-                }
-                screens[screen.category].screens[screen.id] = {
-                  client:   screen.client,
-                  url:      screen.url,
-                  alt:      screen.alt,
-                  sort:     screen.sort,
-                  category: screen.category
-                }
-              })
-
-              // Cache these screens for future requests
-              if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
-                app.cache.set({
-                  key: cacheKey,
-                  scope: scope,
-                  value: screens
-                })
-              }
-              emitter.emit('ready', screens)
             }
           }
         )

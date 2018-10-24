@@ -1,0 +1,164 @@
+// Screenshots
+section.screens {
+  margin: 0;
+
+  // Override default height caused by alt attributes in unloaded images
+  // Coincides with JAY.global.imageLoad() in global.js
+  img[data-src]:not(.loaded) {
+      height: 0;
+  }
+
+  figure[role="group"] {
+    margin: 4rem auto;
+    
+    section {
+      display: flex;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      padding: 1rem;
+
+      &::after {
+        content: '';
+        flex: 0 0 1rem;
+        display: block;
+        height: 1rem;
+      }
+    }
+
+    figure {
+      flex: 0 0 82vw;
+      height: 50vw;
+      margin: 0 2rem 0 0;
+      border-radius: 0.4rem;
+      box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
+      overflow: hidden;
+      position: relative;
+
+      img {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    a.new-tab {
+      position: initial;
+      height: 100%;
+    }
+
+    figcaption {
+      margin-top: 0;
+    }
+
+    &.Vidyo {
+      &:nth-child(2) figure,
+      &:nth-child(3) figure {
+        height: 100%;
+      }
+      &:nth-child(4) figure {
+        height: auto;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    figure[role="group"] {
+      margin: 6rem auto;
+
+      section {
+        padding: 2rem;
+
+        &::after {
+          flex-basis: 2rem;
+        }
+      }
+
+      figure {
+        flex-basis: 45rem;
+        height: 28rem;
+      }
+
+      figcaption {
+        max-width: 45rem;
+      }
+    }
+  }
+
+  // Get rid of figure scroll at 840px and above (width of main with padding)
+  @media only screen and (min-width: 840px) {
+    figure[role="group"] {
+      width: 100%;
+      margin-left: 0;
+
+      section {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0;
+        overflow: visible;
+
+        &::after {
+          display: none;
+        }
+      }
+
+      figure {
+        flex-basis: 23%;
+        height: 14rem;
+        margin: 0 2rem 2rem 0;
+
+        &:first-child,
+        &:nth-child(5) {
+          margin-left: 0;
+        }
+
+        &:nth-child(4),
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+// Figures
+figure.callout {
+  margin: 4rem auto;
+  padding: 0.4rem;
+
+  img {
+    width: 100%;
+    border-radius: 0.4rem;
+    box-shadow: 0 0.1rem 0.4rem 0 rgba(0,0,0,0.30);
+  }
+}
+
+figcaption {
+  margin: 1rem auto 0;
+  font-family: 'Lato Italic', sans-serif;
+  line-height: 1.4;
+  text-align: center;
+}
+
+figure.device img {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media only screen and (min-width: 768px) {
+  figure.callout {
+    img {
+      width: auto;
+      height: 32rem;
+      margin: auto;
+    }
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  figcaption {
+    max-width: none;
+    font-size: 1.8rem;
+  }
+}

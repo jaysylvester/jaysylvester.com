@@ -38,25 +38,7 @@
       <section class="content">
         {{{content}}}
       </section>
-      <section class="screens">
-        {{#each screens}}
-          <figure role="group" class="screens">
-            <section>
-              {{#each this.screens}}
-                <figure>
-                  <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/{{this.url}}" target="_blank" title="Open this image in a new tab">
-                    <noscript>
-                      <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{this.url}}" alt="{{this.alt}}">
-                    </noscript>
-                    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{this.url}}" alt="{{this.alt}}">
-                  </a>
-                </figure>
-              {{/each}}
-            </section>
-            <figcaption>{{{this.category}}}</figcaption>
-          </figure>
-        {{/each}}
-      </section>
+      {{{include.screens}}}
       <nav class="actions">
         <a class="primary-action" href="/case-studies">Read more case studies</a>
       </nav>
