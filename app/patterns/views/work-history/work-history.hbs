@@ -37,9 +37,9 @@
             <h3>{{employer_name}}</h3>
             <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
             <p class="description">{{job_description}}</p>
-            {{#if client_url}}
+            {{#if company_url}}
               <nav class="actions">
-                <a class="primary-action" href="/case-study/client/{{client_url}}">Read my {{employer_name}} case study</a>
+                <a class="primary-action" href="/case-study/company/{{company_url}}">Read my {{employer_name}} case study</a>
               </nav>
             {{/if}}
           </section>

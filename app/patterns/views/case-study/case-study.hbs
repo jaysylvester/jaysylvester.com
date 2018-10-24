@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — Case Study: {{client_name}}</title>
+    <title>Jay Sylvester — Case Study: {{company_name}}</title>
     <meta name="description" content="{{summary}}">
     <meta name="keywords" content="UI, UX, user experience, case study">
     <link rel="stylesheet" type="text/css" href="/min/site.css?v={{config.cacheBuster.css}}">
     <script type="text/javascript" src="/min/site.js?v={{config.cacheBuster.js}}"></script>
   </head>
-  <body data-client="{{client_url}}" data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
     {{{include.header}}}
-    <main class="case-study {{client_url}}">
+    <main class="case-study {{company_url}}">
       <section class="logo">
-        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{client_url}}/{{client_url}}-logo.png" alt="{{client_name}} logo">
+        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
       </section>
       <h1><span>Case Study:</span> {{{title}}}</h1>
       <ul class="attributes">
@@ -31,9 +31,9 @@
       <p class="summary">{{summary}}</p>
       <section class="devices">
         <noscript>
-          <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{client_url}}/{{client_url}}-devices.png" alt="{{client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+          <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
         </noscript>
-        <img class="devices" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{client_url}}/{{client_url}}-devices.png" alt="{{client_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+        <img class="devices" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
       </section>
       <section class="content">
         {{{content}}}

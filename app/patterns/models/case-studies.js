@@ -25,7 +25,7 @@ function caseStudies(emitter) {
       } else {
         client.query({
           name: 'case_studies',
-          text: 'select id, client_name, client_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc;'
+          text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc;'
         },
           function (err, result) {
             done()
@@ -50,9 +50,9 @@ function caseStudies(emitter) {
 }
 
 
-function caseStudy(clientUrl, emitter) {
+function caseStudy(companyUrl, emitter) {
   // See if the case study is already cached
-  var cacheKey  = 'case-study-' + clientUrl,
+  var cacheKey  = 'case-study-' + companyUrl,
       scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
@@ -67,8 +67,8 @@ function caseStudy(clientUrl, emitter) {
       } else {
         client.query({
           name: 'case_study',
-          text: 'select id, client_name, client_url, title, tagline, vertical, platform, expertise, summary, content from case_studies where client_url = $1;',
-          values: [ clientUrl ]
+          text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, content from case_studies where company_url = $1;',
+          values: [ companyUrl ]
         },
           function (err, result) {
             done()

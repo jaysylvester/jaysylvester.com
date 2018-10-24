@@ -11,7 +11,7 @@ module.exports = {
 function handler(params, context, emitter) {
   app.listen({
     caseStudy: function (emitter) {
-      app.models['case-studies'].caseStudy(params.url.client, emitter)
+      app.models['case-studies'].caseStudy(params.url.company, emitter)
     }
   }, function (output) {
     if ( output.listen.success ) {
@@ -26,7 +26,7 @@ function handler(params, context, emitter) {
               controller: '_footer'
             },
             screens: {
-              route: '/_screens/company/' + params.url.client
+              route: '/_screens/company/' + params.url.company
             }
           }
         })

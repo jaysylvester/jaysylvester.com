@@ -25,7 +25,7 @@ function companyScreens(company, emitter) {
       } else {
         client.query({
           name: 'case_study_screens',
-          text: 'select id, client, url, alt, category, sort from screens where client = $1;',
+          text: 'select id, company, url, alt, category, sort from screens where company = $1;',
           values: [ company ]
         },
           function (err, result) {
@@ -38,13 +38,13 @@ function companyScreens(company, emitter) {
               result.rows.forEach( function (screen) {
                 if ( !screens[screen.category] ) {
                   screens[screen.category] = {
-                    company: screen.client,
+                    company: screen.company,
                     category: screen.category,
                     screens: {}
                   }
                 }
                 screens[screen.category].screens[screen.id] = {
-                  client:   screen.client,
+                  company:  screen.company,
                   url:      screen.url,
                   alt:      screen.alt,
                   sort:     screen.sort,
@@ -88,7 +88,7 @@ function screens(emitter) {
       } else {
         client.query({
           name: 'portfolio_screens',
-          text: 'select id, client, url, alt, category, sort from screens;'
+          text: 'select id, company, url, alt, category, sort from screens;'
         },
           function (err, result) {
             done()
@@ -100,13 +100,13 @@ function screens(emitter) {
               result.rows.forEach( function (screen) {
                 if ( !screens[screen.category] ) {
                   screens[screen.category] = {
-                    company: screen.client,
+                    company: screen.company,
                     category: screen.category,
                     screens: {}
                   }
                 }
                 screens[screen.category].screens[screen.id] = {
-                  client:   screen.client,
+                  company:  screen.company,
                   url:      screen.url,
                   alt:      screen.alt,
                   sort:     screen.sort,

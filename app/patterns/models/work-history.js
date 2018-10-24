@@ -24,7 +24,7 @@ function employers(emitter) {
       } else {
         client.query({
           name: 'employers',
-          text: 'select w.id, w.employer_name, w.employer_url, w.job_title, w.job_description, w.employed_from, w.employed_to, c.client_url from work_history w left join case_studies c on w.employer_url = c.client_url order by employed_to desc;'
+          text: 'select w.id, w.employer_name, w.employer_url, w.job_title, w.job_description, w.employed_from, w.employed_to, c.company_url from work_history w left join case_studies c on w.employer_url = c.company_url order by employed_to desc;'
         },
           function (err, result) {
             done()
