@@ -7,6 +7,14 @@ body[data-controller="portfolio"] {
       margin-right: auto;
       margin-left: auto;
       color: #cccccc;
+
+      &:first-of-type {
+        margin-bottom: 0;
+      }
+
+      &:last-of-type {
+        margin-top: 0;
+      }
     }
   }
   
@@ -17,6 +25,28 @@ body[data-controller="portfolio"] {
       margin-right: auto;
       margin-left: auto;
       text-align: center;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    section.documents {
+      text-align: center;
+
+      ul {
+        display: inline-block;
+        
+        &:first-of-type {
+          margin-right: 5%;
+        }
+
+        &:last-of-type {
+          margin-top: 1.2rem;
+        }
+
+        li {
+          text-align: left;
+        }
+      }
     }
   }
 }

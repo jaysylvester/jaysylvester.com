@@ -3,8 +3,8 @@
 @import '_mixins';
 
 body[data-controller="work-history"] {
-  p.download {
-    margin-top: 2rem;
+  main > h2 {
+    margin-bottom: 0;
   }
 
   section.competencies {
