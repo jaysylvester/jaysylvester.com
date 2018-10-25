@@ -2,8 +2,8 @@
 
 CREATE TABLE case_studies (
     id SERIAL PRIMARY KEY,
-    client_name text,
-    client_url text,
+    company_name text,
+    company_url text,
     title text,
     summary text,
     content text,
@@ -16,7 +16,7 @@ CREATE TABLE case_studies (
 
 CREATE TABLE screens (
     id SERIAL PRIMARY KEY,
-    client text,
+    company text,
     url text,
     alt text,
     sort integer,
@@ -79,7 +79,7 @@ values
 ( 'Panasonic Consumer Electronics', 'Panasonic-Consumer-Electronics', 'Web Producer', 'I supervised our interactive agency, reviewing and approving all sites within core product lines including TV, Home Theater, and Home Appliances. Through careful planning with product managers and the advertising department, I coordinated site updates with product introductions, promotions, and events. I also designed and coded the Panasonic Premium sales incentive web site.', '2000-05-01', '2004-10-01' );
 
 insert into case_studies
-( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
+( company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort )
 values
 ( 'Vidyo', 'Vidyo', 'Vidyo Remote Collaboration Solutions', 'Video conferencing and collaboration that goes well beyond the typical Skype call', 'Video Conferencing &amp; Collaboration', 'Desktop / Mobile / Web', 'UX Design / Team Management', 'Vidyo had a complex suite of video conferencing apps that spanned many platforms, but a lack of design standards made the experience inconsistent across devices. I defined crucial UX processes and led the design team in establishing a unified presentation across the entire product line.', '<p>Vidyo built their brand on breakthrough technology that enables high-quality, low bandwidth video conferencing with hundreds of participants across pretty much any device you can imagine: phones, tablets, computers, and even multi-screen conference room systems. The superiority of the underlying technology was enough to drive their initial success, but today’s customers expect great technology to be paired with great design. Recognizing that crucial need, Vidyo hired me to establish UX process, manage and grow the UX team, and drive the adoption of user-centered design across the organization.</p>
 
@@ -183,20 +183,20 @@ values
 <p>Below are various samples of my team''s output across several Vidyo projects.</p>', 1 );
 
 insert into screens
-( client, url, alt, category, sort )
+( company, url, alt, category, sort )
 values
-( 'Vidyo', 'VidyoCore-1.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 1 ),
-( 'Vidyo', 'VidyoCore-2.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 2 ),
-( 'Vidyo', 'VidyoCore-3.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 3),
-( 'Vidyo', 'VidyoCore-4.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 4 ),
-( 'Vidyo', 'Vidyo-Neo-1.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 5 ),
-( 'Vidyo', 'Vidyo-Neo-2.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 6 ),
-( 'Vidyo', 'Vidyo-Neo-3.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 7 ),
-( 'Vidyo', 'Vidyo-Neo-4.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 8 ),
-( 'Vidyo', 'VidyoConnect-1.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 9 ),
-( 'Vidyo', 'VidyoConnect-2.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 10 ),
-( 'Vidyo', 'VidyoConnect-3.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 11 ),
-( 'Vidyo', 'VidyoConnect-4.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 12 ),
+( 'Vidyo', 'Vidyo-Neo-1.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 1 ),
+( 'Vidyo', 'Vidyo-Neo-2.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 2 ),
+( 'Vidyo', 'Vidyo-Neo-3.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 3 ),
+( 'Vidyo', 'Vidyo-Neo-4.jpg', 'A screenshot of Vidyo Neo v1.0', 'Vidyo Neo v1.0', 4 ),
+( 'Vidyo', 'VidyoConnect-1.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 5 ),
+( 'Vidyo', 'VidyoConnect-2.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 6 ),
+( 'Vidyo', 'VidyoConnect-3.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 7 ),
+( 'Vidyo', 'VidyoConnect-4.jpg', 'A screenshot of VidyoConnect (Vidyo Neo v2.0)', 'VidyoConnect (Vidyo Neo v2.0)', 8 ),
+( 'Vidyo', 'VidyoCore-1.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 9 ),
+( 'Vidyo', 'VidyoCore-2.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 10 ),
+( 'Vidyo', 'VidyoCore-3.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 11 ),
+( 'Vidyo', 'VidyoCore-4.jpg', 'A screenshot of the VidyoCore conference mannagement suite', 'VidyoCore conference management suite', 12 ),
 ( 'Vidyo', 'VidyoConnect-mobile-1.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 13 ),
 ( 'Vidyo', 'VidyoConnect-mobile-2.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 14 ),
 ( 'Vidyo', 'VidyoConnect-mobile-3.jpg', 'A screenshot of VidyoConnect Mobile', 'VidyoConnect Mobile', 15 ),
@@ -204,7 +204,7 @@ values
 
 
 insert into case_studies
-( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
+( company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort )
 values
 ( 'Abercrombie & Fitch', 'Abercrombie-and-Fitch', 'Abercrombie &amp; Fitch Online Store', 'Four brands, thirty international sites, and one framework', 'E-commerce', 'Web', 'UI Architecture / Front End Development / Team Management', 'Abercrombie & Fitch had four distinct brands running on four distinct code bases, leading to lots of duplicate development effort. My team engineered a front end framework that let them spend less time chasing problems and more time building solutions.', '<p>
 When I first joined the e-commerce team at Abercrombie &amp; Fitch, the front end code base needed a lot of work. Each of the company''s 4 brands&mdash;Abercrombie &amp; Fitch, abercrombie kids, Hollister Co., and Gilly Hicks&mdash;ran on its own set of JSPs, CSS files, and JavaScript libraries. There were different JavaScript libraries used across brands; some had jQuery, some had YUI, and some even had both being used simultaneously. Gilly Hicks, based on Flex, was entirely inconsistent with the other 3 brands. Any new feature requested by our business users required duplicated development effort. In many cases, up to 4 uniquely engineered solutions were required for the exact same feature.
@@ -229,19 +229,19 @@ During my second year at Abercrombie, we implemented a series of further improve
 </p>
 <p>
 Today, Abercrombie''s various brands are in a much better position to tackle future e-commerce challenges thanks to the work performed by the front end team under my leadership.
-</p>', 5 );
+</p>', 4 );
 
 insert into screens
-( client, url, alt, category, sort )
+( company, url, alt, category, sort )
 values
-( 'Abercrombie-and-Fitch', 'Abercrombie.jpg', 'Abcrombie home page', 'All four Abercrombie brands using the same front end framework', 1 ),
-( 'Abercrombie-and-Fitch', 'abercrombie-kids.jpg', 'abercrombie kids home page', 'All four Abercrombie brands using the same front end framework', 2 ),
-( 'Abercrombie-and-Fitch', 'Hollister.jpg', 'Hollister home page', 'All four Abercrombie brands using the same front end framework', 3),
-( 'Abercrombie-and-Fitch', 'Gilly-Hicks.jpg', 'Gilly Hicks home page', 'All four Abercrombie brands using the same front end framework', 4 );
+( 'Abercrombie-and-Fitch', 'Abercrombie.jpg', 'Abcrombie home page', 'All four Abercrombie brands using the same front end framework', 32 ),
+( 'Abercrombie-and-Fitch', 'abercrombie-kids.jpg', 'abercrombie kids home page', 'All four Abercrombie brands using the same front end framework', 33 ),
+( 'Abercrombie-and-Fitch', 'Hollister.jpg', 'Hollister home page', 'All four Abercrombie brands using the same front end framework', 34 ),
+( 'Abercrombie-and-Fitch', 'Gilly-Hicks.jpg', 'Gilly Hicks home page', 'All four Abercrombie brands using the same front end framework', 35 );
 
 
 insert into case_studies
-( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
+( company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort )
 values
 ( 'hibu', 'hibu', 'hibu Marketplace Responsive Design', 'There is no such thing as the "mobile web"', 'E-commerce', 'Responsive Web', 'UX Design / UI Architecture / Team Management', 'hibu had an e-commerce platform with lots of legacy code and a design that wasn''t ready for mobile devices. My team rebuilt the UI from scratch, then devised a plan to go responsive and improve the experience for millions of mobile and tablet users.', '
 <p>
@@ -361,20 +361,20 @@ While the challenges of UX design on a responsive project are significant, we pr
 </p>', 3 );
 
 insert into screens
-( client, url, alt, category, sort )
+( company, url, alt, category, sort )
 values
-( 'hibu', 'eMP-home-mobile.jpg', 'hibu Marketplace HTML prototype (home page, mobile)', 'hibu Marketplace HTML prototype', 1 ),
-( 'hibu', 'eMP-home-desktop.jpg', 'hibu Marketplace HTML prototype (home page, desktop)', 'hibu Marketplace HTML prototype', 2 ),
-( 'hibu', 'eMP-category-mobile.jpg', 'hibu Marketplace HTML prototype (category page, mobile)', 'hibu Marketplace HTML prototype', 3 ),
-( 'hibu', 'eMP-category-desktop.jpg', 'hibu Marketplace HTML prototype (category page, desktop)', 'hibu Marketplace HTML prototype', 4 ),
-( 'hibu', 'eMP-search-mobile.jpg', 'hibu Marketplace HTML prototype (search results, mobile)', 'hibu Marketplace HTML prototype', 5 ),
-( 'hibu', 'eMP-search-desktop.jpg', 'hibu Marketplace HTML prototype (search results, desktop)', 'hibu Marketplace HTML prototype', 6 ),
-( 'hibu', 'eMP-cart-mobile.jpg', 'hibu Marketplace HTML prototype (shopping cart, mobile)', 'hibu Marketplace HTML prototype', 7 ),
-( 'hibu', 'eMP-cart-desktop.jpg', 'hibu Marketplace HTML prototype (shopping cart, desktop)', 'hibu Marketplace HTML prototype', 8 );
+( 'hibu', 'eMP-home-mobile.jpg', 'hibu Marketplace HTML prototype (home page, mobile)', 'hibu Marketplace HTML prototype', 24 ),
+( 'hibu', 'eMP-home-desktop.jpg', 'hibu Marketplace HTML prototype (home page, desktop)', 'hibu Marketplace HTML prototype', 25 ),
+( 'hibu', 'eMP-category-mobile.jpg', 'hibu Marketplace HTML prototype (category page, mobile)', 'hibu Marketplace HTML prototype', 26 ),
+( 'hibu', 'eMP-category-desktop.jpg', 'hibu Marketplace HTML prototype (category page, desktop)', 'hibu Marketplace HTML prototype', 27 ),
+( 'hibu', 'eMP-search-mobile.jpg', 'hibu Marketplace HTML prototype (search results, mobile)', 'hibu Marketplace HTML prototype', 28 ),
+( 'hibu', 'eMP-search-desktop.jpg', 'hibu Marketplace HTML prototype (search results, desktop)', 'hibu Marketplace HTML prototype', 29 ),
+( 'hibu', 'eMP-cart-mobile.jpg', 'hibu Marketplace HTML prototype (shopping cart, mobile)', 'hibu Marketplace HTML prototype', 30 ),
+( 'hibu', 'eMP-cart-desktop.jpg', 'hibu Marketplace HTML prototype (shopping cart, desktop)', 'hibu Marketplace HTML prototype', 31 );
 
 
 insert into case_studies
-( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
+( company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort )
 values
 ( 'OncoTracker', 'OncoTracker', 'OncoTracker Portable Medical Records', 'Cancer patients should be focused on their treatment, not their treatment records', 'Healthcare', 'Web', 'Information Architecture / UX Design / Full-Stack Development', 'OncoTracker wanted to provide an easy way for oncology patients to access their medical records anywhere. I designed a solution that walks users through the process of entering their records step by step and allows them to track the progress of their treatment.', '<p>
 OncoTracker approached me with their idea for a service to allow oncology patients to store their treatment records online. Cancer patients, already burdened with their illness, carry the stress of transporting extensive medical records from physician to physician over the course of lengthy treatment cycles. If they could store their records online, any doctor or family member with the appropriate credentials could login and view the patient''s medical history, relieving them of this additional burden. OncoTracker wanted a web site that would walk users through the process of entering their medical records and allow them to export those records when necessary. With this set of fairly open requirements and a very aggressive timeline, I got to work.
@@ -398,19 +398,19 @@ Because entering such large amounts of data can be a time-consuming process, the
 </p>
 <p>
 The final product was an easy-to-use interface that allowed oncology patients with a lot on their minds to spend less time worrying about their medical records and more time focusing on their health.
-</p>', 4 );
+</p>', 5 );
 
 insert into screens
-( client, url, alt, category, sort )
+( company, url, alt, category, sort )
 values
-( 'OncoTracker', 'OncoTracker-home.jpg', 'OncoTracker home page', 'OncoTracker screenshots', 1 ),
-( 'OncoTracker', 'OncoTracker-overview.jpg', 'OncoTracker treatment overview', 'OncoTracker screenshots', 2 ),
-( 'OncoTracker', 'OncoTracker-pathology.jpg', 'OncoTracker pathology report entry screen', 'OncoTracker screenshots', 3),
-( 'OncoTracker', 'OncoTracker-profile.jpg', 'OncoTracker profile overview', 'OncoTracker screenshots', 4 );
+( 'OncoTracker', 'OncoTracker-home.jpg', 'OncoTracker home page', 'OncoTracker screenshots', 36 ),
+( 'OncoTracker', 'OncoTracker-overview.jpg', 'OncoTracker treatment overview', 'OncoTracker screenshots', 37 ),
+( 'OncoTracker', 'OncoTracker-pathology.jpg', 'OncoTracker pathology report entry screen', 'OncoTracker screenshots', 38 ),
+( 'OncoTracker', 'OncoTracker-profile.jpg', 'OncoTracker profile overview', 'OncoTracker screenshots', 39 );
 
 
 insert into case_studies
-( client_name, client_url, title, tagline, vertical, platform, expertise, summary, content, sort )
+( company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort )
 values
 ( 'Fitly', 'Fitly', 'Fitly Online Store', 'Making it easy for busy families to plan and prepare healthy, delicious meals', 'E-commerce', 'Responsive Web', 'UX Design / UI Architecture / Front End Development', 'Fitly approached me with an e-commerce site that had some UX challenges stemming from its startup incubator roots and a complex pricing model. I was tasked with improving the user experience and rebuilding the responsive front end to reach MVP (Minimum Viable Product) status.', '
 <p>
@@ -548,12 +548,12 @@ Designing the Fitly experience proved to be an interesting challenge not just be
 </p>', 2 );
 
 insert into screens
-( client, url, alt, category, sort )
+( company, url, alt, category, sort )
 values
-( 'Fitly', 'Fitly-recipe-detail-mobile.jpg', 'Fitly recipe detail page (mobile)', 'Fitly v2.0 online store', 1 ),
-( 'Fitly', 'Fitly-recipe-detail-tablet.jpg', 'Fitly recipe detail page (tablet)', 'Fitly v2.0 online store', 2 ),
-( 'Fitly', 'Fitly-recipe-detail-desktop.jpg', 'Fitly recipe detail page (desktop)', 'Fitly v2.0 online store', 3),
-( 'Fitly', 'Fitly-kitchen-view-tablet.jpg', 'Fitly kitchen view (tablet)', 'Fitly v2.0 online store', 4 ),
-( 'Fitly', 'Fitly-recipe-search-mobile.jpg', 'Fitly recipe search page (mobile)', 'Fitly v2.0 online store', 5 ),
-( 'Fitly', 'Fitly-recipe-search-tablet.jpg', 'Fitly recipe search page (tablet)', 'Fitly v2.0 online store', 6 ),
-( 'Fitly', 'Fitly-recipe-search-desktop.jpg', 'Fitly recipe search page (desktop)', 'Fitly v2.0 online store', 7 );
+( 'Fitly', 'Fitly-recipe-detail-mobile.jpg', 'Fitly recipe detail page (mobile)', 'Fitly v2.0 online store', 17 ),
+( 'Fitly', 'Fitly-recipe-detail-tablet.jpg', 'Fitly recipe detail page (tablet)', 'Fitly v2.0 online store', 18 ),
+( 'Fitly', 'Fitly-recipe-detail-desktop.jpg', 'Fitly recipe detail page (desktop)', 'Fitly v2.0 online store', 19 ),
+( 'Fitly', 'Fitly-kitchen-view-tablet.jpg', 'Fitly kitchen view (tablet)', 'Fitly v2.0 online store', 20 ),
+( 'Fitly', 'Fitly-recipe-search-mobile.jpg', 'Fitly recipe search page (mobile)', 'Fitly v2.0 online store', 21 ),
+( 'Fitly', 'Fitly-recipe-search-tablet.jpg', 'Fitly recipe search page (tablet)', 'Fitly v2.0 online store', 22 ),
+( 'Fitly', 'Fitly-recipe-search-desktop.jpg', 'Fitly recipe search page (desktop)', 'Fitly v2.0 online store', 23 );

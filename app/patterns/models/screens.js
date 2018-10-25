@@ -25,7 +25,7 @@ function companyScreens(company, emitter) {
       } else {
         client.query({
           name: 'case_study_screens',
-          text: 'select id, company, url, alt, category, sort from screens where company = $1;',
+          text: 'select id, company, url, alt, category, sort from screens where company = $1 order by sort asc;',
           values: [ company ]
         },
           function (err, result) {
@@ -88,7 +88,7 @@ function screens(emitter) {
       } else {
         client.query({
           name: 'portfolio_screens',
-          text: 'select id, company, url, alt, category, sort from screens;'
+          text: 'select id, company, url, alt, category, sort from screens order by sort asc;'
         },
           function (err, result) {
             done()

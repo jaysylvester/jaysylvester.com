@@ -50,8 +50,8 @@ section.screens {
     }
 
     &.Vidyo {
-      &:nth-child(2) figure,
-      &:nth-child(3) figure {
+      &:nth-child(1) figure,
+      &:nth-child(2) figure {
         height: 100%;
       }
       &:nth-child(4) figure {
