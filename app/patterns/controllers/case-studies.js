@@ -11,7 +11,7 @@ module.exports = {
 function handler(params, context, emitter) {
   app.listen({
     caseStudies: function (emitter) {
-      app.models['case-studies'].caseStudies(emitter)
+      app.models['case-studies'].caseStudies(params.url.count, emitter)
     }
   }, function (output) {
     if ( output.listen.success ) {

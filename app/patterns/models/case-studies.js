@@ -8,9 +8,9 @@ module.exports = {
 }
 
 
-function caseStudies(emitter) {
+function caseStudies(count = false, emitter) {
   // See if the case study is already cached
-  var cacheKey  = 'case-studies',
+  var cacheKey  = 'case-studies-' + count,
       scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
@@ -23,10 +23,7 @@ function caseStudies(emitter) {
       if ( err ) {
         emitter.emit('error', err)
       } else {
-        client.query({
-          name: 'case_studies',
-          text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc;'
-        },
+        client.query('select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc' + ( count ? ' limit ' + count : '' ) + ';',
           function (err, result) {
             done()
             if ( err ) {

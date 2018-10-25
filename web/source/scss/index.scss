@@ -1,3 +1,5 @@
+@import '_mixins';
+
 // Home / About
 
 body[data-controller="index"] {
@@ -20,6 +22,20 @@ body[data-controller="index"] {
       margin-left: auto;
       text-align: center;
     }
+
+    nav.more {
+      margin-top: 1rem;
+    }
+  }
+
+  section.endorsements {
+    @include separator;
+    margin-top: 6rem;
+    padding-top: 0.1rem;
+
+    nav.more {
+      margin-top: 4rem;
+    }
   }
 
   article.endorsement {
@@ -30,7 +46,6 @@ body[data-controller="index"] {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 4rem;
   }
 
   @media only screen and (min-width: 768px) {
