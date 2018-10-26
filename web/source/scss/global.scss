@@ -1,40 +1,5 @@
 // Fonts
-@font-face {
-  font-family: 'Lato';
-  src:  url('/fonts/Lato/LatoLatin-Regular.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-Regular.woff') format('woff');
-}
 
-@font-face {
-  font-family: 'Lato Bold';
-  src:  url('/fonts/Lato/LatoLatin-Bold.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-Bold.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Lato Bold Italic';
-  src:  url('/fonts/Lato/LatoLatin-BoldItalic.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-BoldItalic.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Lato Italic';
-  src:  url('/fonts/Lato/LatoLatin-Italic.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-Italic.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Lato Light';
-  font-weight: 300;
-  src:  url('/fonts/Lato/LatoLatin-Light.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-Light.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Lato Semibold';
-  src:  url('/fonts/Lato/LatoLatin-Semibold.woff2') format('woff2'),
-        url('/fonts/Lato/LatoLatin-Semibold.woff') format('woff');
-}
 
 @font-face {
 	font-family: 'social';
@@ -66,29 +31,29 @@ body {
 h2 {
   margin: 5rem 0 1rem;
   font-size: 2rem;
-  font-family: 'Lato Bold', sans-serif;
   text-align: center;
 }
 
 h3 {
   margin: 3rem 0 0.5rem;
-  font-family: 'Lato Bold', sans-serif;
   font-size: 1.8rem;
 }
 
 a.primary-action,
 li.primary-action a,
 li.primary-action input {
-  display: block;
-  margin: auto;
-  padding: 1.6rem 3rem 1.8rem;
-  font-family: 'Lato Semibold', sans-serif;
-  font-size: 16px;
+  display: inline-block;
+  min-width: 20rem;
+  padding: 1.6rem 3rem;
+  font-family: Raleway;
+  font-size: 1.6rem;
+  font-weight: 600;
   color: #FFFFFF;
+  letter-spacing: 0.4px;
   text-align: center;
   text-decoration: none;
-  text-shadow: 0 0.1rem 0.2rem #80192B;
-  background-image: linear-gradient(-180deg, #FF3377 0%, #D92B48 100%);
+  text-shadow: 0 0.1rem 0.2rem #541212;
+  background-image: linear-gradient(-180deg,#ed5e5e,#cf1717);
   border-radius: 0.4rem;
 }
 
@@ -110,22 +75,23 @@ body {
     flex-direction: column;
     flex: 0 0 auto;
     padding: 0.8rem 0;
+    font-family: 'Raleway', sans-serif;
     font-size: 1.8rem;
+    font-weight: 600;
     background-color: #fafafa;
-    background-image: linear-gradient(-180deg, #FFFFFF 33%, #F7F7F7 100%);
-    border-top: 0.4rem solid #FF3377;
-    border-bottom: 0.1rem solid #f0f0f0;
+    background-image: linear-gradient(-180deg, #FFFFFF 33%, #f8f8f7 100%);
+    border-top: 0.4rem solid #DCDDD8;
+    border-bottom: 0.1rem solid #eeeeec;
 
     h1 {
       padding: 1.4rem;
       font-size: 2.8rem;
-      font-family: 'Lato Bold', sans-serif;
       line-height: 1;
       text-align: center;
       text-transform: uppercase;
 
       a {
-        color: #595959;
+        color: #5d5f53;
         text-decoration: none;
       }
     }
@@ -144,7 +110,7 @@ body {
           display: block;
           padding: 0.8rem 1.2rem;
           text-decoration: none;
-          color: #737373;
+          color: #787b6b;
         }
       }
     }
@@ -156,9 +122,9 @@ body {
   &[data-controller="portfolio"][data-view="portfolio"] > header nav li.portfolio a,
   &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
   &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
-    color: #4d4d4d;
-    background: #e6e6e6;
-    border-radius: 0.6rem;
+    color: #505247;
+    background: #ebece9;
+    border-radius: .4rem;
   }
 }
 
@@ -175,7 +141,6 @@ main {
   > h1 {
     margin: 3rem auto;
     padding: 0 1rem;
-    font-family: 'Lato Bold', sans-serif;
     font-size: 2.2rem;
     text-align: center;
   }
@@ -187,8 +152,8 @@ main {
 
 main, footer {
   a {
-    font-family: 'Lato Bold', sans-serif;
-    color: #df004a;
+    font-weight: 700;
+    color: #de2121;
 
     &:hover {
       text-decoration: none;
@@ -324,7 +289,7 @@ a.new-tab {
 article.endorsement {
   position: relative;
   padding: 2rem 2.5rem 4rem;
-  font-family: 'Lato Italic', sans-serif;
+  font-style: italic;
 
   &:before,
   &:after {
@@ -366,7 +331,9 @@ article.endorsement {
     right: 2rem;
     bottom: 0;
     z-index: 2;
-    font-family: 'Lato Bold', sans-serif;
+    font-family: 'Biryani', sans-serif;
+    font-weight: 700;
+    font-style: normal;
     color: #666;
     text-align: right;
   }
@@ -375,14 +342,18 @@ article.endorsement {
 footer {
   margin: 4rem 0 0;
   padding: 2rem;
-  color: #545454;
+  color: #606255;
   text-align: center;
-  background: #f7f7f7;
-  border-top: .1rem solid #f0f0f0;
+  background: #f0f1ef;
+  border-top: .1rem solid #e6e7e4;
 
   p.quote {
     margin: 2rem auto 4rem;
-    font-family: 'Lato Italic', sans-serif;
+    font-style: italic;
+
+    span.byline {
+      font-style: normal;
+    }
   }
   
   p.copyright {
@@ -404,7 +375,7 @@ footer {
     &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
     &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
       position: relative;
-      color: #737373;
+      color: #787b6b;
       background: none;
   
       &::after {
@@ -415,12 +386,12 @@ footer {
         position: absolute;
         bottom: 0;
         left: 1.5rem;
-        background: #999999;
+        background: #868877;
       }
     }
 
     > header nav li a:hover::after {
-      background: #ff3377 !important;
+      background: #e44e4e !important;
     }
   }
 
@@ -435,7 +406,7 @@ footer {
     h1 {
       margin: 0 3rem;
       padding: 1rem;
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
 
     nav {
@@ -455,13 +426,14 @@ footer {
 
   main {
     > h1 {
-      margin: 4rem auto;
+      margin: 4rem auto 2rem;
     }
 
     > p {
       max-width: 64rem;
       margin-right: auto;
       margin-left: auto;
+      font-size: 2rem;
     }
   }
 
@@ -507,7 +479,7 @@ footer {
 
   a.primary-action,
   li.primary-action a {
-    padding: 1.4rem 2.4rem 1.6rem;
+    padding: 1.4rem 2.4rem;
   }
 
   main {
@@ -529,7 +501,6 @@ footer {
 
     > p {
       max-width: 80rem;
-      font-size: 2rem;
     }
   }
 

@@ -22,15 +22,13 @@
   h1 {
     margin: 0;
     font-size: 2rem;
-    font-family: 'Lato Bold', sans-serif;
     color: #4D4D4D;
-    letter-spacing: 0.12rem;
     text-align: center;
 
     span {
       display: block;
       margin-bottom: 0.5rem;
-      font-family: 'Lato Light', sans-serif;
+      font-weight: 300;
       text-transform: uppercase;
     }
   }
@@ -51,11 +49,10 @@
     }
   }
 
-  p.tagline {
+  h2.tagline {
     max-width: 34rem;
     margin: 1rem auto;
     padding: 2rem 1rem 0;
-    font-family: 'Lato Bold', sans-serif;
     font-size: 2rem;
     color: #4D4D4D;
     text-align: center;
@@ -100,7 +97,7 @@
       margin: 2rem 0 3rem;
     }
 
-    p.tagline {
+    h2.tagline {
       max-width: 50rem;
       margin-bottom: 2rem;
       padding-top: 3rem;
@@ -154,7 +151,7 @@
       }
     }
 
-    p.tagline {
+    h2.tagline {
       max-width: none;
       padding-right: 0;
       padding-left: 0;
@@ -174,7 +171,7 @@ body[data-controller="case-studies"][data-view="case-studies"] {
     @include separator;
     
     h1,
-    p.tagline,
+    h2.tagline,
     p.summary,
     nav.actions li.more {
       display: none;
@@ -400,7 +397,7 @@ ul.case-studies {
   }
 
   li:hover {
-    box-shadow: inset 0 0 0 0.2rem #FF3377;
+    box-shadow: inset 0 0 0 0.2rem #e44e4e;
 
     img {
       filter: saturate(100%) brightness(100%) contrast(100%);
