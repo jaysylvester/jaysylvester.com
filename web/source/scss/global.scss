@@ -404,14 +404,14 @@ footer {
     font-size: 1.6rem;
 
     h1 {
-      margin: 0 3rem;
+      margin: 0 2rem;
       padding: 1rem;
       font-size: 2rem;
     }
 
     nav {
       ul {
-        margin-right: 3rem;
+        margin-right: 1.5rem;
 
         li {
           margin: 0;
@@ -464,7 +464,7 @@ footer {
 // 1024px and up
 @media only screen and (min-width: 1024px) {
   body > header {
-    padding: 0 calc((100% - 104rem) / 2);
+    padding: 0 calc((100% - 96rem) / 2);
   }
 
   h1, h2 {

@@ -386,7 +386,7 @@ ul.case-studies {
 
   li.hibu {
     img {
-      max-height: 4rem;
+      max-height: 5rem;
     }
   }
 
@@ -414,20 +414,31 @@ ul.case-studies {
     }
   }
 
-  @media only screen and (min-width: 960px) {
+  @media only screen and (min-width: 768px) {
     li {
-      flex-basis: 26rem;
+      flex-basis: 22rem;
       height: 12rem;
 
       &:nth-child(2n) {
         margin-right: 2rem;
       }
-      &:nth-child(3n) {
+
+      &:last-child {
         margin-right: 0;
       }
+    }
+  }
+
+  @media only screen and (min-width: 960px) {
+    li {
+      flex-basis: 26rem;
 
       img {
-        max-height: 5rem;
+        max-height: 5.4rem;
+      }
+
+      &.hibu img {
+        max-height: 4.5rem;
       }
     }
   }
