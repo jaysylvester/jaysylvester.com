@@ -29,10 +29,6 @@ body[data-controller="index"] {
     }
   }
 
-  h2 {
-    width: 100%;
-  }
-
   section.case-studies {
     p {
       max-width: 80rem;
@@ -48,8 +44,11 @@ body[data-controller="index"] {
 
   section.endorsements {
     @include separator;
-    margin-top: 6rem;
-    padding-top: 0.1rem;
+    margin-top: 5rem;
+
+    h2 {
+      padding-top: 4rem;
+    }
 
     nav.more {
       margin-top: 4rem;
@@ -82,6 +81,12 @@ body[data-controller="index"] {
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
+
+      h2 {
+        flex-basis: 100%;
+        margin-bottom: 2rem;
+        padding: 0;
+      }
     }
 
     article.endorsement {
@@ -108,10 +113,6 @@ body[data-controller="index"] {
       width: 96rem;
       margin-right: auto;
       margin-left: auto;
-    }
-
-    section.case-studies {
-      margin-top: 6rem;
     }
   }
 }
