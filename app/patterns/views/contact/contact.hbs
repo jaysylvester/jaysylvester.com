@@ -19,7 +19,10 @@
         <li class="twitter"><a href="https://twitter.com/JayIsAngry">Twitter</a></li>
       </ul>
       <h1>Say hey.</h1>
-      <form id="contact-form" action="/contact/action/form" method="post">
+      {{#if error}}
+        <p class="error">{{error}}</p>
+      {{/if}}
+      <form id="contact-form" action="/contact/action/form" method="post" novalidate>
         <ul class="data">
           <li class="name text required">
             <label for="name">

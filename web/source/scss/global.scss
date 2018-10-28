@@ -56,6 +56,13 @@ li.primary-action input {
   border-radius: 0.4rem;
 }
 
+p.error {
+  padding: 2rem;
+  color: white;
+  background: #d92626;
+  border-radius: 0.6rem;
+}
+
 // Override default width or height caused by alt attributes in unloaded images
 // Coincides with JAY.global.imageLoad() in global.js
 img[data-src]:not(.loaded) {
