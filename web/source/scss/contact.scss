@@ -24,45 +24,16 @@ body[data-controller="contact"] {
       text-indent: 110%;
       overflow: hidden;
       text-decoration: none;
-  
-      &::before {
-        position: absolute;
-        top: 50%;
-        margin-top: -3rem;
-        left: 50%;
-        margin-left: -3rem;
-        display: block;
-        width: 6rem;
-        height: 6rem;
-        font-family: 'social';
-        font-size: 60px;
-        font-size: 6rem;
-        text-indent: 0;
-      }
-    }
-  
-    li.linkedin a {
-      color: #4875B4;
-  
-      &::before {
-        content: '\e007';
-      }
+      background: url('/images/icons/social.svg') no-repeat;
+      background-size: cover;
     }
   
     li.github a {
-      color: #333333;
-  
-      &::before {
-        content: '\e003';
-      }
+      background-position: -7rem 0;
     }
   
     li.twitter a {
-      color: #63A6EA;
-  
-      &::before {
-        content: '\e009';
-      }
+      background-position: -14rem 0;
     }
   }
   
@@ -91,7 +62,7 @@ body[data-controller="contact"] {
       }
       &:focus {
         outline: none;
-        border-color: #ff0055;
+        border-color: #de2121;
       }
     }
   
