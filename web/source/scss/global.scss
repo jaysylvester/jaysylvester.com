@@ -464,7 +464,8 @@ footer {
 // 1024px and up
 @media only screen and (min-width: 1024px) {
   body > header {
-    padding: 0 calc((100% - 96rem) / 2);
+    // 96rem + 3rem margin/padding on either side = 102rem
+    padding: 0 calc((100% - 102rem) / 2);
   }
 
   h1, h2 {
