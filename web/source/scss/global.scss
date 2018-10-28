@@ -236,8 +236,9 @@ main, footer {
   position: absolute;
   top: 2rem;
   right: 6rem;
-  background: url('/images/icons/open-new-tab.png') center no-repeat;
-  background-size: contain;
+  background: url('/images/icons.svg') center no-repeat;
+  background-size: cover;
+  background-position: -10.6rem 0;
   overflow: hidden;
 }
 
@@ -249,8 +250,9 @@ main, footer {
   position: absolute;
   top: 2rem;
   right: 2rem;
-  background: url('/images/icons/close.png') center no-repeat;
-  background-size: contain;
+  background: url('/images/icons.svg') center no-repeat;
+  background-size: cover;
+  background-position: -13.4rem 0;
   overflow: hidden;
 }
 
@@ -266,8 +268,9 @@ a.new-tab {
     position: absolute;
     top: calc(50% - 2rem);
     left: calc(50% - 2rem);
-    background: url('/images/icons/zoom.png') center no-repeat;
-    background-size: contain;
+    background: url('/images/icons.svg') no-repeat;
+    background-size: cover;
+    background-position: -32rem 0;
     opacity: 0;
     transition: opacity 0.2s;
   }
@@ -299,21 +302,20 @@ article.endorsement {
     z-index: 1;
     width: 6rem;
     height: 6rem;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('/images/icons.svg') no-repeat;
     background-size: cover;
   }
 
   &:before {
     top: 0.5rem;
     left: 1rem;
-    background-image: url('/images/icons/quote-open.png');
+    background-position: -56rem 0;
   }
 
   &:after {
     right: 2rem;
     bottom: 3rem;
-    background-image: url('/images/icons/quote-close.png');
+    background-position: -64rem 0;
   }
 
   p {
@@ -359,6 +361,11 @@ footer {
   p.copyright {
     margin: 4rem 0 0;
     font-size: 1.4rem;
+
+    a {
+      font-weight: normal;
+      color: #606255;
+    }
   }
 }
 

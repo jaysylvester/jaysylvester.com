@@ -24,16 +24,16 @@ body[data-controller="contact"] {
       text-indent: 110%;
       overflow: hidden;
       text-decoration: none;
-      background: url('/images/icons/social.svg') no-repeat;
+      background: url('/images/icons.svg') no-repeat;
       background-size: cover;
     }
   
     li.github a {
-      background-position: -7rem 0;
+      background-position: -8rem 0;
     }
   
     li.twitter a {
-      background-position: -14rem 0;
+      background-position: -16rem 0;
     }
   }
   
@@ -79,18 +79,9 @@ body[data-controller="contact"] {
   
     input[type="checkbox"] {
       &:checked {
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          display: block;
-          width: 3rem;
-          height: 3rem;
-          background: url('/images/icons/check.png') center no-repeat;
-          background-size: 2.2rem;
-          background-position: 0.3rem;
-        }
+        background: url('/images/icons.svg') no-repeat;
+        background-size: auto 2.4rem;
+        background-position: -9.4rem 0.2rem;
       }
     }
   
