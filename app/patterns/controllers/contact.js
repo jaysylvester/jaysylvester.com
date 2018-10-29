@@ -4,7 +4,8 @@
 
 module.exports = {
   handler: handler,
-  form: form
+  form: form,
+  confirmation: confirmation
 }
 
 
@@ -47,11 +48,12 @@ function form(params, context, emitter) {
       })
   
       emitter.emit('ready', {
-        view: 'confirmation',
-        cache: {
-          route: false
-        }
+        redirect: '/contact/action/confirmation'
       })
     }
   }
+}
+
+function confirmation(params, context, emitter) {
+  emitter.emit('ready', { view: 'confirmation'} )
 }

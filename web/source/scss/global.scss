@@ -123,12 +123,12 @@ body {
     }
   }
 
-  &[data-controller="index"][data-view="index"] > header nav li.about a,
-  &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
-  &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a,
-  &[data-controller="portfolio"][data-view="portfolio"] > header nav li.portfolio a,
-  &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
-  &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
+  &[data-controller="index"] > header nav li.about a,
+  &[data-controller="case-study"] > header nav li.case-studies a,
+  &[data-controller="case-studies"] > header nav li.case-studies a,
+  &[data-controller="portfolio"] > header nav li.portfolio a,
+  &[data-controller="work-history"] > header nav li.work-history a,
+  &[data-controller="contact"] > header nav li.contact a {
     color: #505247;
     background: #ebece9;
     border-radius: .4rem;
@@ -382,12 +382,12 @@ footer {
     font-size: 1.8rem;
 
     > header nav li a:hover,
-    &[data-controller="index"][data-view="index"] > header nav li.about a,
-    &[data-controller="case-study"][data-view="case-study"] > header nav li.case-studies a,
-    &[data-controller="case-studies"][data-view="case-studies"] > header nav li.case-studies a,
-    &[data-controller="portfolio"][data-view="portfolio"] > header nav li.portfolio a,
-    &[data-controller="work-history"][data-view="work-history"] > header nav li.work-history a,
-    &[data-controller="contact"][data-view="contact"] > header nav li.contact a {
+    &[data-controller="index"] > header nav li.about a,
+    &[data-controller="case-study"] > header nav li.case-studies a,
+    &[data-controller="case-studies"] > header nav li.case-studies a,
+    &[data-controller="portfolio"] > header nav li.portfolio a,
+    &[data-controller="work-history"] > header nav li.work-history a,
+    &[data-controller="contact"] > header nav li.contact a {
       position: relative;
       color: #787b6b;
       background: none;
