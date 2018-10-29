@@ -183,6 +183,7 @@ body[data-controller="case-studies"][data-view="case-studies"] {
 
     section.devices {
       margin-bottom: 2rem;
+      overflow: hidden;
     }
 
     @media only screen and (min-width: 768px) {
