@@ -83,8 +83,7 @@ section.screens {
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
     figure[role="group"] {
-      width: 100%;
-      margin-left: 0;
+      padding: 0 2rem;
 
       section {
         flex-wrap: wrap;
@@ -112,6 +111,12 @@ section.screens {
           margin-right: 0;
         }
       }
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    figure[role="group"] {
+      padding: 0;
     }
   }
 }
