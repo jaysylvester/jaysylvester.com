@@ -12,6 +12,14 @@ function start(params, context, emitter) {
       route: {
         lifespan: 'application'
       }
+    },
+    include: {
+      header: {
+        controller: '_header'
+      },
+      footer: {
+        controller: '_footer'
+      }
     }
   })
 }

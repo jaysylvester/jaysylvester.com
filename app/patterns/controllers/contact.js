@@ -10,16 +10,7 @@ module.exports = {
 
 // default action
 function handler(params, context, emitter) {
-  emitter.emit('ready', {
-    include: {
-      header: {
-        controller: '_header'
-      },
-      footer: {
-        controller: '_footer'
-      }
-    }
-  })
+  emitter.emit('ready')
 }
 
 function form(params, context, emitter) {
@@ -35,14 +26,6 @@ function form(params, context, emitter) {
         },
         cache: {
           route: false
-        },
-        include: {
-          header: {
-            controller: '_header'
-          },
-          footer: {
-            controller: '_footer'
-          }
         }
       })
     } else if ( !emailRegex.test(params.form.email) ) {
@@ -52,14 +35,6 @@ function form(params, context, emitter) {
         },
         cache: {
           route: false
-        },
-        include: {
-          header: {
-            controller: '_header'
-          },
-          footer: {
-            controller: '_footer'
-          }
         }
       })
     } else {
@@ -75,14 +50,6 @@ function form(params, context, emitter) {
         view: 'confirmation',
         cache: {
           route: false
-        },
-        include: {
-          header: {
-            controller: '_header'
-          },
-          footer: {
-            controller: '_footer'
-          }
         }
       })
     }

@@ -19,12 +19,6 @@ function handler(params, context, emitter) {
         emitter.emit('ready', {
           content: output.caseStudy,
           include: {
-            header: {
-              controller: '_header'
-            },
-            footer: {
-              controller: '_footer'
-            },
             screens: {
               route: '/_screens/company/' + params.url.company
             }

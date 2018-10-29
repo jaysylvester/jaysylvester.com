@@ -16,15 +16,7 @@ function handler(params, context, emitter) {
   }, function (output) {
     if ( output.listen.success ) {
       emitter.emit('ready', {
-        content: output,
-        include: {
-          header: {
-            controller: '_header'
-          },
-          footer: {
-            controller: '_footer'
-          }
-        }
+        content: output
       })
     } else {
       emitter.emit('error', output.listen)
