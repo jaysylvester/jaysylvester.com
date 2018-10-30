@@ -2,12 +2,6 @@
 section.screens {
   margin: 0;
 
-  // Override default height caused by alt attributes in unloaded images
-  // Coincides with JAY.global.imageLoad() in global.js
-  img[data-src]:not(.loaded) {
-      height: 0;
-  }
-
   figure[role="group"] {
     margin: 4rem auto;
     

@@ -42,8 +42,8 @@ JAY.global = ( function () {
                   dimension = item.clientHeight ? 'h_' + item.clientHeight : 'w_' + item.clientWidth
                 }
 
-                // If the image is within 2 screen heights of the current offset, load it
-                if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 2 ) ) {
+                // If the image is within 1.5 viewport heights of the current offset, load it
+                if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
                   item.src = item.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
                   item.classList.add('loaded')
                   if ( item.parentNode.parentNode.tagName === 'FIGURE' ) {

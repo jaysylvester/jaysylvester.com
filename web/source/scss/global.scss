@@ -63,17 +63,6 @@ p.error {
   border-radius: 0.6rem;
 }
 
-// Override default width or height caused by alt attributes in unloaded images
-// Coincides with JAY.global.imageLoad() in global.js
-img[data-src]:not(.loaded) {
-  @media only screen and (max-width: 767px) {
-    height: 0;
-  }
-  @media only screen and (min-width: 768px) {
-    width: 0;
-  }
-}
-
 // Main header
 body {
   > header {
@@ -237,29 +226,29 @@ main, footer {
 
 // Open image in new tab
 #mask-open-tab {
-  width: 2rem;
-  height: 2rem;
-  padding-left: 2rem;
+  width: 3rem;
+  height: 3rem;
+  padding-left: 3rem;
   position: absolute;
-  top: 2rem;
+  top: 1.5rem;
   right: 6rem;
-  background: url('/images/icons.svg') center no-repeat;
-  background-size: cover;
-  background-position: -10.6rem 0;
+  background: url('/images/icons.svg') no-repeat;
+  background-size: auto 2rem;
+  background-position: -10rem 0.5rem;
   overflow: hidden;
 }
 
 // Close mask button
 #mask-close {
-  width: 2rem;
-  height: 2rem;
-  padding-left: 2rem;
+  width: 3rem;
+  height: 3rem;
+  padding-left: 3rem;
   position: absolute;
-  top: 2rem;
-  right: 2rem;
-  background: url('/images/icons.svg') center no-repeat;
-  background-size: cover;
-  background-position: -13.4rem 0;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: url(/images/icons.svg) no-repeat;
+  background-size: auto 2rem;
+  background-position: -13rem 0.5rem;
   overflow: hidden;
 }
 

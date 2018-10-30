@@ -128,7 +128,7 @@ values
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/ux-process.png" alt="UX and development process flow chart">
     </a>
 <figcaption>My recommendation of a healthy design workflow within a development environment</figcaption>
 </figure>
@@ -147,7 +147,7 @@ values
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/usability-study.jpg" alt="A screen cap of a usability study session">
     </a>
 <figcaption>A Vidyo Neo usability study participant attempts to search her contact list</figcaption>
 </figure>
@@ -160,7 +160,7 @@ values
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of the Vidyo UX style guide">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of the Vidyo UX style guide">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/style-guide.jpg" alt="A screen cap of the Vidyo UX style guide">
     </a>
 <figcaption>Part of our style guide</figcaption>
 </figure>
@@ -173,7 +173,7 @@ values
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Vidyo/VidyoConnect-prototype.jpg" alt="A screen cap of the VidyoConnect prototype">
     </a>
 <figcaption>VidyoConnect desktop prototype built with Electron (note the live camera capture)</figcaption>
 </figure>
@@ -275,7 +275,7 @@ Before we could begin a responsive redesign, I had to sell the idea to senior ma
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" alt="A screen cap of my hibu Marketplace mobile concept">
     </a>
 </figure>
 <figure>
@@ -283,7 +283,7 @@ Before we could begin a responsive redesign, I had to sell the idea to senior ma
       <noscript>
         <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
       </noscript>
-      <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
+      <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
     </a>
 </figure>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
@@ -324,7 +324,7 @@ We spent the next round of meetings discussing the challenges of UX design on a 
     <noscript>
       <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
     </noscript>
-    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
+    <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-whiteboard-home.jpg" alt="A photo of our Marketplace whiteboard sketches">
   </a>
 <figcaption>hibu Marketplace home page whiteboard sketches</figcaption>
 </figure>
@@ -339,7 +339,7 @@ HTML wireframes have many advantages over flat wireframes. Our wireframes would 
     <noscript>
       <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
     </noscript>
-    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
+    <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" alt="A screen cap of the hibu Marketplace responsive redesign mobile home page prototype">
   </a>
 </figure>
 <figure>
@@ -347,7 +347,7 @@ HTML wireframes have many advantages over flat wireframes. Our wireframes would 
     <noscript>
       <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
     </noscript>
-    <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
+    <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
   </a>
 </figure>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
@@ -388,7 +388,7 @@ The first step was coming up with a logical, friendly architecture that would gu
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/OncoTracker/oncotracker-sitemap.png" alt="An image of the OncoTracker sitemap">
 </a>
 <figcaption>The OncoTracker sitemap (OmniGraffle)</figcaption>
 </figure>
@@ -445,7 +445,7 @@ Given the tight deadline, I decided that we''d produce wireframes for mobile onl
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" alt="An image of the Fitly sitemap">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" alt="An image of the Fitly sitemap">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-sitemap.png" alt="An image of the Fitly sitemap">
 </a>
 <figcaption>Fitly MVP sitemap and user task flow</figcaption>
 </figure>
@@ -462,7 +462,7 @@ While a true Lean UX approach would probably call for even fewer formal wirefram
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" alt="A thumbnail of my Fitly wireframes">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" alt="A thumbnail of my Fitly wireframes">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-wireframes.png" alt="A thumbnail of my Fitly wireframes">
 </a>
 <figcaption>Fitly mobile wireframes (checkout, delivery info)</figcaption>
 </figure>
@@ -485,7 +485,7 @@ I proposed we open our recipes to the public and simply add a zip code field abo
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" alt="A thumbnail of the Fitly zip code verification field">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" alt="A thumbnail of the Fitly zip code verification field">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-zip-code-verification.jpg" alt="A thumbnail of the Fitly zip code verification field">
 </a>
 <figcaption>We avoided a pile of additional requested functionality and a negative user experience by adding one extra field.</figcaption>
 </figure>
@@ -508,7 +508,7 @@ If we couldn''t provide printed cards, I thought perhaps we could extend the fun
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" alt="A thumbnail of the Fitly recipe kitchen view">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" alt="A thumbnail of the Fitly recipe kitchen view">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-kitchen-view.jpg" alt="A thumbnail of the Fitly recipe kitchen view">
 </a>
 <figcaption>A printed recipe card isn''t necessary thanks to the easy-to-read Kitchen View.</figcaption>
 </figure>
@@ -529,7 +529,7 @@ I figured that clear and consistent messaging throughout the shopping path was t
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" alt="A thumbnail of the Fitly pricing story">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" alt="A thumbnail of the Fitly pricing story">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" alt="A thumbnail of the Fitly pricing story">
 </a>
 </figure>
 <figure>
@@ -537,7 +537,7 @@ I figured that clear and consistent messaging throughout the shopping path was t
   <noscript>
     <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
   </noscript>
-  <img data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
+  <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
 </a>
 </figure>
 <figcaption>The prominent orange CTA, which is visually consistent across all product pages, helps convey the story of a complex and potentially confusing pricing model.</figcaption>
