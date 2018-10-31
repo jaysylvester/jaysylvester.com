@@ -31,23 +31,23 @@ JAY.global = ( function () {
             const images = document.querySelectorAll('img[data-src]:not(.loaded)')
             
             if ( images.length ) {
-              images.forEach( function (item) {
+              images.forEach( function (image) {
                 // Make sure all images have an explicit width or height set in CSS for best results
                 let dimension
                 // Default to width on mobile since most images are set to 100% width
                 if ( document.body.clientWidth < 768 ) {
-                  dimension = item.clientWidth ? 'w_' + item.clientWidth : 'h_' + item.clientHeight
+                  dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
                 // Default to height on larger devices
                 } else {
-                  dimension = item.clientHeight ? 'h_' + item.clientHeight : 'w_' + item.clientWidth
+                  dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
                 }
 
                 // If the image is within 1.5 viewport heights of the current offset, load it
-                if ( item.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-                  item.src = item.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
-                  item.classList.add('loaded')
-                  if ( item.parentNode.parentNode.tagName === 'FIGURE' ) {
-                    methods.imageZoom(item)
+                if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
+                  image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+                  image.classList.add('loaded')
+                  if ( image.parentNode.parentNode.tagName === 'FIGURE' ) {
+                    methods.imageZoom(image)
                   }
                 }
               })
@@ -61,18 +61,42 @@ JAY.global = ( function () {
       window.addEventListener('scroll', load)
     },
 
-    imageZoom: function (item) {
+    imageZoom: function (image) {
       var mask    = document.getElementById('mask') || document.createElement('div'),
-          anchor  = item.parentNode,
+          anchor  = image.parentNode,
           img     = document.createElement('img'),
-          src     = item.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+          src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
 
       mask.setAttribute('id', 'mask')
       document.body.appendChild(mask)
 
       anchor.addEventListener('click', function (e) {
         e.preventDefault()
+        let figureGroup = image.parentNode.parentNode.parentNode.parentNode,
+            figureIndex = Array.prototype.slice.call( figureGroup.querySelector('section').children ).indexOf(anchor.parentNode)
+
         mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a>'
+
+        // Create navigation if it's a group of images
+        if ( figureGroup.getAttribute('role') === 'group' ) {
+          mask.innerHTML += '<nav id="screen-nav"><ul></ul></nav>'
+          let screenNav = mask.querySelector('#screen-nav')
+          figureGroup.querySelectorAll('figure').forEach( function (figure, index) {
+            screenNav.querySelector('ul').innerHTML += '<li' + ( index === figureIndex ? ' class="selected"' : '' ) + '><a href="' + figure.querySelector('img').dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0') + '">' + figure.querySelector('img').getAttribute('alt') + '</a></li>'
+            screenNav.addEventListener('click', function (e) {
+              e.preventDefault()
+              if ( e.target.tagName === 'A' ) {
+                screenNav.querySelectorAll('li').forEach( function (anchor) {
+                  anchor.classList.remove('selected')
+                })
+                e.target.parentNode.classList.add('selected')
+                mask.querySelector('#mask-open-tab').setAttribute('href', e.target.href)
+                img.setAttribute('src', e.target.href)
+              }
+            })
+          })
+        }
+
         document.querySelector('html').classList.add('mask-enabled')
         mask.classList.add('enabled')
         img.setAttribute('src', src)
@@ -91,9 +115,6 @@ JAY.global = ( function () {
         window.addEventListener('keydown', escape)
         mask.querySelector('#mask-close').addEventListener('click', function (e) {
           e.preventDefault()
-          close()
-        })
-        mask.querySelector('#mask-open-tab').addEventListener('click', function () {
           close()
         })
 

@@ -270,6 +270,7 @@ Before we could begin a responsive redesign, I had to sell the idea to senior ma
 </p>
 
 <figure role="group" class="callout concept">
+<section>
 <figure>
     <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-concept-mobile.jpg" target="_blank" title="Open this image in a new tab">
       <noscript>
@@ -286,6 +287,7 @@ Before we could begin a responsive redesign, I had to sell the idea to senior ma
       <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-concept-tablet.jpg" alt="A screen cap of my hibu Marketplace tablet concept">
     </a>
 </figure>
+</section>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
 </figure>
 
@@ -334,6 +336,7 @@ HTML wireframes have many advantages over flat wireframes. Our wireframes would 
 </p>
 
 <figure role="group" class="callout prototype">
+<section>
 <figure>
   <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/hibu/eMP-home-open-mobile.jpg" target="_blank" title="Open this image in a new tab">
     <noscript>
@@ -350,6 +353,7 @@ HTML wireframes have many advantages over flat wireframes. Our wireframes would 
     <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/hibu/eMP-home-open-tablet.jpg" alt="A screen cap of the hibu Marketplace responsive redesign tablet home page prototype">
   </a>
 </figure>
+</section>
 <figcaption>hibu Marketplace responsive design proof of concept (HTML)</figcaption>
 </figure>
 
@@ -524,6 +528,7 @@ I figured that clear and consistent messaging throughout the shopping path was t
 </p>
 
 <figure role="group" class="callout pricing-cta">
+<section>
 <figure>
 <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-1.jpg" target="_blank" title="Open this image in a new tab">
   <noscript>
@@ -540,6 +545,7 @@ I figured that clear and consistent messaging throughout the shopping path was t
   <img src="/images/placeholder-callout.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/Fitly/fitly-pricing-cta-2.jpg" alt="A thumbnail of the Fitly pricing story">
 </a>
 </figure>
+</section>
 <figcaption>The prominent orange CTA, which is visually consistent across all product pages, helps convey the story of a complex and potentially confusing pricing model.</figcaption>
 </figure>
 

@@ -236,17 +236,19 @@ body[data-controller="case-study"][data-view="case-study"] {
     &.hibu {
       figure.callout.concept,
       figure.callout.prototype {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-
-        figure:nth-child(1) {
-          flex: 0 0 35%;
-          margin: 0;
-        }
-        figure:nth-child(2) {
-          flex: 0 0 60%;
-          margin: 0;
+        section {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+  
+          figure:nth-child(1) {
+            flex: 0 0 35.3%;
+            margin: 0;
+          }
+          figure:nth-child(2) {
+            flex: 0 0 60%;
+            margin: 0;
+          }
         }
       }
     }
@@ -310,15 +312,14 @@ body[data-controller="case-study"][data-view="case-study"] {
       &.hibu {
         figure.callout.concept,
         figure.callout.prototype {
-          figure:nth-child(1) {
-            flex-basis: 40%;
-            display: flex;
-            justify-content: flex-end;
-          }
-          figure:nth-child(2) {
-            flex-basis: 55%;
-            display: flex;
-            justify-content: flex-start;
+          section {
+            justify-content: center;
+
+            figure:nth-child(1),
+            figure:nth-child(2) {
+              flex-basis: auto;
+              margin: 0 2rem;
+            }
           }
         }
       }

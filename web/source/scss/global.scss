@@ -43,7 +43,7 @@ a.primary-action,
 li.primary-action a,
 li.primary-action input {
   display: inline-block;
-  min-width: 20rem;
+  min-width: 26rem;
   padding: 1.6rem 3rem;
   font-family: Raleway;
   font-size: 1.6rem;
@@ -61,6 +61,17 @@ p.error {
   color: white;
   background: #d92626;
   border-radius: 0.6rem;
+}
+
+// Override default width or height caused by alt attributes in unloaded images
+// Coincides with JAY.global.imageLoad() in global.js
+img[data-src]:not(.loaded) {
+  @media only screen and (max-width: 767px) {
+    height: 100%;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 100%;
+  }
 }
 
 // Main header
@@ -234,7 +245,7 @@ main, footer {
   right: 6rem;
   background: url('/images/icons.svg') no-repeat;
   background-size: auto 2rem;
-  background-position: -10rem 0.5rem;
+  background-position: -10.2rem 0.5rem;
   overflow: hidden;
 }
 
@@ -248,7 +259,7 @@ main, footer {
   right: 1.5rem;
   background: url(/images/icons.svg) no-repeat;
   background-size: auto 2rem;
-  background-position: -13rem 0.5rem;
+  background-position: -12.8rem 0.5rem;
   overflow: hidden;
 }
 
