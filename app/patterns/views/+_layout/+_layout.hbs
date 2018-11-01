@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  {{{include.head}}}
+  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
+    {{{include.header}}}
+    <main>
+      {{#each route.chain}}
+        {{{viewContent}}}
+      {{/each}}
+    </main>
+    {{{include.footer}}}
+  </body>
+</html>

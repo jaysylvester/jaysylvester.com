@@ -67,8 +67,6 @@
   }
 
   section.devices {
-    margin: 0;
-
     img {
       width: 100%;
     }
@@ -107,6 +105,7 @@
     p.summary {
       max-width: 64rem;
       margin: 0 auto 4rem;
+      font-size: 2rem;
     }
 
     section.devices img {
@@ -229,7 +228,9 @@ body[data-controller="case-study"][data-view="case-study"] {
     }
 
     section.devices {
+      width: 100vw;
       margin-bottom: 2rem;
+      margin-left: -1rem;
       overflow-x: hidden;
     }
 
@@ -278,7 +279,9 @@ body[data-controller="case-study"][data-view="case-study"] {
       }
 
       section.devices {
+        width: auto;
         margin-bottom: 4rem;
+        margin-left: 0;
       }
 
       section.content {

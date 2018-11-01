@@ -1,67 +1,49 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — Contact Me</title>
-    <meta name="description" content="Find me on social media or send me an e-mail.">
-    <meta name="keywords" content="jay sylvester, e-mail, contact form, social media">
-    <link rel="stylesheet" type="text/css" href="/min/site.css?v={{config.cacheBuster.css}}">
-    <script type="text/javascript" src="/min/site.js?v={{config.cacheBuster.js}}"></script>
-  </head>
-  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
-    {{{include.header}}}
-    <main>
-      <h1>Be social.</h1>
-      <ul class="social">
-        <li class="linkedin"><a href="https://www.linkedin.com/in/jaysylvester">LinkedIn</a></li>
-        <li class="github"><a href="https://github.com/jaysylvester">GitHub</a></li>
-        <li class="twitter"><a href="https://twitter.com/JayIsAngry">Twitter</a></li>
-      </ul>
-      <h1>Say hey.</h1>
-      {{#if error}}
-        <p class="error">{{error}}</p>
-      {{/if}}
-      <form id="contact-form" action="/contact/action/form" method="post" novalidate>
-        <ul class="data">
-          <li class="name text required">
-            <label for="name">
-              Name
-            </label>
-            <input id="name" name="name" value="{{form.name}}" required />
-          </li>
-          <li class="email text required">
-            <label for="email">
-              E-mail
-            </label>
-            <input id="email" name="email" type="email" value="{{form.email}}" required />
-          </li>
-          <li class="subject text required">
-            <label for="subject">
-              Subject
-            </label>
-            <input id="subject" name="subject" value="{{form.subject}}" required />
-          </li>
-          <li class="message textarea required">
-            <label for="message">
-              Message
-            </label>
-            <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
-          </li>
-          <li class="cc checkbox">
-            <input type="checkbox" name="cc" id="cc" {{#if form.cc}} checked {{/if}}>
-            <label for="cc">
-              Send me a copy
-            </label>
-          </li>
-        </ul>
-        <ul class="actions">
-          <li class="submit primary-action">
-            <input id="submit" name="submit" type="submit" value="Send your message" />
-          </li>
-        </ul>
-      </form>
-    </main>
-    {{{include.footer}}}
-  </body>
-</html>
+<h1>Be social.</h1>
+<ul class="social">
+  <li class="linkedin"><a href="https://www.linkedin.com/in/jaysylvester">LinkedIn</a></li>
+  <li class="github"><a href="https://github.com/jaysylvester">GitHub</a></li>
+  <li class="twitter"><a href="https://twitter.com/JayIsAngry">Twitter</a></li>
+</ul>
+<h1>Say hey.</h1>
+{{#if error}}
+  <p class="error">{{error}}</p>
+{{/if}}
+<form id="contact-form" action="/contact/action/form" method="post" novalidate>
+  <ul class="data">
+    <li class="name text required">
+      <label for="name">
+        Name
+      </label>
+      <input id="name" name="name" value="{{form.name}}" required />
+    </li>
+    <li class="email text required">
+      <label for="email">
+        E-mail
+      </label>
+      <input id="email" name="email" type="email" value="{{form.email}}" required />
+    </li>
+    <li class="subject text required">
+      <label for="subject">
+        Subject
+      </label>
+      <input id="subject" name="subject" value="{{form.subject}}" required />
+    </li>
+    <li class="message textarea required">
+      <label for="message">
+        Message
+      </label>
+      <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
+    </li>
+    <li class="cc checkbox">
+      <input type="checkbox" name="cc" id="cc" {{#if form.cc}} checked {{/if}}>
+      <label for="cc">
+        Send me a copy
+      </label>
+    </li>
+  </ul>
+  <ul class="actions">
+    <li class="submit primary-action">
+      <input id="submit" name="submit" type="submit" value="Send your message" />
+    </li>
+  </ul>
+</form>

@@ -1,25 +1,7 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — Case Studies</title>
-    <meta name="description" content="Read detailed case studies that describe my contribution to various UX and development projects.">
-    <meta name="keywords" content="UI, UX, user experience, front end development, case studies">
-    <link rel="stylesheet" type="text/css" href="/min/site.css?v={{config.cacheBuster.css}}">
-    <script type="text/javascript" src="/min/site.js?v={{config.cacheBuster.js}}"></script>
-  </head>
-  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
-    {{{include.header}}}
-    <main>
-      <h1>I've solved design and architectural challenges for organizations of all sizes.</h1>
-      <p>
-        My experience with both UX design and front end development gives me a thorough understanding of the challenges in a modern design and development workflow. Performance is part of user experience, and I bring that perspective to all my designs.
-      </p>
-      {{#each caseStudies}}
-        {{> caseStudyCallout this}}
-      {{/each}}
-    </main>
-    {{{include.footer}}}
-  </body>
-</html>
+<h1>I've solved design and architectural challenges for organizations of all sizes.</h1>
+<p>
+  My experience with both UX design and front end development gives me a thorough understanding of the challenges in a modern design and development workflow. Performance is part of user experience, and I bring that perspective to all my designs.
+</p>
+{{#each caseStudies}}
+  {{> caseStudyCallout this}}
+{{/each}}

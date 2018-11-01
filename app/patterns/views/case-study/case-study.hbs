@@ -1,48 +1,32 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay Sylvester — Case Study: {{company_name}}</title>
-    <meta name="description" content="{{summary}}">
-    <meta name="keywords" content="UI, UX, user experience, case study">
-    <link rel="stylesheet" type="text/css" href="/min/site.css?v={{config.cacheBuster.css}}">
-    <script type="text/javascript" src="/min/site.js?v={{config.cacheBuster.js}}"></script>
-  </head>
-  <body data-controller="{{route.controller}}" data-action="{{route.action}}" data-view="{{route.view}}" data-renderer="{{route.renderer}}" data-rendered-view="{{route.renderedView}}" data-show="{{route.show}}" data-task="{{route.task}}" data-type="{{route.type}}" data-mode="{{config.citizen.mode}}">
-    {{{include.header}}}
-    <main class="case-study {{company_url}}">
-      <section class="logo">
-        <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
-      </section>
-      <h1><span>Case Study:</span> {{{title}}}</h1>
-      <ul class="attributes">
-        <li class="vertical">
-          {{{vertical}}}
-        </li>
-        <li class="platform">
-          {{{platform}}}
-        </li>
-        <li class="expertise">
-          {{{expertise}}}
-        </li>
-      </ul>
-      <h2 class="tagline">{{tagline}}</h2>
-      <p class="summary">{{summary}}</p>
-      <section class="devices">
-        <noscript>
-          <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-        </noscript>
-        <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-      </section>
-      <section class="content">
-        {{{content}}}
-      </section>
-      {{{include.screens}}}
-      <nav class="actions">
-        <a class="primary-action" href="/case-studies">Read more case studies</a>
-      </nav>
-    </main>
-    {{{include.footer}}}
-  </body>
-</html>
+<section class="case-study {{company_url}}">
+  <section class="logo">
+    <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
+  </section>
+  <h1><span>Case Study:</span> {{{title}}}</h1>
+  <ul class="attributes">
+    <li class="vertical">
+      {{{vertical}}}
+    </li>
+    <li class="platform">
+      {{{platform}}}
+    </li>
+    <li class="expertise">
+      {{{expertise}}}
+    </li>
+  </ul>
+  <h2 class="tagline">{{tagline}}</h2>
+  <p class="summary">{{summary}}</p>
+  <section class="devices">
+    <noscript>
+      <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+    </noscript>
+    <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+  </section>
+  <section class="content">
+    {{{content}}}
+  </section>
+  {{{include.screens}}}
+  <nav class="actions">
+    <a class="primary-action" href="/case-studies">Read more case studies</a>
+  </nav>
+</section>
