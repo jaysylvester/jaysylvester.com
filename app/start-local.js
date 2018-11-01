@@ -11,7 +11,7 @@ const consolidate = require('consolidate'),
 consolidate.requires.handlebars = handlebars
 consolidate.requires.handlebars.registerPartial('caseStudyCallout', fs.readFileSync(app.views['case-study']._callout.path).toString())
 
-// Get static file lat modified times to populate cache buster variables
+// Get static file last modified times to populate cache buster variables
 const path = require('path')
 app.config.cacheBuster = {
   css: fs.statSync(path.resolve(__dirname, '../web/min/site.css')).mtime.toString().replace(/[ :\-()]/g, ''),
