@@ -239,7 +239,6 @@ body[data-controller="case-study"][data-view="case-study"] {
       figure.callout.prototype {
         section {
           display: flex;
-          flex-wrap: wrap;
           justify-content: space-between;
   
           figure:nth-child(1) {
