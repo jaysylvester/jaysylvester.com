@@ -44,12 +44,12 @@ gulp.task('views', function () {
 
 gulp.task('watch', function() {
   livereload.listen()
-  gulp.watch('web/source/scss/**/**.scss', ['css'])
-  gulp.watch('web/source/js/**/**.js', ['js'])
-  gulp.watch('app/patterns/models/**.js', ['views'])
-  gulp.watch('app/patterns/views/**/**.hbs', ['views'])
-  gulp.watch('web/**/**.hbs', ['views'])
+  gulp.watch('web/source/scss/**/**.scss', gulp.series('css'))
+  gulp.watch('web/source/js/**/**.js', gulp.series('js'))
+  gulp.watch('app/patterns/models/**.js', gulp.series('views'))
+  gulp.watch('app/patterns/views/**/**.hbs', gulp.series('views'))
+  gulp.watch('web/**/**.hbs', gulp.series('views'))
 })
 
-gulp.task('default', ['watch'])
-gulp.task('prod', ['js', 'css'])
+gulp.task('default', gulp.series('watch'))
+gulp.task('prod', gulp.parallel('js', 'css'))

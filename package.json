@@ -19,18 +19,18 @@
     "pg": "7.4.3"
   },
   "devDependencies": {
-    "autoprefixer": "^7.2.6",
-    "cssnano": "^4.0.5",
-    "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.3",
+    "autoprefixer": "*",
+    "cssnano": "*",
+    "gulp": "^4.0.0",
+    "gulp-concat": "*",
+    "gulp-cssnano": "*",
     "gulp-filter": "*",
-    "gulp-livereload": "^3.8.1",
-    "gulp-postcss": "^7.0.1",
-    "gulp-sass": "^3.2.1",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify-es": "^1.0.4",
-    "gulp-watch": "^4.3.11"
+    "gulp-livereload": "*",
+    "gulp-postcss": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-uglify-es": "*",
+    "gulp-watch": "*"
   },
   "engines": {
     "node": ">= 8.0.0"
