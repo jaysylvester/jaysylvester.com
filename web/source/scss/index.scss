@@ -30,10 +30,21 @@ body[data-controller="index"] {
   }
 
   section.case-studies {
+    margin: 0;
+    padding: 4rem 1rem;
+    background: #fafafa;
+    border-bottom: .1rem solid #f0f1ef;
+
+    h2 {
+      margin-top: 0;
+      color: #111111;
+    }
+
     p {
       max-width: 80rem;
       margin: 0 auto 2rem;
       text-align: center;
+      color: #111111;
     }
 
     nav.more {
@@ -42,13 +53,6 @@ body[data-controller="index"] {
   }
 
   section.endorsements {
-    @include separator;
-    margin-top: 5rem;
-
-    h2 {
-      padding-top: 4rem;
-    }
-
     nav.more {
       margin-top: 4rem;
     }
@@ -83,7 +87,7 @@ body[data-controller="index"] {
 
       h2 {
         flex-basis: 100%;
-        margin-bottom: 2rem;
+        margin: 7rem 0 2rem;
         padding: 0;
       }
     }
@@ -107,7 +111,6 @@ body[data-controller="index"] {
       }
     }
 
-    section.case-studies,
     section.endorsements {
       width: 96rem;
       margin-right: auto;
