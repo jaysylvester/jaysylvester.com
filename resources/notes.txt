@@ -1,0 +1,5 @@
+*** Don't put anything sensitive in here ***
+
+Copy db from production to local:
+
+$ ssh <remote_user>@<remote_host> 'pg_dump --format=t -d <remote_db> -U <remote_db_user>' | pg_restore -d <local_db> -U <local_db_user>
