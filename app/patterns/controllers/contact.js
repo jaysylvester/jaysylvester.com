@@ -14,6 +14,9 @@ function handler(params, context, emitter) {
   emitter.emit('ready', {
     content: {
       verification: verification()
+    },
+    cache: {
+      route: false
     }
   })
 }
