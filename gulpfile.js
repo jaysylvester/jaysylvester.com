@@ -12,7 +12,11 @@ var autoprefixer  = require('autoprefixer'),
     uglify        = require('gulp-uglify-es').default
 
 gulp.task('css', function (done) {
-  gulp.src(['web/source/scss/baseline.scss', 'web/source/scss/global.scss', 'web/source/scss/**/**.scss'])
+  gulp.src([
+            'web/source/scss/baseline.scss',
+            'web/source/scss/global.scss',
+            'web/source/scss/**/**.scss'
+          ])
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(postcss([autoprefixer({ browsers: 'last 2 versions' })]))
@@ -44,7 +48,7 @@ gulp.task('views', function (done) {
   done()
 })
 
-gulp.task('watch', function(done) {
+gulp.task('watch', function (done) {
   livereload.listen()
   gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
   gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
