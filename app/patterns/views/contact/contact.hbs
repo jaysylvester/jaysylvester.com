@@ -9,6 +9,8 @@
   <p class="error">{{error}}</p>
 {{/if}}
 <form id="contact-form" action="/contact/action/form" method="post" novalidate>
+  <input type="hidden" name="first_int" value="{{verification.firstInt}}">
+  <input type="hidden" name="second_int" value="{{verification.secondInt}}">
   <ul class="data">
     <li class="name text required">
       <label for="name">
@@ -33,6 +35,15 @@
         Message
       </label>
       <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
+    </li>
+    <li class="verification select">
+      <label for="verification">What's {{verification.firstInt}} plus {{verification.secondInt}}?</label>
+      <select name="verification" id="verification">
+        <option value="0">0</option>
+        {{#each verification.options}}
+          <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </select>
     </li>
     <li class="cc checkbox">
       <input type="checkbox" name="cc" id="cc" {{#if form.cc}} checked {{/if}}>

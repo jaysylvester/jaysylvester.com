@@ -19,6 +19,7 @@ app.config.cacheBuster = {
 }
 
 app.toolbox = {
+  helpers: require('./toolbox/helpers'),
   // Third party modules
   mail: {
     sendMail: function (args) {
