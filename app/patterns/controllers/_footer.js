@@ -8,6 +8,4 @@ module.exports = {
 
 
 // default action
-function handler(params, context, emitter) {
-  emitter.emit('ready')
-}
+function handler() {}

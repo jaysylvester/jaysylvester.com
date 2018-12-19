@@ -1,4 +1,4 @@
-// Request start
+// Request events
 
 'use strict'
 
@@ -6,12 +6,13 @@ module.exports = {
   start: start
 }
 
-function start(params, context, emitter) {
-  emitter.emit('ready', {
+
+async function start() {
+  return {
     cache: {
       route: {
         lifespan: 'application'
       }
     }
-  })
+  }
 }

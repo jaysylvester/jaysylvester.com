@@ -8,18 +8,12 @@ module.exports = {
 
 
 // default action
-function handler(params, context, emitter) {
-  app.listen({
-    employers: function (emitter) {
-      app.models['work-history'].employers(emitter)
+async function handler() {
+  let employers = await app.models['work-history'].employers()
+
+  return {
+    content: {
+      employers: employers
     }
-  }, function (output) {
-    if ( output.listen.success ) {
-      emitter.emit('ready', {
-        content: output
-      })
-    } else {
-      emitter.emit('error', output.listen)
-    }
-  })
+  }
 }

@@ -3,32 +3,33 @@
 'use strict'
 
 module.exports = {
-  handler: handler,
-  form: form,
-  confirmation: confirmation
+  handler       : handler,
+  form          : form,
+  confirmation  : confirmation
 }
 
 
 // default action
-function handler(params, context, emitter) {
-  emitter.emit('ready', {
+function handler() {
+  return {
     content: {
       verification: verification()
     },
     cache: {
       route: false
     }
-  })
+  }
 }
 
-function form(params, context, emitter) {
+
+function form(params) {
   let emailRegex = new RegExp(/[a-z0-9!##$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!##$%&''*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i)
 
   if ( params.request.method !== 'POST' ) {
-    emitter.emit('ready', { redirect: '/contact' })
+    return { redirect: '/contact' }
   } else {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
-      emitter.emit('ready', {
+      return {
         content: {
           error: 'All fields are required.',
           verification: verification()
@@ -36,9 +37,9 @@ function form(params, context, emitter) {
         cache: {
           route: false
         }
-      })
+      }
     } else if ( !emailRegex.test(params.form.email) ) {
-      emitter.emit('ready', {
+      return {
         content: {
           error: 'Your e-mail address doesn\'t look right.',
           verification: verification()
@@ -46,9 +47,9 @@ function form(params, context, emitter) {
         cache: {
           route: false
         }
-      })
+      }
     } else if ( parseInt(params.form.first_int, 10) + parseInt(params.form.second_int, 10) !== parseInt(params.form.verification, 10) ) {
-      emitter.emit('ready', {
+      return {
         content: {
           error: 'Are you a bot? If not, please try again.',
           verification: verification()
@@ -56,7 +57,7 @@ function form(params, context, emitter) {
         cache: {
           route: false
         }
-      })
+      }
     } else {
       app.toolbox.mail.sendMail({
         from: { name: params.form.name, address: params.form.email },
@@ -66,16 +67,18 @@ function form(params, context, emitter) {
         text: params.form.message
       })
   
-      emitter.emit('ready', {
+      return {
         redirect: '/contact/action/confirmation'
-      })
+      }
     }
   }
 }
 
-function confirmation(params, context, emitter) {
-  emitter.emit('ready', { view: 'confirmation'} )
+
+function confirmation() {
+  return { view: 'confirmation' }
 }
+
 
 function verification() {
   let verification = {}

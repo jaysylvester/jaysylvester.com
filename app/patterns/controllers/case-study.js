@@ -8,27 +8,21 @@ module.exports = {
 
 
 // default action
-function handler(params, context, emitter) {
-  app.listen({
-    caseStudy: function (emitter) {
-      app.models['case-studies'].caseStudy(params.url.company, emitter)
-    }
-  }, function (output) {
-    if ( output.listen.success ) {
-      if ( output.caseStudy ) {
-        emitter.emit('ready', {
-          content: output.caseStudy,
-          include: {
-            screens: {
-              route: '/_screens/company/' + params.url.company
-            }
-          }
-        })
-      } else {
-        emitter.emit('error', { statusCode: 404 })
+async function handler(params) {
+  let caseStudy = await app.models['case-studies'].caseStudy(params.url.company)
+
+  if ( caseStudy ) {
+    return {
+      content: caseStudy,
+      include: {
+        screens: {
+          route: '/_screens/company/' + params.url.company
+        }
       }
-    } else {
-      emitter.emit('error', output.listen)
     }
-  })
+  } else {
+    return {
+      error: { statusCode: 404 }
+    }
+  }
 }

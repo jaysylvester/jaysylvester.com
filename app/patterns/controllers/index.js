@@ -3,18 +3,18 @@
 'use strict'
 
 module.exports = {
-  handler: handler
+  handler : handler
 }
 
 
 // default action
-function handler(params, context, emitter) {
-  emitter.emit('ready', {
+function handler() {
+  return {
     include: {
       caseStudies: {
         route: '/case-studies/count/3',
         view: '_compact'
       }
     }
-  })
+  }
 }

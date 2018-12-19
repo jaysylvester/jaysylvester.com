@@ -8,24 +8,12 @@ module.exports = {
 
 
 // default action
-function handler(params, context, emitter) {
-  app.listen({
-    screens: function (emitter) {
-      if ( params.url.company ) {
-        app.models.screens.companyScreens(params.url.company, emitter)
-      } else {
-        app.models.screens.screens(emitter)
-      }
+async function handler(params) {
+  let screens = params.url.company ? await app.models.screens.companyScreens(params.url.company) : await app.models.screens.screens()
+
+  return {
+    content: {
+      screens: screens
     }
-  }, function (output) {
-    if ( output.listen.success ) {
-      emitter.emit('ready', {
-        content: {
-          screens: output.screens
-        }
-      })
-    } else {
-      emitter.emit('error', output.listen)
-    }
-  })
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "jaysylvester.com",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Source code from my personal site",
   "author": {
     "name": "Jay Sylvester",
@@ -13,7 +13,7 @@
   },
   "main": "index",
   "dependencies": {
-    "citizen": "^0.8.8",
+    "citizen": "jaysylvester/citizen#0.9.0",
     "moment": "2.22.2",
     "nodemailer": "4.6.8",
     "pg": "7.4.3"

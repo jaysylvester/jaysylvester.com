@@ -3,88 +3,75 @@
 'use strict'
 
 module.exports = {
-  caseStudies: caseStudies,
-  caseStudy: caseStudy
+  caseStudies : caseStudies,
+  caseStudy   : caseStudy
 }
 
 
-function caseStudies(count = false, emitter) {
+async function caseStudies(count = false) {
   // See if the case study is already cached
-  var cacheKey  = 'case-studies-' + count,
+  let cacheKey  = 'case-studies-' + count,
       scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
   // If it's cached, return the cache object
   if ( cached ) {
-    emitter.emit('ready', cached)
+    return cached
   // If it's not cached, retrieve it from the database and cache it
   } else {
-    app.toolbox.dbPool.connect(function (err, client, done) {
-      if ( err ) {
-        emitter.emit('error', err)
-      } else {
-        client.query('select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc' + ( count ? ' limit ' + count : '' ) + ';',
-          function (err, result) {
-            done()
-            if ( err ) {
-              emitter.emit('error', err)
-            } else {
-              // Cache the case study for future requests
-              if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
-                app.cache.set({
-                  key: cacheKey,
-                  scope: scope,
-                  value: result.rows
-                })
-              }
-              emitter.emit('ready', result.rows)
-            }
-          }
-        )
+    const client = await app.toolbox.dbPool.connect()
+
+    try {
+      const result = await client.query({
+        name: count ? 'case_studies_caseStudies_count_' + count : 'case_studies_caseStudies',
+        text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc' + ( count ? ' limit ' + count : '' ) + ';'
+      })
+      // Cache the case study for future requests
+      if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
+        app.cache.set({
+          key: cacheKey,
+          scope: scope,
+          value: result.rows
+        })
       }
-    })
+      return result.rows
+    } finally {
+      client.release()
+    }
   }
 }
 
 
-function caseStudy(companyUrl, emitter) {
+async function caseStudy(companyUrl) {
   // See if the case study is already cached
-  var cacheKey  = 'case-study-' + companyUrl,
+  let cacheKey  = 'case-study-' + companyUrl,
       scope     = 'case-studies',
       cached    = app.cache.get({ scope: scope, key: cacheKey })
 
   // If it's cached, return the cache object
   if ( cached ) {
-    emitter.emit('ready', cached)
+    return cached
   // If it's not cached, retrieve it from the database and cache it
   } else {
-    app.toolbox.dbPool.connect(function (err, client, done) {
-      if ( err ) {
-        emitter.emit('error', err)
-      } else {
-        client.query({
-          name: 'case_study',
-          text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, content from case_studies where company_url = $1;',
-          values: [ companyUrl ]
-        },
-          function (err, result) {
-            done()
-            if ( err ) {
-              emitter.emit('error', err)
-            } else {
-              // Cache the case study for future requests
-              if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
-                app.cache.set({
-                  key: cacheKey,
-                  scope: scope,
-                  value: result.rows[0]
-                })
-              }
-              emitter.emit('ready', result.rows[0])
-            }
-          }
-        )
+    const client = await app.toolbox.dbPool.connect()
+
+    try {
+      const result = await client.query({
+        name: 'case_studies_caseStudy',
+        text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, content from case_studies where company_url = $1;',
+        values: [ companyUrl ]
+      })
+      // Cache the case study for future requests
+      if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
+        app.cache.set({
+          key: cacheKey,
+          scope: scope,
+          value: result.rows[0]
+        })
       }
-    })
+      return result.rows[0]
+    } finally {
+      client.release()
+    }
   }
 }

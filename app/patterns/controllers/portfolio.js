@@ -8,12 +8,12 @@ module.exports = {
 
 
 // default action
-function handler(params, context, emitter) {
-  emitter.emit('ready', {
+function handler() {
+  return {
     include: {
       screens: {
         controller: '_screens'
       }
     }
-  })
+  }
 }

@@ -7,27 +7,21 @@ module.exports = {
 }
 
 // default action
-function handler(params, context, emitter) {
-  app.listen({
-    metaData: function (emitter) {
-      switch ( params.route.controller ) {
-        case 'case-study':
-          app.models._head['case-study'](params.url.company, emitter)
-          break
-        default:
-          app.models._head[params.route.controller](emitter)
-      }
+async function handler(params) {
+  let metaData
+
+  switch ( params.route.controller ) {
+    case 'case-study':
+      metaData = await app.models._head['case-study'](params.url.company)
+      break
+    default:
+      metaData = await app.models._head[params.route.controller]()
+  }
+  
+  return {
+    content: {
+      metaData: metaData,
+      tracking: app.config.citizen.mode === 'production' ? true : false
     }
-  }, function (output) {
-    if ( output.listen.success ) {
-      if ( app.config.citizen.mode === 'production' ) {
-        output.tracking = true
-      }
-      emitter.emit('ready', {
-        content: output
-      })
-    } else {
-      emitter.emit('error', output.listen)
-    }
-  })
+  }
 }

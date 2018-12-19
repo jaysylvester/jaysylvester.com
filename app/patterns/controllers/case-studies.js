@@ -3,23 +3,17 @@
 'use strict'
 
 module.exports = {
-  handler: handler
+  handler : handler
 }
 
 
 // default action
-function handler(params, context, emitter) {
-  app.listen({
-    caseStudies: function (emitter) {
-      app.models['case-studies'].caseStudies(params.url.count, emitter)
+async function handler(params) {
+  let caseStudies = await app.models['case-studies'].caseStudies(params.url.count)
+
+  return {
+    content: {
+      caseStudies: caseStudies
     }
-  }, function (output) {
-    if ( output.listen.success ) {
-      emitter.emit('ready', {
-        content: output
-      })
-    } else {
-      emitter.emit('error', output.listen)
-    }
-  })
+  }
 }
