@@ -21,7 +21,7 @@
   "devDependencies": {
     "autoprefixer": "*",
     "cssnano": "*",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.x",
     "gulp-concat": "*",
     "gulp-cssnano": "*",
     "gulp-filter": "*",
