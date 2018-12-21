@@ -9,11 +9,9 @@ module.exports = {
 
 // default action
 async function handler(params) {
-  let screens = params.url.company ? await app.models.screens.companyScreens(params.url.company) : await app.models.screens.screens()
-
   return {
     content: {
-      screens: screens
+      screens: params.url.company ? await app.models.screens.companyScreens(params.url.company) : await app.models.screens.screens()
     }
   }
 }

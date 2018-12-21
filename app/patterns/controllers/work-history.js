@@ -9,11 +9,11 @@ module.exports = {
 
 // default action
 async function handler() {
-  let employers = await app.models['work-history'].employers()
+  // let employers = await app.models['work-history'].employers()
 
   return {
     content: {
-      employers: employers
+      employers: await app.models['work-history'].employers()
     }
   }
 }

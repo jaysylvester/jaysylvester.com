@@ -8,19 +8,9 @@ module.exports = {
 
 // default action
 async function handler(params) {
-  let metaData
-
-  switch ( params.route.controller ) {
-    case 'case-study':
-      metaData = await app.models._head['case-study'](params.url.company)
-      break
-    default:
-      metaData = await app.models._head[params.route.controller]()
-  }
-  
   return {
     content: {
-      metaData: metaData,
+      metaData: await app.models._head[params.route.controller](params.url.company),
       tracking: app.config.citizen.mode === 'production' ? true : false
     }
   }
