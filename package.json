@@ -29,8 +29,7 @@
     "gulp-postcss": "*",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
-    "gulp-uglify-es": "*",
-    "gulp-watch": "*"
+    "gulp-uglify-es": "*"
   },
   "engines": {
     "node": ">= 8.0.0"
