@@ -7,7 +7,7 @@ module.exports = {
 }
 
 
-async function start() {
+function start() {
   return {
     cache: {
       route: {
