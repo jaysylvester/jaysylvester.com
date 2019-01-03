@@ -82,20 +82,18 @@ function confirmation() {
 
 function verification() {
   let verification = {}
-  verification.firstInt  = app.toolbox.helpers.getRandomIntInclusive(1, 10)
+  verification.firstInt  = app.toolbox.helpers.getRandomIntInclusive(0, 10)
   verification.secondInt = app.toolbox.helpers.getRandomIntInclusive(1, 10)
-  verification.answer    = verification.firstInt + verification.secondInt
-  verification.options   = []
-  for ( var i = 0; i < 5; i++ ) {
-    verification.options[app.toolbox.helpers.getRandomIntInclusive(0, 20)] = app.toolbox.helpers.getRandomIntInclusive(1, 20)
+  verification.options   = [ verification.firstInt + verification.secondInt ]
+
+  while ( verification.options.length < 8 ) {
+    let value = app.toolbox.helpers.getRandomIntInclusive(1, 20)
+
+    if ( verification.options.indexOf(value) === -1 ) {
+      verification.options.push(value)
+    }
   }
-  verification.options[app.toolbox.helpers.getRandomIntInclusive(0, 20)] = verification.answer
-  verification.options = verification.options.filter( function (element) {
-    return element != null
-  })
-  verification.options = verification.options.filter( function (item, index, array) {
-    return array.indexOf(item) === index
-  })
+
   verification.options.sort((a, b) => a - b)
   return verification
 }
