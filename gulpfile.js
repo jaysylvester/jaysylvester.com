@@ -43,8 +43,11 @@ gulp.task('js', function (done) {
   done()
 })
 
-gulp.task('views', function (done) {
-  livereload.reload()
+gulp.task('reload', function (done) {
+  // Give citizen time to reload the module before refreshing
+  setTimeout(function () {
+    livereload.reload()
+  }, 500)
   done()
 })
 
@@ -52,9 +55,8 @@ gulp.task('watch', function (done) {
   livereload.listen()
   gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
   gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
-  gulp.watch('app/patterns/models/**.js', gulp.parallel('views'))
-  gulp.watch('app/patterns/views/**/**.hbs', gulp.parallel('views'))
-  gulp.watch('web/**/**.hbs', gulp.parallel('views'))
+  gulp.watch('app/patterns/**', gulp.parallel('reload'))
+  gulp.watch('web/**/**.hbs', gulp.parallel('reload'))
   done()
 })
 
