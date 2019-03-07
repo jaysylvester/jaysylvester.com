@@ -1,0 +1,29 @@
+{
+  "name": "shop-lc",
+  "version": "0.0.1",
+  "description": "Code demo for the Shop LC category landing page",
+  "author": {
+    "name": "Jay Sylvester",
+    "email": "jay@jaysylvester.com",
+    "url": "http://jaysylvester.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaysylvester/shop-lc"
+  },
+  "devDependencies": {
+    "autoprefixer": "*",
+    "chokidar": "*",
+    "cssnano": "*",
+    "gulp": "^4.0.0",
+    "gulp-concat": "*",
+    "gulp-cssnano": "*",
+    "gulp-filter": "*",
+    "gulp-livereload": "*",
+    "gulp-postcss": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-uglify-es": "*",
+    "gulp-watch": "*"
+  }
+}
