@@ -1,4 +1,4 @@
-app.global = ( function () {
+SLC.global = ( function () {
   'use strict'
 
   var methods = {
@@ -23,6 +23,11 @@ app.global = ( function () {
         }
 
         bodyOffset = body.getBoundingClientRect().top
+        if ( bodyOffset < -60 ) {
+          body.classList.add('partial-header')
+        } else {
+          body.classList.remove('partial-header')
+        }
       })
     },
 
@@ -68,7 +73,7 @@ app.global = ( function () {
           src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
 
       mask.setAttribute('id', 'mask')
-      document.body.appendChild(mask)
+      document.body.SLCendChild(mask)
 
       anchor.addEventListener('click', function (e) {
         e.preventDefault()
@@ -100,7 +105,7 @@ app.global = ( function () {
         document.querySelector('html').classList.add('mask-enabled')
         mask.classList.add('enabled')
         img.setAttribute('src', src)
-        mask.append(img)
+        mask.SLCend(img)
         // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
         setTimeout( function () {
           if ( img.naturalWidth === 0 ) {
@@ -141,4 +146,4 @@ app.global = ( function () {
     imageZoom:  methods.imageZoom
   }
 
-}(app))
+}(SLC))

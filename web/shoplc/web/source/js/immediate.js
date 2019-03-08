@@ -1,6 +1,6 @@
-window.app = {}
+window.SLC = {}
 
-app.immediate = ( function () {
+SLC.immediate = ( function () {
   'use strict'
 
   var methods = {
@@ -14,6 +14,6 @@ app.immediate = ( function () {
     init: methods.init
   }
 
-})(app)
+})(SLC)
 
-app.immediate.init()
+SLC.immediate.init()

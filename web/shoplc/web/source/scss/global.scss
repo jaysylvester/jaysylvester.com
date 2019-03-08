@@ -1,7 +1,5 @@
 // Global styles
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700');
-
 @font-face {
   font-family: 'glyphs';
   src: url('/shoplc/web/fonts/icomoon.woff') format('woff');
@@ -54,6 +52,8 @@ body {
     flex-wrap: wrap;
     justify-content: space-between;
     font-size: 18px;
+    background: white;
+    border-bottom: 1px solid #ededed;
 
     a.logo {
       display: inline-block;
@@ -134,6 +134,8 @@ body {
         font-size: 16px;
 
         li {
+          display: flex;
+          align-items: center;
           margin-right: 20px;
 
           &:first-child {
@@ -142,20 +144,41 @@ body {
           &:last-child {
             padding-right: 10px;
           }
+
+          &:nth-child(1),
+          &:nth-child(2) {
+            &::after {
+              content: '\e900';
+              font-family: glyphs;
+              font-size: 10px;
+              color: #555;
+              margin-left: 5px;
+            }
+          }
         }
 
         a {
           color: #333;
           text-decoration: none;
         }
+
+        li:last-child {
+          a {
+            color: red;
+          }
+        }
       }
+    }
+
+    p.call {
+      margin: 14px auto 0;
+      font-size: 14px;
     }
 
     form {
       display: flex;
       width: 100%;
       padding: 15px 10px;
-      border-bottom: 1px solid #ededed;
       position: relative;
 
       label[for="search"] {
@@ -171,17 +194,39 @@ body {
 
       input[type="submit"] {
         padding: 0 20px;
-        font-size: 16px;
         color: white;
-        background: #487cc1;
         text-transform: uppercase;
-        border: 1px solid #487cc1;
-        border-left: none;
-        border-radius: .4rem;
+        font-size: 14px;
+        background-image: linear-gradient(-180deg,#5c8ac7,#3c6eaf);
+        text-transform: uppercase;
+        border: none;
+        border-radius: 4px;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
       }
     }
+  }
+}
+
+html.js {
+  body {
+    > header {
+      position: fixed;
+      height: 195px;
+      z-index: 500;
+      overflow: hidden;
+      transition: height 0.3s, margin 0.3s;
+    }
+    &.hidden-header > header {
+      margin-top: -92px; // Header height
+    }
+    &.partial-header > header {
+      height: 92px;
+    }
+  }
+
+  main {
+    padding-top: 210px !important;
   }
 }
 
@@ -224,7 +269,13 @@ section.summary {
 }
 
 section.products {
+  header {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   nav.pagination {
+    flex: 0 0 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -262,6 +313,29 @@ section.products {
     }
   }
 
+  > nav.pagination {
+    padding-top: 20px;
+    border-top: 1px solid #efefef;
+  }
+
+  nav.sort,
+  nav.filters {
+    flex: 0 0 45%;
+    margin: 0 2.5% 30px;
+
+    > a {
+      display: block;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: white;
+      text-decoration: none;
+      text-transform: uppercase;
+      text-align: center;
+      background-image: linear-gradient(-180deg,#5c8ac7,#3c6eaf);
+      border-radius: 4px;
+    }
+  }
+
   section.product-list {
     ul {
       display: flex;
@@ -273,12 +347,17 @@ section.products {
       flex: 0 0 50%;
       padding: 0 10px;
       margin: 20px 0;
+      text-align: center;
 
       &:nth-child(odd) {
         padding-right: 15px;
       }
       &:nth-child(even) {
         padding-left: 15px;
+      }
+
+      > * {
+        width: 100%;
       }
     }
 
@@ -302,13 +381,14 @@ section.products {
       font-size: 16px;
 
       li {
+        width: 100%;
         margin-bottom: 5px;
       }
     }
 
     li.retail,
     li.actual {
-      color: #999;
+      color: #808080;
       text-decoration: line-through;
     }
 
@@ -323,20 +403,53 @@ section.products {
 }
 
 footer {
-  margin: 4rem 0 0;
-  padding: 2rem;
+  margin: 20px 0 0;
+  padding: 20px;
   color: #5c5c5c;
   text-align: center;
-  background: #f0f0f0;
-  border-top: .1rem solid #e6e7e4;
+  border-top: .1rem solid #efefef;
 
-  p.quote {
-    margin: 2rem auto 4rem;
-    font-style: italic;
+  section {
+    ul {
+      li {
+        margin: 20px auto;
 
-    span.byline {
-      font-style: normal;
+        p {
+          font-size: 16px;
+          line-height: 1.4;
+          text-align: left;
+        }
+      }
     }
+  }
+
+  nav {
+    > ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      > li {
+        flex: 0 0 45%;
+        margin-bottom: 20px;
+        font-size: 16px;
+        text-align: left;
+        line-height: 1.4;
+
+        &.newsletter {
+          flex-basis: 100%;
+        }
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  h6 {
+    margin: 10px auto;
+    font-weight: bold;
   }
   
   p.copyright {

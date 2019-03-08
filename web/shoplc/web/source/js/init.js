@@ -1,4 +1,4 @@
-app.init = function () {
+SLC.init = function () {
   'use strict'
 
   var body        = document.body,
@@ -6,16 +6,16 @@ app.init = function () {
       action      = body.getAttribute('data-action'),
       view        = body.getAttribute('data-view')
 
-  app.global.init()
+  SLC.global.init()
 
-  if ( app[controller] ) {
-    app[controller].init()
+  if ( SLC[controller] ) {
+    SLC[controller].init()
 
-    if ( app[controller][action] && typeof app[controller][action] === 'function' ) {
-      app[controller][action]()
+    if ( SLC[controller][action] && typeof SLC[controller][action] === 'function' ) {
+      SLC[controller][action]()
 
-      if ( app[controller][action][view] ) {
-        app[controller][action][view]()
+      if ( SLC[controller][action][view] ) {
+        SLC[controller][action][view]()
       }
     }
   }
@@ -25,6 +25,6 @@ document.onreadystatechange = function () {
   'use strict'
 
   if ( document.readyState === 'interactive' ) {
-    app.init()
+    SLC.init()
   }
 }
