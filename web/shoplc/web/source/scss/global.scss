@@ -451,6 +451,17 @@ footer {
     margin: 10px auto;
     font-weight: bold;
   }
+
+  a.logo {
+    display: block;
+    height: 60px;
+    margin: 30px auto;
+    padding-top: 60px;
+    background: url('/shoplc/web/images/shop-lc-logo-full.png') center no-repeat;
+    background-size: contain;
+    text-indent: 100%;
+    overflow: hidden;
+  }
   
   p.copyright {
     margin: 0;
