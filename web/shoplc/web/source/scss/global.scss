@@ -479,6 +479,7 @@ footer {
     z-index: 1001;
     background: white;
     overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 
     &.left {
       top: 0;
