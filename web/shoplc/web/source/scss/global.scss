@@ -69,12 +69,11 @@ body {
     }
 
     nav.account {
-      margin: 10px;
+      margin: 15px 10px;
 
       ul {
         display: flex;
         justify-content: flex-end;
-        margin: 5px 5px 0 0;
       }
 
       li {
@@ -173,6 +172,10 @@ body {
     p.call {
       margin: 14px auto 0;
       font-size: 14px;
+
+      a {
+        font-weight: bold;
+      }
     }
 
     form {
@@ -307,7 +310,7 @@ section.products {
 
       a {
         display: block;
-        padding: 10px 15px;
+        padding: 12px 15px;
         text-decoration: none;
       }
     }
@@ -340,7 +343,6 @@ section.products {
     ul {
       display: flex;
       flex-wrap: wrap;
-      justify-content: space-between;
     }
 
     li.product {
@@ -348,13 +350,6 @@ section.products {
       padding: 0 10px;
       margin: 20px 0;
       text-align: center;
-
-      &:nth-child(odd) {
-        padding-right: 15px;
-      }
-      &:nth-child(even) {
-        padding-left: 15px;
-      }
 
       > * {
         width: 100%;
@@ -469,112 +464,112 @@ footer {
   }
 }
 
-// 768px and up
-@media only screen and (min-width: 768px) {
-  body {
-    font-size: 1.8rem;
-
-    > header nav li a:hover,
-    &[data-controller="index"] > header nav li.home a,
-    &[data-controller="form-demo"] > header nav li.form-demo a {
-      position: relative;
-      background: none;
-  
-      &::after {
-        content: '';
-        display: block;
-        width: calc(100% - 3rem);
-        height: 0.3rem;
-        position: absolute;
-        bottom: 0;
-        left: 1.5rem;
-        background: #808080;
-      }
-    }
-
-    > header nav li a:hover::after {
-      background: #cccccc !important;
-    }
-  }
-
-  // Main header
-  body > header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 calc((100% - 140rem) / 2);
-    font-size: 1.6rem;
-
-    h1 {
-      margin: 0 1rem;
-      padding: 1rem;
-      font-size: 2rem;
-    }
-
-    nav {
-      ul {
-        margin-right: 0.5rem;
-
-        li {
-          margin: 0;
-
-          a {
-            padding: 2rem 1.5rem 1.9rem;
-          }
-        }
-      }
-    }
-  }
-
-  main {
-    max-width: 96rem;
-    margin: auto;
-  }
-
+@media only screen and (max-width: 959px) {
   html.js {
-    body {
-      > header {
-        position: fixed;
-        z-index: 500;
-        transition: margin 0.3s;
-      }
-      &.hidden-header > header {
-        margin-top: -6rem; // Header height
+    section.products {
+      nav.sort > section,
+      nav.filters form {
+        display: none;
       }
     }
+  }
 
-    main {
-      padding-top: 14rem;
+  .slide-menu {
+    position: fixed;
+    z-index: 1001;
+    background: white;
+    overflow: scroll;
+
+    &.left {
+      top: 0;
+      left: -100%;
+      width: 75%;
+      height: 100%;
+      text-align: left;
+      transition: left 0.4s;
+
+      &.open {
+        left: 0;
+      }
+    }
+    &.right {
+      top: 0;
+      right: -100%;
+      width: 75%;
+      height: 100%;
+      text-align: right;
+      transition: right 0.4s;
+
+      &.open {
+        right: 0;
+      }
+    }
+    &.bottom {
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      text-align: left;
+      transition: top 0.4s;
+
+      &.open {
+        top: 20%;
+      }
+
+      > a {
+        display: none;
+      }
+
+      h4 {
+        margin: 40px 20px 20px;
+        font-weight: bold;
+      }
+
+      form {
+        margin: 0 17px;
+      }
+    }
+
+    li {
+      display: block;
+      line-height: 1;
+
+      a {
+        display: block;
+        padding: 1.6rem 1.8rem;
+        text-decoration: none;
+      }
     }
   }
-}
 
-// 960px and up
-@media only screen and (min-width: 960px) {
-  body > header {
-    // 96rem + 2rem margin/padding on either side = 100rem
-    padding: 0 calc((100% - 100rem) / 2);
+  .menu-shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 1000;
+    background-color: hsla(0,0%,0%,0.5);
+    opacity: 0;
+    transition: opacity 0.4s;
   }
-}
 
-// 1000px and up
-@media only screen and (min-width: 1000px) {
-  main {
-    section {
-      margin: 2rem 0;
+  body.menu-open {
+    .menu-shadow {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
     }
   }
 
-  a.primary-action,
-  li.primary-action a {
-    padding: 1.4rem 2.4rem;
+  body.menu-closing {
+    .menu-shadow {
+      width: 100%;
+      height: 100%;
+    }
   }
 
-  footer {
-    margin-top: 8rem;
-  }
 }
-
 
 // Forms
 form {
@@ -603,7 +598,6 @@ form {
     }
     &:focus {
       outline: none;
-      box-shadow: inset 0 0 0.4rem 0.4rem #efefef;
     }
   }
 
@@ -615,12 +609,11 @@ form {
   input[type="radio"] {
     flex: 0 0 30px;
     height: 30px;
-    position: relative;
   }
 
   input[type="checkbox"] {
     &:checked {
-      background: url('/images/icons.svg') no-repeat;
+      background: url('../images/icons.svg') no-repeat;
       background-size: auto 24px;
       background-position: -94px 2px;
     }
@@ -685,28 +678,6 @@ form {
           line-height: 1.3;
         }
       }
-
-      ul.data {
-        margin: 2.4rem 0;
-
-        ul.data {
-          & > li {
-            flex-wrap: nowrap;
-            margin: 1.2rem 0;
-
-            ul.checkbox,
-            ul.radio {
-              margin-top: 0.6rem;
-            }
-          }
-        }
-      }
-      ul.checkbox,
-      ul.radio {
-        & > li {
-          margin: 0.4rem 0 0.6rem;
-        }
-      }
     }
   }
   ul.actions {
@@ -728,13 +699,125 @@ form {
   }
 }
 
-@media only screen and (min-width: 425px) {
-  form {
-    max-width: 40rem;
-    margin: auto;
+// 720px and up
+@media only screen and (min-width: 720px) {
+  html.js {
+    body {
+      > header {
+        height: auto;
+      }
+
+      &.partial-header > header {
+        height: 120px;
+      }
+
+      &.hidden-header > header {
+        margin-top: -120px;
+      }
+    }
   }
 
-  li.primary-action input {
-    width: auto;
+  body {
+    font-size: 18px;
+
+    > header {
+      align-items: flex-start;
+
+      a.logo {
+        order: 1;
+        margin: 15px 20px 0;
+      }
+
+      p.call {
+        order: 2;
+        margin-top: 25px;
+      }
+
+      nav.account {
+        order: 3;
+        margin: 20px;
+      }
+
+      nav.site {
+        order: 4;
+
+        ul {
+          padding: 20px 0;
+
+          li {
+            &:first-child {
+              padding-left: 20px;
+            }
+          }
+        }
+      }
+
+      form {
+        order: 5;
+        padding: 20px;
+      }
+    }
+  }
+
+  nav.breadcrumbs {
+    margin: 20px;
+  }
+
+  section.summary {
+    margin: 20px 20px 40px;
+  }
+
+  section.products {
+    header {
+      flex-wrap: nowrap;
+      align-items: flex-start;
+    }
+
+    nav.sort {
+      flex: 1 1 auto;
+    }
+
+    nav.filters {
+      flex: 1 1 auto;
+      margin: 0;
+    }
+
+    nav.pagination {
+      flex: 1 1 auto;
+      justify-content: flex-end;
+      margin-right: 20px;
+    }
+
+    section.product-list {
+      li.product {
+        flex-basis: 33.3%;
+      }
+    }
+  }
+}
+
+// 960px and up
+@media only screen and (min-width: 960px) {
+  body > header {
+    // 96rem + 2rem margin/padding on either side = 100rem
+    padding: 0 calc((100% - 100rem) / 2);
+  }
+}
+
+// 1000px and up
+@media only screen and (min-width: 1000px) {
+  main {
+    section {
+      margin: 2rem 0;
+    }
+  }
+
+  a.primary-action,
+  li.primary-action a {
+    padding: 1.4rem 2.4rem;
+  }
+
+  footer {
+    margin-top: 8rem;
   }
 }

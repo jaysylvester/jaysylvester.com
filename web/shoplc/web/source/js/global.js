@@ -6,6 +6,16 @@ SLC.global = ( function () {
     init: function () {
       methods.header()
       methods.imageLoad()
+      methods.menu({
+        menu: 'main nav.filters',
+        trigger: 'main nav.filters > a',
+        position: 'bottom'
+      })
+      methods.menu({
+        menu: 'main nav.sort',
+        trigger: 'main nav.sort > a',
+        position: 'bottom'
+      })
     },
 
     header: function () {
@@ -37,23 +47,10 @@ SLC.global = ( function () {
             
             if ( images.length ) {
               images.forEach( function (image) {
-                // Make sure all images have an explicit width or height set in CSS for best results
-                let dimension
-                // Default to width on mobile since most images are set to 100% width
-                if ( document.body.clientWidth < 768 ) {
-                  dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
-                // Default to height on larger devices
-                } else {
-                  dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
-                }
-
                 // If the image is within 1.5 viewport heights of the current offset, load it
                 if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-                  image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+                  image.src = image.dataset.src
                   image.classList.add('loaded')
-                  if ( image.parentNode.parentNode.tagName === 'FIGURE' ) {
-                    methods.imageZoom(image)
-                  }
                 }
               })
             } else {
@@ -66,76 +63,58 @@ SLC.global = ( function () {
       window.addEventListener('scroll', load)
     },
 
-    imageZoom: function (image) {
-      var mask    = document.getElementById('mask') || document.createElement('div'),
-          anchor  = image.parentNode,
-          img     = document.createElement('img'),
-          src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+    menu: function (args) {
+      var body = document.querySelector('body'),
+          source = document.querySelector(args.menu),
+          menu = source.cloneNode(true),
+          trigger = document.querySelector(args.trigger)
 
-      mask.setAttribute('id', 'mask')
-      document.body.SLCendChild(mask)
-
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault()
-        let figureGroup = image.parentNode.parentNode.parentNode.parentNode,
-            figureIndex = Array.prototype.slice.call( figureGroup.querySelector('section').children ).indexOf(anchor.parentNode)
-
-        mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a>'
-
-        // Create navigation if it's a group of images
-        if ( figureGroup.getAttribute('role') === 'group' ) {
-          mask.innerHTML += '<nav id="screen-nav"><ul></ul></nav>'
-          let screenNav = mask.querySelector('#screen-nav')
-          figureGroup.querySelectorAll('figure').forEach( function (figure, index) {
-            screenNav.querySelector('ul').innerHTML += '<li' + ( index === figureIndex ? ' class="selected"' : '' ) + '><a href="' + figure.querySelector('img').dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0') + '">' + figure.querySelector('img').getAttribute('alt') + '</a></li>'
-            screenNav.addEventListener('click', function (e) {
-              e.preventDefault()
-              if ( e.target.tagName === 'A' ) {
-                screenNav.querySelectorAll('li').forEach( function (anchor) {
-                  anchor.classList.remove('selected')
-                })
-                e.target.parentNode.classList.add('selected')
-                mask.querySelector('#mask-open-tab').setAttribute('href', e.target.href)
-                img.setAttribute('src', e.target.href)
-              }
-            })
-          })
-        }
-
-        document.querySelector('html').classList.add('mask-enabled')
-        mask.classList.add('enabled')
-        img.setAttribute('src', src)
-        mask.SLCend(img)
-        // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
-        setTimeout( function () {
-          if ( img.naturalWidth === 0 ) {
-            mask.classList.add('loading')
-
-            setTimeout( function () {
-              mask.classList.remove('loading')
-            }, 10000)
-          }
-        }, 500)
-
-        window.addEventListener('keydown', escape)
-        mask.querySelector('#mask-close').addEventListener('click', function (e) {
-          e.preventDefault()
-          close()
-        })
-
-        function escape(e) {
-          if ( e.key === 'Escape' ) {
-            close()
-          }
-        }
-
-        function close() {
-          document.querySelector('html').classList.remove('mask-enabled')
-          mask.classList.remove('enabled', 'loading')
-          mask.innerHTML = ''
-          window.removeEventListener('keydown', escape)
-        }
+      source.querySelectorAll('section').forEach(function (item) {
+        source.removeChild(item)
       })
+
+      trigger.addEventListener('click', function () {
+        var menuShadow = document.createElement('div')
+
+        body.appendChild(menu)
+        menuShadow.className = 'menu-shadow'
+        body.appendChild(menuShadow)
+
+        if ( args.keepClass === false ) {
+          menu.className = 'slide-menu ' + args.position
+        } else {
+          menu.className += ' slide-menu ' + args.position
+        }
+
+        if ( body.classList.contains('menu-open') ) {
+          body.classList.remove('menu-open')
+          menu.classList.remove('open')
+          body.classList.add('menu-closing')
+          setTimeout( function () {
+            body.classList.remove('menu-closing')
+          }, 200)
+        } else {
+          body.classList.add('menu-opening')
+          setTimeout( function () {
+            body.classList.remove('menu-opening')
+            body.classList.add('menu-open')
+            menu.classList.add('open')
+          }, 200)
+        }
+
+        menuShadow.addEventListener('click', function () {
+          body.classList.remove('menu-open')
+          menu.classList.remove('open')
+          body.classList.add('menu-closing')
+          setTimeout( function () {
+            body.classList.remove('menu-closing')
+            body.removeChild(menuShadow)
+            if ( menu.parentNode !== null ) {
+              body.removeChild(menu)
+            }
+          }, 200)
+        }, false)
+      }, false)
     }
   }
 
