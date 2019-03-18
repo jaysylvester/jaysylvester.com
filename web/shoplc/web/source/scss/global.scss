@@ -215,16 +215,16 @@ html.js {
   body {
     > header {
       position: fixed;
-      height: 202px;
+      height: 206px;
       z-index: 500;
       overflow: hidden;
       transition: height 0.3s, margin 0.3s;
     }
     &.hidden-header > header {
-      margin-top: -92px; // Header height
+      margin-top: -102px; // Header height
     }
     &.partial-header > header {
-      height: 92px;
+      height: 102px;
     }
   }
 
