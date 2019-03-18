@@ -69,7 +69,7 @@ body {
     }
 
     nav.account {
-      margin: 15px 10px;
+      margin: 15px 15px 0 0;
 
       ul {
         display: flex;
@@ -151,12 +151,12 @@ body {
               font-family: glyphs;
               font-size: 10px;
               color: #555;
-              margin-left: 5px;
             }
           }
         }
 
         a {
+          padding: 5px;
           color: #333;
           text-decoration: none;
         }
@@ -215,7 +215,7 @@ html.js {
   body {
     > header {
       position: fixed;
-      height: 195px;
+      height: 202px;
       z-index: 500;
       overflow: hidden;
       transition: height 0.3s, margin 0.3s;
@@ -284,7 +284,7 @@ section.products {
     align-items: center;
 
     p {
-      margin: 0 10px;
+      margin: 0 20px;
     }
 
     ul {
@@ -732,6 +732,7 @@ form {
       p.call {
         order: 2;
         margin-top: 25px;
+        font-size: 16px;
       }
 
       nav.account {
@@ -743,11 +744,11 @@ form {
         order: 4;
 
         ul {
-          padding: 20px 0;
+          padding: 15px 0;
 
           li {
             &:first-child {
-              padding-left: 20px;
+              padding-left: 15px;
             }
           }
         }
@@ -766,6 +767,10 @@ form {
 
   section.summary {
     margin: 20px 20px 40px;
+
+    p {
+      font-size: 16px;
+    }
   }
 
   section.products {
