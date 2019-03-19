@@ -6,16 +6,19 @@ SLC.global = ( function () {
     init: function () {
       methods.header()
       methods.imageLoad()
-      methods.menu({
-        menu: 'main nav.filters',
-        trigger: 'main nav.filters > a',
-        position: 'bottom'
-      })
-      methods.menu({
-        menu: 'main nav.sort',
-        trigger: 'main nav.sort > a',
-        position: 'bottom'
-      })
+
+      if ( document.body.clientWidth < 960 ) {
+        methods.menu({
+          menu: 'main nav.filters',
+          trigger: 'main nav.filters > a',
+          position: 'bottom'
+        })
+        methods.menu({
+          menu: 'main nav.sort',
+          trigger: 'main nav.sort > a',
+          position: 'bottom'
+        })
+      }
     },
 
     header: function () {

@@ -19,6 +19,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   height: 100%;
   font-family: 'Open Sans', sans-serif;
   font-size: 1.8rem;
@@ -183,6 +184,7 @@ body {
       width: 100%;
       padding: 15px 10px;
       position: relative;
+      overflow: hidden; // Hide the form label
 
       label[for="search"] {
         position: absolute;
@@ -272,10 +274,8 @@ section.summary {
 }
 
 section.products {
-  header {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  flex-wrap: wrap;
 
   nav.pagination {
     flex: 0 0 100%;
@@ -316,7 +316,7 @@ section.products {
     }
   }
 
-  > nav.pagination {
+  > nav.pagination:last-child {
     padding-top: 20px;
     border-top: 1px solid #efefef;
   }
@@ -704,10 +704,6 @@ form {
 @media only screen and (min-width: 720px) {
   html.js {
     body {
-      > header {
-        height: auto;
-      }
-
       &.partial-header > header {
         height: 120px;
       }
@@ -756,6 +752,8 @@ form {
 
       form {
         order: 5;
+        max-width: 600px;
+        margin: auto;
         padding: 20px;
       }
     }
@@ -774,11 +772,6 @@ form {
   }
 
   section.products {
-    header {
-      flex-wrap: nowrap;
-      align-items: flex-start;
-    }
-
     nav.sort {
       flex: 1 1 auto;
     }
@@ -791,7 +784,12 @@ form {
     nav.pagination {
       flex: 1 1 auto;
       justify-content: flex-end;
+      align-items: flex-start;
       margin-right: 20px;
+
+      p {
+        margin-top: 10px;
+      }
     }
 
     section.product-list {
@@ -804,26 +802,95 @@ form {
 
 // 960px and up
 @media only screen and (min-width: 960px) {
+  html.js {
+    section.products {
+      nav.sort > section,
+      nav.filters form {
+        display: initial;
+      }
+    }
+  }
+
   body > header {
-    // 96rem + 2rem margin/padding on either side = 100rem
-    padding: 0 calc((100% - 100rem) / 2);
+    nav.site {
+      width: 100%;
+
+      ul {
+        width: 100%;
+        justify-content: center;
+
+        li {
+          &:first-child {
+            padding: 0;
+          }
+          &:last-child {
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    max-width: 960px;
+    margin: auto;
+  }
+
+  nav.breadcrumbs {
+    margin: 20px auto;
+  }
+
+  section.summary {
+    margin: 20px auto 40px;
+  }
+
+  section.product-list {
+    flex: 0 0 70%;
+    order: 4;
+  }
+
+  section.products {
+    align-items: flex-start;
+    justify-content: flex-end;
+
+    nav.filters {
+      order: 3;
+      flex: 0 0 30%;
+
+      a {
+        display: none;
+      }
+    }
+
+    nav.sort {
+      flex: 0 0 30%;
+      order: 1;
+      margin: 0;
+    }
+
+    nav.pagination {
+      flex: 0 0 70%;
+      justify-content: flex-end;
+      order: 2;
+      margin: 0;
+
+      &:last-child {
+        order: 5;
+      }
+    }
   }
 }
 
 // 1000px and up
 @media only screen and (min-width: 1000px) {
-  main {
-    section {
-      margin: 2rem 0;
+  body > header {
+    a.logo {
+      margin-left: calc((100% - 960px) / 2);
     }
-  }
 
-  a.primary-action,
-  li.primary-action a {
-    padding: 1.4rem 2.4rem;
-  }
-
-  footer {
-    margin-top: 8rem;
+    nav.account {
+      margin-right: calc((100% - 960px) / 2);
+    }
   }
 }
