@@ -294,20 +294,22 @@ body[data-controller="category"] {
   }
 }
 
-html.js {
-  body[data-controller="category"] {
-    section.products {
-      nav.filters {
-        > section {
-          form {
-            display: block;
-            height: 195px;
-            overflow: hidden;
-          }
-
-          &.more {
+@media only screen and (min-width: 960px) {
+  html.js {
+    body[data-controller="category"] {
+      section.products {
+        nav.filters {
+          > section {
             form {
-              height: auto;
+              display: block;
+              height: 195px;
+              overflow: hidden;
+            }
+
+            &.more {
+              form {
+                height: auto;
+              }
             }
           }
         }
