@@ -6,19 +6,6 @@ SLC.global = ( function () {
     init: function () {
       methods.header()
       methods.imageLoad()
-
-      if ( document.body.clientWidth < 960 ) {
-        methods.menu({
-          menu: 'main nav.filters',
-          trigger: 'main nav.filters > a',
-          position: 'bottom'
-        })
-        methods.menu({
-          menu: 'main nav.sort',
-          trigger: 'main nav.sort > a',
-          position: 'bottom'
-        })
-      }
     },
 
     header: function () {
@@ -44,10 +31,12 @@ SLC.global = ( function () {
       })
     },
 
+    // Delay image loading until users scroll to them
     imageLoad: function () {
       var load = function () {
             const images = document.querySelectorAll('img[data-src]:not(.loaded)')
             
+            // If there are images yet to be loaded...
             if ( images.length ) {
               images.forEach( function (image) {
                 // If the image is within 1.5 viewport heights of the current offset, load it
@@ -56,6 +45,7 @@ SLC.global = ( function () {
                   image.classList.add('loaded')
                 }
               })
+            // ...otherwise, remove the scroll listener for performance reasons
             } else {
               window.removeEventListener('scroll', load)
             }
@@ -123,9 +113,8 @@ SLC.global = ( function () {
 
   //  Public methods
   return {
-    // ajaxFormBinding: methods.ajaxFormBinding,
-    init:       methods.init,
-    imageZoom:  methods.imageZoom
+    init: methods.init,
+    menu: methods.menu
   }
 
 }(SLC))

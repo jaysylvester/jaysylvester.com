@@ -1,0 +1,330 @@
+// category styles
+
+body[data-controller="category"] {
+  section.summary {
+    margin: 20px 10px;
+  
+    h1 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  
+    p {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  }
+  
+  section.products {
+    display: flex;
+    flex-wrap: wrap;
+  
+    nav.pagination {
+      flex: 0 0 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      p {
+        margin: 0 20px;
+      }
+  
+      ul {
+        display: flex;
+  
+        li {
+          border-width: 1px;
+          border-style: solid;
+          border-color: #ccc;
+          border-right: none;
+  
+          &:first-child {
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+          }
+  
+          &:last-child {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-right: 1px solid #ccc;
+          }
+        }
+  
+        a {
+          display: block;
+          padding: 12px 15px;
+          text-decoration: none;
+        }
+      }
+    }
+  
+    > nav.pagination:last-child {
+      padding-top: 20px;
+      border-top: 1px solid #efefef;
+    }
+  
+    nav.sort,
+    nav.filters {
+      flex: 0 0 45%;
+      margin: 0 2.5% 30px;
+  
+      > a {
+        display: block;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        text-align: center;
+        background-image: linear-gradient(-180deg,#5c8ac7,#3c6eaf);
+        border-radius: 4px;
+      }
+    }
+  
+    section.product-list {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+      }
+  
+      li.product {
+        flex: 0 0 50%;
+        padding: 0 10px;
+        margin: 20px 0;
+        text-align: center;
+  
+        > * {
+          width: 100%;
+        }
+      }
+  
+      h5 {
+        margin-bottom: 10px;
+        line-height: 1.2;
+      }
+  
+      p.promo {
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: bold;
+  
+        span.discount {
+          display: block;
+          color: red;
+        }
+      }
+  
+      ul.prices {
+        font-size: 16px;
+  
+        li {
+          width: 100%;
+          margin-bottom: 5px;
+        }
+      }
+  
+      li.retail,
+      li.actual {
+        color: #808080;
+        text-decoration: line-through;
+      }
+  
+      li.clearance {
+        font-weight: bold;
+  
+        span.price {
+          color: #487cc1;
+        }
+      }
+    }
+  }
+
+  // 720px and up
+  @media only screen and (min-width: 720px) {
+    section.summary {
+      margin: 20px 20px 40px;
+
+      p {
+        font-size: 16px;
+      }
+    }
+
+    section.products {
+      nav.sort {
+        flex: 1 1 auto;
+      }
+
+      nav.filters {
+        flex: 1 1 auto;
+        margin: 0;
+      }
+
+      nav.pagination {
+        flex: 1 1 auto;
+        justify-content: flex-end;
+        align-items: flex-start;
+        margin-right: 20px;
+
+        p {
+          margin-top: 10px;
+        }
+      }
+
+      section.product-list {
+        li.product {
+          flex-basis: 33.3%;
+        }
+      }
+    }
+  }
+
+  // 960px and up
+  @media only screen and (min-width: 960px) {
+    section.summary {
+      margin: 20px auto 40px;
+    }
+
+    section.product-list {
+      flex: 0 0 70%;
+      order: 4;
+      margin-top: 20px;
+    }
+
+    section.products {
+      align-items: flex-start;
+      justify-content: flex-end;
+
+      nav.filters {
+        order: 3;
+        flex: 0 0 30%;
+        margin-top: 40px;
+
+        > a {
+          display: none;
+        }
+
+        > section {
+          margin-bottom: 40px;
+        }
+
+        h4 {
+          padding: 0 0 10px;
+          font-weight: 700;
+        }
+
+        ul.data {
+          li {
+            margin-bottom: 6px;
+
+            input[type="checkbox"] {
+              flex: 0 0 16px;
+              height: 16px;
+
+              &:checked {
+                background-size: auto 19px;
+                background-position: -74px 3px;
+              }
+            }
+
+            label {
+              margin-left: 6px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      nav.sort {
+        flex: 0 0 60%;
+        order: 1;
+        display: flex;
+        justify-content: flex-end;
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #efefef;
+
+        > section {
+          position: absolute;
+          top: 100%;
+          padding: 20px;
+          background: #fff;
+          border: 1px solid #3c6eaf;
+          border-radius: 6px;
+
+          li {
+            margin-bottom: 10px;
+
+            &:last-child {
+              margin: 0;
+            }
+          }
+
+          a {
+            display: block;
+            text-decoration: none;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+
+        &.active {
+          overflow: visible;
+        }
+      }
+
+      nav.pagination {
+        flex: 0 0 40%;
+        justify-content: flex-end;
+        order: 2;
+        margin: 0;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #efefef;
+
+        &:last-child {
+          order: 5;
+          flex-basis: 100%;
+        }
+      }
+    }
+  }
+}
+
+html.js {
+  body[data-controller="category"] {
+    section.products {
+      nav.filters {
+        > section {
+          form {
+            display: block;
+            height: 195px;
+            overflow: hidden;
+          }
+
+          &.more {
+            form {
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 959px) {
+  html.js {
+    body[data-controller="category"] {
+      section.products {
+        nav.sort > section,
+        nav.filters form {
+          display: none;
+        }
+      }
+    }
+  }
+}

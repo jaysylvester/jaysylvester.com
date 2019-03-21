@@ -258,145 +258,6 @@ nav.breadcrumbs {
   }
 }
 
-section.summary {
-  margin: 20px 10px;
-
-  h1 {
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  p {
-    font-size: 14px;
-    line-height: 1.4;
-  }
-}
-
-section.products {
-  display: flex;
-  flex-wrap: wrap;
-
-  nav.pagination {
-    flex: 0 0 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    p {
-      margin: 0 20px;
-    }
-
-    ul {
-      display: flex;
-
-      li {
-        border-width: 1px;
-        border-style: solid;
-        border-color: #ccc;
-        border-right: none;
-
-        &:first-child {
-          border-top-left-radius: 4px;
-          border-bottom-left-radius: 4px;
-        }
-
-        &:last-child {
-          border-top-right-radius: 4px;
-          border-bottom-right-radius: 4px;
-          border-right: 1px solid #ccc;
-        }
-      }
-
-      a {
-        display: block;
-        padding: 12px 15px;
-        text-decoration: none;
-      }
-    }
-  }
-
-  > nav.pagination:last-child {
-    padding-top: 20px;
-    border-top: 1px solid #efefef;
-  }
-
-  nav.sort,
-  nav.filters {
-    flex: 0 0 45%;
-    margin: 0 2.5% 30px;
-
-    > a {
-      display: block;
-      padding: 14px 16px;
-      font-size: 14px;
-      color: white;
-      text-decoration: none;
-      text-transform: uppercase;
-      text-align: center;
-      background-image: linear-gradient(-180deg,#5c8ac7,#3c6eaf);
-      border-radius: 4px;
-    }
-  }
-
-  section.product-list {
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    li.product {
-      flex: 0 0 50%;
-      padding: 0 10px;
-      margin: 20px 0;
-      text-align: center;
-
-      > * {
-        width: 100%;
-      }
-    }
-
-    h5 {
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-
-    p.promo {
-      margin-bottom: 10px;
-      font-size: 16px;
-      font-weight: bold;
-
-      span.discount {
-        display: block;
-        color: red;
-      }
-    }
-
-    ul.prices {
-      font-size: 16px;
-
-      li {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-    }
-
-    li.retail,
-    li.actual {
-      color: #808080;
-      text-decoration: line-through;
-    }
-
-    li.clearance {
-      font-weight: bold;
-
-      span.price {
-        color: #487cc1;
-      }
-    }
-  }
-}
-
 footer {
   margin: 20px 0 0;
   padding: 20px;
@@ -465,15 +326,6 @@ footer {
 }
 
 @media only screen and (max-width: 959px) {
-  html.js {
-    section.products {
-      nav.sort > section,
-      nav.filters form {
-        display: none;
-      }
-    }
-  }
-
   .slide-menu {
     position: fixed;
     z-index: 1001;
@@ -763,39 +615,19 @@ form {
     margin: 20px;
   }
 
-  section.summary {
-    margin: 20px 20px 40px;
+  footer {
+    section.benefits {
+      width: 500px;
+      margin: auto;
 
-    p {
-      font-size: 16px;
-    }
-  }
-
-  section.products {
-    nav.sort {
-      flex: 1 1 auto;
-    }
-
-    nav.filters {
-      flex: 1 1 auto;
-      margin: 0;
-    }
-
-    nav.pagination {
-      flex: 1 1 auto;
-      justify-content: flex-end;
-      align-items: flex-start;
-      margin-right: 20px;
-
-      p {
-        margin-top: 10px;
+      li {
+        margin-bottom: 40px;
       }
     }
 
-    section.product-list {
-      li.product {
-        flex-basis: 33.3%;
-      }
+    > nav {
+      width: 500px;
+      margin: auto;
     }
   }
 }
@@ -839,46 +671,6 @@ form {
 
   nav.breadcrumbs {
     margin: 20px auto;
-  }
-
-  section.summary {
-    margin: 20px auto 40px;
-  }
-
-  section.product-list {
-    flex: 0 0 70%;
-    order: 4;
-  }
-
-  section.products {
-    align-items: flex-start;
-    justify-content: flex-end;
-
-    nav.filters {
-      order: 3;
-      flex: 0 0 30%;
-
-      a {
-        display: none;
-      }
-    }
-
-    nav.sort {
-      flex: 0 0 30%;
-      order: 1;
-      margin: 0;
-    }
-
-    nav.pagination {
-      flex: 0 0 70%;
-      justify-content: flex-end;
-      order: 2;
-      margin: 0;
-
-      &:last-child {
-        order: 5;
-      }
-    }
   }
 }
 

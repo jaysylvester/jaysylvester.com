@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700" />
     <script type="text/javascript" src="/shoplc/web/min/site.js"></script>
   </head>
-  <body>
+  <body data-controller="category">
     <header>
       <a class="logo" href="/">Shop LC</a>
       <nav class="account">
@@ -64,13 +64,11 @@
         <nav class="sort">
           <a href="#">Sort</a>
           <section>
-            <form action="#">
-              <ul class="data">
-                <li><a href="#">Newest first</a></li>
-                <li><a href="#">Price: lowest to highest</a></li>
-                <li><a href="#">Price: highest to lowest</a></li>
-              </ul>
-            </form>
+            <ul class="data">
+              <li><a href="#">Newest first</a></li>
+              <li><a href="#">Price: lowest to highest</a></li>
+              <li><a href="#">Price: highest to lowest</a></li>
+            </ul>
           </section>
         </nav>
         <nav class="filters">
