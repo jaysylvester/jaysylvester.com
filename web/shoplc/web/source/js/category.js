@@ -26,13 +26,16 @@ SLC.category = ( function () {
         document.querySelectorAll('main section.products nav.filters > section').forEach(function (item) {
           let moreButton = document.createElement('a')
           moreButton.href = '#'
+          moreButton.classList.add('more')
           moreButton.text = 'More'
           moreButton.addEventListener('click', function (e) {
             e.preventDefault()
             e.target.parentNode.classList.toggle('more')
             if ( e.target.text === 'More' ) {
+              e.target.className = 'fewer'
               e.target.text = 'Fewer'
             } else {
+              e.target.className = 'more'
               e.target.text = 'More'
             }
           })

@@ -124,7 +124,7 @@ body {
     nav.site {
       background: #f7f7f7;
 
-      ul {
+      > ul {
         display: flex;
         padding: 10px 0;
         overflow-x: scroll;
@@ -133,7 +133,7 @@ body {
         text-transform: uppercase;
         font-size: 16px;
 
-        li {
+        > li {
           display: flex;
           align-items: center;
           margin-right: 20px;
@@ -154,15 +154,20 @@ body {
               color: #555;
             }
           }
+
+          > ul {
+            display: none;
+          }
         }
 
         a {
+          display: block;
           padding: 5px;
           color: #333;
           text-decoration: none;
         }
 
-        li:last-child {
+        > li:last-child {
           a {
             color: red;
           }
@@ -383,14 +388,59 @@ footer {
       }
     }
 
+    ul {
+      ul {
+        display: none;
+        margin-left: 20px;
+        font-size: 16px;
+
+        li {
+          a {
+            border: none;
+
+            &::after {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
     li {
       display: block;
       line-height: 1;
 
-      a {
-        display: block;
+      &.active {
+        border-bottom: 1px solid #efefef;
+
+        a {
+          border: none;
+
+          &::after {
+            transform: rotate(180deg);
+          }
+        }
+
+        ul {
+          display: block;
+        }
+      }
+
+      > a {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 1.6rem 1.8rem;
         text-decoration: none;
+        border-bottom: 1px solid #efefef;
+
+        &::after {
+          content: '\e900';
+          font-family: glyphs;
+          font-size: 10px;
+          color: #487cc1;
+          transition: transform 0.2s;
+        }
       }
     }
   }
@@ -586,15 +636,25 @@ form {
       nav.account {
         order: 3;
         margin: 20px;
+
+        li {
+          transition: transform 0.2s;
+
+          &:hover {
+            transform: scale(1.25);
+          }
+        }
       }
 
       nav.site {
         order: 4;
 
-        ul {
-          padding: 15px 0;
+        > ul {
+          padding: 0;
 
-          li {
+          > li {
+            padding: 15px 0;
+
             &:first-child {
               padding-left: 15px;
             }
@@ -635,6 +695,23 @@ form {
 // 960px and up
 @media only screen and (min-width: 960px) {
   html.js {
+    body > header {
+      overflow: visible;
+
+      form {
+        transition: height 0.2s, padding 0.2s;
+      }
+    }
+
+    body.hidden-header header,
+    body.partial-header header {
+      form {
+        height: 0;
+        padding: 0 20px;
+        overflow: hidden;
+      }
+    }
+
     section.products {
       nav.sort > section,
       nav.filters form {
@@ -647,17 +724,45 @@ form {
     nav.site {
       width: 100%;
 
-      ul {
+      > ul {
         width: 100%;
         justify-content: center;
+        overflow: visible;
 
-        li {
+        > li {
+          position: relative;
+
           &:first-child {
             padding: 0;
           }
           &:last-child {
             margin: 0;
             padding: 0;
+          }
+
+          &:hover {
+            > ul {
+              display: initial;
+              position: absolute;
+              top: 100%;
+              left: -10px;
+              padding: 10px;
+              background: #487cc1;
+              border-bottom-right-radius: 4px;
+              border-bottom-left-radius: 4px;
+
+              > li {
+                > ul {
+                  position: absolute;
+                  top: 0;
+                  left: 100%;
+                }
+              }
+
+              a {
+                color: white;
+              }
+            }
           }
         }
       }

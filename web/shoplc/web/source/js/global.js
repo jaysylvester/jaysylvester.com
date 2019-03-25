@@ -6,6 +6,14 @@ SLC.global = ( function () {
     init: function () {
       methods.header()
       methods.imageLoad()
+
+      if ( document.body.clientWidth < 960 ) {
+        methods.menu({
+          menu: 'body > header nav.site > ul > li > ul',
+          trigger: 'body > header nav.site > ul > li > a',
+          position: 'left'
+        })
+      }
     },
 
     header: function () {
@@ -59,11 +67,16 @@ SLC.global = ( function () {
     menu: function (args) {
       var body = document.querySelector('body'),
           source = document.querySelector(args.menu),
-          menu = source.cloneNode(true),
+          menu = document.createElement('nav'),
           trigger = document.querySelector(args.trigger)
 
-      source.querySelectorAll('section').forEach(function (item) {
-        source.removeChild(item)
+      menu.appendChild(source.cloneNode(true))
+
+      menu.addEventListener('click', function (e) {
+        if ( e.target.tagName === 'A' ) {
+          e.preventDefault()
+          e.target.parentNode.classList.toggle('active')
+        }
       })
 
       trigger.addEventListener('click', function () {
