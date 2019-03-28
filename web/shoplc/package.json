@@ -13,7 +13,6 @@
   },
   "devDependencies": {
     "autoprefixer": "*",
-    "chokidar": "*",
     "cssnano": "*",
     "gulp": "^4.0.0",
     "gulp-concat": "*",

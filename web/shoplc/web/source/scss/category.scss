@@ -358,6 +358,14 @@ body[data-controller="category"] {
       }
     }
   }
+
+  body[data-controller="category"] {
+    section.product-list {
+      h5 {
+        min-height: 42px;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 959px) {

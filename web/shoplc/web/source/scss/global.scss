@@ -136,7 +136,7 @@ body {
         > li {
           display: flex;
           align-items: center;
-          margin-right: 20px;
+          margin-right: 15px;
 
           &:first-child {
             padding-left: 10px;
@@ -607,11 +607,15 @@ form {
   html.js {
     body {
       &.partial-header > header {
-        height: 120px;
+        height: 140px;
+
+        form {
+          margin-bottom: 20px;
+        }
       }
 
       &.hidden-header > header {
-        margin-top: -120px;
+        margin-top: -140px;
       }
     }
   }
@@ -624,18 +628,18 @@ form {
 
       a.logo {
         order: 1;
-        margin: 15px 20px 0;
+        margin: 25px 20px 0;
       }
 
       p.call {
-        order: 2;
-        margin-top: 25px;
+        order: 5;
+        margin-top: 0;
         font-size: 16px;
       }
 
       nav.account {
         order: 3;
-        margin: 20px;
+        margin: 30px 20px 0 20px;
 
         li {
           transition: transform 0.2s;
@@ -663,10 +667,10 @@ form {
       }
 
       form {
-        order: 5;
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
+        order: 2;
+        max-width: 400px;
+        margin-top: 20px;
+        padding: 0;
       }
     }
   }
@@ -697,18 +701,12 @@ form {
   html.js {
     body > header {
       overflow: visible;
-
-      form {
-        transition: height 0.2s, padding 0.2s;
-      }
     }
 
     body.hidden-header header,
     body.partial-header header {
-      form {
-        height: 0;
-        padding: 0 20px;
-        overflow: hidden;
+      p.call {
+        display: none;
       }
     }
 
@@ -767,6 +765,10 @@ form {
         }
       }
     }
+
+    form {
+      max-width: 600px;
+    }
   }
 
   main {
@@ -776,6 +778,22 @@ form {
 
   nav.breadcrumbs {
     margin: 20px auto;
+  }
+
+  footer {
+    section.benefits {
+      width: auto;
+      max-width: 960px;
+
+      ul {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      li {
+        flex: 0 0 30%;
+      }
+    }
   }
 }
 

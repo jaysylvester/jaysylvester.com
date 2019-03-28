@@ -1,22 +1,26 @@
-This is a responsive web site template built with [citizen](https://github.com/jaysylvester/citizen), including a basic Gulp and Sass build. Feel free to overengineer and overcomplicate as your ego and/or manager requires.
+This directory a code sample/demo for the Shop LC category landing page created as part of a UX audit performed on their behalf. It consists of a static HTML page and associated assets paired with a basic Gulp/Sass build process.
 
-# Instructions
+# Viewing Instructions
 
-Download the ZIP file, extract its contents to your site's directory, then:
+To view the demo page, visit the following URL in your desktop or mobile browser:
 
-    cd /path/to/yoursite
-    npm install
-    node app/start.js
+http://jaysylvester.com/shoplc/web/category.html
 
-See the [citizen documentation](https://github.com/jaysylvester/citizen) for details on how to configure and use citizen.
+Alternately, download the contents of the `/web` directory from GitHub and open the `category.html` file in your browser.
 
-# Requirements
+# Dev Requirements
 
+You'll need to install the following to edit these files with the help of the build process:
+
+- Node/npm
 - Gulp 4.x
 - Sass
 
-# Notes
+# Features
 
-This template uses an [inline configuration](https://github.com/jaysylvester/citizen#inline-config) for simplicity, but a [configuration file](https://github.com/jaysylvester/citizen#config-files) is a more robust way to manage citizen across different environments.
+Some of the benefits demonstrated in this demo:
 
-The included .gitignore excludes `app/config/*` to prevent potentially sensitive configuration options (database credentials, for example) being committed to a public repository.
+1. Simple, clean markup created from scratch—no bloated frameworks.
+2. Sass for CSS, which allows for nesting and other great features to simplify CSS and make it easier to read and navigate.
+3. Concatenation and minification of CSS and JS files.
+4. Lazy loading of images to prevent mobile devices from having to load large product images that the user might not even see.
