@@ -1,4 +1,4 @@
-This directory a code sample/demo for the Shop LC category landing page created as part of a UX audit performed on their behalf. It consists of a static HTML page and associated assets paired with a basic Gulp/Sass build process.
+This directory contains a code sample/demo for the Shop LC category landing page created as part of a UX audit performed on their behalf. It consists of a static HTML page and associated assets paired with a basic Gulp/Sass build process.
 
 # Viewing Instructions
 

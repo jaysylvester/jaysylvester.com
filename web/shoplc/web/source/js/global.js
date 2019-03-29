@@ -13,6 +13,12 @@ SLC.global = ( function () {
           trigger: 'body > header nav.site > ul > li > a',
           position: 'left'
         })
+
+        document.querySelectorAll('body > header nav.site > ul > li > a').forEach( function (item) {
+          item.addEventListener('click', function (e) {
+            e.preventDefault()
+          })
+        })
       }
     },
 
