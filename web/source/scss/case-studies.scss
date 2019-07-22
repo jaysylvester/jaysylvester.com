@@ -164,6 +164,14 @@
 
 // Case studies list
 body[data-controller="case-studies"][data-view="case-studies"] {
+  @media only screen and (max-width: 425px) {
+    h1 {
+      br {
+        display: none;
+      }
+    }
+  }
+
   .case-study {
     margin: 4rem 0;
     padding-top: 4rem;
