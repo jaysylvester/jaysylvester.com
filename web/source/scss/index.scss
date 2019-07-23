@@ -20,13 +20,21 @@ body[data-controller="index"] {
 
     > p {
       margin: 0;
-      padding: 0 1rem 4rem;
+      padding: 0 1rem 3rem;
     }
 
     > h1, > p {
       color: #ffffff;
       background-color: #354B5E;
     }
+  }
+
+  nav.case-studies {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0 4rem;
+    background-color: #354B5E;
   }
 
   section.endorsements {
@@ -54,8 +62,12 @@ body[data-controller="index"] {
 
       > p {
         max-width: none;
-        padding: 0 calc((100% - 64rem) / 2) 5rem;
+        padding: 0 calc((100% - 64rem) / 2) 3rem;
       }
+    }
+
+    nav.case-studies {
+      padding-bottom: 5rem;
     }
     
     section.endorsements {
@@ -86,8 +98,12 @@ body[data-controller="index"] {
       }
 
       > p {
-        padding: 0 calc((100% - 80rem) / 2) 7rem;
+        padding: 0 calc((100% - 80rem) / 2) 4rem;
       }
+    }
+
+    nav.case-studies {
+      padding-bottom: 6rem;
     }
 
     section.endorsements {
