@@ -28,7 +28,9 @@ async function employers() {
       // Format dates
       result.rows.forEach( function (item) {
         item.employed_from_formatted = app.toolbox.moment(item.employed_from).format('MMMM YYYY')
-        item.employed_to_formatted = app.toolbox.moment(item.employed_to).format('MMMM YYYY')
+        if ( item.employed_to ) {
+          item.employed_to_formatted = app.toolbox.moment(item.employed_to).format('MMMM YYYY')
+        }
       })
       // Cache the data for future requests
       if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {

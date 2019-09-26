@@ -22,7 +22,11 @@
     <section class="employer">
       <h2>{{job_title}}</h2>
       <h3>{{employer_name}}</h3>
-      <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
+      {{#if employed_to_formatted}}
+        <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
+      {{else}}
+        <p class="dates">{{employed_from_formatted}} to Present</p>
+      {{/if}}
       <p class="description">{{job_description}}</p>
       {{#if company_url}}
         <nav class="actions">

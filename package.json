@@ -13,10 +13,10 @@
   },
   "main": "index",
   "dependencies": {
-    "citizen": "jaysylvester/citizen#0.9.0",
-    "moment": "2.22.2",
-    "nodemailer": "4.6.8",
-    "pg": "7.4.3"
+    "citizen": "github:jaysylvester/citizen#0.9.0",
+    "moment": "^2.24.x",
+    "nodemailer": "^6.3.x",
+    "pg": "^7.12.x"
   },
   "devDependencies": {
     "autoprefixer": "*",
