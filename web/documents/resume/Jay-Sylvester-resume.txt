@@ -21,7 +21,7 @@ Primary Skills
 - Lean UX / Agile
 
 UX Manager at Linode - 2019 to Present
-I lead the UX team at Linode, an innovative cloud hosting provider, where most of our work centers around the Cloud Manager, a browser-based tool for administrating servers hosted on the Linode platform. In addition to supervising interface design for new products such as cloud firewalls and managed servers, I also drove implementation of the company’s first moderated usability studies.
+I lead the UX team at Linode, an innovative cloud hosting provider, where most of our work centers around the Cloud Manager, a browser-based tool for administrating servers hosted on the Linode platform. In addition to supervising interface design for new products such as cloud firewalls and managed servers, I also drove implementation of the company's first moderated usability studies.
 
 UX Lead at Vidyo – 2015 to 2018
 Vidyo welcomed me to their growing UX team in order to build an internal design practice and help transform the company into a customer-focused organization. I defined the process for user experience research and design and managed the UX designers responsible for the company’s flagship video conferencing systems, including desktop, mobile, and conference room applications.
