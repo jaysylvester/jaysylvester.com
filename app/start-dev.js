@@ -33,7 +33,7 @@ app.toolbox = {
           text: args.text
         },
         toFile: true,
-        file: 'email.txt'
+        file: 'email.log'
       })
     }
   },
