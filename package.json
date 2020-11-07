@@ -14,9 +14,9 @@
   "main": "index",
   "dependencies": {
     "citizen": "^0.9.x",
-    "moment": "^2.24.x",
-    "nodemailer": "^6.3.x",
-    "pg": "^7.12.x"
+    "moment": "^2.29.x",
+    "nodemailer": "^6.4.x",
+    "pg": "^8.4.x"
   },
   "devDependencies": {
     "autoprefixer": "*",
