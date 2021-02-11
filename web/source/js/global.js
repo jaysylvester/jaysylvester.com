@@ -65,7 +65,19 @@ JAY.global = ( function () {
       var mask    = document.getElementById('mask') || document.createElement('div'),
           anchor  = image.parentNode,
           img     = document.createElement('img'),
-          src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+          src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0'),
+          loading = function () {
+            // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
+            setTimeout( function () {
+              if ( img.naturalWidth === 0 ) {
+                mask.classList.add('loading')
+
+                setTimeout( function () {
+                  mask.classList.remove('loading')
+                }, 10000)
+              }
+            }, 500)
+          }
 
       mask.setAttribute('id', 'mask')
       document.body.appendChild(mask)
@@ -91,6 +103,8 @@ JAY.global = ( function () {
                 })
                 e.target.parentNode.classList.add('selected')
                 mask.querySelector('#mask-open-tab').setAttribute('href', e.target.href)
+                loading()
+                img.setAttribute('src', '/images/placeholder-screen.svg')
                 img.setAttribute('src', e.target.href)
               }
             })
@@ -101,16 +115,7 @@ JAY.global = ( function () {
         mask.classList.add('enabled')
         img.setAttribute('src', src)
         mask.append(img)
-        // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
-        setTimeout( function () {
-          if ( img.naturalWidth === 0 ) {
-            mask.classList.add('loading')
-
-            setTimeout( function () {
-              mask.classList.remove('loading')
-            }, 10000)
-          }
-        }, 500)
+        loading()
 
         window.addEventListener('keydown', escape)
         mask.querySelector('#mask-close').addEventListener('click', function (e) {

@@ -15,6 +15,10 @@
     margin: auto;
   }
 
+  &.Linode img.logo {
+    max-height: 4rem;
+  }
+
   &.hibu img.logo {
     max-height: 5rem;
   }
@@ -72,6 +76,7 @@
     }
   }
 
+  &.Linode,
   &.Vidyo,
   &.Fitly,
   &.hibu {
@@ -84,6 +89,22 @@
   > nav.actions {
     display: flex;
     justify-content: center;
+  }
+
+  .screens {
+    &.Vidyo {
+      &:nth-child(1) figure,
+      &:nth-child(2) figure {
+        height: 100%;
+      }
+      &:nth-child(3) figure {
+        height: 14rem !important;
+      }
+      &:nth-child(4) figure {
+        height: auto;
+        border: none;
+      }
+    }
   }
 
   @media only screen and (min-width: 768px) {
@@ -114,7 +135,10 @@
       margin: auto;
     }
 
-    &.Fitly, &.hibu, &.Vidyo {
+    &.Linode,
+    &.Vidyo,
+    &.Fitly,
+    &.hibu {
       section.devices img {
         width: auto;
         margin: 0 auto;
@@ -242,6 +266,14 @@ body[data-controller="case-study"][data-view="case-study"] {
       overflow-x: hidden;
     }
 
+    &.Linode {
+      figure[role="group"] {
+        figure {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+
     &.hibu {
       figure.callout.concept,
       figure.callout.prototype {
@@ -297,6 +329,27 @@ body[data-controller="case-study"][data-view="case-study"] {
 
         h2 {
           margin: 6rem 0 2rem;
+        }
+      }
+
+      &.Linode {
+        figure[role="group"] {
+          section {
+            display: flex;
+            justify-content: space-between;
+
+            figure {
+              img {
+                height: 24rem;
+              }
+            }
+          }
+
+          &.usability-testing {
+            img {
+              height: 12.8rem;
+            }
+          }
         }
       }
 

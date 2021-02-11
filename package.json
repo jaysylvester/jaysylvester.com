@@ -13,7 +13,7 @@
   },
   "main": "index",
   "dependencies": {
-    "citizen": "^0.9.x",
+    "citizen": "git://github.com/jaysylvester/citizen.git#0.9.1",
     "moment": "^2.29.x",
     "nodemailer": "^6.4.x",
     "pg": "^8.4.x"
@@ -21,7 +21,7 @@
   "devDependencies": {
     "autoprefixer": "*",
     "cssnano": "*",
-    "gulp": "^4.0.x",
+    "gulp": "*",
     "gulp-concat": "*",
     "gulp-cssnano": "*",
     "gulp-filter": "*",
@@ -32,6 +32,6 @@
     "gulp-uglify-es": "*"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 12.0.0"
   }
 }
