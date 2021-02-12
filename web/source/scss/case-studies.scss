@@ -267,7 +267,7 @@ body[data-controller="case-study"][data-view="case-study"] {
     }
 
     &.Linode {
-      figure[role="group"] {
+      figure[role="group"].callout {
         figure {
           margin-bottom: 1rem;
         }
@@ -349,6 +349,12 @@ body[data-controller="case-study"][data-view="case-study"] {
             img {
               height: 12.8rem;
             }
+          }
+        }
+
+        figure[role="group"].callout {
+          figure {
+            margin-bottom: 0;
           }
         }
       }
