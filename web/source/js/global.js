@@ -104,7 +104,7 @@ JAY.global = ( function () {
                 e.target.parentNode.classList.add('selected')
                 mask.querySelector('#mask-open-tab').setAttribute('href', e.target.href)
                 loading()
-                img.setAttribute('src', '/images/placeholder-screen.svg')
+                img.setAttribute('src', '/images/placeholder-zoom.svg')
                 img.setAttribute('src', e.target.href)
               }
             })
