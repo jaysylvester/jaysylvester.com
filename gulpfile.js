@@ -19,7 +19,7 @@ gulp.task('css', function (done) {
           ])
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
-      .pipe(postcss([autoprefixer({ browsers: 'last 2 versions' })]))
+      .pipe(postcss([autoprefixer()]))
       .pipe(cssnano({ safe: true, colormin: false }))
       .pipe(concat('site.css'))
       .pipe(sourcemaps.write('../min'))
