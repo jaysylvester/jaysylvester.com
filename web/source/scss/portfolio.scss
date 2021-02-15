@@ -3,49 +3,35 @@
 body[data-controller="portfolio"] {
   section.documents {
     ul {
-      max-width: 40rem;
-      margin-right: auto;
-      margin-left: auto;
+      margin: 2rem auto 0;
       color: #cccccc;
+    }
 
-      &:first-of-type {
-        margin-bottom: 0;
-      }
-
-      &:last-of-type {
-        margin-top: 0;
-      }
+    li {
+      margin: 0 0 0.8rem 2rem;
     }
   }
   
   @media only screen and (min-width: 768px) {
     section.documents p,
+    section.documents ul,
     section.all-screens p {
       max-width: 80rem;
       margin-right: auto;
       margin-left: auto;
+    }
+
+    section.documents p,
+    section.all-screens p {
       text-align: center;
     }
-  }
 
-  @media only screen and (min-width: 1024px) {
     section.documents {
-      text-align: center;
-
       ul {
-        display: inline-block;
-        
-        &:first-of-type {
-          margin-right: 5%;
-        }
-
-        &:last-of-type {
-          margin-top: 1.2rem;
-        }
-
-        li {
-          text-align: left;
-        }
+        margin-top: 4rem;
+        display: block;
+        column-count: 2;
+        column-gap: 2rem;
       }
     }
   }

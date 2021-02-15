@@ -124,9 +124,9 @@
     }
 
     p.summary {
-      max-width: 64rem;
-      margin: 0 auto 4rem;
-      font-size: 2rem;
+      max-width: 66rem;
+      margin: 0 auto 6rem;
+      font-size: 1.8rem;
     }
 
     section.devices img {
@@ -242,13 +242,6 @@ body[data-controller="case-studies"][data-view="case-studies"] {
         }
       }
     }
-
-    @media only screen and (min-width: 1024px) {
-      p.summary {
-        max-width: 74rem;
-        font-size: 2rem;
-      }
-    }
   }
 }
 
@@ -319,7 +312,7 @@ body[data-controller="case-study"][data-view="case-study"] {
 
       section.devices {
         width: auto;
-        margin-bottom: 4rem;
+        margin-bottom: 6rem;
         margin-left: 0;
       }
 
@@ -395,18 +388,6 @@ body[data-controller="case-study"][data-view="case-study"] {
 
       &.OncoTracker img.logo {
         max-height: 4rem;
-      }
-    }
-
-    // 1024px and up
-    @media only screen and (min-width: 1024px) {
-      p.summary {
-        max-width: 90rem;
-        margin-bottom: 6rem;
-      }
-
-      section.devices {
-        margin-bottom: 6rem;
       }
     }
   }
