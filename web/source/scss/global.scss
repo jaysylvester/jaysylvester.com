@@ -1,6 +1,26 @@
+// Preserve original color values
+@function hsl($h, $s, $l) {
+  @return unquote('hsl(#{$h},#{$s},#{$l})');
+}
+
+@function hsla($h, $s, $l, $a) {
+  @return unquote('hsla(#{$h},#{$s},#{$l},#{$a})');
+}
+
+// Use HSB values provided by apps like Sketch and Photoshop and 
+// convert them into HSL, because HSL (native CSS) and HSB aren't 
+// interchangeable.
+@function hsb($h-hsb, $s-hsb, $b-hsb, $a: 1) {
+  @if $b-hsb == 0 {
+    @return unquote('hsla(0, 0, 0, $a)');
+  } @else {
+    $l-hsl: ($b-hsb/2) * (2 - ($s-hsb/100));
+    $s-hsl: ($b-hsb * $s-hsb) / if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2);
+    @return unquote('hsla($h-hsb, $s-hsl, $l-hsl, $a)');
+  }
+}
+
 // Fonts
-
-
 @font-face {
 	font-family: 'social';
 	src: url('/images/icons/social.woff') format('woff');
@@ -51,9 +71,12 @@ li.primary-action input {
   color: #FFFFFF;
   text-align: center;
   text-decoration: none;
-  text-shadow: 0 0.1rem 0.2rem #541212;
-  background-image: linear-gradient(-180deg,#ed5e5e,#cf1717);
+  background: hsl(0,80%,50%);
   border-radius: 0.4rem;
+
+  &:hover {
+    background: hsl(0,90%,40%);
+  }
 }
 
 p.error {
@@ -84,8 +107,7 @@ body {
     font-family: 'Raleway', sans-serif;
     font-size: 1.8rem;
     font-weight: 500;
-    background-color: #fafafa;
-    background-image: linear-gradient(-180deg, #FFFFFF 33%, #f8f8f7 100%);
+    background: hsl(60,7%,98%);
     border-top: 0.4rem solid #DCDDD8;
     border-bottom: 0.1rem solid #eeeeec;
 
@@ -298,7 +320,6 @@ a.new-tab {
 article.endorsement {
   position: relative;
   padding: 2rem 2.5rem 4rem;
-  font-style: italic;
 
   &:before,
   &:after {
@@ -313,37 +334,33 @@ article.endorsement {
   }
 
   &:before {
-    top: 0.5rem;
+    top: 0.6rem;
     left: 1rem;
     background-position: -56rem 0;
   }
 
   &:after {
     right: 2rem;
-    bottom: 3rem;
+    bottom: 4.6rem;
     background-position: -64rem 0;
   }
 
   p {
     position: relative;
     z-index: 2;
-  }
-
-  p:last-of-type {
-    margin: 0;
+    font-size: 1.6rem;
   }
 
   span.byline {
     display: block;
     position: absolute;
-    right: 2rem;
-    bottom: 0;
+    bottom: 2.6rem;
     z-index: 2;
     font-family: 'Raleway', sans-serif;
+    font-size: 1.6rem;
     font-weight: 600;
     font-style: normal;
     color: #666;
-    text-align: right;
   }
 }
 
@@ -352,20 +369,11 @@ footer {
   padding: 2rem;
   color: #606255;
   text-align: center;
-  background: #f0f1ef;
-  border-top: .1rem solid #e6e7e4;
-
-  p.quote {
-    margin: 2rem auto 4rem;
-    font-style: italic;
-
-    span.byline {
-      font-style: normal;
-    }
-  }
+  background: hsl(90,7%,98%);
+  border-top: 0.1rem solid hsl(80,6%,96%);
   
   p.copyright {
-    margin: 4rem 0 0;
+    margin: 0;
     font-size: 1.4rem;
 
     a {
@@ -403,7 +411,7 @@ footer {
     }
 
     > header nav li a:hover::after {
-      background: #e44e4e !important;
+      background: hsl(0,80%,50%) !important;
     }
   }
 
@@ -446,12 +454,6 @@ footer {
       margin-right: auto;
       margin-left: auto;
       font-size: 2rem;
-    }
-  }
-
-  footer {
-    p.quote {
-      max-width: 70rem;
     }
   }
 

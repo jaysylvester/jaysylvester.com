@@ -55,14 +55,14 @@ body[data-controller="contact"] {
       font-size: 1.6rem;
       border: 0.1rem solid #cccccc;
       border-radius: 0.4rem;
-      transition: border-color 0.5s, background-color 0.5s;
+      transition: border-color 0.2s, background-color 0.2s;
   
       &[type="submit"] {
         border: none;
       }
       &:focus {
         outline: none;
-        border-color: #de2121;
+        border-color: hsl(0,80%,50%);
       }
     }
   
