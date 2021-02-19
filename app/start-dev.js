@@ -28,7 +28,6 @@ app.toolbox = {
         content: {
           from: args.from,
           to: args.to,
-          cc: args.cc,
           subject: args.subject,
           text: args.text
         },

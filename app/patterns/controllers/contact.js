@@ -60,11 +60,17 @@ function form(params) {
       }
     } else {
       app.toolbox.mail.sendMail({
-        from: { name: params.form.name, address: params.form.email },
         to: { name: 'Jay Sylvester', address: 'jay@jaysylvester.com' },
-        cc: params.form.cc ? { name: params.form.name, address: params.form.email } : {},
+        from: { name: params.form.name, address: params.form.email },
         subject: params.form.subject + ' (sent via contact form)',
         text: params.form.message
+      })
+
+      app.toolbox.mail.sendMail({
+        to: { name: params.form.name, address: params.form.email },
+        from: { name: 'Jay Sylvester', address: 'noreply@jaysylvester.com' },
+        subject: 'Message confirmation',
+        text: 'Thanks for your message. I\'ll respond to you shortly.\n\nPlease don\'t reply to this e-mail; this address is unmonitored.'
       })
   
       return {
