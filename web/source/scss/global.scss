@@ -80,9 +80,9 @@ li.primary-action input {
 }
 
 p.error {
+  margin: 2rem auto;
   padding: 2rem;
-  color: white;
-  background: #d92626;
+  border: 4px solid #d92626;
   border-radius: 0.6rem;
 }
 
@@ -231,20 +231,36 @@ main, footer {
     }
   }
 
+  h1 {
+    padding: 0.2rem 0;
+    font-size: 1.8rem;
+    color: #efefef;
+
+    @media only screen and (min-width: 768px) {
+      text-align: center;
+    }
+  }
+
   img {
     width: 100%;
-    height: 100%;
-    position: relative;
+    height: calc(100% - 170px);
+    margin: 2rem auto;
     z-index: 2;
     object-fit: contain;
   }
 
   &.enabled {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    padding: 6rem 2rem 2rem;
+    padding: 2rem;
     z-index: 1000;
     opacity: 1;
+  }
+
+  &.screens {
+    justify-content: space-between;
   }
 }
 

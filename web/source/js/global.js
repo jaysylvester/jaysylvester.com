@@ -85,22 +85,27 @@ JAY.global = ( function () {
       anchor.addEventListener('click', function (e) {
         e.preventDefault()
         let figureGroup = image.parentNode.parentNode.parentNode.parentNode,
-            figureIndex = Array.prototype.slice.call( figureGroup.querySelector('section').children ).indexOf(anchor.parentNode)
+            figureIndex = [...figureGroup.querySelector('section').children].indexOf(anchor.parentNode),
+            screenNav = false
 
-        mask.innerHTML = '<a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a>'
+        mask.innerHTML = '<h1>Image 1 of 1</h1><a id="mask-open-tab" href="' + src + '" target="_blank">Open this image in a new tab</a><a id="mask-close" href="#">Close</a>'
 
         // Create navigation if it's a group of images
         if ( figureGroup.getAttribute('role') === 'group' ) {
+          mask.querySelector('h1').innerHTML = 'Image <span class="current-image">1</span> of <span class="total-images">1</span>'
           mask.innerHTML += '<nav id="screen-nav"><ul></ul></nav>'
-          let screenNav = mask.querySelector('#screen-nav')
+          screenNav = mask.querySelector('#screen-nav')
           figureGroup.querySelectorAll('figure').forEach( function (figure, index) {
             screenNav.querySelector('ul').innerHTML += '<li' + ( index === figureIndex ? ' class="selected"' : '' ) + '><a href="' + figure.querySelector('img').dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0') + '">' + figure.querySelector('img').getAttribute('alt') + '</a></li>'
+            mask.querySelector('span.current-image').innerHTML = figureIndex + 1
+            mask.querySelector('span.total-images').innerHTML = index + 1
             screenNav.addEventListener('click', function (e) {
               e.preventDefault()
               if ( e.target.tagName === 'A' ) {
                 screenNav.querySelectorAll('li').forEach( function (anchor) {
                   anchor.classList.remove('selected')
                 })
+                mask.querySelector('span.current-image').innerHTML = [...e.target.parentNode.parentNode.children].indexOf(e.target.parentNode) + 1
                 e.target.parentNode.classList.add('selected')
                 mask.querySelector('#mask-open-tab').setAttribute('href', e.target.href)
                 loading()
@@ -114,7 +119,12 @@ JAY.global = ( function () {
         document.querySelector('html').classList.add('mask-enabled')
         mask.classList.add('enabled')
         img.setAttribute('src', src)
-        mask.append(img)
+        if ( screenNav ) {
+          mask.classList.add('screens')
+          mask.insertBefore(img, screenNav)
+        } else {
+          mask.append(img)
+        }
         loading()
 
         window.addEventListener('keydown', escape)
@@ -131,7 +141,7 @@ JAY.global = ( function () {
 
         function close() {
           document.querySelector('html').classList.remove('mask-enabled')
-          mask.classList.remove('enabled', 'loading')
+          mask.classList.remove('enabled', 'loading', 'screens')
           mask.innerHTML = ''
           window.removeEventListener('keydown', escape)
         }

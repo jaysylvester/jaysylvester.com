@@ -93,15 +93,7 @@
 
   .screens {
     &.Vidyo {
-      &:nth-child(1) figure,
-      &:nth-child(2) figure {
-        height: 100%;
-      }
-      &:nth-child(3) figure {
-        height: 14rem !important;
-      }
       &:nth-child(4) figure {
-        height: auto;
         border: none;
       }
     }
@@ -326,7 +318,7 @@ body[data-controller="case-study"][data-view="case-study"] {
       }
 
       &.Linode {
-        figure[role="group"] {
+        figure[role="group"]:not(.screens) {
           section {
             display: flex;
             justify-content: space-between;

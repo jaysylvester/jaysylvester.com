@@ -9,12 +9,5 @@ module.exports = {
 
 // default action
 function handler() {
-  return {
-    include: {
-      caseStudies: {
-        route: '/case-studies/count/3',
-        view: '_compact'
-      }
-    }
-  }
+  return
 }
