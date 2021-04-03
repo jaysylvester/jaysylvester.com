@@ -86,19 +86,6 @@
     }
   }
 
-  > nav.actions {
-    display: flex;
-    justify-content: center;
-  }
-
-  .screens {
-    &.Vidyo {
-      &:nth-child(4) figure {
-        border: none;
-      }
-    }
-  }
-
   @media only screen and (min-width: 768px) {
     h1 {
       font-size: 2.4rem;
@@ -234,6 +221,11 @@ body[data-controller="case-studies"][data-view="case-studies"] {
         }
       }
     }
+  }
+
+  nav.actions {
+    display: flex;
+    justify-content: center;
   }
 }
 
@@ -382,6 +374,19 @@ body[data-controller="case-study"][data-view="case-study"] {
         max-height: 4rem;
       }
     }
+  }
+
+  .screens {
+    &.Vidyo {
+      &:nth-child(4) figure {
+        border: none;
+      }
+    }
+  }
+
+  nav.actions {
+    display: flex;
+    justify-content: center;
   }
 }
 

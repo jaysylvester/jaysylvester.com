@@ -11,12 +11,6 @@ body[data-controller="portfolio"] {
       margin: 0 0 0.8rem 2rem;
     }
   }
-
-  @media only screen and (max-width: 839px) {
-    section.screens {
-      padding: 0 1rem;
-    }
-  }
   
   @media only screen and (min-width: 768px) {
     section.documents p,

@@ -1,6 +1,6 @@
 // Screenshots
 section.screens {
-  margin: 0 -1rem;
+  margin: 0;
 
   // Override default height caused by alt attributes in unloaded images
   // Coincides with JAY.global.imageLoad() in global.js
@@ -33,6 +33,10 @@ section.screens {
       border: 0.1rem solid #e6e6e6;
       overflow: hidden;
       position: relative;
+
+      &:last-child {
+        margin: 0;
+      }
 
       img {
         width: 100%;
@@ -76,8 +80,6 @@ section.screens {
 
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
-    margin: 0;
-
     figure[role="group"] {
       padding: 0 2rem;
 
@@ -93,7 +95,7 @@ section.screens {
       }
 
       figure {
-        flex-basis: 23%;
+        flex-basis: 22%;
         margin: 0 2rem 2rem 0;
 
         &:first-child,
