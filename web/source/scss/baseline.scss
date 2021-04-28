@@ -1,6 +1,6 @@
 // Baseline styles
 
-@import url('https://fonts.googleapis.com/css?family=Lato:400,400i,600|Raleway:300,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,400i,500,600|Raleway:300,500,600,700,800,900');
 
 *,
 *::before,
@@ -17,8 +17,8 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 700;
+  font-family: Raleway, sans-serif;
+  font-weight: 900;
   line-height: 1.4;
 }
 

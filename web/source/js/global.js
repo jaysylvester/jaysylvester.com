@@ -26,38 +26,39 @@ JAY.global = ( function () {
       })
     },
 
+    // Lazy load images
     imageLoad: function () {
-      var load = function () {
-            const images = document.querySelectorAll('img[data-src]:not(.loaded)')
-            
-            if ( images.length ) {
-              images.forEach( function (image) {
-                // Make sure all images have an explicit width or height set in CSS for best results
-                let dimension
-                // Default to width on mobile since most images are set to 100% width
-                if ( document.body.clientWidth < 768 ) {
-                  dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
-                // Default to height on larger devices
-                } else {
-                  dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
-                }
-
-                // If the image is within 1.5 viewport heights of the current offset, load it
-                if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-                  image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
-                  image.classList.add('loaded')
-                  if ( image.parentNode.parentNode.tagName === 'FIGURE' ) {
-                    methods.imageZoom(image)
-                  }
-                }
-              })
+      const load = function () {
+        const images = document.querySelectorAll('img[data-src]:not(.loaded)')
+        
+        if ( images.length ) {
+          images.forEach( function (image) {
+            // Make sure all images have an explicit width or height set in CSS for best results
+            let dimension
+            // Default to width on mobile since most images are set to 100% width
+            if ( document.body.clientWidth < 768 ) {
+              dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
+            // Default to height on larger devices
             } else {
-              window.removeEventListener('scroll', load)
+              dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
             }
-          }
-      
-      load()
 
+            // If the image is within 1.5 viewport heights of the current offset, load it
+            if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
+              image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+              image.classList.add('loaded')
+              if ( image.parentNode.parentNode.tagName === 'FIGURE' ) {
+                methods.imageZoom(image)
+              }
+            }
+          })
+        } else {
+          window.removeEventListener('scroll', load)
+        }
+      }
+      
+      // Load images within the viewport, then load additional images as the user scrolls
+      load()
       window.addEventListener('scroll', load)
     },
 
@@ -181,28 +182,6 @@ JAY.global = ( function () {
 
     //     request.onerror = function () {
     //       // There was a connection error of some sort
-    //     }
-    //   })
-
-    //   // Some browsers don't include the submit button's value when form.submit() is
-    //   // called. This function creates a click listener that duplicates a form's submit
-    //   // button as a hidden field so its name/value can be included in AJAX POSTs,
-    //   // allowing different processing based on different submit buttons.
-    //   form.addEventListener('click', function (e) {
-    //     var input = document.createElement('input'),
-    //         previousActions = form.querySelectorAll('input[type="hidden"].submit-surrogate')
-
-    //     for ( var i = 0; i < previousActions.length; i++ ) {
-    //       form.removeChild(previousActions[i])
-    //     }
-
-    //     if ( e.target.type && e.target.type.toLowerCase() === 'submit' ) {
-    //       input.name = e.target.name
-    //       input.type = 'hidden'
-    //       input.value = e.target.value
-    //       input.className = 'submit-surrogate'
-
-    //       form.appendChild(input)
     //     }
     //   })
     // }

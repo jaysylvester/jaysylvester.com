@@ -1,40 +1,43 @@
-@import '_mixins';
-
 // Home / About
 
+@import '_mixins';
+
 body[data-controller="index"] {
-  @media only screen and (max-width: 374px) {
-    h1 {
-      br {
-        display: none;
-      }
+  background: hsl(175,55%,76%);
+
+  header {
+    background: none;
+  }
+
+  main h1 {
+    color: white;
+    text-shadow: 0 2px 4px hsl(175,22%,55%);
+  }
+
+  section.intro {
+    background: hsl(175,55%,70%);
+
+    p {
+      width: 90%;
+      margin: 0 auto;
+      padding: 0 2rem 3rem;
+      font-family: 'Avenir Next', Lato, sans-serif;
+      font-size: 2.4rem;
+      font-weight: 500;
+      color: hsl(176,33%,30%);
+      text-align: center;
+      line-height: 1.4;
     }
   }
 
-  main {
-    > h1 {
-      margin: 0;
-      padding: 3rem 1rem;
-      text-shadow: 0 0.1rem 0.4rem #121a21;
-    }
-
-    > p {
-      margin: 0;
-      padding: 0 1rem 3rem;
-    }
-
-    > h1, > p {
-      color: #ffffff;
-      background-color: #354B5E;
-    }
+  section.case-studies h1 {
+    padding-bottom: 0;
   }
 
-  nav.case-studies {
+  section nav {
     display: flex;
     justify-content: center;
-    margin: 0;
-    padding: 0 0 4rem;
-    background-color: #354B5E;
+    padding: 0 2rem 4rem;
   }
 
   section.endorsements {
@@ -47,11 +50,6 @@ body[data-controller="index"] {
 
   article.endorsement {
     margin: 2rem 0;
-  }
-
-  nav.more {
-    width: 100%;
-    text-align: center;
   }
 
   @media only screen and (min-width: 768px) {

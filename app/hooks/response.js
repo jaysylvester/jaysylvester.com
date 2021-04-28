@@ -1,4 +1,4 @@
-// Request events
+// response events
 
 'use strict'
 

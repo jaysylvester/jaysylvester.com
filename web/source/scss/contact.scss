@@ -1,5 +1,7 @@
 // Contact
 
+@import '_mixins';
+
 body[data-controller="contact"] {
   @media only screen and (max-width: 767px) {
     main > h1 {

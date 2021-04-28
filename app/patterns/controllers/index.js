@@ -9,5 +9,11 @@ module.exports = {
 
 // default action
 function handler() {
-  return
+  return {
+    include: {
+      screens: {
+        route: '/_screens/action/featured'
+      }
+    }
+  }
 }

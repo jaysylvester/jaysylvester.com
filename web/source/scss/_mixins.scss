@@ -18,3 +18,25 @@
     }
   }
 }
+
+// Preserve original color values
+@function hsl($h, $s, $l) {
+  @return unquote('hsl(#{$h},#{$s},#{$l})');
+}
+
+@function hsla($h, $s, $l, $a) {
+  @return unquote('hsla(#{$h},#{$s},#{$l},#{$a})');
+}
+
+// Use HSB values provided by apps like Sketch and Photoshop and 
+// convert them into HSL, because HSL (native CSS) and HSB aren't 
+// interchangeable.
+@function hsb($h-hsb, $s-hsb, $b-hsb, $a: 1) {
+  @if $b-hsb == 0 {
+    @return unquote('hsla(0, 0, 0, $a)');
+  } @else {
+    $l-hsl: ($b-hsb/2) * (2 - ($s-hsb/100));
+    $s-hsl: ($b-hsb * $s-hsb) / if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2);
+    @return unquote('hsla($h-hsb, $s-hsl, $l-hsl, $a)');
+  }
+}

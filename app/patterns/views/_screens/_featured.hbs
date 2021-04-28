@@ -1,0 +1,16 @@
+<section class="screens featured">
+  <figure role="group" class="screens">
+    <section>
+      {{#each screens}}
+        <figure>
+          <a class="new-tab" href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/screens/{{url}}" target="_blank" title="Open this image in a new tab">
+            <noscript>
+              <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+            </noscript>
+            <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+          </a>
+        </figure>
+      {{/each}}
+    </section>
+  </figure>
+</section>

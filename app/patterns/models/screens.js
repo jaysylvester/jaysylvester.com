@@ -4,6 +4,7 @@
 
 module.exports = {
   companyScreens  : companyScreens,
+  featuredScreens : featuredScreens,
   screens         : screens
 }
 
@@ -36,6 +37,21 @@ async function companyScreens(company) {
       }
     })
     return screens
+  } finally {
+    client.release()
+  }
+}
+
+
+async function featuredScreens() {
+  const client = await app.toolbox.dbPool.connect()
+
+  try {
+    const result = await client.query({
+      name: 'featured_screens',
+      text: 'select id, company, url, alt, category, sort from screens where featured = true order by sort asc;'
+    })
+    return result.rows
   } finally {
     client.release()
   }
