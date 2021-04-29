@@ -41,15 +41,67 @@ body[data-controller="index"] {
   }
 
   section.endorsements {
-    margin-top: 4rem;
+    background: hsl(175,55%,70%);
+  }
 
-    nav.more {
-      margin-top: 4rem;
+  blockquote {
+
+    p {
+      margin: 0;
+      padding: 2rem 3rem;
+      font-family: Raleway, sans-serif;
+      font-weight: 300;
+      background: hsl(175,100%,95%);
+      border-radius: 1rem;
     }
   }
 
-  article.endorsement {
-    margin: 2rem 0;
+  blockquote {
+    position: relative;
+    padding: 2rem 2.5rem 4rem;
+  
+    &:before {
+      content: '“'
+    }
+    &:after {
+      content: '”'
+    }
+  
+    &:before,
+    &:after {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      height: 3rem;
+      font-family: Raleway, sans-serif;
+      font-weight: 800;
+      font-size: 6.4rem;
+      color: white;
+      text-shadow: 0 2px 4px hsl(175,22%,55%);
+    }
+  
+    &:before {
+      top: 0.8rem;
+      left: 1.4rem;
+    }
+  
+    &:after {
+      right: 1.4rem;
+      bottom: 3rem;
+    }
+  
+    p {
+      position: relative;
+      z-index: 1;
+      font-size: 1.6rem;
+      margin: 0;
+      padding: 2rem 3rem;
+      font-family: Raleway, sans-serif;
+      font-weight: 400;
+      color: #444;
+      background: hsl(175,100%,95%);
+      border-radius: 1rem;
+    }
   }
 
   @media only screen and (min-width: 768px) {
@@ -64,8 +116,9 @@ body[data-controller="index"] {
       }
     }
 
-    nav.case-studies {
-      padding-bottom: 5rem;
+    section.intro,
+    section.endorsements {
+      background: none;
     }
     
     section.endorsements {
@@ -81,7 +134,7 @@ body[data-controller="index"] {
       }
     }
 
-    article.endorsement {
+    blockquote {
       flex: 0 0 48%;
     }
   }
