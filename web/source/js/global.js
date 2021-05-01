@@ -15,28 +15,39 @@ JAY.global = ( function () {
 
       window.addEventListener('scroll', function () {
         if ( !body.classList.contains('hidden-header') && bodyOffset > body.getBoundingClientRect().top && Math.abs(body.getBoundingClientRect().top) > header.getBoundingClientRect().height ) {
+          setTimeout( () => {
+            body.classList.remove('fixed-header') // Matches transition time in global.js
+          }, 300)
           body.classList.add('hidden-header')
         // The minus 10 pixels is to keep the header from popping in with only slight movements (happens frequently when using touchscreens and touch input devices)
         // The second half of the statement deals with Safari's bounceback when you scroll past the top of the page
         } else if ( body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
           body.classList.remove('hidden-header')
+          if ( bodyOffset < -110 ) {
+            body.classList.add('fixed-header')
+          }
         }
 
         bodyOffset = body.getBoundingClientRect().top
+
+        if ( bodyOffset === 0 ) {
+          body.classList.remove('fixed-header')
+        }
       })
     },
 
     // Lazy load images
     imageLoad: function () {
       const load = function () {
-        const images = document.querySelectorAll('img[data-src]:not(.loaded)')
+        const images = document.querySelectorAll('img[data-src]:not(.loaded)'),
+              mobile = document.body.clientWidth < 768
         
         if ( images.length ) {
           images.forEach( function (image) {
             // Make sure all images have an explicit width or height set in CSS for best results
             let dimension
             // Default to width on mobile since most images are set to 100% width
-            if ( document.body.clientWidth < 768 ) {
+            if ( mobile ) {
               dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
             // Default to height on larger devices
             } else {
@@ -47,7 +58,7 @@ JAY.global = ( function () {
             if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
               image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
               image.classList.add('loaded')
-              if ( image.parentNode.parentNode.tagName === 'FIGURE' ) {
+              if ( !mobile ) {
                 methods.imageZoom(image)
               }
             }

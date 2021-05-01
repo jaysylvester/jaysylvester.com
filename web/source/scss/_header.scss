@@ -8,7 +8,7 @@ header {
   font-family: Raleway, sans-serif;
   font-size: 1.8rem;
   font-weight: 500;
-  background: hsl(207,54%,98%);
+  background: white;
 
   h1 {
     padding: 1.4rem;
@@ -87,17 +87,17 @@ header nav li a:hover:after {
   header {
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 calc((100% - 140rem) / 2);
+    padding: 0;
     font-size: 1.6rem;
 
     h1 {
-      padding: 3.2rem 4rem;
+      padding: 3rem 4rem;
     }
 
     nav {
       ul {
         max-width: none;
-        margin: 1.8rem 2.4rem 0;
+        margin: 1.8rem 2.4rem 0 0;
 
         li {
           margin: 0;
@@ -112,12 +112,25 @@ header nav li a:hover:after {
 
   html.js {
     header {
-      position: fixed;
+      position: absolute;
+      top: 0;
       z-index: 500;
-      transition: margin 0.3s;
+      backdrop-filter: blur(1rem);
+      transition: top 0.3s, background 0.3s; // Matches class change delay in JAY.global.header
+    }
+    body.fixed-header header {
+      position: fixed;
+      top: 0;
+      background: hsla(175,55%,70%,0.75);
     }
     body.hidden-header header {
-      margin-top: -11.5rem; // Header height
+      top: -11rem; // Header height
     }
+  }
+}
+
+@media only screen and (min-width: 1680px) {
+  header {
+    padding: 0 calc((100% - 168rem) / 2);
   }
 }

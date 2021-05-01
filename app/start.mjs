@@ -28,9 +28,9 @@ app.cacheBuster = {
 app.toolbox = {
   helpers: helpers,
   // Third party modules
-  mail:   nodemailer.createTransport(app.config.mail),
-  moment: moment,
-  pg:     pg
+  mail:    nodemailer.createTransport(app.config.mail),
+  moment:  moment,
+  pg:      pg
 }
 
 // Overwrite pg's default date handler to convert to GMT

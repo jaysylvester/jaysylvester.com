@@ -1,7 +1,11 @@
 @import '_mixins';
 
 body > footer {
-  padding: 2rem 2rem 3rem; // Extra bottom padding for iPhone swipe-up indicator
+  padding: 2rem;
+  // Extra bottom padding for iPhone swipe-up indicator
+  @media (hover: none) {
+    padding-bottom: 4rem;
+  }
   font-family: Raleway, sans-serif;
   font-size: 1.4rem;
   color: white;

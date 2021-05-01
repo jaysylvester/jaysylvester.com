@@ -73,32 +73,11 @@ main {
   flex: 1 1 auto;
   color: black;
 
-  h1 {
+  h1, h2 {
     padding: 3rem 2rem 2rem;
     font-size: 3.2rem;
-    color: hsl(176,33%,38%);
+    color: hsl(176,53%,37%);
     text-align: center;
-  }
-
-  h2 {
-    margin: 5rem 0 1rem;
-    font-size: 2rem;
-    text-align: center;
-  }
-
-  h3 {
-    margin: 3rem 0 0.5rem;
-    font-size: 1.8rem;
-  }
-}
-
-main {
-  a {
-    font-weight: 600;
-
-    &:hover {
-      text-decoration: none;
-    }
   }
 }
 
@@ -240,38 +219,22 @@ a.new-tab {
 
 // 768px and up
 @media only screen and (min-width: 768px) {
-  body {
-    font-size: 1.8rem;
-  }
-
   main {
-    > h1 {
-      margin: 4rem auto 2rem;
-    }
-
-    > p {
-      max-width: 64rem;
-      margin-right: auto;
-      margin-left: auto;
-      font-size: 2rem;
+    h1, h2 {
+      padding-right: 4rem;
+      padding-left: 4rem;
+      text-align: left;
     }
   }
-
   html.js {
     main {
-      padding-top: 11.5rem !important;
+      padding-top: 11rem;
     }
   }
 }
 
 // 1024px and up
 @media only screen and (min-width: 1024px) {
-  h1, h2 {
-    br {
-      display: none;
-    }
-  }
-
   h3 {
     margin: 4rem 0 1rem;
   }
@@ -282,24 +245,24 @@ a.new-tab {
   }
 
   main {
-    width: 96rem;
+    max-width: 128rem;
     margin: auto;
     padding-left: 0;
     padding-right: 0;
+
+    h1 {
+      font-size: 4.2rem;
+    }
 
     > * {
       margin-right: 0;
       margin-left: 0;
     }
-    
-    > h1 {
-      margin: 6rem auto 2rem;
-      padding: 0;
-      font-size: 2.2rem;
-    }
+  }
+}
 
-    > p {
-      max-width: 80rem;
-    }
+@media only screen and (min-width: 1680px) {
+  html.js main {
+    padding-top: 16rem;
   }
 }

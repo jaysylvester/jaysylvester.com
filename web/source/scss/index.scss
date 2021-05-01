@@ -6,12 +6,14 @@ body[data-controller="index"] {
   background: hsl(175,55%,76%);
 
   header {
-    background: none;
+    background: hsl(175,55%,76%);
   }
 
-  main h1 {
-    color: white;
-    text-shadow: 0 2px 4px hsl(175,22%,55%);
+  main {
+    h1, h2 {
+      color: white;
+      text-shadow: 0 2px 4px hsl(175,22%,55%);
+    }
   }
 
   section.intro {
@@ -30,7 +32,7 @@ body[data-controller="index"] {
     }
   }
 
-  section.case-studies h1 {
+  section.case-studies h2 {
     padding-bottom: 0;
   }
 
@@ -42,18 +44,6 @@ body[data-controller="index"] {
 
   section.endorsements {
     background: hsl(175,55%,70%);
-  }
-
-  blockquote {
-
-    p {
-      margin: 0;
-      padding: 2rem 3rem;
-      font-family: Raleway, sans-serif;
-      font-weight: 300;
-      background: hsl(175,100%,95%);
-      border-radius: 1rem;
-    }
   }
 
   blockquote {
@@ -105,14 +95,12 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 768px) {
-    main {
-      > h1 {
-        padding: 5rem 1rem 2rem;
-      }
+    main > section {
+      margin-bottom: 4rem;
 
-      > p {
-        max-width: none;
-        padding: 0 calc((100% - 66rem) / 2) 3rem;
+      nav {
+        justify-content: flex-start;
+        padding: 2rem 4rem;
       }
     }
 
@@ -120,43 +108,28 @@ body[data-controller="index"] {
     section.endorsements {
       background: none;
     }
+
+    section.intro {
+      p {
+        max-width: 90rem;
+        margin: 0;
+        padding-right: 4rem;
+        padding-left: 4rem;
+        width: auto;
+        text-align: left;
+      }
+    }
     
-    section.endorsements {
+    section.quotes {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
-
-      h2 {
-        flex-basis: 100%;
-        margin: 7rem 0 2rem;
-        padding: 0;
-      }
+      margin: 0 2.4rem;
     }
 
     blockquote {
-      flex: 0 0 48%;
-    }
-  }
-
-  @media only screen and (min-width: 1024px) {
-    main {
-      width: 100%;
-
-      > h1 {
-        margin: 0;
-        padding-top: 6rem;
-      }
-    }
-
-    nav.case-studies {
-      padding-bottom: 6rem;
-    }
-
-    section.endorsements {
-      width: 96rem;
-      margin-right: auto;
-      margin-left: auto;
+      flex: 0 0 50%;
     }
   }
 }
