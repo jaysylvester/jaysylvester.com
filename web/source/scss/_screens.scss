@@ -39,7 +39,7 @@ section.screens {
       position: relative;
 
       &:last-child {
-        margin-right: 1rem;
+        margin-right: 0;
       }
 
       img {
@@ -93,17 +93,23 @@ section.screens {
       }
 
       figure {
-        flex-basis: 48rem;
-        height: 36rem;
+        flex-basis: 46rem;
+        height: 34.6rem;
         margin-right: 4rem;
       }
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    figure[role="group"] {
+      padding: 0;
     }
   }
 
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
     figure[role="group"] {
-      padding: 0 2rem;
+      padding: 0;
 
       section {
         flex-wrap: wrap;
@@ -116,9 +122,9 @@ section.screens {
       }
 
       figure {
-        flex-basis: 22%;
-        height: auto;
-        margin: 0 2rem 2rem 0;
+        flex-basis: 23.5%;
+        height: 15.4rem;
+        margin: 0 2% 2rem 0;
 
         &:first-child,
         &:nth-child(5n) {
@@ -132,9 +138,19 @@ section.screens {
     }
   }
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (min-width: 1024px) {
     figure[role="group"] {
-      padding: 0;
+      figure {
+        height: 16.6rem;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    figure[role="group"] {
+      figure {
+        height: 21.2rem;
+      }
     }
   }
 }

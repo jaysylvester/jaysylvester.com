@@ -1,33 +1,35 @@
 JAY.global = ( function () {
   'use strict'
 
-  var methods = {
+  const methods = {
 
     init: function () {
-      methods.header()
+      methods.fixedHeader()
       methods.imageLoad()
     },
 
-    header: function () {
-      var body        = document.querySelector('body'),
-          bodyOffset  = 0,
-          header      = document.querySelector('body > header')
+    fixedHeader: function () {
+      let body       = document.querySelector('body'),
+          bodyOffset = 0,
+          header     = document.querySelector('body > header')
 
-      window.addEventListener('scroll', function () {
+      window.addEventListener('scroll', () => {
+        // The second half of each of the following IF statements deals with Safari's bounceback when
+        // you scroll past the top of the page
+
+        // scroll down
         if ( !body.classList.contains('hidden-header') && bodyOffset > body.getBoundingClientRect().top && Math.abs(body.getBoundingClientRect().top) > header.getBoundingClientRect().height ) {
-          setTimeout( () => {
-            body.classList.remove('fixed-header') // Matches transition time in global.js
-          }, 300)
           body.classList.add('hidden-header')
-        // The minus 10 pixels is to keep the header from popping in with only slight movements (happens frequently when using touchscreens and touch input devices)
-        // The second half of the statement deals with Safari's bounceback when you scroll past the top of the page
-        } else if ( body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
+          body.classList.remove('fixed-header')
+        // scroll up
+        // The minus 10 pixels is to keep the header from popping in with only slight movements, which
+        // happens frequently when using touchscreens and touch input devices.
+        } else if ( !body.classList.contains('fixed-header') && body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
           body.classList.remove('hidden-header')
           if ( bodyOffset < -110 ) {
             body.classList.add('fixed-header')
           }
         }
-
         bodyOffset = body.getBoundingClientRect().top
 
         if ( bodyOffset === 0 ) {
@@ -74,7 +76,7 @@ JAY.global = ( function () {
     },
 
     imageZoom: function (image) {
-      var mask    = document.getElementById('mask') || document.createElement('div'),
+      let mask    = document.getElementById('mask') || document.createElement('div'),
           anchor  = image.parentNode,
           img     = document.createElement('img'),
           src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0'),
@@ -158,49 +160,11 @@ JAY.global = ( function () {
           window.removeEventListener('keydown', escape)
         }
       })
-    },
-
-    // ajaxFormBinding: function(options) {
-    //   var form = document.querySelector(options.formSelector),
-    //       format = options.format || 'json',
-    //       type = options.type || 'direct'
-
-    //   form.addEventListener('submit', function (e) {
-    //     var request = new XMLHttpRequest(),
-    //         formData = new FormData(form),
-    //         data
-
-    //     e.preventDefault()
-
-    //     request.open('POST', form.action + '/format/' + format + '/type/' + type, true)
-    //     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-    //     // request.setRequestHeader('Content-Type', 'application/json')
-    //     request.send(formData)
-
-    //     request.onreadystatechange = function () {
-    //       console.log('readyState: ' + request.readyState)
-    //       console.log('status: ' + request.status)
-    //     }
-
-    //     request.onload = function () {
-    //       if ( request.status >= 200 && request.status < 400 ) {
-    //         data = JSON.parse(request.responseText)
-    //         console.log(data)
-    //       } else {
-    //         // We reached our target server, but it returned an error
-    //       }
-    //     }
-
-    //     request.onerror = function () {
-    //       // There was a connection error of some sort
-    //     }
-    //   })
-    // }
+    }
   }
 
   //  Public methods
   return {
-    // ajaxFormBinding: methods.ajaxFormBinding,
     init:       methods.init,
     imageZoom:  methods.imageZoom
   }
