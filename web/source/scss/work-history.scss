@@ -8,7 +8,6 @@ body[data-controller="work-history"] {
   }
 
   section.competencies {
-    @include separator;
     margin-top: 4rem;
 
     h2 {
@@ -17,7 +16,6 @@ body[data-controller="work-history"] {
   }
 
   section.employer {
-    @include separator;
     margin: 4rem 0;
     padding-top: 4rem;
 

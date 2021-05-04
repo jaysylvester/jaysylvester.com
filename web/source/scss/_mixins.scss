@@ -1,24 +1,5 @@
 // Mixins
 
-@mixin separator {
-  position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    display: block;
-    width: 100%;
-    height: 1px;
-    background-image: linear-gradient(-90deg, rgba(217,217,217,0.00) 0%, #DCDDD8 53%, rgba(216,216,216,0.00) 100%);
-
-    @media only screen and (min-width: 1024px) {
-      max-width: 80rem;
-      left: 8rem;
-    }
-  }
-}
-
 // Preserve original color values
 @function hsl($h, $s, $l) {
   @return unquote('hsl(#{$h},#{$s},#{$l})');

@@ -4,8 +4,11 @@ JAY.global = ( function () {
   const methods = {
 
     init: function () {
-      methods.fixedHeader()
-      methods.imageLoad()
+      let mobile = document.body.clientWidth < 768
+      if ( !mobile ) {
+        methods.fixedHeader()
+      }
+      methods.imageLoad(mobile)
     },
 
     fixedHeader: function () {
@@ -39,10 +42,9 @@ JAY.global = ( function () {
     },
 
     // Lazy load images
-    imageLoad: function () {
+    imageLoad: function (mobile) {
       const load = function () {
-        const images = document.querySelectorAll('img[data-src]:not(.loaded)'),
-              mobile = document.body.clientWidth < 768
+        const images = document.querySelectorAll('img[data-src]:not(.loaded)')
         
         if ( images.length ) {
           images.forEach( function (image) {

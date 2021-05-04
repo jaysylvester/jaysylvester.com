@@ -12,7 +12,7 @@ body[data-controller="index"] {
   main {
     h1, h2 {
       color: white;
-      text-shadow: 0 2px 4px hsl(175,22%,55%);
+      text-shadow: 0 1px 3px hsl(175,42%,45%);
     }
   }
 
@@ -26,12 +26,6 @@ body[data-controller="index"] {
 
   section.case-studies h2 {
     padding-bottom: 0;
-  }
-
-  section nav {
-    display: flex;
-    justify-content: center;
-    padding: 0 2rem 4rem;
   }
 
   section.endorsements {
@@ -76,7 +70,7 @@ body[data-controller="index"] {
       position: relative;
       z-index: 1;
       margin: 0;
-      padding: 2rem 3rem;
+      padding: 3rem 4rem;
       font-family: Raleway, sans-serif;
       color: #444;
       background: hsl(175,100%,95%);
@@ -94,20 +88,8 @@ body[data-controller="index"] {
       }
     }
 
-    section.intro,
     section.endorsements {
       background: none;
-    }
-
-    section.intro {
-      p {
-        max-width: 90rem;
-        margin: 0;
-        padding-right: 4rem;
-        padding-left: 4rem;
-        width: auto;
-        text-align: left;
-      }
     }
 
     section.screens {
@@ -130,13 +112,21 @@ body[data-controller="index"] {
       flex: 0 0 50%;
     }
   }
+
+  @media only screen and (min-width: 1440px) {
+    main > section {
+      margin-bottom: 8rem;
+    }
+  }
 }
 
-html.js body[data-controller="index"] {
-  header {
-    background: hsla(175,55%,70%,0);
-  }
-  &.fixed-header header {
-    background: hsla(175,55%,70%,0.75);
+@media only screen and (min-width: 768px) {
+  html.js body[data-controller="index"] {
+    header {
+      background: hsla(175,55%,70%,0);
+    }
+    &.fixed-header header {
+      background: hsla(175,55%,65%,0.75);
+    }
   }
 }

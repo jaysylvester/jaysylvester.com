@@ -127,8 +127,8 @@ header nav li a:hover:after {
   }
 }
 
-@media only screen and (min-width: 1680px) {
+@media only screen and (min-width: 1600px) {
   header {
-    padding: 0 calc((100% - 168rem) / 2);
+    padding: 0 calc((100% - 160rem) / 2);
   }
 }

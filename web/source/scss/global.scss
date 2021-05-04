@@ -31,6 +31,12 @@ body {
     width: 100%;
   }
 }
+main nav {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 2rem 4rem;
+}
 
 a.primary-action,
 li.primary-action a,
@@ -83,10 +89,15 @@ main {
 }
 
 section.intro {
+  padding: 4rem 2rem;
+  background: hsl(207,54%,98%);
+
+  h1 {
+    padding: 0;
+  }
+  
   p {
-    width: 90%;
-    margin: 0 auto;
-    padding: 0 2rem 3rem;
+    margin: 2rem 0 1rem;
     font-family: 'Avenir Next', Lato, sans-serif;
     font-size: 2.4rem;
     font-weight: 500;
@@ -246,6 +257,14 @@ a.new-tab {
       padding-top: 11rem;
     }
   }
+
+  section.intro {
+    padding: 4rem;
+
+    p {
+      text-align: left;
+    }
+  }
 }
 
 // 1024px and up
@@ -262,21 +281,17 @@ a.new-tab {
   main {
     max-width: 128rem;
     margin: auto;
-    padding-left: 0;
-    padding-right: 0;
 
     h1 {
       font-size: 4.2rem;
     }
-
-    > * {
-      margin-right: 0;
-      margin-left: 0;
-    }
   }
 }
 
-@media only screen and (min-width: 1680px) {
+@media only screen and (min-width: 1440px) {
+  section.intro {
+    padding: 6rem;
+  }
   html.js main {
     padding-top: 16rem;
   }

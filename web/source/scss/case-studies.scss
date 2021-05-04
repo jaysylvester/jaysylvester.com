@@ -53,13 +53,11 @@
     font-size: 2rem;
     color: #4D4D4D;
     text-align: center;
-
-    @include separator;
   }
 
   p.summary {
-    margin-bottom: 3rem;
-    line-height: 1.6;
+    margin: 3rem 2rem;
+    font-family: Raleway, Lato, sans-serif;
     text-align: center;
   }
 
@@ -83,21 +81,10 @@
     h1 {
       font-size: 2.4rem;
     }
-    
-    ul.attributes {
-      margin: 2rem 0 3rem;
-    }
-
-    h2.tagline {
-      max-width: 50rem;
-      margin-bottom: 2rem;
-      padding-top: 3rem;
-      font-size: 2.2rem;
-    }
 
     p.summary {
-      max-width: 66rem;
-      margin: 0 auto 6rem;
+      max-width: 56rem;
+      margin: 3rem auto 4rem;
       font-size: 1.8rem;
     }
 
@@ -125,33 +112,6 @@
       }
     }
 
-    ul.attributes {
-      flex-direction: row;
-      justify-content: center;
-      margin-top: 0.2rem;
-
-      li {
-        &::before {
-          content: '•';
-          display: inline-block;
-          padding: 0 0.6rem 0 1rem;
-          color: #cccccc;
-        }
-
-        &:first-child {
-          &::before {
-            display: none;
-          }
-        }
-      }
-    }
-
-    h2.tagline {
-      max-width: none;
-      padding-right: 0;
-      padding-left: 0;
-    }
-
     section.devices img {
       height: 32rem;
     }
@@ -168,21 +128,8 @@ body[data-controller="case-studies"][data-view="case-studies"] {
     }
   }
 
-  .case-study {
-    margin: 4rem 0;
-    padding-top: 4rem;
-    @include separator;
-    
-    h1,
-    h2.tagline,
-    p.summary,
-    nav.actions li.more {
-      display: none;
-    }
-
-    ul.attributes {
-      margin-top: 1rem;
-    }
+  article.case-study {
+    margin: 6rem 0;
 
     section.devices {
       margin-bottom: 2rem;
@@ -190,27 +137,44 @@ body[data-controller="case-studies"][data-view="case-studies"] {
     }
 
     @media only screen and (min-width: 768px) {
-      margin: 6rem 0;
-      padding-top: 6rem;
+      margin-bottom: 10rem;
 
       &.OncoTracker img.logo {
         max-height: 4rem;
-      }
-
-      ul.attributes {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-      }
-
-      p.summary {
-        display: block;
       }
 
       section.devices {
         margin-bottom: 4rem;
 
         img {
-          height: 24rem;
+          height: 28rem;
+        }
+      }
+    }
+
+    @media only screen and (min-width: 1024px) {
+      display: grid;
+      grid-template: 4rem 24rem 10rem / 36% 64%;
+      margin-left: 4rem;
+      margin-right: 4rem;
+
+      img.logo {
+        max-height: 4rem;
+      }
+
+      p.summary {
+        margin: 0;
+        text-align: left;
+      }
+
+      section.devices {
+        grid-column: 2;
+        grid-row: 1/4;
+        margin: 0;
+
+        img {
+          height: auto;
+          width: 100%;
         }
       }
     }
