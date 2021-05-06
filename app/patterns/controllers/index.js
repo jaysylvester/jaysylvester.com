@@ -12,7 +12,8 @@ function handler() {
   return {
     include: {
       screens: {
-        route: '/_screens/action/featured'
+        controller: '_screens',
+        action: 'featured'
       }
     }
   }

@@ -1,0 +1,233 @@
+// case study
+@import '_mixins';
+
+body[data-controller="case-study"] {
+  main h1 {
+    span.title {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+  }
+
+  ul.attributes {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 2rem 0 0;
+    font-family: Avenir Next, Lato, sans-serif;
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: hsl(176,33%,20%);
+    text-align: center;
+    line-height: 1.4;
+
+    li {
+      padding: 0.2rem 0;
+    }
+  }
+
+  h2.tagline {
+    padding: 0 2rem;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: hsl(0,0%,20%);
+    text-align: center;
+  }
+
+  p.summary {
+    margin: 3rem 2rem;
+    font-family: Raleway, Lato, sans-serif;
+    text-align: center;
+  }
+
+  section.devices {
+    margin-bottom: 2rem;
+    overflow-x: hidden;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  section.logo {
+    display: flex;
+    justify-content: center;
+    height: 5rem;
+    margin: 6rem auto 4rem;
+
+    img {
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  section.content {
+    margin: 0 2rem;
+
+    h3 {
+      margin: 4rem 0 2rem;
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+
+    p {
+      margin-bottom: 2.6rem;
+    }
+  }
+
+  section.Linode,
+  section.Vidyo,
+  section.Fitly,
+  section.hibu {
+    section.devices img {
+      width: 142%;
+      margin-left: -21%;
+    }
+  }
+
+  section.Linode {
+    figure[role="group"].callout {
+      figure {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  section.hibu {
+    figure.callout.concept,
+    figure.callout.prototype {
+      section {
+        display: flex;
+        justify-content: space-between;
+
+        figure:nth-child(1) {
+          flex: 0 0 35.3%;
+          margin: 0;
+        }
+        figure:nth-child(2) {
+          flex: 0 0 60%;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  section.Fitly {
+    figure.callout.pricing-cta {
+      figure:nth-child(1) {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+      figure:nth-child(2) {
+        margin: 0 auto 2rem;
+      }
+    }
+  }
+
+  // No borders around mobile screens
+  section.Vidyo {
+    section.screens figure[role="group"] {
+      &:nth-child(4) {
+        figure {
+          border: none;
+        }
+      }
+    }
+  }
+
+  section.screens.group {
+    padding: 3rem 0 1rem;
+    background: hsl(175,55%,76%);
+    
+    figure[role="group"] figure {
+      border: 0.1rem solid hsl(175,55%,66%);
+    }
+  }
+
+  @media only screen and (min-width: 768px) {
+    section.devices {
+      width: auto;
+      margin-bottom: 6rem;
+      margin-left: 0;
+    }
+
+    section.content {
+      max-width: 70rem;
+      margin: auto;
+
+      h2 {
+        margin: 6rem 0 2rem;
+      }
+    }
+
+    section.Linode {
+      figure[role="group"]:not(.screens) {
+        section {
+          display: flex;
+          justify-content: space-between;
+
+          figure {
+            img {
+              height: 24rem;
+            }
+          }
+        }
+
+        &.usability-testing {
+          img {
+            height: 12.8rem;
+          }
+        }
+      }
+
+      figure[role="group"].callout {
+        figure {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    figure.callout {
+      // Fitly
+      &.zip-code {
+        img {
+          height: 30rem;
+        }
+      }
+
+      &.pricing-cta {
+        figure {
+          margin-bottom: 2rem;
+        }
+
+        img {
+          height: 24rem;
+        }
+      }
+    }
+
+    section.hibu {
+      figure.callout.concept,
+      figure.callout.prototype {
+        section {
+          justify-content: center;
+
+          figure:nth-child(1),
+          figure:nth-child(2) {
+            flex-basis: auto;
+            margin: 0 2rem;
+          }
+        }
+      }
+    }
+
+    main nav {
+      position: initial;
+      justify-content: center;
+      margin: 6rem 0;
+    }
+  }
+}

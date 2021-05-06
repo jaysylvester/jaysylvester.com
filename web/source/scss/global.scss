@@ -31,16 +31,27 @@ body {
     width: 100%;
   }
 }
-main nav {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 0 2rem 4rem;
+
+main {
+  flex: 1 1 auto;
+  color: black;
+
+  h1, h2 {
+    padding: 3rem 2rem 2rem;
+    font-size: 3.2rem;
+    color: hsl(176,53%,37%);
+    text-align: center;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 2rem 4rem;
+  }
 }
 
-a.primary-action,
-li.primary-action a,
-li.primary-action input {
+a.primary-action {
   display: inline-block;
   min-width: 26rem;
   padding: 1.6rem 4rem;
@@ -72,19 +83,6 @@ img[data-src]:not(.loaded) {
   }
   @media only screen and (min-width: 768px) {
     width: 100%;
-  }
-}
-
-// Main content
-main {
-  flex: 1 1 auto;
-  color: black;
-
-  h1, h2 {
-    padding: 3rem 2rem 2rem;
-    font-size: 3.2rem;
-    color: hsl(176,53%,37%);
-    text-align: center;
   }
 }
 
@@ -251,7 +249,12 @@ a.new-tab {
       padding-left: 4rem;
       text-align: left;
     }
+    nav {
+      justify-content: flex-start;
+      padding: 2rem 4rem;
+    }
   }
+
   html.js {
     main {
       padding-top: 11rem;
@@ -273,8 +276,7 @@ a.new-tab {
     margin: 4rem 0 1rem;
   }
 
-  a.primary-action,
-  li.primary-action a {
+  a.primary-action {
     padding: 1.4rem 2.4rem;
   }
 
@@ -282,8 +284,19 @@ a.new-tab {
     max-width: 128rem;
     margin: auto;
 
+    > section {
+      position: relative;
+    }
+
     h1 {
       font-size: 4.2rem;
+    }
+
+    nav {
+      position: absolute;
+      right: 4rem;
+      top: 3rem;
+      padding: 0;
     }
   }
 }

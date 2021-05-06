@@ -20,7 +20,7 @@ async function handler(params) {
 
 async function featured() {
   return {
-    view: '_featured',
+    view: '_group',
     content: {
       screens: await app.models.screens.featuredScreens()
     }

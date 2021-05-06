@@ -1,23 +1,21 @@
 <section class="case-study {{company_url}}">
   <section class="intro">
-    <h1><span>Case Study:</span> {{{title}}}</h1>
-    <p class="summary">{{summary}}</p>
+    <h1>Case Study: <span class="title">{{{title}}}</span></h1>
+    <ul class="attributes">
+      <li class="vertical">
+        {{{vertical}}}
+      </li>
+      <li class="platform">
+        {{{platform}}}
+      </li>
+      <li class="expertise">
+        {{{expertise}}}
+      </li>
+    </ul>
   </section>
   <section class="logo">
-    <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
+    <img src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
   </section>
-  <h1><span>Case Study:</span> {{{title}}}</h1>
-  <ul class="attributes">
-    <li class="vertical">
-      {{{vertical}}}
-    </li>
-    <li class="platform">
-      {{{platform}}}
-    </li>
-    <li class="expertise">
-      {{{expertise}}}
-    </li>
-  </ul>
   <h2 class="tagline">{{tagline}}</h2>
   <p class="summary">{{summary}}</p>
   <section class="devices">
@@ -26,11 +24,12 @@
     </noscript>
     <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
   </section>
+  {{> screenGroup this}}
   <section class="content">
     {{{content}}}
   </section>
-</section>
 {{{include.screens}}}
-<nav class="actions">
+</section>
+<nav>
   <a class="primary-action" href="/case-studies">Read more case studies</a>
 </nav>

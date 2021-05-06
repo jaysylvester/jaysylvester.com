@@ -28,8 +28,16 @@ body[data-controller="index"] {
     padding-bottom: 0;
   }
 
+  section.screens {
+    figure[role="group"] figure {
+      height: 22.5rem;
+      border: 0.1rem solid hsl(175,55%,66%);
+    }
+  }
+
   section.endorsements {
     background: hsl(175,55%,70%);
+    padding-bottom: 8rem;
   }
 
   blockquote {
@@ -70,7 +78,7 @@ body[data-controller="index"] {
       position: relative;
       z-index: 1;
       margin: 0;
-      padding: 3rem 4rem;
+      padding: 2.2rem 3.2rem;
       font-family: Raleway, sans-serif;
       color: #444;
       background: hsl(175,100%,95%);
@@ -79,22 +87,19 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 768px) {
-    main > section {
-      margin-bottom: 4rem;
-
-      nav {
-        justify-content: flex-start;
-        padding: 2rem 4rem;
-      }
-    }
-
-    section.endorsements {
-      background: none;
+    section.case-studies{
+      margin: 2rem 0 4rem;
     }
 
     section.screens {
-      figure[role="group"] section {
-        padding-bottom: 2rem;
+      figure[role="group"] {
+        section {
+          padding-bottom: 2rem;
+        }
+        figure {
+          height: 34.6rem;
+          border: 0.1rem solid hsl(175,55%,66%);
+        }
       }
     }
     
@@ -108,8 +113,30 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 1024px) {
+    section.case-studies {
+      margin: 6rem 0;
+    }
+
+    section.screens figure[role="group"] {
+      figure {
+        height: 16.6rem;
+      }
+    }
+
+    section.endorsements {
+      background: none;
+    }
+
     blockquote {
       flex: 0 0 50%;
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    section.screens figure[role="group"] {
+      figure {
+        height: 21.2rem;
+      }
     }
   }
 

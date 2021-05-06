@@ -12,14 +12,13 @@ section.screens {
   }
 
   figure[role="group"] {
-    margin: 4rem auto;
+    margin: 6rem auto;
     
     section {
       display: flex;
       overflow-x: scroll;
       -webkit-overflow-scrolling: touch;
-      margin-bottom: 1rem;
-      padding: 0 2rem 1.4rem; // Maintain bottom padding for scrollbar visibility
+      padding: 0 2rem 2rem; // Maintain bottom padding for scrollbar visibility
 
       &::after {
         content: '';
@@ -31,10 +30,9 @@ section.screens {
 
     figure {
       flex: 0 0 30rem;
-      height: 22.5rem;
       margin-right: 2rem;
       border-radius: 0.4rem;
-      border: 0.1rem solid ;
+      border: 0.1rem solid hsl(175,25%,90%);
       overflow: hidden;
       position: relative;
 
@@ -56,28 +54,18 @@ section.screens {
       margin-top: 0;
       max-width: none;
     }
-
-    &.Vidyo {
-      &:nth-child(5) figure {
-        border: none;
-      }
-    }
   }
 
-  &.featured {
-    margin: 3rem 0 2.6rem;
+  &.group {
+    margin: 3rem 0 1.6rem;
 
     figure[role="group"] {
       margin: 0 auto;
-    
-      figure {
-        border: 0.1rem solid hsl(175,25%,70%)
-      }
     }
   }
 
   @media only screen and (min-width: 768px) {
-    &.featured {
+    &.group {
       margin: 0;
     }
 
@@ -94,7 +82,6 @@ section.screens {
 
       figure {
         flex-basis: 46rem;
-        height: 34.6rem;
         margin-right: 4rem;
       }
     }
@@ -123,7 +110,6 @@ section.screens {
 
       figure {
         flex-basis: 23.5%;
-        height: 15.4rem;
         margin: 0 2% 2rem 0;
 
         &:first-child,
@@ -134,22 +120,6 @@ section.screens {
         &:nth-child(4n) {
           margin-right: 0;
         }
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1024px) {
-    figure[role="group"] {
-      figure {
-        height: 16.6rem;
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    figure[role="group"] {
-      figure {
-        height: 21.2rem;
       }
     }
   }

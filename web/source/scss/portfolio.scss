@@ -13,6 +13,15 @@ body[data-controller="portfolio"] {
       margin: 0 0 0.8rem 2rem;
     }
   }
+
+  // No borders around mobile screens
+  section.screens figure[role="group"].Vidyo {
+    &:nth-child(5) {
+      figure {
+        border: none;
+      }
+    }
+  }
   
   @media only screen and (min-width: 768px) {
     section.documents p,
