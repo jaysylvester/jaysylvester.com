@@ -19,23 +19,18 @@ body[data-controller="case-studies"] {
     }
   }
 
-  article.case-study {
+  article {
     margin: 6rem 0;
 
     p {
-      margin: 3rem 2rem;
+      margin: 3rem 2rem 1rem;
       font-family: 'Raleway', sans-serif;
       text-align: center;
     }
   }
 
-  nav.actions {
-    display: flex;
-    justify-content: center;
-  }
-
   @media only screen and (min-width: 768px) {
-    article.case-study {
+    article {
       margin-bottom: 10rem;
   
       p {
@@ -53,16 +48,11 @@ body[data-controller="case-studies"] {
         justify-content: left;
       }
     }
-
-    main nav {
-      padding-top: 0;
-    }
   }
 
   @media only screen and (min-width: 1024px) {
-    article.case-study {
-      position: relative;
-      margin: 8rem 0;
+    article {
+      margin: 8rem auto;
 
       nav {
         top: 0;

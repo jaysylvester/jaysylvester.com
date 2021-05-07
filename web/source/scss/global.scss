@@ -36,11 +36,15 @@ main {
   flex: 1 1 auto;
   color: black;
 
-  h1, h2 {
+  h1, h2, h3 {
     padding: 3rem 2rem 2rem;
     font-size: 3.2rem;
     color: hsl(176,53%,37%);
     text-align: center;
+  }
+
+  h2, h3 {
+    font-weight: 700;
   }
   
   nav {
@@ -281,10 +285,11 @@ a.new-tab {
   }
 
   main {
-    max-width: 128rem;
-    margin: auto;
-
-    > section {
+    > section,
+    > article {
+      max-width: 128rem;
+      margin-right: auto;
+      margin-left: auto;
       position: relative;
     }
 

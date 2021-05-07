@@ -19,7 +19,7 @@ body[data-controller="case-study"] {
     font-family: Avenir Next, Lato, sans-serif;
     font-size: 2.4rem;
     font-weight: 500;
-    color: hsl(176,33%,20%);
+    color: hsl(176,33%,30%);
     text-align: center;
     line-height: 1.4;
 
@@ -31,7 +31,6 @@ body[data-controller="case-study"] {
   h2.tagline {
     padding: 0 2rem;
     font-size: 2.4rem;
-    font-weight: 700;
     color: hsl(0,0%,20%);
     text-align: center;
   }
@@ -65,17 +64,20 @@ body[data-controller="case-study"] {
   }
 
   section.content {
-    margin: 0 2rem;
+    margin: 4rem 2rem;
 
     h3 {
       margin: 4rem 0 2rem;
       font-size: 2.4rem;
-      font-weight: 700;
     }
 
     p {
       margin-bottom: 2.6rem;
     }
+  }
+
+  figcaption {
+    display: none;
   }
 
   section.Linode,
@@ -139,7 +141,6 @@ body[data-controller="case-study"] {
   }
 
   section.screens.group {
-    padding: 3rem 0 1rem;
     background: hsl(175,55%,76%);
     
     figure[role="group"] figure {
@@ -148,15 +149,62 @@ body[data-controller="case-study"] {
   }
 
   @media only screen and (min-width: 768px) {
+    main h1 span.title {
+      display: initial;
+    }
+
+    ul.attributes {
+      text-align: left;
+      margin-top: 0.8rem;
+
+      li {
+        display: flex;
+        
+        &:before {
+          content: '•';
+          display: block;
+          padding: 0.6rem 1rem 0 0;
+          color: hsl(175,55%,76%);
+        }
+      }
+    }
+
+    section.logo {
+      height: 5.6rem;
+
+      img {
+        max-width: 50%;
+      }
+    }
+
+    h2.tagline {
+      padding: 0;
+      max-width: 50rem;
+      margin: auto;
+    }
+
+    p.summary {
+      max-width: 64rem;
+      margin: 3rem auto 6rem;
+      font-size: 2rem;
+    }
+
     section.devices {
       width: auto;
-      margin-bottom: 6rem;
+      margin-bottom: 4rem;
       margin-left: 0;
+      padding: 0 4rem;
+
+      img {
+        margin: 0 !important;
+        width: 100% !important;
+      }
     }
 
     section.content {
-      max-width: 70rem;
-      margin: auto;
+      max-width: 66rem;
+      margin-right: auto;
+      margin-left: auto;
 
       h2 {
         margin: 6rem 0 2rem;
@@ -171,14 +219,14 @@ body[data-controller="case-study"] {
 
           figure {
             img {
-              height: 24rem;
+              height: 22.8rem;
             }
           }
         }
 
         &.usability-testing {
           img {
-            height: 12.8rem;
+            height: 12rem;
           }
         }
       }
@@ -228,6 +276,63 @@ body[data-controller="case-study"] {
       position: initial;
       justify-content: center;
       margin: 6rem 0;
+    }
+  }
+
+  @media only screen and (min-width: 840px) {
+    section.screens.group {
+      figure[role="group"] {
+        figure {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    section.case-study {
+      max-width: none;
+    }
+
+    section.intro {
+      max-width: 128rem;
+      margin: auto;
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    section.about {
+      display: grid;
+      grid-template: auto/42% 58%;
+      max-width: 120rem;
+      margin: 6rem auto;
+    }
+
+    h2.tagline {
+      grid-column: 1;
+    }
+
+    p.summary {
+      grid-column: 1;
+    }
+
+    section.devices {
+      grid-row: 1/4;
+      grid-column: 2;
+      padding: 0 0 0 2rem;
+    }
+
+    section.screens.group {
+      figure[role="group"] {
+        section {
+          padding: 3rem;
+        }
+        figure {
+          flex-basis: 28rem;
+          height: 21rem;
+          margin: 0 3rem 0 0;
+        }
+      }
     }
   }
 }

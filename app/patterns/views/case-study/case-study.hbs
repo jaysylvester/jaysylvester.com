@@ -13,22 +13,24 @@
       </li>
     </ul>
   </section>
-  <section class="logo">
-    <img src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
-  </section>
-  <h2 class="tagline">{{tagline}}</h2>
-  <p class="summary">{{summary}}</p>
-  <section class="devices">
-    <noscript>
-      <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-    </noscript>
-    <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+  <section class="about">
+    <section class="logo">
+      <img src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
+    </section>
+    <h2 class="tagline">{{tagline}}</h2>
+    <p class="summary">{{summary}}</p>
+    <section class="devices">
+      <noscript>
+        <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      </noscript>
+      <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+    </section>
   </section>
   {{> screenGroup this}}
   <section class="content">
     {{{content}}}
   </section>
-{{{include.screens}}}
+  {{{include.screens}}}
 </section>
 <nav>
   <a class="primary-action" href="/case-studies">Read more case studies</a>

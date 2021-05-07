@@ -56,7 +56,7 @@ async function caseStudy(company) {
             's.url as screen_url, s.alt, s.sort as screen_sort ' +
             'from case_studies cs ' +
             'join screens s on cs.company_url = s.company ' +
-            'where cs.company_url = $1 and s.featured = true ' +
+            'where cs.company_url = $1 ' +
             'order by s.sort asc, cs.sort asc;',
       values: [ company ]
     })
@@ -64,9 +64,11 @@ async function caseStudy(company) {
     let caseStudy = result.rows[0]
     caseStudy.screens = {}
     result.rows.forEach( function (item) {
-      caseStudy.screens[item.screen_sort] = {
-        url: item.screen_url,
-        alt: item.alt
+      if ( Object.keys(caseStudy.screens).length < 4 ) {
+        caseStudy.screens[item.screen_sort] = {
+          url: item.screen_url,
+          alt: item.alt
+        }
       }
     })
     return caseStudy

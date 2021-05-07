@@ -14,6 +14,10 @@ body[data-controller="index"] {
       color: white;
       text-shadow: 0 1px 3px hsl(175,42%,45%);
     }
+
+    h2 {
+      font-weight: 800;
+    }
   }
 
   section.intro {
@@ -29,6 +33,8 @@ body[data-controller="index"] {
   }
 
   section.screens {
+    margin: 1rem 0 2rem;
+
     figure[role="group"] figure {
       height: 22.5rem;
       border: 0.1rem solid hsl(175,55%,66%);
@@ -88,14 +94,13 @@ body[data-controller="index"] {
 
   @media only screen and (min-width: 768px) {
     section.case-studies{
-      margin: 2rem 0 4rem;
+      margin-bottom: 4rem;
     }
 
     section.screens {
+      margin: 0;
+
       figure[role="group"] {
-        section {
-          padding-bottom: 2rem;
-        }
         figure {
           height: 34.6rem;
           border: 0.1rem solid hsl(175,55%,66%);
@@ -114,7 +119,7 @@ body[data-controller="index"] {
 
   @media only screen and (min-width: 1024px) {
     section.case-studies {
-      margin: 6rem 0;
+      margin: 6rem auto;
     }
 
     section.screens figure[role="group"] {
