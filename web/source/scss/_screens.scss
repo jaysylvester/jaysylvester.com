@@ -16,7 +16,7 @@ section.screens {
       display: flex;
       overflow-x: scroll;
       -webkit-overflow-scrolling: touch;
-      padding: 2rem; // Maintain bottom padding for scrollbar visibility
+      padding: 0 2rem 2rem 2rem; // Maintain bottom padding for scrollbar visibility
 
       &::after {
         content: '';
@@ -66,13 +66,16 @@ section.screens {
     }
 
     figure[role="group"] {
-      margin: 6rem auto;
-    }
-  }
-
-  @media only screen and (min-width: 768px) {
-    figure[role="group"] {
       padding: 0;
+
+      section {
+        padding-right: 4rem;
+        padding-left: 4rem;
+
+        &::after {
+          flex-basis: 4rem;
+        }
+      }
     }
   }
 
@@ -82,6 +85,7 @@ section.screens {
       section {
         flex-wrap: wrap;
         justify-content: center;
+        padding-bottom: 0;
         overflow: visible;
 
         &::after {
@@ -141,7 +145,7 @@ figure.device img {
 
 @media only screen and (min-width: 1280px) {
   section.screens:not(.group) {
-    max-width: 124rem;
+    max-width: 128rem;
     margin: auto;
   }
 }

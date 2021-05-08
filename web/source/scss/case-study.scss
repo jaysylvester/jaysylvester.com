@@ -63,19 +63,6 @@ body[data-controller="case-study"] {
     }
   }
 
-  section.content {
-    margin: 6rem 2rem;
-
-    h2, h3 {
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    p {
-      margin-bottom: 2.6rem;
-    }
-  }
-
   section.screens figure[role="group"]:only-child figcaption {
     display: none;
   }
@@ -141,6 +128,7 @@ body[data-controller="case-study"] {
   }
 
   section.screens.group {
+    padding-top: 2rem;
     background: hsl(175,55%,76%);
     
     figure[role="group"] figure {
@@ -201,13 +189,8 @@ body[data-controller="case-study"] {
       }
     }
 
-    section.content {
-      max-width: 70rem;
-      margin: 8rem auto;
-
-      h2 {
-        margin: 6rem 0 2rem;
-      }
+    section.screens.group {
+      padding: 4rem 0 2rem;
     }
 
     section.Linode {
@@ -280,6 +263,8 @@ body[data-controller="case-study"] {
 
   @media only screen and (min-width: 840px) {
     section.screens.group {
+      padding-top: 2rem;
+
       figure[role="group"] {
         figure {
           margin-bottom: 0;
@@ -296,6 +281,10 @@ body[data-controller="case-study"] {
     section.intro {
       max-width: 128rem;
       margin: auto;
+    }
+
+    section.screens.group {
+      padding-top: 2rem;
     }
   }
 
@@ -355,6 +344,8 @@ body[data-controller="case-study"] {
     }
 
     section.screens.group {
+      padding: 0;
+
       figure[role="group"] {
         section {
           padding: 3rem;

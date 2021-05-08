@@ -15,17 +15,21 @@ body[data-controller="work-history"] {
     }
   }
 
+  section.work-history {
+    h2 {
+      padding: 4rem 0 0;
+    }
+  }
+
   section.employer {
     margin: 4rem 0;
-    padding-top: 4rem;
-
-    h2 {
-      margin: 0 0 1rem;
-    }
 
     h3 {
-      margin-top: 0;
-      text-align: center;
+      padding: 0;
+    }
+
+    h4 {
+      padding: 0;
     }
 
     p.dates {

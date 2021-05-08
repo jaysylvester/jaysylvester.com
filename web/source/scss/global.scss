@@ -36,20 +36,33 @@ main {
   flex: 1 1 auto;
   color: black;
 
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
     padding: 3rem 2rem 2rem;
-    font-size: 3.2rem;
     color: hsl(176,53%,37%);
     text-align: center;
+  }
+
+  h1, h2 {
+    font-size: 3.2rem;
   }
 
   h2, h3 {
     font-weight: 700;
   }
 
+  h3 {
+    font-size: 2.6rem;
+  }
+
+  h4 {
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: hsl(0,0%,30%);
+  }
+
   a {
     font-weight: 700;
-    color: hsl(175,95%,30%);
+    color: hsl(207,54%,32%);
 
     &:hover {
       text-decoration: none;
@@ -61,6 +74,19 @@ main {
     justify-content: center;
     align-items: flex-start;
     padding: 0 2rem 4rem;
+  }
+}
+
+section.content {
+  margin: 6rem 2rem;
+
+  h2, h3 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  p {
+    margin-bottom: 2.6rem;
   }
 }
 
@@ -282,6 +308,15 @@ a.new-tab {
 
     p {
       text-align: left;
+    }
+  }
+
+  section.content {
+    max-width: 70rem;
+    margin: 8rem auto;
+
+    h2 {
+      margin: 6rem 0 2rem;
     }
   }
 }

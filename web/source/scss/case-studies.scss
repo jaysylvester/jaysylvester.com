@@ -3,6 +3,16 @@
 
 // Case studies list
 body[data-controller="case-studies"] {
+  article {
+    margin: 6rem 0;
+
+    p {
+      margin: 3rem 2rem 1rem;
+      font-family: 'Raleway', sans-serif;
+      text-align: center;
+    }
+  }
+
   section.logo {
     display: flex;
     justify-content: center;
@@ -20,14 +30,8 @@ body[data-controller="case-studies"] {
     }
   }
 
-  article {
-    margin: 6rem 0;
-
-    p {
-      margin: 3rem 2rem 1rem;
-      font-family: 'Raleway', sans-serif;
-      text-align: center;
-    }
+  section.screens.group {
+    margin: 3rem 0 2rem;
   }
 
   @media only screen and (min-width: 768px) {
@@ -46,13 +50,8 @@ body[data-controller="case-studies"] {
       margin: 0 4rem;
     }
 
-    section.screens.group figure[role="group"] section {
-      padding-right: 4rem;
-      padding-left: 4rem;
-
-      &:after {
-        flex-basis: 4rem;
-      }
+    section.screens.group {
+      margin-bottom: 0;
     }
   }
 

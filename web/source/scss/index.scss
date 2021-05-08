@@ -33,7 +33,7 @@ body[data-controller="index"] {
   }
 
   section.screens {
-    margin: 1rem 0 2rem;
+    margin: 3rem 0 2rem;
 
     figure[role="group"] figure {
       height: 22.5rem;
@@ -93,16 +93,20 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 768px) {
-    section.case-studies{
+    section.case-studies {
       margin-bottom: 4rem;
     }
 
-    section.screens figure[role="group"] section {
-      padding-left: 4rem;
-      padding-right: 4rem;
+    section.screens {
+      margin: 4rem 0 1rem;
 
-      &:after {
-        flex-basis: 4rem;
+      figure[role="group"] section {
+        padding-left: 4rem;
+        padding-right: 4rem;
+  
+        &:after {
+          flex-basis: 4rem;
+        }
       }
     }
     
@@ -125,7 +129,7 @@ body[data-controller="index"] {
 
   @media only screen and (min-width: 1024px) {
     section.case-studies {
-      margin: 6rem auto;
+      margin: 6rem auto 8rem;
     }
 
     section.endorsements {
