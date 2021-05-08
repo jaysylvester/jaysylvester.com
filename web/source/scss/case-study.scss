@@ -64,11 +64,11 @@ body[data-controller="case-study"] {
   }
 
   section.content {
-    margin: 4rem 2rem;
+    margin: 6rem 2rem;
 
-    h3 {
-      margin: 4rem 0 2rem;
-      font-size: 2.4rem;
+    h2, h3 {
+      padding-right: 0;
+      padding-left: 0;
     }
 
     p {
@@ -76,7 +76,7 @@ body[data-controller="case-study"] {
     }
   }
 
-  figcaption {
+  section.screens figure[role="group"]:only-child figcaption {
     display: none;
   }
 
@@ -202,9 +202,8 @@ body[data-controller="case-study"] {
     }
 
     section.content {
-      max-width: 66rem;
-      margin-right: auto;
-      margin-left: auto;
+      max-width: 70rem;
+      margin: 8rem auto;
 
       h2 {
         margin: 6rem 0 2rem;
@@ -219,14 +218,14 @@ body[data-controller="case-study"] {
 
           figure {
             img {
-              height: 22.8rem;
+              height: 24rem;
             }
           }
         }
 
         &.usability-testing {
           img {
-            height: 12rem;
+            height: 12.6rem;
           }
         }
       }
@@ -301,25 +300,58 @@ body[data-controller="case-study"] {
   }
 
   @media only screen and (min-width: 1280px) {
+    section.intro {
+      padding: 0 4rem;
+      background: none;
+    }
+
+    ul.attributes {
+      flex-direction: row;
+
+      li {
+        margin-right: 1rem;
+
+        &:first-child:before {
+          display: none;
+        }
+      }
+    }
+
     section.about {
       display: grid;
-      grid-template: auto/42% 58%;
+      grid-template: auto/37% 63%;
       max-width: 120rem;
-      margin: 6rem auto;
+      margin: 8rem auto 6rem;
+    }
+
+    section.logo {
+      height: 5rem;
+      justify-content: left;
+      margin: 0 0 2rem;
+
+      img {
+        max-width: 70%;
+      }
     }
 
     h2.tagline {
       grid-column: 1;
+      font-size: 2.2rem;
+      text-align: left;
     }
 
     p.summary {
       grid-column: 1;
+      margin-bottom: 0;
+      font-size: 1.8rem;
+      text-align: left;
     }
 
     section.devices {
       grid-row: 1/4;
       grid-column: 2;
-      padding: 0 0 0 2rem;
+      margin: 2rem 0 0 4rem;
+      padding: 0;
     }
 
     section.screens.group {

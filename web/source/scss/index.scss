@@ -97,14 +97,12 @@ body[data-controller="index"] {
       margin-bottom: 4rem;
     }
 
-    section.screens {
-      margin: 0;
+    section.screens figure[role="group"] section {
+      padding-left: 4rem;
+      padding-right: 4rem;
 
-      figure[role="group"] {
-        figure {
-          height: 34.6rem;
-          border: 0.1rem solid hsl(175,55%,66%);
-        }
+      &:after {
+        flex-basis: 4rem;
       }
     }
     
@@ -117,15 +115,17 @@ body[data-controller="index"] {
     }
   }
 
+  @media only screen and (min-width: 840px) {
+    section.screens figure[role="group"] {
+      figure {
+        height: 16vw;
+      }
+    }
+  }
+
   @media only screen and (min-width: 1024px) {
     section.case-studies {
       margin: 6rem auto;
-    }
-
-    section.screens figure[role="group"] {
-      figure {
-        height: 16.6rem;
-      }
     }
 
     section.endorsements {

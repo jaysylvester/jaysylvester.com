@@ -4,12 +4,13 @@
 // Case studies list
 body[data-controller="case-studies"] {
   section.logo {
+    display: flex;
+    justify-content: center;
     margin: 0 2rem;
 
     a {
-      display: flex;
+      display: inline-block;
       height: 5rem;
-      justify-content: center;
 
       img {
         height: 100%;
@@ -43,9 +44,22 @@ body[data-controller="case-studies"] {
     section.logo {
       justify-content: flex-start;
       margin: 0 4rem;
+    }
 
-      a {
-        justify-content: left;
+    section.screens.group figure[role="group"] section {
+      padding-right: 4rem;
+      padding-left: 4rem;
+
+      &:after {
+        flex-basis: 4rem;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 840px) {
+    section.screens figure[role="group"] {
+      figure {
+        height: 16vw;
       }
     }
   }
@@ -56,6 +70,14 @@ body[data-controller="case-studies"] {
 
       nav {
         top: 0;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    section.screens figure[role="group"] {
+      figure {
+        height: 21.2rem;
       }
     }
   }

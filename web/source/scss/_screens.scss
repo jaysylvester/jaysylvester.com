@@ -3,8 +3,6 @@
 @import '_mixins';
 
 section.screens {
-  margin: 0;
-
   // Override default height caused by alt attributes in unloaded images
   // Coincides with JAY.global.imageLoad() in global.js
   img[data-src]:not(.loaded) {
@@ -69,19 +67,6 @@ section.screens {
 
     figure[role="group"] {
       margin: 6rem auto;
-
-      section {
-        padding: 3rem 4rem;
-
-        &::after {
-          flex-basis: 4rem;
-        }
-      }
-
-      figure {
-        flex-basis: 46rem;
-        margin-right: 4rem;
-      }
     }
   }
 
@@ -94,8 +79,6 @@ section.screens {
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
     figure[role="group"] {
-      padding: 0;
-
       section {
         flex-wrap: wrap;
         justify-content: center;
@@ -153,6 +136,13 @@ figure.device img {
       height: 32rem;
       margin: auto;
     }
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  section.screens:not(.group) {
+    max-width: 124rem;
+    margin: auto;
   }
 }
 
