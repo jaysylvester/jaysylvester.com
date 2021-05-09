@@ -7,17 +7,47 @@ body > footer {
     padding-bottom: 4rem;
   }
   font-family: Raleway, sans-serif;
-  font-size: 1.4rem;
   color: white;
   text-align: center;
-  background: hsl(175,18%,51%);
+  background: hsl(182,18%,51%);
+
+  nav {
+    margin: 2rem auto 4rem;
+
+    li {
+      margin-bottom: 1rem;
+    }
+
+    a {
+      display: inline-block;
+      padding: 1rem;
+      text-decoration: none;
+    }
+  }
   
   p.copyright {
     margin: 0;
     font-size: 1.4rem;
+  }
 
-    a {
-      color: white;
+  a {
+    color: white;
+  }
+
+  @media only screen and (min-width: 768px) {
+    nav {
+      width: 60rem;
+      margin: 1rem auto 3rem;
+    }
+
+    ul {
+      display: flex;
+      justify-content: space-between;
+      margin: auto;
+
+      li {
+        margin: 0;
+      }
     }
   }
 }

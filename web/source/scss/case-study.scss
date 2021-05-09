@@ -182,10 +182,28 @@ body[data-controller="case-study"] {
       margin-bottom: 4rem;
       margin-left: 0;
       padding: 0 4rem;
+    }
 
-      img {
+    section.Linode,
+    section.Vidyo,
+    section.hibu,
+    section.Fitly {
+      section.devices img {
         margin: 0 !important;
         width: 100% !important;
+      }
+    }
+
+    section.Abercrombie-and-Fitch,
+    section.OncoTracker {
+      section.devices {
+        display: flex;
+        justify-content: center;
+
+        img {
+          width: auto;
+          height: 27rem;
+        }
       }
     }
 
