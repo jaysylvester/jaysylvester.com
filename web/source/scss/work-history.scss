@@ -7,22 +7,20 @@ body[data-controller="work-history"] {
     margin-bottom: 0;
   }
 
-  section.competencies {
-    margin-top: 4rem;
-
-    h2 {
-      padding-top: 3rem;
+  section.resume {
+    ul {
+      margin-top: 0;
     }
   }
 
-  section.work-history {
-    h2 {
-      padding: 4rem 0 0;
+  section.competencies {
+    ul {
+      margin-top: 0;
     }
   }
 
   section.employer {
-    margin: 4rem 0;
+    margin: 4rem 0 8rem;
 
     h3 {
       padding: 0;
@@ -36,38 +34,10 @@ body[data-controller="work-history"] {
       font-size: 1.6rem;
       color: #808080;
       text-align: center;
-    }
 
-    p.description {
-      margin-right: auto;
-      margin-left: auto;
-      max-width: 64rem;
-    }
-
-    nav.actions {
-      margin-top: 2rem;
-      text-align: center;
-    }
-
-    a.primary-action {
-      display: inline-block;
-      margin: auto;
-    }
-  }
-
-  @media only screen and (min-width: 768px) {
-    main {
-      > h1 {
-        br {
-          display: none;
-        }
+      @media only screen and (min-width: 768px) {
+        text-align: left;
       }
-    }
-
-    section.competencies {
-      max-width: 64rem;
-      margin-right: auto;
-      margin-left: auto;
     }
   }
 }
