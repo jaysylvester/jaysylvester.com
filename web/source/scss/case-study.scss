@@ -206,10 +206,6 @@ body[data-controller="case-study"] {
       }
     }
 
-    section.screens.group {
-      padding: 4rem 0 2rem;
-    }
-
     section.Linode {
       figure[role="group"]:not(.screens) {
         section {
@@ -280,7 +276,7 @@ body[data-controller="case-study"] {
 
   @media only screen and (min-width: 840px) {
     section.screens.group {
-      padding-top: 2rem;
+      padding-bottom: 2rem;
 
       figure[role="group"] {
         figure {
@@ -369,7 +365,6 @@ body[data-controller="case-study"] {
         }
         figure {
           flex-basis: 28rem;
-          height: 21rem;
           margin: 0 3rem 0 0;
         }
       }

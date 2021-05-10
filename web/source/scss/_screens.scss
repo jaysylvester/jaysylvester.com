@@ -57,6 +57,10 @@ section.screens {
   &.group {
     figure[role="group"] {
       margin: 0 auto;
+
+      figure {
+        height: 22.5rem;
+      }
     }
   }
 
@@ -104,6 +108,24 @@ section.screens {
 
         &:nth-child(4n) {
           margin-right: 0 !important;
+        }
+      }
+    }
+
+    &.group {
+      figure[role="group"] {
+        figure {
+          height: 16vw;
+        }
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
+    &.group {
+      figure[role="group"] {
+        figure {
+          height: 21.2rem;
         }
       }
     }

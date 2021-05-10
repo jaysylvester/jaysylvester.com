@@ -36,7 +36,6 @@ body[data-controller="index"] {
     margin: 3rem 0 2rem;
 
     figure[role="group"] figure {
-      height: 22.5rem;
       border: 0.1rem solid hsl(175,55%,66%);
     }
   }
@@ -118,14 +117,6 @@ body[data-controller="index"] {
     }
   }
 
-  @media only screen and (min-width: 840px) {
-    section.screens figure[role="group"] {
-      figure {
-        height: 16vw;
-      }
-    }
-  }
-
   @media only screen and (min-width: 1024px) {
     section.case-studies {
       margin: 6rem auto 8rem;
@@ -137,14 +128,6 @@ body[data-controller="index"] {
 
     blockquote {
       flex: 0 0 50%;
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    section.screens figure[role="group"] {
-      figure {
-        height: 21.2rem;
-      }
     }
   }
 

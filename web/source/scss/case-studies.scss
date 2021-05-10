@@ -54,28 +54,12 @@ body[data-controller="case-studies"] {
     }
   }
 
-  @media only screen and (min-width: 840px) {
-    section.screens figure[role="group"] {
-      figure {
-        height: 16vw;
-      }
-    }
-  }
-
   @media only screen and (min-width: 1024px) {
     article {
       margin: 8rem auto;
 
       nav {
         top: 0;
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    section.screens figure[role="group"] {
-      figure {
-        height: 21.2rem;
       }
     }
   }
