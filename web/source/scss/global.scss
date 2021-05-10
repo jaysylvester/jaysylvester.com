@@ -22,7 +22,7 @@ body {
   justify-content: space-between;
   position: relative;
   height: 100%;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
   font-size: 1.8rem;
   background: white;
   text-rendering: optimizeLegibility;
@@ -61,7 +61,6 @@ main {
   }
 
   a {
-    font-weight: 700;
     color: hsl(207,54%,32%);
 
     &:hover {
@@ -92,6 +91,7 @@ section.content {
 
   p {
     margin-bottom: 2.6rem;
+    line-height: 1.6;
   }
 }
 
@@ -162,7 +162,7 @@ section.intro {
   
   p {
     margin: 2rem 0 0;
-    font-family: 'Avenir Next', Lato, sans-serif;
+    font-family: Avenir Next, Libre Franklin, sans-serif;
     font-size: 2.4rem;
     font-weight: 500;
     color: hsl(176,33%,20%);
@@ -341,8 +341,14 @@ a.new-tab {
   }
 
   section.content {
-    max-width: 70rem;
-    margin: 6rem auto;
+    max-width: 88rem;
+    margin: 10rem auto;
+    padding: 0 4rem;
+    font-size: 2rem;
+  }
+
+  p.error {
+    margin: 4rem 0 6rem 4rem;
   }
 }
 

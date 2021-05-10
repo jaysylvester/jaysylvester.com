@@ -6,13 +6,13 @@ body > footer {
   @media (hover: none) {
     padding-bottom: 4rem;
   }
-  font-family: Raleway, sans-serif;
   color: white;
   text-align: center;
   background: hsl(182,18%,51%);
 
   nav {
     margin: 2rem auto 4rem;
+    font-family: Raleway, sans-serif;
 
     li {
       margin-bottom: 1rem;
@@ -22,6 +22,7 @@ body > footer {
       display: inline-block;
       padding: 1rem;
       text-decoration: none;
+      text-transform: uppercase;
     }
   }
   
@@ -35,8 +36,10 @@ body > footer {
   }
 
   @media only screen and (min-width: 768px) {
+    font-size: 1.6rem;
+
     nav {
-      width: 60rem;
+      width: 66rem;
       margin: 1rem auto 3rem;
     }
 
