@@ -49,4 +49,8 @@ app.toolbox.dbPool.on('error', function (err) {
   })
 })
 
-app.server.start()
+app.server.start({
+  citizen: {
+    mode: 'production'
+  }
+})
