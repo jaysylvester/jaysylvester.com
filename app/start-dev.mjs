@@ -20,7 +20,7 @@ consolidate.requires.handlebars.registerPartial('caseStudyCallout', fs.readFileS
 consolidate.requires.handlebars.registerPartial('screenGroup', fs.readFileSync(app.views._screens._group.path).toString())
 
 // Get static file last modified times to populate cache buster variables
-app.cacheBuster = {
+let cacheBuster = {
   css: fs.statSync(path.resolve(app.config.citizen.directories.app, '../web/min/site.css')).mtime.toString().replace(/[ :\-()]/g, ''),
   js:  fs.statSync(path.resolve(app.config.citizen.directories.app, '../web/min/site.js')).mtime.toString().replace(/[ :\-()]/g, '')
 }
@@ -62,4 +62,6 @@ app.toolbox.dbPool.on('error', function (err) {
   })
 })
 
-app.server.start()
+app.server.start({
+  cacheBuster: cacheBuster
+})
