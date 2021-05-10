@@ -1,111 +1,150 @@
-@import '_mixins';
-
 // Home / About
 
+@import '_mixins';
+
 body[data-controller="index"] {
-  @media only screen and (max-width: 374px) {
-    h1 {
-      br {
-        display: none;
-      }
-    }
+  background: hsl(175,55%,76%);
+
+  header {
+    background: hsl(175,55%,76%);
   }
 
   main {
-    > h1 {
-      margin: 0;
-      padding: 3rem 1rem;
-      text-shadow: 0 0.1rem 0.4rem #121a21;
+    h1, h2 {
+      color: white;
+      text-shadow: 0 1px 3px hsl(175,42%,45%);
     }
 
-    > p {
-      margin: 0;
-      padding: 0 1rem 3rem;
-    }
-
-    > h1, > p {
-      color: #ffffff;
-      background-color: #354B5E;
+    h2 {
+      font-weight: 800;
     }
   }
 
-  nav.case-studies {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0 0 4rem;
-    background-color: #354B5E;
+  section.intro {
+    background: hsl(175,55%,70%);
+
+    p {
+      color: hsl(176,33%,30%);
+    }
+  }
+
+  section.case-studies h2 {
+    padding-bottom: 0;
+  }
+
+  section.screens {
+    margin: 3rem 0 2rem;
+
+    figure[role="group"] figure {
+      border: 0.1rem solid hsl(175,55%,66%);
+    }
   }
 
   section.endorsements {
-    margin-top: 4rem;
+    background: hsl(175,55%,70%);
+    padding-bottom: 8rem;
+  }
 
-    nav.more {
-      margin-top: 4rem;
+  blockquote {
+    position: relative;
+    padding: 2rem 2.5rem 4rem;
+  
+    &:before {
+      content: '“'
     }
-  }
-
-  article.endorsement {
-    margin: 2rem 0;
-  }
-
-  nav.more {
-    width: 100%;
-    text-align: center;
+    &:after {
+      content: '”'
+    }
+  
+    &:before,
+    &:after {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      height: 3rem;
+      font-family: Raleway, sans-serif;
+      font-weight: 800;
+      font-size: 6.4rem;
+      color: white;
+      text-shadow: 0 2px 4px hsl(175,22%,55%);
+    }
+  
+    &:before {
+      top: 0.8rem;
+      left: 1.4rem;
+    }
+  
+    &:after {
+      right: 1.4rem;
+      bottom: 3rem;
+    }
+  
+    p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 2.2rem 3.2rem;
+      color: #444;
+      background: hsl(175,100%,95%);
+      border-radius: 1rem;
+    }
   }
 
   @media only screen and (min-width: 768px) {
-    main {
-      > h1 {
-        padding: 5rem 1rem 2rem;
-      }
-
-      > p {
-        max-width: none;
-        padding: 0 calc((100% - 66rem) / 2) 3rem;
-      }
+    section.case-studies {
+      margin-bottom: 4rem;
     }
 
-    nav.case-studies {
-      padding-bottom: 5rem;
+    section.screens {
+      margin: 4rem 0 1rem;
+
+      figure[role="group"] section {
+        padding-left: 4rem;
+        padding-right: 4rem;
+  
+        &:after {
+          flex-basis: 4rem;
+        }
+      }
     }
     
-    section.endorsements {
+    section.quotes {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
-
-      h2 {
-        flex-basis: 100%;
-        margin: 7rem 0 2rem;
-        padding: 0;
-      }
-    }
-
-    article.endorsement {
-      flex: 0 0 48%;
+      margin: 0 2.4rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
-    main {
-      width: 100%;
-
-      > h1 {
-        margin: 0;
-        padding-top: 6rem;
-      }
-    }
-
-    nav.case-studies {
-      padding-bottom: 6rem;
+    section.case-studies {
+      margin: 6rem auto 8rem;
     }
 
     section.endorsements {
-      width: 96rem;
-      margin-right: auto;
-      margin-left: auto;
+      background: none;
+    }
+
+    blockquote {
+      flex: 0 0 50%;
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    main > section {
+      margin-bottom: 8rem;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  html.js body[data-controller="index"] {
+    header {
+      background: hsla(175,55%,70%,0);
+    }
+    &.fixed-header header {
+      background: hsla(175,55%,65%,0.75);
     }
   }
 }

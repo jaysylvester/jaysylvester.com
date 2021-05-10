@@ -3,7 +3,7 @@ window.JAY = {}
 JAY.immediate = ( function () {
   'use strict'
 
-  var methods = {
+  const methods = {
     init: function () {
       document.querySelector('html').classList.add('js')
     }

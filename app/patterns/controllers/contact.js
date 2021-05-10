@@ -31,7 +31,7 @@ function form(params) {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
       return {
         content: {
-          error: 'All fields are required.',
+          error: 'All fields are required',
           verification: verification()
         },
         cache: {
@@ -41,7 +41,7 @@ function form(params) {
     } else if ( !emailRegex.test(params.form.email) ) {
       return {
         content: {
-          error: 'Your e-mail address doesn\'t look right.',
+          error: 'Your e-mail address doesn\'t look right',
           verification: verification()
         },
         cache: {

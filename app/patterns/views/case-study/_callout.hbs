@@ -4,36 +4,9 @@
       <img class="logo" src="https://res.cloudinary.com/tehinnernets/image/upload/q_60,h_160/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-logo.png" alt="{{company_name}} logo">
     </a>
   </section>
-  <h1><span>Case Study:</span> {{{title}}}</h1>
-  <ul class="attributes">
-    <li class="vertical">
-      {{{vertical}}}
-    </li>
-    <li class="platform">
-      {{{platform}}}
-    </li>
-    <li class="expertise">
-      {{{expertise}}}
-    </li>
-  </ul>
-  <h2 class="tagline">{{tagline}}</h2>
   <p class="summary">{{summary}}</p>
-  <section class="devices">
-    <a href="/case-study/company/{{company_url}}" title="Read the full {{company_name}} case study.">
-      <noscript>
-        <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-      </noscript>
-      <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
-    </a>
-  </section>
-  <nav class="actions">
-    <ul>
-      <li class="primary-action read">
-        <a href="/case-study/company/{{company_url}}" title="Read the full {{company_name}} case study.">Read the case study</a>
-      </li>
-      <li class="secondary-action more">
-        <a href="/case-studies">See more case studies</a>
-      </li>
-    </ul>
+  {{> screenGroup this}}
+  <nav>
+    <a class="primary-action" href="/case-study/company/{{company_url}}" title="Read the full {{company_name}} case study.">Read my case study</a>
   </nav>
 </article>

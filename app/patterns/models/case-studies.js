@@ -8,70 +8,71 @@ module.exports = {
 }
 
 
-async function caseStudies(count = false) {
-  // See if the case study is already cached
-  let cacheKey  = 'case-studies-' + count,
-      scope     = 'case-studies',
-      cached    = app.cache.get({ scope: scope, key: cacheKey })
+async function caseStudies() {
+  const client = await app.toolbox.dbPool.connect()
 
-  // If it's cached, return the cache object
-  if ( cached ) {
-    return cached
-  // If it's not cached, retrieve it from the database and cache it
-  } else {
-    const client = await app.toolbox.dbPool.connect()
-
-    try {
-      const result = await client.query({
-        name: count ? 'case_studies_caseStudies_count_' + count : 'case_studies_caseStudies',
-        text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort from case_studies order by sort asc' + ( count ? ' limit ' + count : '' ) + ';'
-      })
-      // Cache the case study for future requests
-      if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
-        app.cache.set({
-          key: cacheKey,
-          scope: scope,
-          value: result.rows
-        })
+  try {
+    const result = await client.query({
+      name: 'case_studies_caseStudies',
+      text: 'select cs.id, cs.company_name, cs.company_url, cs.title, cs.tagline, cs.vertical, cs.platform, cs.expertise, cs.summary, cs.sort, ' +
+            's.url as screen_url, s.alt, s.sort as screen_sort ' +
+            'from case_studies cs ' +
+            'join screens s on cs.company_url = s.company ' +
+            'order by s.sort asc, cs.sort asc;'
+    })
+    // Transform the data to make it usable by the view
+    let caseStudies = {}
+    result.rows.forEach( function (item) {
+      if ( !caseStudies[item.sort] ) {
+        caseStudies[item.sort] = {
+          company_url: item.company_url,
+          company_name: item.company_name,
+          summary: item.summary,
+          screens: {}
+        }
       }
-      return result.rows
-    } finally {
-      client.release()
-    }
+      // Limit to 4 screens per case study
+      if ( Object.keys(caseStudies[item.sort].screens).length < 4 ) {
+        caseStudies[item.sort].screens[item.screen_sort] = {
+          url: item.screen_url,
+          alt: item.alt
+        }
+      }
+    })
+    return caseStudies
+  } finally {
+    client.release()
   }
 }
 
 
-async function caseStudy(companyUrl) {
-  // See if the case study is already cached
-  let cacheKey  = 'case-study-' + companyUrl,
-      scope     = 'case-studies',
-      cached    = app.cache.get({ scope: scope, key: cacheKey })
+async function caseStudy(company) {
+  const client = await app.toolbox.dbPool.connect()
 
-  // If it's cached, return the cache object
-  if ( cached ) {
-    return cached
-  // If it's not cached, retrieve it from the database and cache it
-  } else {
-    const client = await app.toolbox.dbPool.connect()
-
-    try {
-      const result = await client.query({
-        name: 'case_studies_caseStudy',
-        text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, content from case_studies where company_url = $1;',
-        values: [ companyUrl ]
-      })
-      // Cache the case study for future requests
-      if ( !app.cache.exists({ scope: scope, key: cacheKey }) ) {
-        app.cache.set({
-          key: cacheKey,
-          scope: scope,
-          value: result.rows[0]
-        })
+  try {
+    const result = await client.query({
+      name: 'case_studies_caseStudy',
+      text: 'select cs.id, cs.company_name, cs.company_url, cs.title, cs.tagline, cs.vertical, cs.platform, cs.expertise, cs.summary, cs.content, cs.sort, ' +
+            's.url as screen_url, s.alt, s.sort as screen_sort ' +
+            'from case_studies cs ' +
+            'join screens s on cs.company_url = s.company ' +
+            'where cs.company_url = $1 ' +
+            'order by s.sort asc, cs.sort asc;',
+      values: [ company ]
+    })
+    // Transform the data to make it usable by the view
+    let caseStudy = result.rows[0]
+    caseStudy.screens = {}
+    result.rows.forEach( function (item) {
+      if ( Object.keys(caseStudy.screens).length < 4 ) {
+        caseStudy.screens[item.screen_sort] = {
+          url: item.screen_url,
+          alt: item.alt
+        }
       }
-      return result.rows[0]
-    } finally {
-      client.release()
-    }
+    })
+    return caseStudy
+  } finally {
+    client.release()
   }
 }

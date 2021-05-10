@@ -16,7 +16,7 @@ async function handler(params) {
       content: caseStudy,
       include: {
         screens: {
-          route: '/_screens/company/' + params.url.company
+          controller: '_screens'
         }
       }
     }

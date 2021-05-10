@@ -1,468 +1,66 @@
 // Case studies
 @import '_mixins';
 
-// Common styles
-.case-study {
+// Case studies list
+body[data-controller="case-studies"] {
+  article {
+    margin: 6rem 0;
+
+    p {
+      margin: 3rem 2rem 1rem;
+      text-align: center;
+    }
+  }
+
   section.logo {
     display: flex;
     justify-content: center;
-    align-content: center;
-  }
+    margin: 0 2rem;
 
-  img.logo {
-    max-width: 30rem;
-    max-height: 6rem;
-    margin: auto;
-  }
+    a {
+      display: inline-block;
+      height: 5rem;
 
-  &.Linode img.logo {
-    max-height: 4rem;
-  }
-
-  &.hibu img.logo {
-    max-height: 5rem;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-    color: #4D4D4D;
-    text-align: center;
-
-    span {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 300;
-      text-transform: uppercase;
+      img {
+        height: 100%;
+        max-width: 40rem;
+        object-fit: contain;
+      }
     }
   }
 
-  ul.attributes {
-    display: flex;
-    flex-direction: column;
-    margin: 2rem 1rem;
-    list-style-type: none;
-    font-size: 1.4rem;
-    color: #808080;
-    letter-spacing: 0.12rem;
-    text-align: center;
-    text-transform: uppercase;
-
-    li {
-      padding: 0.2rem 0;
-    }
-  }
-
-  h2.tagline {
-    max-width: 34rem;
-    margin: 1rem auto;
-    padding: 2rem 1rem 0;
-    font-size: 2rem;
-    color: #4D4D4D;
-    text-align: center;
-
-    @include separator;
-  }
-
-  p.summary {
-    margin-bottom: 3rem;
-    line-height: 1.6;
-    text-align: center;
-  }
-
-  section.devices {
-    img {
-      width: 100%;
-    }
-  }
-
-  &.Linode,
-  &.Vidyo,
-  &.Fitly,
-  &.hibu {
-    section.devices img {
-      width: 142%;
-      margin-left: -21%;
-    }
+  section.screens.group {
+    margin: 3rem 0 2rem;
   }
 
   @media only screen and (min-width: 768px) {
-    h1 {
-      font-size: 2.4rem;
-    }
-    
-    ul.attributes {
-      margin: 2rem 0 3rem;
-    }
-
-    h2.tagline {
-      max-width: 50rem;
-      margin-bottom: 2rem;
-      padding-top: 3rem;
-      font-size: 2.2rem;
-    }
-
-    p.summary {
-      max-width: 66rem;
-      margin: 0 auto 6rem;
-      font-size: 1.8rem;
-    }
-
-    section.devices img {
-      width: auto;
-      height: 27.5rem;
-      margin: auto;
-    }
-
-    &.Linode,
-    &.Vidyo,
-    &.Fitly,
-    &.hibu {
-      section.devices img {
-        width: auto;
-        margin: 0 auto;
+    article {
+      margin-bottom: 10rem;
+  
+      p {
+        margin: 3rem 4rem 0;
+        font-size: 2rem;
+        text-align: left;
       }
+    }
+  
+    section.logo {
+      justify-content: flex-start;
+      margin: 0 4rem;
+    }
+
+    section.screens.group {
+      margin-bottom: 0;
     }
   }
 
   @media only screen and (min-width: 1024px) {
-    h1 {
-      span {
-        display: initial;
+    article {
+      margin: 8rem auto;
+
+      nav {
+        top: 0;
       }
-    }
-
-    ul.attributes {
-      flex-direction: row;
-      justify-content: center;
-      margin-top: 0.2rem;
-
-      li {
-        &::before {
-          content: '•';
-          display: inline-block;
-          padding: 0 0.6rem 0 1rem;
-          color: #cccccc;
-        }
-
-        &:first-child {
-          &::before {
-            display: none;
-          }
-        }
-      }
-    }
-
-    h2.tagline {
-      max-width: none;
-      padding-right: 0;
-      padding-left: 0;
-    }
-
-    section.devices img {
-      height: 32rem;
-    }
-  }
-}
-
-// Case studies list
-body[data-controller="case-studies"][data-view="case-studies"] {
-  @media only screen and (max-width: 425px) {
-    h1 {
-      br {
-        display: none;
-      }
-    }
-  }
-
-  .case-study {
-    margin: 4rem 0;
-    padding-top: 4rem;
-    @include separator;
-    
-    h1,
-    h2.tagline,
-    p.summary,
-    nav.actions li.more {
-      display: none;
-    }
-
-    ul.attributes {
-      margin-top: 1rem;
-    }
-
-    section.devices {
-      margin-bottom: 2rem;
-      overflow: hidden;
-    }
-
-    @media only screen and (min-width: 768px) {
-      margin: 6rem 0;
-      padding-top: 6rem;
-
-      &.OncoTracker img.logo {
-        max-height: 4rem;
-      }
-
-      ul.attributes {
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-      }
-
-      p.summary {
-        display: block;
-      }
-
-      section.devices {
-        margin-bottom: 4rem;
-
-        img {
-          height: 24rem;
-        }
-      }
-    }
-  }
-
-  nav.actions {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-// Standalone case study
-body[data-controller="case-study"][data-view="case-study"] {
-  .case-study {
-    section.logo {
-      height: 12rem;
-    }
-
-    section.devices {
-      width: 100vw;
-      margin-bottom: 2rem;
-      margin-left: -1rem;
-      overflow-x: hidden;
-    }
-
-    &.Linode {
-      figure[role="group"].callout {
-        figure {
-          margin-bottom: 1rem;
-        }
-      }
-    }
-
-    &.hibu {
-      figure.callout.concept,
-      figure.callout.prototype {
-        section {
-          display: flex;
-          justify-content: space-between;
-  
-          figure:nth-child(1) {
-            flex: 0 0 35.3%;
-            margin: 0;
-          }
-          figure:nth-child(2) {
-            flex: 0 0 60%;
-            margin: 0;
-          }
-        }
-      }
-    }
-
-    &.Fitly figure.callout.pricing-cta {
-      figure:nth-child(1) {
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-      figure:nth-child(2) {
-        margin: 0 auto 2rem;
-      }
-    }
-
-    > nav.actions {
-      margin: 8rem auto 4rem;
-    }
-  
-    &.Fitly img.logo {
-      max-height: 6rem;
-    }
-
-    // 768px and up
-    @media only screen and (min-width: 768px) {
-      section.logo {
-        height: 15rem;
-      }
-
-      section.devices {
-        width: auto;
-        margin-bottom: 6rem;
-        margin-left: 0;
-      }
-
-      section.content {
-        max-width: 70rem;
-        margin: auto;
-
-        h2 {
-          margin: 6rem 0 2rem;
-        }
-      }
-
-      &.Linode {
-        figure[role="group"]:not(.screens) {
-          section {
-            display: flex;
-            justify-content: space-between;
-
-            figure {
-              img {
-                height: 24rem;
-              }
-            }
-          }
-
-          &.usability-testing {
-            img {
-              height: 12.8rem;
-            }
-          }
-        }
-
-        figure[role="group"].callout {
-          figure {
-            margin-bottom: 0;
-          }
-        }
-      }
-
-      figure.callout {
-        // Fitly
-        &.zip-code {
-          img {
-            height: 30rem;
-          }
-        }
-
-        &.pricing-cta {
-          figure {
-            margin-bottom: 2rem;
-          }
-
-          img {
-            height: 24rem;
-          }
-        }
-      }
-
-      &.hibu {
-        figure.callout.concept,
-        figure.callout.prototype {
-          section {
-            justify-content: center;
-
-            figure:nth-child(1),
-            figure:nth-child(2) {
-              flex-basis: auto;
-              margin: 0 2rem;
-            }
-          }
-        }
-      }
-
-      &.OncoTracker img.logo {
-        max-height: 4rem;
-      }
-    }
-  }
-
-  .screens {
-    &.Vidyo {
-      &:nth-child(4) figure {
-        border: none;
-      }
-    }
-  }
-
-  nav.actions {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-
-// Case study clickable logos (used everywhere)
-ul.case-studies {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0;
-  list-style: none;
-
-  li {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 8rem;
-    margin-bottom: 2rem;
-    padding: 0 3rem;
-  }
-
-  a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  img {
-    max-width: 100%;
-    max-height: 5rem;
-    filter: saturate(0) brightness(100%) contrast(0%);
-    transition: filter 0.2s;
-  }
-
-  li.hibu {
-    img {
-      max-height: 4rem;
-    }
-  }
-
-  li.OncoTracker {
-    img {
-      max-height: 3rem;
-    }
-  }
-
-  li:hover {
-    img {
-      filter: saturate(100%) brightness(100%) contrast(100%);
-    }
-  }
-
-  @media only screen and (min-width: 768px) {
-    li {
-      height: 8rem;
-      margin: 0 1rem 2rem;
-      
-      img {
-        max-height: 4rem;
-      }
-
-      &.hibu img {
-        max-height: 3.5rem;
-      }
-    }
-
-    li.Fitly {
-      order: 1;
-    }
-    li.Vidyo {
-      order: 2;
-    }
-    li.hibu {
-      order: 3;
     }
   }
 }

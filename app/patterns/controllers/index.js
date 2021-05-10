@@ -9,5 +9,12 @@ module.exports = {
 
 // default action
 function handler() {
-  return
+  return {
+    include: {
+      screens: {
+        controller: '_screens',
+        action: 'featured'
+      }
+    }
+  }
 }

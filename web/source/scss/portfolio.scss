@@ -1,5 +1,7 @@
 // Portfolio
 
+@import '_mixins';
+
 body[data-controller="portfolio"] {
   section.documents {
     ul {
@@ -11,6 +13,15 @@ body[data-controller="portfolio"] {
       margin: 0 0 0.8rem 2rem;
     }
   }
+
+  // No borders around mobile screens
+  section.screens figure[role="group"].Vidyo {
+    &:nth-child(5) {
+      figure {
+        border: none;
+      }
+    }
+  }
   
   @media only screen and (min-width: 768px) {
     section.documents p,
@@ -19,11 +30,6 @@ body[data-controller="portfolio"] {
       max-width: 80rem;
       margin-right: auto;
       margin-left: auto;
-    }
-
-    section.documents p,
-    section.all-screens p {
-      text-align: center;
     }
 
     section.documents {

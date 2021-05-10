@@ -1,15 +1,27 @@
-<h1>I'm pretty good at this.<br> I've been doing it a while.</h1>
-<p>
-  I've led and contributed to just about every phase of the development lifecycle, including team management, information architecture, UX design, and full stack development.
-</p>
-<h2 class="download">Download my résumé:</h2>
-<p>
-  <a href="/documents/resume/Jay-Sylvester-resume.pdf">PDF</a> / <a href="/documents/resume/Jay-Sylvester-resume.docx">Word</a> / <a href="/documents/resume/Jay-Sylvester-resume.txt">Plain text</a>
-</p>
-<section class="competencies">
-  <h2>Core competencies</h2>
+<section class="intro">
+  <h1>I'm pretty good at this. I've been doing it a while.</h1>
+  <p>
+    I've led and contributed to just about every phase of the development lifecycle, including team management, information architecture, UX design, and full stack development.
+  </p>
+</section>
+<section class="content resume">
+  <h2 class="download">Download my résumé:</h2>
   <ul>
-    <li>Accomplished manager and mentor of UX designers and UI developers</li>
+    <li>
+      <a href="/documents/resume/Jay-Sylvester-resume.pdf">PDF</a>
+    </li>
+    <li>
+      <a href="/documents/resume/Jay-Sylvester-resume.docx">Word</a>
+    </li>
+    <li>
+      <a href="/documents/resume/Jay-Sylvester-resume.txt">Plain text</a>
+    </li>
+  </ul>
+</section>
+<section class="content competencies">
+  <h2>Core Competencies</h2>
+  <ul>
+    <li>Accomplished manager and mentor of UX designers and front end developers</li>
     <li>Holistic strategist who balances business, design, and technical concerns</li>
     <li>Intuitive team builder adept at identifying critical needs and ideal candidates</li>
     <li>Vocal driver of product design process definition and implementation</li>
@@ -17,22 +29,18 @@
     <li>Proven web architect with focused expertise on front end development</li>
   </ul>
 </section>
-<section class="work-history">
+<section class="content work-history">
+  <h2>Work History</h2>
   {{#each employers}}
     <section class="employer">
-      <h2>{{job_title}}</h2>
-      <h3>{{employer_name}}</h3>
+      <h3>{{job_title}}</h2>
+      <h4>{{employer_name}}</h3>
       {{#if employed_to_formatted}}
         <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
       {{else}}
         <p class="dates">{{employed_from_formatted}} to Present</p>
       {{/if}}
       <p class="description">{{job_description}}</p>
-      {{#if company_url}}
-        <nav class="actions">
-          <a class="primary-action" href="/case-study/company/{{company_url}}">Read my {{employer_name}} case study</a>
-        </nav>
-      {{/if}}
     </section>
   {{/each}}
 </section>

@@ -1,7 +1,8 @@
 // Screenshots
-section.screens {
-  margin: 0;
 
+@import '_mixins';
+
+section.screens {
   // Override default height caused by alt attributes in unloaded images
   // Coincides with JAY.global.imageLoad() in global.js
   img[data-src]:not(.loaded) {
@@ -9,33 +10,32 @@ section.screens {
   }
 
   figure[role="group"] {
-    margin: 4rem auto;
+    margin: 6rem auto;
     
     section {
       display: flex;
       overflow-x: scroll;
       -webkit-overflow-scrolling: touch;
-      padding: 1rem;
+      padding: 0 2rem 2rem 2rem; // Maintain bottom padding for scrollbar visibility
 
       &::after {
         content: '';
-        flex: 0 0 1rem;
+        flex: 0 0 2rem;
         display: block;
-        height: 1rem;
+        height: 2rem;
       }
     }
 
     figure {
-      flex: 0 0 82vw;
-      height: 100%;
-      margin: 0 2rem 0 0;
+      flex: 0 0 30rem;
+      margin-right: 2rem;
       border-radius: 0.4rem;
-      border: 0.1rem solid #e6e6e6;
+      border: 0.1rem solid hsl(175,25%,90%);
       overflow: hidden;
       position: relative;
 
       &:last-child {
-        margin: 0;
+        margin-right: 0;
       }
 
       img {
@@ -52,28 +52,33 @@ section.screens {
       margin-top: 0;
       max-width: none;
     }
+  }
 
-    &.Vidyo {
-      &:nth-child(5) figure {
-        border: none;
+  &.group {
+    figure[role="group"] {
+      margin: 0 auto;
+
+      figure {
+        height: 22.5rem;
       }
     }
   }
 
   @media only screen and (min-width: 768px) {
+    &.group {
+      margin: 0;
+    }
+
     figure[role="group"] {
-      margin: 6rem auto;
+      padding: 0;
 
       section {
-        padding: 3rem;
+        padding-right: 4rem;
+        padding-left: 4rem;
 
         &::after {
-          flex-basis: 2rem;
+          flex-basis: 4rem;
         }
-      }
-
-      figure {
-        flex-basis: 45rem;
       }
     }
   }
@@ -81,12 +86,10 @@ section.screens {
   // Get rid of figure scroll at 840px and above (width of main with padding)
   @media only screen and (min-width: 840px) {
     figure[role="group"] {
-      padding: 0 2rem;
-
       section {
         flex-wrap: wrap;
         justify-content: center;
-        padding: 0;
+        padding-bottom: 0;
         overflow: visible;
 
         &::after {
@@ -95,8 +98,8 @@ section.screens {
       }
 
       figure {
-        flex-basis: 22%;
-        margin: 0 2rem 2rem 0;
+        flex-basis: 23.5%;
+        margin: 0 2% 2rem 0;
 
         &:first-child,
         &:nth-child(5n) {
@@ -104,15 +107,27 @@ section.screens {
         }
 
         &:nth-child(4n) {
-          margin-right: 0;
+          margin-right: 0 !important;
+        }
+      }
+    }
+
+    &.group {
+      figure[role="group"] {
+        figure {
+          height: 16vw;
         }
       }
     }
   }
 
-  @media only screen and (min-width: 768px) {
-    figure[role="group"] {
-      padding: 0;
+  @media only screen and (min-width: 1280px) {
+    &.group {
+      figure[role="group"] {
+        figure {
+          height: 21.2rem;
+        }
+      }
     }
   }
 }
@@ -147,6 +162,13 @@ figure.device img {
       height: 32rem;
       margin: auto;
     }
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  section.screens:not(.group) {
+    max-width: 128rem;
+    margin: auto;
   }
 }
 

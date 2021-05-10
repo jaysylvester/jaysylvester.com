@@ -1,25 +1,3 @@
-// Preserve original color values
-@function hsl($h, $s, $l) {
-  @return unquote('hsl(#{$h},#{$s},#{$l})');
-}
-
-@function hsla($h, $s, $l, $a) {
-  @return unquote('hsla(#{$h},#{$s},#{$l},#{$a})');
-}
-
-// Use HSB values provided by apps like Sketch and Photoshop and 
-// convert them into HSL, because HSL (native CSS) and HSB aren't 
-// interchangeable.
-@function hsb($h-hsb, $s-hsb, $b-hsb, $a: 1) {
-  @if $b-hsb == 0 {
-    @return unquote('hsla(0, 0, 0, $a)');
-  } @else {
-    $l-hsl: ($b-hsb/2) * (2 - ($s-hsb/100));
-    $s-hsl: ($b-hsb * $s-hsb) / if($l-hsl < 50, $l-hsl * 2, 200 - $l-hsl * 2);
-    @return unquote('hsla($h-hsb, $s-hsl, $l-hsl, $a)');
-  }
-}
-
 // Fonts
 @font-face {
 	font-family: 'social';
@@ -27,6 +5,10 @@
 	font-weight: normal;
 	font-style: normal;
 }
+
+@import '_header';
+@import '_footer';
+@import '_screens';
 
 // Global styles
 html {
@@ -38,9 +20,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
   height: 100%;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Libre Franklin', sans-serif;
   font-size: 1.8rem;
+  background: white;
   text-rendering: optimizeLegibility;
 
   > * {
@@ -48,42 +32,113 @@ body {
   }
 }
 
-h2 {
-  margin: 5rem 0 1rem;
-  font-size: 2rem;
-  text-align: center;
+main {
+  flex: 1 1 auto;
+  color: black;
+
+  h1, h2, h3, h4 {
+    padding: 3rem 2rem 2rem;
+    color: hsl(176,53%,37%);
+    text-align: center;
+  }
+
+  h1, h2 {
+    font-size: 3.2rem;
+  }
+
+  h2, h3 {
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 2.6rem;
+  }
+
+  h4 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: hsl(0,0%,30%);
+  }
+
+  a {
+    color: hsl(207,54%,32%);
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  
+  nav {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 2rem 4rem;
+  }
 }
 
-h3 {
-  margin: 3rem 0 0.5rem;
-  font-size: 1.8rem;
+section.content {
+  margin: 4rem 2rem;
+
+  > *:first-child {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  h2, h3 {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  p {
+    margin-bottom: 2.6rem;
+    line-height: 1.6;
+  }
 }
 
 a.primary-action,
-li.primary-action a,
 li.primary-action input {
   display: inline-block;
   min-width: 26rem;
-  padding: 1.4rem 2.4rem;
+  padding: 1.6rem 4rem;
   font-family: Raleway, sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  color: #FFFFFF;
+  color: hsl(0,0%,100%);
   text-align: center;
   text-decoration: none;
-  background: hsl(0,80%,50%);
+  background: hsl(2,86%,63%);
   border-radius: 0.4rem;
 
   &:hover {
-    background: hsl(0,90%,40%);
+    background: hsl(2,86%,53%);
   }
 }
 
 p.error {
-  margin: 2rem auto;
+  display: flex;
+  margin: 2rem;
   padding: 2rem;
-  border: 4px solid #d92626;
+  font-family: Raleway, sans-serif;
+  font-weight: 600;
+  color: hsl(0,0%,100%);
+  background: hsl(175,55%,50%);
   border-radius: 0.6rem;
+
+  &:before {
+    content: '!';
+    display: block;
+    flex: 0 0 3rem;
+    height: 3rem;
+    margin-right: 2rem;
+    padding: 0.6rem 0.4rem 0.2rem;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 2rem;
+    text-align: center;
+    color: hsl(175,55%,50%);
+    background: hsl(0,0%,100%);
+    border-radius: 50%;
+  }
 }
 
 // Override default width or height caused by alt attributes in unloaded images
@@ -97,95 +152,22 @@ img[data-src]:not(.loaded) {
   }
 }
 
-// Main header
-body {
-  > header {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 auto;
-    padding: 0.8rem 0;
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.8rem;
+section.intro {
+  padding: 4rem 2rem;
+  background: hsl(207,54%,98%);
+
+  h1 {
+    padding: 0;
+  }
+  
+  p {
+    margin: 2rem 0 0;
+    font-family: Avenir Next, Libre Franklin, sans-serif;
+    font-size: 2.4rem;
     font-weight: 500;
-    background: hsl(60,7%,98%);
-    border-top: 0.4rem solid #DCDDD8;
-    border-bottom: 0.1rem solid #eeeeec;
-
-    h1 {
-      padding: 1.4rem;
-      font-size: 2.8rem;
-      letter-spacing: 0.4px;
-      line-height: 1;
-      text-align: center;
-      text-transform: uppercase;
-
-      a {
-        color: #5d5f53;
-        text-decoration: none;
-      }
-    }
-
-    nav {
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      li {
-        margin: 0.2rem 0.4rem;
-
-        a {
-          display: block;
-          padding: 0.8rem 1.2rem;
-          text-decoration: none;
-          color: #5e5f53;
-        }
-      }
-    }
-  }
-
-  &[data-controller="index"] > header nav li.about a,
-  &[data-controller="case-study"] > header nav li.case-studies a,
-  &[data-controller="case-studies"] > header nav li.case-studies a,
-  &[data-controller="portfolio"] > header nav li.portfolio a,
-  &[data-controller="work-history"] > header nav li.work-history a,
-  &[data-controller="contact"] > header nav li.contact a {
-    background: #ebece9;
-    border-radius: .4rem;
-  }
-}
-
-// Main content
-main {
-  flex: 1 1 auto;
-  color: #333333;
-
-  > * {
-    margin-right: 1rem;
-    margin-left: 1rem;
-  }
-
-  > h1 {
-    margin: 3rem auto;
-    padding: 0 1rem;
-    font-size: 2.2rem;
+    color: hsl(176,33%,20%);
     text-align: center;
-  }
-
-  > p {
-    text-align: center;
-  }
-}
-
-main, footer {
-  a {
-    font-weight: 600;
-    color: #de2121;
-
-    &:hover {
-      text-decoration: none;
-    }
+    line-height: 1.4;
   }
 }
 
@@ -296,238 +278,113 @@ a.new-tab {
   display: block;
   position: relative;
 
-  &::after {
-    content: '';
-    display: block;
-    width: 4rem;
-    height: 4rem;
-    position: absolute;
-    top: calc(50% - 2rem);
-    left: calc(50% - 2rem);
-    background: url('/images/icons.svg') no-repeat;
-    background-size: cover;
-    background-position: -32rem 0;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  img {
-    transition: filter 0.2s;
-  }
-
-  &:hover {
+  @media (hover: hover) {
     &::after {
-      opacity: 1;
+      content: '';
+      display: block;
+      width: 4rem;
+      height: 4rem;
+      position: absolute;
+      top: calc(50% - 2rem);
+      left: calc(50% - 2rem);
+      background: url('/images/icons.svg') no-repeat;
+      background-size: cover;
+      background-position: -32rem 0;
+      opacity: 0;
+      transition: opacity 0.2s;
     }
-    img {
-      filter: brightness(50%);
-    }
-  }
-}
-
-article.endorsement {
-  position: relative;
-  padding: 2rem 2.5rem 4rem;
-
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    z-index: 1;
-    width: 6rem;
-    height: 6rem;
-    background: url('/images/icons.svg') no-repeat;
-    background-size: cover;
-  }
-
-  &:before {
-    top: 0.6rem;
-    left: 1rem;
-    background-position: -56rem 0;
-  }
-
-  &:after {
-    right: 2rem;
-    bottom: 4.6rem;
-    background-position: -64rem 0;
-  }
-
-  p {
-    position: relative;
-    z-index: 2;
-    font-size: 1.6rem;
-  }
-
-  span.byline {
-    display: block;
-    position: absolute;
-    bottom: 2.6rem;
-    z-index: 2;
-    font-family: 'Raleway', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 600;
-    font-style: normal;
-    color: #666;
-  }
-}
-
-footer {
-  margin: 4rem 0 0;
-  padding: 2rem;
-  color: #606255;
-  text-align: center;
-  background: hsl(90,7%,98%);
-  border-top: 0.1rem solid hsl(80,6%,96%);
   
-  p.copyright {
-    margin: 0;
-    font-size: 1.4rem;
-
-    a {
-      font-weight: normal;
-      color: #606255;
+    img {
+      transition: filter 0.2s;
+    }
+  
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+      img {
+        filter: brightness(50%);
+      }
     }
   }
 }
 
 // 768px and up
 @media only screen and (min-width: 768px) {
-  body {
-    font-size: 1.8rem;
-
-    > header nav li a:hover,
-    &[data-controller="index"] > header nav li.about a,
-    &[data-controller="case-study"] > header nav li.case-studies a,
-    &[data-controller="case-studies"] > header nav li.case-studies a,
-    &[data-controller="portfolio"] > header nav li.portfolio a,
-    &[data-controller="work-history"] > header nav li.work-history a,
-    &[data-controller="contact"] > header nav li.contact a {
-      position: relative;
-      background: none;
-  
-      &::after {
-        content: '';
-        display: block;
-        width: calc(100% - 3rem);
-        height: 0.3rem;
-        position: absolute;
-        bottom: 0;
-        left: 1.5rem;
-        background: #868877;
-      }
-    }
-
-    > header nav li a:hover::after {
-      background: hsl(0,80%,50%) !important;
-    }
-  }
-
-  // Main header
-  body > header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 calc((100% - 140rem) / 2);
-    font-size: 1.6rem;
-
-    h1 {
-      margin: 0 2rem;
-      padding: 1rem;
-      font-size: 2rem;
-    }
-
-    nav {
-      ul {
-        margin-right: 1.5rem;
-
-        li {
-          margin: 0;
-
-          a {
-            padding: 2rem 1.5rem 1.9rem;
-          }
-        }
-      }
-    }
-  }
-
   main {
-    > h1 {
-      margin: 4rem auto 2rem;
+    h1, h2, h3, h4 {
+      padding-right: 4rem;
+      padding-left: 4rem;
+      text-align: left;
     }
-
-    > p {
-      max-width: 64rem;
-      margin-right: auto;
-      margin-left: auto;
-      font-size: 2rem;
+    h3 {
+      font-size: 2.4rem;
+    }
+    nav {
+      justify-content: flex-start;
+      padding: 2rem 4rem;
     }
   }
 
   html.js {
-    body {
-      > header {
-        position: fixed;
-        z-index: 500;
-        transition: margin 0.3s;
-      }
-      &.hidden-header > header {
-        margin-top: -6rem; // Header height
-      }
-    }
-
     main {
-      padding-top: 6rem !important;
+      padding-top: 11rem;
     }
+  }
+
+  section.intro {
+    padding: 4rem;
+
+    p {
+      text-align: left;
+    }
+  }
+
+  section.content {
+    max-width: 88rem;
+    margin: 10rem auto;
+    padding: 0 4rem;
+    font-size: 2rem;
+  }
+
+  p.error {
+    margin: 4rem 0 6rem 4rem;
   }
 }
 
 // 1024px and up
 @media only screen and (min-width: 1024px) {
-  body > header {
-    // 96rem + 3rem margin/padding on either side = 102rem
-    padding: 0 calc((100% - 102rem) / 2);
-  }
-
-  h1, h2 {
-    br {
-      display: none;
-    }
-  }
-
-  h3 {
-    margin: 4rem 0 1rem;
-  }
-
-  a.primary-action,
-  li.primary-action a {
+  a.primary-action {
     padding: 1.4rem 2.4rem;
   }
 
   main {
-    width: 96rem;
-    margin: auto;
-    padding-left: 0;
-    padding-right: 0;
-
-    > * {
-      margin-right: 0;
-      margin-left: 0;
+    > section,
+    > article {
+      max-width: 128rem;
+      margin-right: auto;
+      margin-left: auto;
+      position: relative;
     }
-    
-    > h1 {
-      margin: 6rem auto 2rem;
+
+    h1 {
+      font-size: 4.2rem;
+    }
+
+    nav {
+      position: absolute;
+      right: 4rem;
+      top: 3rem;
       padding: 0;
-      font-size: 2.2rem;
-    }
-
-    > p {
-      max-width: 80rem;
     }
   }
+}
 
-  footer {
-    margin-top: 8rem;
+@media only screen and (min-width: 1440px) {
+  section.intro {
+    padding: 6rem;
+  }
+  html.js main {
+    padding-top: 16rem;
   }
 }

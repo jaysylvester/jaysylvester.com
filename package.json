@@ -1,11 +1,11 @@
 {
   "name": "jaysylvester.com",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Source code from my personal site",
   "author": {
     "name": "Jay Sylvester",
     "email": "jay@jaysylvester.com",
-    "url": "http://jaysylvester.com/"
+    "url": "https://jaysylvester.com/"
   },
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   },
   "main": "index",
   "dependencies": {
-    "citizen": "git://github.com/jaysylvester/citizen.git#0.9.1",
+    "citizen": "https://github.com/jaysylvester/citizen#1.0.0",
     "moment": "^2.29.x",
     "nodemailer": "^6.4.x",
     "pg": "^8.4.x"
@@ -29,7 +29,8 @@
     "gulp-postcss": "*",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
-    "gulp-uglify-es": "*"
+    "gulp-uglify-es": "*",
+    "postcss": "*"
   },
   "engines": {
     "node": ">= 12.0.0"

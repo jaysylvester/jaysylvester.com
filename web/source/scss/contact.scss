@@ -1,8 +1,10 @@
 // Contact
 
+@import '_mixins';
+
 body[data-controller="contact"] {
   @media only screen and (max-width: 767px) {
-    main > h1 {
+    main > h2 {
       margin-bottom: 2rem;
     }
   }
@@ -38,6 +40,8 @@ body[data-controller="contact"] {
   }
   
   form {
+    padding: 0 2rem 6rem;
+
     label {
       margin-bottom: 0.6rem;
       line-height: 1;
@@ -50,57 +54,25 @@ body[data-controller="contact"] {
     select,
     textarea {
       width: 100%;
+      min-height: 4.5rem;
       padding: 1.2rem;
-      font-family: 'Lato', sans-serif;
+      font-family: 'Libre Franklin', sans-serif;
       font-size: 1.6rem;
       border: 0.1rem solid #cccccc;
       border-radius: 0.4rem;
       transition: border-color 0.2s, background-color 0.2s;
-  
-      &[type="submit"] {
-        border: none;
-      }
+
       &:focus {
         outline: none;
-        border-color: hsl(0,80%,50%);
+        border-color: hsl(2,86%,53%);
       }
     }
   
     textarea {
+      height: 14.2rem;
       line-height: 1.5;
     }
-  
-    input[type="checkbox"],
-    input[type="radio"] {
-      flex: 0 0 3rem;
-      height: 3rem;
-      position: relative;
-    }
-  
-    input[type="checkbox"] {
-      &:checked {
-        background: url('/images/icons.svg') no-repeat;
-        background-size: auto 2.4rem;
-        background-position: -9.4rem 0.2rem;
-      }
-    }
-  
-    input[type="radio"] {
-      border-radius: 50%;
-  
-      &:checked {
-        &::after {
-          content: '';
-          display: block;
-          width: 2.4rem;
-          height: 2.4rem;
-          position: absolute;
-          top: 0.2rem;
-          left: 0.2rem;
-          border-radius: 50%;
-        }
-      }
-    }
+
     ul.data {
       margin: 0;
   
@@ -128,61 +100,21 @@ body[data-controller="contact"] {
             height: 2rem;
             position: absolute;
             right: 0.8rem;
-            bottom: 1.1rem;
+            bottom: 1.2rem;
             background: url(../images/icons.svg) -24rem no-repeat;
             background-size: cover;
           }
         }
-        &.checkbox,
-        &.radio {
-          display: flex;
-          align-items: center;
-  
-          label {
-            margin: 0 0 0 1.2rem;
-            font-size: 100%;
-            line-height: 1.3;
-          }
-        }
-  
-        ul.data {
-          margin: 2.4rem 0;
-  
-          ul.data {
-            & > li {
-              flex-wrap: nowrap;
-              margin: 1.2rem 0;
-  
-              ul.checkbox,
-              ul.radio {
-                margin-top: 0.6rem;
-              }
-            }
-          }
-        }
-        ul.checkbox,
-        ul.radio {
-          & > li {
-            margin: 0.4rem 0 0.6rem;
-          }
-        }
       }
     }
+
     ul.actions {
-      margin: 0;
-      padding: 2.4rem 0;
-      text-align: center;
-  
-      & > li {
-        display: block;
-        margin-bottom: 1.2rem;
-  
-        &:first-child {
-          margin-left: 0;
-        }
-        &:last-child {
-          margin-right: 0;
-        }
+      margin: 4rem 0;
+      list-style-type: none;
+
+      li {
+        display: flex;
+        justify-content: center;
       }
     }
   }
@@ -192,9 +124,72 @@ body[data-controller="contact"] {
       max-width: 40rem;
       margin: auto;
     }
+  }
 
-    li.primary-action input {
-      width: auto;
+  @media only screen and (min-width: 768px) {
+    main h2 {
+      text-align: center;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    main {
+      max-width: 80rem;
+      margin: auto;
+
+      h2 {
+        text-align: left;
+      }
+    }
+
+    ul.social {
+      justify-content: flex-start;
+      margin-bottom: 2rem;
+      margin-left: 0;
+      padding: 0 4rem;
+
+      li {
+        margin-right: 2.8rem;
+      }
+    }
+
+    form {
+      max-width: 72rem;
+      padding-right: 0;
+      padding-left: 0;
+
+      ul.data {
+        display: grid;
+        grid-template: auto / 50% 50%;
+        row-gap: 2rem;
+        column-gap: 4rem;
+
+        li {
+          margin: 0;
+
+          &.email,
+          &.subject {
+            grid-column: 1;
+          }
+
+          &.message {
+            grid-row: 1 / 3;
+            grid-column: 2;
+          }
+
+          &.verification {
+            grid-column: 2;
+            grid-row: 3;
+          }
+        }
+      }
+    }
+  }
+
+  &[data-view="confirmation"] {
+    h1,
+    section.content p {
+      text-align: center;
     }
   }
 }

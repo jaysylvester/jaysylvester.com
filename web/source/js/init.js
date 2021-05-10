@@ -1,10 +1,10 @@
 JAY.init = function () {
   'use strict'
 
-  var body        = document.getElementsByTagName('body')[0],
-      controller  = body.getAttribute('data-controller'),
-      action      = body.getAttribute('data-action'),
-      view        = body.getAttribute('data-view')
+  const body       = document.getElementsByTagName('body')[0],
+        controller = body.getAttribute('data-controller'),
+        action     = body.getAttribute('data-action'),
+        view       = body.getAttribute('data-view')
 
   JAY.global.init()
 
