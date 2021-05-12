@@ -50,10 +50,10 @@ gulp.task('reload', function (done) {
 
 gulp.task('watch', function (done) {
   livereload.listen()
-  gulp.watch('app/patterns/**', gulp.parallel('reload'))
-  gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
-  gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
-  gulp.watch('web/**/**.hbs', gulp.parallel('reload'))
+  gulp.watch('app/patterns/**', { delay: 500 }, gulp.task('reload'))
+  gulp.watch('web/source/scss/**/**.scss', gulp.task('css'))
+  gulp.watch('web/source/js/**/**.js', gulp.task('js'))
+  gulp.watch('web/**/**.hbs', gulp.task('reload'))
   done()
 })
 
