@@ -241,6 +241,12 @@ body[data-controller="case-study"] {
         }
       }
 
+      &.kitchen-view {
+        img {
+          height: 48rem;
+        }
+      }
+
       &.pricing-cta {
         figure {
           margin-bottom: 2rem;
@@ -261,7 +267,7 @@ body[data-controller="case-study"] {
           figure:nth-child(1),
           figure:nth-child(2) {
             flex-basis: auto;
-            margin: 0 2rem;
+            margin: 0 1rem;
           }
         }
       }
@@ -298,6 +304,24 @@ body[data-controller="case-study"] {
 
     section.screens.group {
       padding-top: 2rem;
+    }
+
+    section.Linode {
+      figure[role="group"]:not(.screens) {
+        section {
+          figure {
+            img {
+              height: 28rem;
+            }
+          }
+        }
+
+        &.usability-testing {
+          img {
+            height: 14.6rem;
+          }
+        }
+      }
     }
   }
 

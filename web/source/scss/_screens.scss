@@ -146,6 +146,7 @@ figure.callout {
 figcaption {
   max-width: 60rem;
   margin: 1rem auto 0;
+  font-size: 1.6rem;
   font-style: italic;
   line-height: 1.4;
   text-align: center;
@@ -159,7 +160,7 @@ figure.device img {
   figure.callout {
     img {
       width: auto;
-      height: 32rem;
+      height: 36rem;
       margin: auto;
     }
   }
