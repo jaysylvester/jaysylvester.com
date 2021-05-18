@@ -22,10 +22,10 @@ function handler() {
 }
 
 
-function form(params) {
+function form(params, request) {
   let emailRegex = new RegExp(/[a-z0-9!##$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!##$%&''*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i)
 
-  if ( params.request.method !== 'POST' ) {
+  if ( request.method !== 'POST' ) {
     return { redirect: '/contact' }
   } else {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
