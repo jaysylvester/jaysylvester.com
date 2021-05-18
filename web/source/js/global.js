@@ -38,43 +38,44 @@ JAY.global = ( function () {
         if ( bodyOffset === 0 ) {
           body.classList.remove('fixed-header')
         }
-      })
+      }, { passive: true })
     },
 
     // Lazy load images
     imageLoad: function (mobile) {
-      const load = function () {
-        const images = document.querySelectorAll('img[data-src]:not(.loaded)')
-        
-        if ( images.length ) {
-          images.forEach( function (image) {
-            // Make sure all images have an explicit width or height set in CSS for best results
-            let dimension
-            // Default to width on mobile since most images are set to 100% width
-            if ( mobile ) {
-              dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
-            // Default to height on larger devices
-            } else {
-              dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
-            }
+      let images = document.querySelectorAll('img[data-src]:not(.loaded)')
 
-            // If the image is within 1.5 viewport heights of the current offset, load it
-            if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-              image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
-              image.classList.add('loaded')
-              if ( !mobile && image.parentNode.tagName === 'A' ) {
-                methods.imageZoom(image)
-              }
+      const load = function () {
+        window.addEventListener('scroll', load, { capture: true, passive: true})
+        images.forEach( function (image) {
+          // Make sure all images have an explicit width or height set in CSS for best results
+          let dimension
+          // Default to width on mobile since most images are set to 100% width
+          if ( mobile ) {
+            dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
+          // Default to height on larger devices
+          } else {
+            dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
+          }
+
+          // If the image is within 1.5 viewport heights of the current offset, load it
+          if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
+            image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+            image.classList.add('loaded')
+            if ( !mobile && image.parentNode.tagName === 'A' ) {
+              methods.imageZoom(image)
             }
-          })
-        } else {
-          window.removeEventListener('scroll', load)
-        }
+            images = document.querySelectorAll('img[data-src]:not(.loaded)')
+            if ( !images.length ) {
+              window.removeEventListener('scroll', load, { capture: true, passive: true})
+            }
+          }
+        })
       }
-      
-      // Load images within the viewport, then load additional images as the user scrolls
-      load()
-      window.addEventListener('scroll', load)
+
+      if ( images.length ) {
+        load()
+      }
     },
 
     imageZoom: function (image) {
