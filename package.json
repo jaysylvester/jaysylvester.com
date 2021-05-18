@@ -21,6 +21,7 @@
   "devDependencies": {
     "autoprefixer": "*",
     "cssnano": "*",
+    "eslint": "*",
     "gulp": "*",
     "gulp-concat": "*",
     "gulp-cssnano": "*",
