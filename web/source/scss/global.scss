@@ -342,7 +342,7 @@ a.new-tab {
 
   section.content {
     max-width: 88rem;
-    margin: 10rem auto;
+    margin: 6rem auto;
     padding: 0 4rem;
     font-size: 2rem;
   }
@@ -383,6 +383,9 @@ a.new-tab {
 @media only screen and (min-width: 1440px) {
   section.intro {
     padding: 6rem;
+  }
+  section.content {
+    margin: 10rem auto;
   }
   html.js main {
     padding-top: 16rem;

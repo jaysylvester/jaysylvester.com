@@ -13,7 +13,7 @@ async function employers() {
   try {
     const result = await client.query({
       name: 'work_history_employers',
-      text: 'select w.id, w.employer_name, w.employer_url, w.job_title, w.job_description, w.employed_from, w.employed_to, c.company_url from work_history w left join case_studies c on w.employer_url = c.company_url order by employed_to desc;'
+      text: 'select w.id, w.employer_name, w.employer_url, w.job_title, w.job_description, w.employed_from, w.employed_to, c.company_url, c.title from work_history w left join case_studies c on w.employer_url = c.company_url order by employed_to desc;'
     })
     // Format dates
     result.rows.forEach( function (item) {

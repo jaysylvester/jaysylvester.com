@@ -1,11 +1,11 @@
 <section class="intro">
-  <h1>I'm pretty good at this. I've been doing it a while.</h1>
+  <h1>I'm good at this. I've been doing it for a while.</h1>
   <p>
-    I've led and contributed to just about every phase of the development lifecycle, including team management, information architecture, UX design, and full stack development.
+    I've led and contributed to just about every phase of the design-development lifecycle, including product strategy, information architecture, UX design, and full stack development.
   </p>
 </section>
 <section class="content resume">
-  <h2 class="download">Download my résumé:</h2>
+  <h2 class="download">My résumé</h2>
   <ul>
     <li>
       <a href="/documents/resume/Jay-Sylvester-resume.pdf">PDF</a>
@@ -19,18 +19,18 @@
   </ul>
 </section>
 <section class="content competencies">
-  <h2>Core Competencies</h2>
+  <h2>Core competencies</h2>
   <ul>
     <li>Accomplished manager and mentor of UX designers and front end developers</li>
     <li>Holistic strategist who balances business, design, and technical concerns</li>
-    <li>Intuitive team builder adept at identifying critical needs and ideal candidates</li>
+    <li>Intuitive team builder, adept at identifying critical needs and ideal candidates</li>
     <li>Vocal driver of product design process definition and implementation</li>
     <li>Insightful interaction designer with extensive web and mobile experience</li>
     <li>Proven web architect with focused expertise on front end development</li>
   </ul>
 </section>
 <section class="content work-history">
-  <h2>Work History</h2>
+  <h2>Work history</h2>
   {{#each employers}}
     <section class="employer">
       <h3>{{job_title}}</h2>
@@ -39,6 +39,11 @@
         <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
       {{else}}
         <p class="dates">{{employed_from_formatted}} to Present</p>
+      {{/if}}
+      {{#if company_url}}
+        <p class="case-study">
+          Case study: <a href="/case-study/company/{{company_url}}">{{{title}}}</a>
+        </p>
       {{/if}}
       <p class="description">{{job_description}}</p>
     </section>
