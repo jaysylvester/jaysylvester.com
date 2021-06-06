@@ -10,7 +10,7 @@ module.exports = {
 // default action
 async function handler() {
   return {
-    content: {
+    public: {
       employers: await app.models['work-history'].employers()
     }
   }

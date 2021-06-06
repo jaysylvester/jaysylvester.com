@@ -10,7 +10,7 @@ module.exports = {
 // default action
 async function handler(params) {
   return {
-    content: {
+    public: {
       caseStudies: await app.models['case-studies'].caseStudies(params.url.count)
     }
   }

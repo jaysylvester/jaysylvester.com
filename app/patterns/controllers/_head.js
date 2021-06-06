@@ -19,7 +19,7 @@ async function handler(params) {
     }
   }
   return {
-    content: {
+    public: {
       metaData: metaData,
       tracking: app.config.citizen.mode === 'production' ? true : false
     }

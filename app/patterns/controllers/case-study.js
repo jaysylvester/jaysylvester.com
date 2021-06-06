@@ -13,7 +13,7 @@ async function handler(params) {
 
   if ( caseStudy ) {
     return {
-      content: caseStudy,
+      public: caseStudy,
       include: {
         screens: {
           controller: '_screens'

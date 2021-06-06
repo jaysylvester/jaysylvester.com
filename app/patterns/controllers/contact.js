@@ -12,7 +12,7 @@ module.exports = {
 // default action
 function handler() {
   return {
-    content: {
+    public: {
       verification: verification()
     },
     cache: {
@@ -30,7 +30,7 @@ function form(params, request) {
   } else {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
       return {
-        content: {
+        public: {
           error: 'All fields are required',
           verification: verification()
         },
@@ -40,7 +40,7 @@ function form(params, request) {
       }
     } else if ( !emailRegex.test(params.form.email) ) {
       return {
-        content: {
+        public: {
           error: 'Your e-mail address doesn\'t look right',
           verification: verification()
         },
@@ -50,7 +50,7 @@ function form(params, request) {
       }
     } else if ( parseInt(params.form.first_int, 10) + parseInt(params.form.second_int, 10) !== parseInt(params.form.verification, 10) ) {
       return {
-        content: {
+        public: {
           error: 'Are you a bot? If not, please try again.',
           verification: verification()
         },

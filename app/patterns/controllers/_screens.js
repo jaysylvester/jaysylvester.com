@@ -11,7 +11,7 @@ module.exports = {
 // default action
 async function handler(params) {
   return {
-    content: {
+    public: {
       screens: params.url.company ? await app.models.screens.companyScreens(params.url.company) : await app.models.screens.screens()
     }
   }
@@ -21,7 +21,7 @@ async function handler(params) {
 async function featured() {
   return {
     view: '_group',
-    content: {
+    public: {
       screens: await app.models.screens.featuredScreens()
     }
   }
