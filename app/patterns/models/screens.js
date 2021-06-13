@@ -76,7 +76,7 @@ async function screens() {
           screens: {}
         }
       }
-      screens[screen.category].screens[screen.id] = {
+      screens[screen.category].screens[screen.sort] = {
         company:  screen.company,
         url:      screen.url,
         alt:      screen.alt,
