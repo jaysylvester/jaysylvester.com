@@ -60,17 +60,22 @@ async function caseStudy(company) {
             'order by s.sort asc, cs.sort asc;',
       values: [ company ]
     })
+    
     // Transform the data to make it usable by the view
     let caseStudy = result.rows[0]
-    caseStudy.screens = {}
-    result.rows.forEach( function (item) {
-      if ( Object.keys(caseStudy.screens).length < 4 ) {
-        caseStudy.screens[item.screen_sort] = {
-          url: item.screen_url,
-          alt: item.alt
+
+    if ( caseStudy ) {
+      caseStudy.screens = {}
+      result.rows.forEach( function (item) {
+        if ( Object.keys(caseStudy.screens).length < 4 ) {
+          caseStudy.screens[item.screen_sort] = {
+            url: item.screen_url,
+            alt: item.alt
+          }
         }
-      }
-    })
+      })
+    }
+
     return caseStudy
   } finally {
     client.release()

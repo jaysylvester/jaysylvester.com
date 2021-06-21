@@ -1,4 +1,8 @@
 <section class="content error">
-  <h1>D'oh!</h1>
-  <p>The page you requested doesn't exist.</p>
+  <h1>{{error.label}}</h1>
+  {{#if error.message}}
+    <p>{{{error.message}}}</p>
+  {{else}}
+    <p>The document you requested doesn't exist.</p>
+  {{/if}}
 </section>

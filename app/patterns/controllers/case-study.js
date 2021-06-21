@@ -21,8 +21,8 @@ async function handler(params) {
       }
     }
   } else {
-    return {
-      error: { statusCode: 404 }
-    }
+    let err = new Error('The case study you requested doesn\'t exist.<br><br>Feel free to browse <a href="/case-studies">my complete list of case studies</a>.')
+    err.statusCode = 404
+    throw err
   }
 }
