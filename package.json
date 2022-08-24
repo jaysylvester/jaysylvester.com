@@ -1,6 +1,6 @@
 {
   "name": "jaysylvester.com",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Source code from my personal site",
   "author": {
     "name": "Jay Sylvester",
@@ -31,9 +31,10 @@
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify-es": "*",
-    "postcss": "*"
+    "postcss": "*",
+    "sass": "*"
   },
   "engines": {
-    "node": ">= 12.0.0"
+    "node": ">= 16.0.0"
   }
 }
