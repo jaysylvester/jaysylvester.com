@@ -3,12 +3,6 @@
 @import '_mixins';
 
 body[data-controller="contact"] {
-  // Spam honeypot
-  li.nope {
-    position: absolute;
-    top: -100%;
-  }
-
   @media only screen and (max-width: 767px) {
     main > h2 {
       margin-bottom: 2rem;

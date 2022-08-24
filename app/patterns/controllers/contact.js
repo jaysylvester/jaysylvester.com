@@ -12,6 +12,9 @@ module.exports = {
 // default action
 function handler() {
   return {
+    public: {
+      date: Date.now()
+    },
     cache: {
       route: false
     }
@@ -43,10 +46,11 @@ function form(params, request) {
           route: false
         }
       }
-    } else if ( params.form.nope.length ) {
+    // If they submit the form in less than 10 seconds, assume it's a bot.
+    } else if ( params.form.date > ( Date.now() - 10000 ) ) {
       return {
         public: {
-          error: 'Are you a bot? If not, please try again.'
+          error: 'Are you a bot? If not, wait 10 seconds and try again.'
         },
         cache: {
           route: false
