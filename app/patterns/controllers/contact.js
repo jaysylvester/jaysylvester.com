@@ -12,9 +12,6 @@ module.exports = {
 // default action
 function handler() {
   return {
-    public: {
-      verification: verification()
-    },
     cache: {
       route: false
     }
@@ -31,8 +28,7 @@ function form(params, request) {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
       return {
         public: {
-          error: 'All fields are required',
-          verification: verification()
+          error: 'All fields are required'
         },
         cache: {
           route: false
@@ -41,18 +37,16 @@ function form(params, request) {
     } else if ( !emailRegex.test(params.form.email) ) {
       return {
         public: {
-          error: 'Your e-mail address doesn\'t look right',
-          verification: verification()
+          error: 'Your e-mail address doesn\'t look right'
         },
         cache: {
           route: false
         }
       }
-    } else if ( parseInt(params.form.first_int, 10) + parseInt(params.form.second_int, 10) !== parseInt(params.form.verification, 10) ) {
+    } else if ( params.form.nope.length ) {
       return {
         public: {
-          error: 'Are you a bot? If not, please try again.',
-          verification: verification()
+          error: 'Are you a bot? If not, please try again.'
         },
         cache: {
           route: false
@@ -83,23 +77,4 @@ function form(params, request) {
 
 function confirmation() {
   return { view: 'confirmation' }
-}
-
-
-function verification() {
-  let verification = {}
-  verification.firstInt  = app.toolbox.helpers.getRandomIntInclusive(0, 10)
-  verification.secondInt = app.toolbox.helpers.getRandomIntInclusive(1, 10)
-  verification.options   = [ verification.firstInt + verification.secondInt ]
-
-  while ( verification.options.length < 8 ) {
-    let value = app.toolbox.helpers.getRandomIntInclusive(1, 20)
-
-    if ( verification.options.indexOf(value) === -1 ) {
-      verification.options.push(value)
-    }
-  }
-
-  verification.options.sort((a, b) => a - b)
-  return verification
 }

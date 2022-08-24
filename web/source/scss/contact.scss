@@ -3,6 +3,12 @@
 @import '_mixins';
 
 body[data-controller="contact"] {
+  // Spam honeypot
+  li.nope {
+    position: absolute;
+    top: -100%;
+  }
+
   @media only screen and (max-width: 767px) {
     main > h2 {
       margin-bottom: 2rem;
@@ -69,7 +75,7 @@ body[data-controller="contact"] {
     }
   
     textarea {
-      height: 14.2rem;
+      height: 100%;
       line-height: 1.5;
     }
 
@@ -173,20 +179,20 @@ body[data-controller="contact"] {
           }
 
           &.message {
-            grid-row: 1 / 3;
+            grid-row: 1 / 4;
             grid-column: 2;
-          }
+            margin-bottom: 0;
 
-          &.verification {
-            grid-column: 2;
-            grid-row: 3;
+            textarea {
+              height: 23rem;
+            }
           }
         }
       }
     }
   }
 
-  &[data-view="confirmation"] {
+  &[data-action="confirmation"] {
     h1,
     section.content p {
       text-align: center;

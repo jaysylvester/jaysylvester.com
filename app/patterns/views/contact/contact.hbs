@@ -9,8 +9,6 @@
   <p class="error">{{error}}</p>
 {{/if}}
 <form id="contact-form" action="/contact/action/form" method="post" novalidate>
-  <input type="hidden" name="first_int" value="{{verification.firstInt}}">
-  <input type="hidden" name="second_int" value="{{verification.secondInt}}">
   <ul class="data">
     <li class="name text required">
       <label for="name">
@@ -36,14 +34,11 @@
       </label>
       <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
     </li>
-    <li class="verification select">
-      <label for="verification">What's {{verification.firstInt}} plus {{verification.secondInt}}?</label>
-      <select name="verification" id="verification">
-        <option value="0"></option>
-        {{#each verification.options}}
-          <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
+    <li class="nope">
+      <label for="nope">
+        Humans leave this blank
+      </label>
+      <input id="nope" name="nope" value="" />
     </li>
   </ul>
   <ul class="actions">
