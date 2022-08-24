@@ -31,6 +31,7 @@ function form(params, request) {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
       return {
         public: {
+          date: Date.now(),
           error: 'All fields are required'
         },
         cache: {
@@ -40,6 +41,7 @@ function form(params, request) {
     } else if ( !emailRegex.test(params.form.email) ) {
       return {
         public: {
+          date: Date.now(),
           error: 'Your e-mail address doesn\'t look right'
         },
         cache: {
@@ -50,6 +52,7 @@ function form(params, request) {
     } else if ( params.form.date > ( Date.now() - 10000 ) ) {
       return {
         public: {
+          date: Date.now(),
           error: 'Are you a bot? If not, wait 10 seconds and try again.'
         },
         cache: {
