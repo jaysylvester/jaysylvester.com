@@ -1,16 +1,14 @@
 // _head controller
 
-'use strict'
-
-module.exports = {
-  handler: handler
-}
 
 // default action
-async function handler(params) {
-  let metaData = {}
-  if ( app.models._head.default[params.route.controller] ) {
-    metaData = await app.models._head.default[params.route.controller](params.url.company)
+export const handler = async (params) => {
+  let metaData = {},
+      // Convert the controller name to a valid method name that matches the _head model method name
+      modelMethod = params.route.controller.replace(/[\-]([a-z])/g, (match, p1) => { return p1.toUpperCase() })
+
+  if ( app.models._head[modelMethod] ) {
+    metaData = await app.models._head[modelMethod](params.url.company)
   } else {
     metaData = {
       title: 'Error',

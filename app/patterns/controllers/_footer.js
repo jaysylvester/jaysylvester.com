@@ -1,11 +1,5 @@
-// _header controller
-
-'use strict'
-
-module.exports = {
-  handler: handler
-}
+// _footer controller
 
 
 // default action
-function handler() {}
+export const handler = () => {}

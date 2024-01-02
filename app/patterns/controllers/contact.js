@@ -1,16 +1,8 @@
 // contact controller
 
-'use strict'
-
-module.exports = {
-  handler       : handler,
-  form          : form,
-  confirmation  : confirmation
-}
-
 
 // default action
-function handler() {
+export const handler = (params) => {
   return {
     public: {
       date: Date.now()
@@ -22,7 +14,7 @@ function handler() {
 }
 
 
-function form(params, request) {
+export const form = (params, request) => {
   let emailRegex = new RegExp(/[a-z0-9!##$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!##$%&''*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i)
 
   if ( request.method !== 'POST' ) {
@@ -82,6 +74,6 @@ function form(params, request) {
 }
 
 
-function confirmation() {
+export const confirmation = () => {
   return { view: 'confirmation' }
 }

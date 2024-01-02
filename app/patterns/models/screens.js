@@ -1,15 +1,7 @@
 // _screens model
 
-'use strict'
 
-module.exports = {
-  companyScreens  : companyScreens,
-  featuredScreens : featuredScreens,
-  screens         : screens
-}
-
-
-async function companyScreens(company) {
+export const companyScreens = async (company) => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
@@ -43,7 +35,7 @@ async function companyScreens(company) {
 }
 
 
-async function featuredScreens() {
+export const featuredScreens = async () => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
@@ -58,7 +50,7 @@ async function featuredScreens() {
 }
 
 
-async function screens() {
+export const screens = async () => {
   const client = await app.toolbox.dbPool.connect()
 
   try {

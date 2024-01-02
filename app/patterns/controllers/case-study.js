@@ -1,14 +1,8 @@
 // _case-study controller
 
-'use strict'
-
-module.exports = {
-  handler: handler
-}
-
 
 // default action
-async function handler(params) {
+export const handler = async (params) => {
   let caseStudy = await app.models['case-studies'].caseStudy(params.url.company)
 
   if ( caseStudy ) {

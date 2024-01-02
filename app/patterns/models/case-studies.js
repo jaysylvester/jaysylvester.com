@@ -1,14 +1,7 @@
 // _case-study model
 
-'use strict'
 
-module.exports = {
-  caseStudies : caseStudies,
-  caseStudy   : caseStudy
-}
-
-
-async function caseStudies() {
+export const caseStudies = async () => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
@@ -46,7 +39,7 @@ async function caseStudies() {
 }
 
 
-async function caseStudy(company) {
+export const caseStudy = async (company) => {
   const client = await app.toolbox.dbPool.connect()
 
   try {

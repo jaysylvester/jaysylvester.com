@@ -1,18 +1,7 @@
 // _head model
 
-'use strict'
 
-module.exports = {
-  'case-studies'  : caseStudies,
-  'case-study'    : caseStudy,
-  contact         : contact,
-  index           : index,
-  portfolio       : portfolio,
-  'work-history'  : workHistory
-}
-
-
-function caseStudies() {
+export const caseStudies = () => {
   return {
     title:        'Jay Sylvester — Case Studies',
     description:  'Read detailed case studies that describe my contribution to various UX and development projects.',
@@ -21,7 +10,7 @@ function caseStudies() {
 }
 
 
-async function caseStudy(company) {
+export const caseStudy = async (company) => {
   let caseStudy = await app.models['case-studies'].caseStudy(company)
 
   if ( caseStudy ) {
@@ -36,7 +25,7 @@ async function caseStudy(company) {
 }
 
 
-function contact() {
+export const contact = () => {
   return {
     title:        'Jay Sylvester — Contact Me',
     description:  'Find me on social media or send me an e-mail.',
@@ -45,7 +34,7 @@ function contact() {
 }
 
 
-function index() {
+export const index = () => {
   return {
     title:       'Jay Sylvester — UX Manager/Director, Designer, and Engineer',
     description: 'I\'m a UX director/lead with almost 20 years experience spanning user research, user experience design, and full stack development.',
@@ -54,7 +43,7 @@ function index() {
 }
 
 
-function portfolio() {
+export const portfolio = () => {
   return {
     title:       'Jay Sylvester\'s Portfolio — UX Designer and Engineer',
     description: 'Enjoy my dry process documentation, research data, ugly sketches, plain-looking wireframes, and half-baked prototypes. And a few pretty screens for those of you who are into that.',
@@ -63,7 +52,7 @@ function portfolio() {
 }
 
 
-function workHistory() {
+export const workHistory = () => {
   return {
     title:       'Jay Sylvester — Work History / Résumé',
     description: 'I\'ve led and contributed to just about every phase of the development lifecycle, including team management, information architecture, UX design, and full stack development.',

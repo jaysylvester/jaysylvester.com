@@ -1,13 +1,7 @@
 // work-history model
 
-'use strict'
 
-module.exports = {
-  employers : employers
-}
-
-
-async function employers() {
+export const employers = async () => {
   const client = await app.toolbox.dbPool.connect()
 
   try {

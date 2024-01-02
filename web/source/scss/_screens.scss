@@ -1,7 +1,5 @@
 // Screenshots
 
-@import '_mixins';
-
 section.screens {
   // Override default height caused by alt attributes in unloaded images
   // Coincides with JAY.global.imageLoad() in global.js

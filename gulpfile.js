@@ -1,64 +1,69 @@
-'use strict'
-
-var autoprefixer  = require('autoprefixer'),
-    concat        = require('gulp-concat'),
-    cssnano       = require('gulp-cssnano'),
-    filter        = require('gulp-filter'),
-    gulp          = require('gulp'),
-    livereload    = require('gulp-livereload'),
-    postcss       = require('gulp-postcss'),
-    gulpsass      = require('gulp-sass'),
-    nodesass      = require('sass'),
-    sourcemaps    = require('gulp-sourcemaps'),
-    uglify        = require('gulp-uglify-es').default
+import autoprefixer from 'autoprefixer'
+import concat       from 'gulp-concat'
+import cssnano      from 'gulp-cssnano'
+import filter       from 'gulp-filter'
+import gulp         from 'gulp'
+import gulpsass     from 'gulp-sass'
+import browsersync  from 'browser-sync'
+import postcss      from 'gulp-postcss'
+import nodesass     from 'sass'
+import sourcemaps   from 'gulp-sourcemaps'
+import uglify       from 'gulp-uglify-es'
 
 const sass = gulpsass(nodesass)
 
 gulp.task('css', function (done) {
-  gulp.src([
-            'web/source/scss/baseline.scss',
-            'web/source/scss/global.scss',
-            'web/source/scss/**/**.scss'
-          ])
+  gulp.src(['web/source/scss/site.scss'])
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(postcss([autoprefixer()]))
       .pipe(cssnano({ safe: true, colormin: false }))
       .pipe(concat('site.css'))
-      .pipe(sourcemaps.write('../min'))
-      .pipe(gulp.dest('web/min/'))
-      .pipe(filter('**/*.css'))
-      .pipe(livereload())
+      .pipe(sourcemaps.write(''))
+      .pipe(gulp.dest('web/min'))
+      .pipe(filter('**/*.css*'))
+      .pipe(browsersync.stream())
   done()
 })
 
 gulp.task('js', function (done) {
   gulp.src([
             'web/source/js/immediate.js',
-            'web/source/js/**.js'
+            'web/source/js/**/*.js'
           ])
       .pipe(sourcemaps.init())
-      .pipe(uglify())
+      .pipe(uglify.default())
       .pipe(concat('site.js'))
-      .pipe(sourcemaps.write('../min'))
+      .pipe(sourcemaps.write(''))
       .pipe(gulp.dest('web/min'))
-      .pipe(livereload())
+      .pipe(browsersync.stream())
   done()
 })
 
 gulp.task('reload', function (done) {
-  livereload.reload()
-  done()
+  // Slight delay in browser reload to give citizen time to reinitialize module updates
+  setTimeout( () => {
+    browsersync.reload()
+    done()
+  }, 500)
 })
 
 gulp.task('watch', function (done) {
-  livereload.listen()
-  gulp.watch('app/patterns/**', { delay: 500 }, gulp.task('reload'))
-  gulp.watch('web/source/scss/**/**.scss', gulp.task('css'))
-  gulp.watch('web/source/js/**/**.js', gulp.task('js'))
-  gulp.watch('web/**/**.hbs', gulp.task('reload'))
+  browsersync.init({
+    proxy: 'https://dev.jaysylvester.com',
+    port: 8181,
+    ui: {
+      port: 8282
+    },
+    notify: false,
+    open: false
+  })
+  gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
+  gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
+  gulp.watch('app/patterns/**', gulp.parallel('reload'))
+  gulp.watch('app/toolbox/**', gulp.parallel('reload'))
   done()
 })
 
 gulp.task('default', gulp.parallel('watch'))
-gulp.task('prod', gulp.parallel('js', 'css'))
+gulp.task('all', gulp.parallel('css', 'js'))

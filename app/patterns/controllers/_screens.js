@@ -1,15 +1,8 @@
 // _screens controller
 
-'use strict'
-
-module.exports = {
-  handler  : handler,
-  featured : featured
-}
-
 
 // default action
-async function handler(params) {
+export const handler = async (params) => {
   return {
     public: {
       screens: params.url.company ? await app.models.screens.companyScreens(params.url.company) : await app.models.screens.screens()
@@ -18,7 +11,7 @@ async function handler(params) {
 }
 
 
-async function featured() {
+export const featured = async () => {
   return {
     view: '_group',
     public: {

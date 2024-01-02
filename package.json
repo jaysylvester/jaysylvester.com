@@ -12,6 +12,7 @@
     "url": "https://github.com/jaysylvester/jaysylvester.com"
   },
   "main": "index",
+  "type": "module",
   "dependencies": {
     "citizen": "https://github.com/jaysylvester/citizen#1.0.0",
     "moment": "^2.29.x",
@@ -20,18 +21,17 @@
   },
   "devDependencies": {
     "autoprefixer": "*",
-    "cssnano": "*",
+    "browser-sync": "*",
     "eslint": "*",
     "gulp": "*",
     "gulp-concat": "*",
     "gulp-cssnano": "*",
     "gulp-filter": "*",
-    "gulp-livereload": "*",
     "gulp-postcss": "*",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify-es": "*",
-    "postcss": "*",
+    "gulp-watch": "*",
     "sass": "*"
   },
   "engines": {

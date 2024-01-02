@@ -1,0 +1,15 @@
+// Global styles
+@import '_mixins';
+@import 'baseline';
+@import 'global';
+@import '_footer';
+@import '_header';
+@import '_screens';
+
+// Pattern styles
+@import 'case-studies';
+@import 'case-study';
+@import 'contact';
+@import 'index';
+@import 'portfolio';
+@import 'work-history';

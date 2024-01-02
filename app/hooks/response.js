@@ -1,13 +1,7 @@
 // response events
 
-'use strict'
 
-module.exports = {
-  start: start
-}
-
-
-function start() {
+export const start = () => {
   return {
     cache: {
       route: {
