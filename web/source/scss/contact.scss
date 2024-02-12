@@ -48,7 +48,7 @@ body[data-controller="contact"] {
       width: 100%;
       min-height: 4.5rem;
       padding: 1.2rem;
-      font-family: 'Libre Franklin', sans-serif;
+      font-family: var(--font-content);
       font-size: 1.6rem;
       border: 0.1rem solid #cccccc;
       border-radius: 0.4rem;

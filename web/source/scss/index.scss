@@ -23,7 +23,7 @@ body[data-controller="index"] {
       position: absolute;
       z-index: 2;
       height: 3rem;
-      font-family: Raleway, sans-serif;
+      font-family: var(--font-primary);
       font-weight: 800;
       font-size: 6.4rem;
       color: white;

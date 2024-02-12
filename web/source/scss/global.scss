@@ -10,6 +10,8 @@
 :root {
   --color-links: hsl(207,54%,32%);
   --color-primary: hsl(176,53%,47%);
+  --font-content: 'Libre Franklin', sans-serif;
+  --font-primary: 'Raleway', sans-serif;
 }
 
 @import '_header';
@@ -25,7 +27,7 @@ html {
 body {
   position: relative;
   height: 100%;
-  font-family: 'Libre Franklin', sans-serif;
+  font-family: var(--font-content);
   font-size: 1.8rem;
   background: var(--color-primary);
   text-rendering: optimizeLegibility;
@@ -109,7 +111,7 @@ li.primary-action input {
   display: inline-block;
   padding: 1.2rem 2.4rem;
   color: hsl(0,0%,100%);
-  font-family: Raleway, sans-serif;
+  font-family: var(--font-primary);
   font-size: 1.6rem;
   font-weight: 600;
   line-height: 1.4;
@@ -127,7 +129,7 @@ p.error {
   display: flex;
   margin: 2rem;
   padding: 2rem;
-  font-family: Raleway, sans-serif;
+  font-family: var(--font-primary);
   font-weight: 600;
   color: hsl(0,0%,100%);
   background: hsl(175,55%,50%);
