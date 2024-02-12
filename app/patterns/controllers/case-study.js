@@ -1,9 +1,9 @@
-// _case-study controller
+// case-study controller
 
 
 // default action
 export const handler = async (params) => {
-  let caseStudy = await app.models['case-studies'].caseStudy(params.url.company)
+  let caseStudy = await app.models['case-studies'].caseStudy(params.url.company || params.url['case-study'])
 
   if ( caseStudy ) {
     return {

@@ -6,6 +6,12 @@
 	font-style: normal;
 }
 
+// Custom properties
+:root {
+  --color-links: hsl(207,54%,32%);
+  --color-primary: hsl(176,53%,47%);
+}
+
 @import '_header';
 @import '_footer';
 @import '_screens';
@@ -17,14 +23,11 @@ html {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   position: relative;
   height: 100%;
   font-family: 'Libre Franklin', sans-serif;
   font-size: 1.8rem;
-  background: white;
+  background: var(--color-primary);
   text-rendering: optimizeLegibility;
 
   > * {
@@ -33,35 +36,43 @@ body {
 }
 
 main {
-  flex: 1 1 auto;
   color: black;
+  background: white;
 
-  h1, h2, h3, h4 {
-    padding: 3rem 2rem 2rem;
-    color: hsl(176,53%,37%);
-    text-align: center;
+  h1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 46vh;
+    padding: 2rem 2.6rem;
+    background: var(--color-primary);
+    font-size: 10vw;
+    color: white;
+    text-transform: lowercase;
   }
 
-  h1, h2 {
-    font-size: 3.2rem;
-  }
-
-  h2, h3 {
-    font-weight: 700;
+  h2 {
+    margin: 2rem 2.6rem 2.4rem;
+    font-size: 7vw;
+    color: var(--color-primary);
+    text-transform: lowercase;
   }
 
   h3 {
+    margin: 0.6rem 2.6rem;
     font-size: 2.6rem;
+    color: hsl(0,0%,30%);
   }
 
   h4 {
+    margin: 0.6rem 2.6rem;
     font-size: 2rem;
     font-weight: 600;
     color: hsl(0,0%,30%);
   }
 
   a {
-    color: hsl(207,54%,32%);
+    color: var(--color-links);
 
     &:hover {
       text-decoration: none;
@@ -69,48 +80,46 @@ main {
   }
   
   nav {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 2rem 4rem;
+    margin: 0 2.6rem;
   }
 }
 
 section.content {
-  margin: 4rem 2rem;
-
-  > *:first-child {
-    margin-top: 0;
-    padding-top: 0;
-  }
-
-  h2, h3 {
-    padding-right: 0;
-    padding-left: 0;
-  }
+  padding: 0.6rem 0; // Header margins will collapse and cause background gaps without this
 
   p {
-    margin-bottom: 2.6rem;
-    line-height: 1.6;
+    margin: 0 2.6rem 2.6rem;
+  }
+
+  ul {
+    margin-top: 0;
+
+    li {
+      margin: 0 0 0.8rem 2rem;
+
+      &::marker {
+        color: hsl(0,0%,75%);
+      }
+    }
   }
 }
 
 a.primary-action,
 li.primary-action input {
   display: inline-block;
-  min-width: 26rem;
-  padding: 1.6rem 4rem;
-  font-family: Raleway, sans-serif;
-  font-size: 1.8rem;
-  font-weight: 600;
+  padding: 1.2rem 2.4rem;
   color: hsl(0,0%,100%);
+  font-family: Raleway, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.4;
   text-align: center;
   text-decoration: none;
-  background: hsl(2,86%,63%);
+  background: var(--color-links);
   border-radius: 0.4rem;
 
   &:hover {
-    background: hsl(2,86%,53%);
+    background: hsl(207,54%,42%);
   }
 }
 
@@ -149,25 +158,6 @@ img[data-src]:not(.loaded) {
   }
   @media only screen and (min-width: 768px) {
     width: 100%;
-  }
-}
-
-section.intro {
-  padding: 4rem 2rem;
-  background: hsl(207,54%,98%);
-
-  h1 {
-    padding: 0;
-  }
-  
-  p {
-    margin: 2rem 0 0;
-    font-family: Avenir Next, Libre Franklin, sans-serif;
-    font-size: 2.4rem;
-    font-weight: 500;
-    color: hsl(176,33%,20%);
-    text-align: center;
-    line-height: 1.4;
   }
 }
 
@@ -312,39 +302,39 @@ a.new-tab {
 // 768px and up
 @media only screen and (min-width: 768px) {
   main {
-    h1, h2, h3, h4 {
-      padding-right: 4rem;
-      padding-left: 4rem;
-      text-align: left;
+    h1 {
+      max-height: 40rem;
+      padding: 2.4rem 4.8rem;
+      font-size: 6.4rem;
+    }
+    h2 {
+      margin: 2.4rem 4.8rem;
+      font-size: 3.6rem;
     }
     h3 {
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
       font-size: 2.4rem;
     }
+    h4 {
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
+    }
     nav {
-      justify-content: flex-start;
-      padding: 2rem 4rem;
-    }
-  }
-
-  html.js {
-    main {
-      padding-top: 11rem;
-    }
-  }
-
-  section.intro {
-    padding: 4rem;
-
-    p {
-      text-align: left;
+      margin: 2rem 4.8rem;
     }
   }
 
   section.content {
-    max-width: 88rem;
-    margin: 6rem auto;
-    padding: 0 4rem;
-    font-size: 2rem;
+    p {
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
+    }
+
+    ul {
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
+    }
   }
 
   p.error {
@@ -356,38 +346,5 @@ a.new-tab {
 @media only screen and (min-width: 1024px) {
   a.primary-action {
     padding: 1.4rem 2.4rem;
-  }
-
-  main {
-    > section,
-    > article {
-      max-width: 128rem;
-      margin-right: auto;
-      margin-left: auto;
-      position: relative;
-    }
-
-    h1 {
-      font-size: 4.2rem;
-    }
-
-    nav {
-      position: absolute;
-      right: 4rem;
-      top: 3rem;
-      padding: 0;
-    }
-  }
-}
-
-@media only screen and (min-width: 1440px) {
-  section.intro {
-    padding: 6rem;
-  }
-  section.content {
-    margin: 10rem auto;
-  }
-  html.js main {
-    padding-top: 16rem;
   }
 }

@@ -2,47 +2,42 @@
 
 header {
   display: flex;
-  flex-direction: column;
-  flex: 0 0 auto;
-  padding: 0.8rem 0;
+  justify-content: space-between;
+  position: absolute;
+  padding: 0.8rem 1.2rem;
   font-family: Raleway, sans-serif;
   font-size: 1.8rem;
   font-weight: 500;
-  background: white;
 
-  h1 {
+  > a {
+    display: flex;
+    justify-content: center;
     padding: 1.4rem;
     font-size: 4.2rem;
     font-weight: 900;
     line-height: 1;
-    text-align: center;
+    color: var(--color-links);
+    text-decoration: none;
 
-    a {
-      display: flex;
-      justify-content: center;
-      color: hsl(207,54%,32%);
-      text-decoration: none;
-    }
-
-    span {
-      display: block;
-
-      &.j {
-        padding-bottom: 0.8rem;
+      span {
+        display: block;
+    
+        &.j {
+          padding-bottom: 0.8rem;
+        }
+        &.s {
+          padding-top: 0.8rem;
+        }
       }
-      &.s {
-        padding-top: 0.8rem;
-      }
-    }
   }
 
   nav {
+    margin-top: 1.2rem;
+
     ul {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 0 auto;
-      max-width: 42rem;
+      flex-direction: column;
+      align-items: flex-end;
     }
 
     li {
@@ -54,7 +49,7 @@ header {
         padding: 0.6rem 1.2rem 1.2rem;
         text-decoration: none;
         text-transform: uppercase;
-        color: hsl(207,54%,32%);
+        color: white;
       }
     }
   }
@@ -75,7 +70,7 @@ body[data-controller="contact"] header nav li.contact a {
     left: 0.5rem;
     width: calc(100% - 1rem);
     height: 0.4rem;
-    background: hsl(207,54%,32%);
+    background: var(--color-links);
   }
 }
 
@@ -85,20 +80,20 @@ header nav li a:hover:after {
 
 @media only screen and (min-width: 768px) {
   header {
-    flex-direction: row;
     justify-content: space-between;
     padding: 0;
     font-size: 1.6rem;
-    background: hsla(255,100%,100%,1);
+    background: hsla(176,53%,47%,.75);
 
-    h1 {
-      padding: 3rem 4rem;
+    a {
+      padding: 2.4rem 3.6rem;
     }
 
     nav {
+      margin: 1.8rem 2.4rem 0 0;
+
       ul {
-        max-width: none;
-        margin: 1.8rem 2.4rem 0 0;
+        flex-direction: row;
 
         li {
           margin: 0;
@@ -114,15 +109,13 @@ header nav li a:hover:after {
   html.js {
     header {
       position: fixed;
+      top: 0;
       z-index: 500;
       backdrop-filter: blur(1rem);
-      transition: margin 0.5s, background 0.25s;
-    }
-    body.fixed-header header {
-      background: hsla(207,54%,95%,0.75);
+      transition: top 0.5s;
     }
     body.hidden-header header {
-      margin-top: -11rem; // Header height
+      top: -11rem; // Header height
     }
   }
 }

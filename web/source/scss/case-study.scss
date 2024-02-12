@@ -1,42 +1,9 @@
 // Case study
 
 body[data-controller="case-study"] {
-  main h1 {
-    span.title {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-  }
-
-  ul.attributes {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    margin: 2rem 0 0;
-    font-family: Avenir Next, Libre Franklin, sans-serif;
-    font-size: 2.4rem;
-    font-weight: 500;
-    color: hsl(176,33%,30%);
-    text-align: center;
-    line-height: 1.4;
-
-    li {
-      padding: 0.2rem 0;
-    }
-  }
-
-  h2.tagline {
-    padding: 0 2rem;
-    font-size: 2.4rem;
-    color: hsl(0,0%,20%);
-    text-align: center;
-  }
 
   p.summary {
-    margin: 3rem 2rem;
-    text-align: center;
+    margin: 0 2.6rem 3rem;
   }
 
   section.devices {
@@ -48,31 +15,8 @@ body[data-controller="case-study"] {
     }
   }
 
-  section.logo {
-    display: flex;
-    justify-content: center;
-    height: 5rem;
-    margin: 6rem auto 4rem;
-
-    img {
-      height: 100%;
-      max-width: 100%;
-      object-fit: contain;
-    }
-  }
-
   section.screens figure[role="group"]:only-child figcaption {
     display: none;
-  }
-
-  section.Linode,
-  section.Vidyo,
-  section.Fitly,
-  section.hibu {
-    section.devices img {
-      width: 142%;
-      margin-left: -21%;
-    }
   }
 
   section.Linode {
@@ -126,6 +70,7 @@ body[data-controller="case-study"] {
   }
 
   section.screens.group {
+    margin-bottom: 4rem;
     padding-top: 2rem;
     background: hsl(175,55%,76%);
     
@@ -139,40 +84,9 @@ body[data-controller="case-study"] {
       display: initial;
     }
 
-    ul.attributes {
-      text-align: left;
-      margin-top: 0.8rem;
-
-      li {
-        display: flex;
-        
-        &:before {
-          content: '•';
-          display: block;
-          padding: 0.6rem 1rem 0 0;
-          color: hsl(175,55%,76%);
-        }
-      }
-    }
-
-    section.logo {
-      height: 5.6rem;
-
-      img {
-        max-width: 50%;
-      }
-    }
-
-    h2.tagline {
-      padding: 0;
-      max-width: 50rem;
-      margin: auto;
-    }
-
     p.summary {
-      max-width: 64rem;
-      margin: 3rem auto 6rem;
-      font-size: 2rem;
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
     }
 
     section.devices {
@@ -213,14 +127,14 @@ body[data-controller="case-study"] {
 
           figure {
             img {
-              height: 24rem;
+              height: 23rem;
             }
           }
         }
 
         &.usability-testing {
           img {
-            height: 12.6rem;
+            height: 12rem;
           }
         }
       }
@@ -292,77 +206,11 @@ body[data-controller="case-study"] {
   }
 
   @media only screen and (min-width: 1024px) {
-    section.case-study {
-      max-width: none;
-    }
-
-    section.intro {
-      max-width: 128rem;
-      margin: auto;
-    }
-
-    section.screens.group {
-      padding-top: 2rem;
-    }
-
-    section.Linode {
-      figure[role="group"]:not(.screens) {
-        section {
-          figure {
-            img {
-              height: 28rem;
-            }
-          }
-        }
-
-        &.usability-testing {
-          img {
-            height: 14.6rem;
-          }
-        }
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    section.intro {
-      padding: 0 4rem;
-      background: none;
-    }
-
-    ul.attributes {
-      flex-direction: row;
-
-      li {
-        margin-right: 1rem;
-
-        &:first-child:before {
-          display: none;
-        }
-      }
-    }
-
     section.about {
       display: grid;
       grid-template: auto/37% 63%;
       max-width: 120rem;
       margin: 8rem auto 6rem;
-    }
-
-    section.logo {
-      height: 5rem;
-      justify-content: left;
-      margin: 0 0 2rem;
-
-      img {
-        max-width: 40rem;
-      }
-    }
-
-    h2.tagline {
-      grid-column: 1;
-      font-size: 2.2rem;
-      text-align: left;
     }
 
     p.summary {
@@ -379,6 +227,30 @@ body[data-controller="case-study"] {
       padding: 0;
     }
 
+    section.screens.group {
+      padding-top: 2rem;
+    }
+
+    section.Linode {
+      figure[role="group"]:not(.screens) {
+        section {
+          figure {
+            img {
+              height: 32rem;
+            }
+          }
+        }
+
+        &.usability-testing {
+          img {
+            height: 17rem;
+          }
+        }
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1280px) {
     section.screens.group {
       padding: 0;
 

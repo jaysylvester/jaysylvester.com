@@ -2,28 +2,10 @@
 
 body[data-controller="case-studies"] {
   article {
-    margin: 6rem 0;
-
+    margin-bottom: 8rem;
+    
     p {
-      margin: 3rem 2rem 1rem;
-      text-align: center;
-    }
-  }
-
-  section.logo {
-    display: flex;
-    justify-content: center;
-    margin: 0 2rem;
-
-    a {
-      display: inline-block;
-      height: 5rem;
-
-      img {
-        height: 100%;
-        max-width: 40rem;
-        object-fit: contain;
-      }
+      margin: 0 2.6rem 1rem;
     }
   }
 
@@ -33,32 +15,15 @@ body[data-controller="case-studies"] {
 
   @media only screen and (min-width: 768px) {
     article {
-      margin-bottom: 10rem;
-  
+      margin-bottom: 12rem;
+
       p {
-        margin: 3rem 4rem 0;
-        font-size: 2rem;
-        text-align: left;
+        margin: 0 4.8rem;
       }
-    }
-  
-    section.logo {
-      justify-content: flex-start;
-      margin: 0 4rem;
     }
 
     section.screens.group {
       margin-bottom: 0;
-    }
-  }
-
-  @media only screen and (min-width: 1024px) {
-    article {
-      margin: 8rem auto;
-
-      nav {
-        top: 0;
-      }
     }
   }
 }

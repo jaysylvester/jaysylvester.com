@@ -1,4 +1,4 @@
-// _case-study model
+// case-study model
 
 
 export const caseStudies = async () => {
@@ -20,6 +20,7 @@ export const caseStudies = async () => {
         caseStudies[item.sort] = {
           company_url: item.company_url,
           company_name: item.company_name,
+          title: item.title,
           summary: item.summary,
           screens: {}
         }

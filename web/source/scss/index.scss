@@ -1,46 +1,9 @@
 // Home / About
 
 body[data-controller="index"] {
-  background: hsl(175,55%,76%);
-
-  header {
-    background: hsl(175,55%,76%);
-  }
-
-  main {
-    h1, h2 {
-      color: white;
-      text-shadow: 0 1px 3px hsl(175,42%,45%);
-    }
-
-    h2 {
-      font-weight: 800;
-    }
-  }
-
-  section.intro {
-    background: hsl(175,55%,70%);
-
-    p {
-      color: hsl(176,33%,30%);
-    }
-  }
-
-  section.case-studies h2 {
-    padding-bottom: 0;
-  }
-
-  section.screens {
-    margin: 3rem 0 2rem;
-
-    figure[role="group"] figure {
-      border: 0.1rem solid hsl(175,55%,66%);
-    }
-  }
-
   section.endorsements {
-    background: hsl(175,55%,70%);
     padding-bottom: 8rem;
+    background: var(--color-primary);
   }
 
   blockquote {
@@ -89,23 +52,10 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 768px) {
-    section.case-studies {
-      margin-bottom: 4rem;
+    section.endorsements {
+      padding: 2.4rem 0;
     }
 
-    section.screens {
-      margin: 4rem 0 1rem;
-
-      figure[role="group"] section {
-        padding-left: 4rem;
-        padding-right: 4rem;
-  
-        &:after {
-          flex-basis: 4rem;
-        }
-      }
-    }
-    
     section.quotes {
       display: flex;
       flex-wrap: wrap;
@@ -116,14 +66,6 @@ body[data-controller="index"] {
   }
 
   @media only screen and (min-width: 1024px) {
-    section.case-studies {
-      margin: 6rem auto 8rem;
-    }
-
-    section.endorsements {
-      background: none;
-    }
-
     blockquote {
       flex: 0 0 50%;
     }

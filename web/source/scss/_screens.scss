@@ -8,20 +8,13 @@ section.screens {
   }
 
   figure[role="group"] {
-    margin: 6rem auto;
+    margin: 2rem auto 6rem;
     
     section {
       display: flex;
       overflow-x: scroll;
       -webkit-overflow-scrolling: touch;
-      padding: 0 2rem 2rem 2rem; // Maintain bottom padding for scrollbar visibility
-
-      &::after {
-        content: '';
-        flex: 0 0 2rem;
-        display: block;
-        height: 2rem;
-      }
+      padding: 0 2.6rem 2rem; // Maintain bottom padding for scrollbar visibility
     }
 
     figure {
@@ -47,8 +40,7 @@ section.screens {
     }
 
     figcaption {
-      margin-top: 0;
-      max-width: none;
+      margin-bottom: 1.6rem;
     }
   }
 
@@ -71,11 +63,11 @@ section.screens {
       padding: 0;
 
       section {
-        padding-right: 4rem;
-        padding-left: 4rem;
+        padding-right: 4.8rem;
+        padding-left: 4.8rem;
 
         &::after {
-          flex-basis: 4rem;
+          flex-basis: 4.8rem;
         }
       }
     }
@@ -132,22 +124,25 @@ section.screens {
 
 // Figures
 figure.callout {
-  margin: 4rem auto;
+  margin: 4rem 2.6rem;
 
   img {
     width: 100%;
     border-radius: 0.4rem;
     border: 0.1rem solid #e6e6e6;
   }
+
+  figcaption {
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
 
 figcaption {
-  max-width: 60rem;
-  margin: 1rem auto 0;
+  margin: 1rem 2.6rem 0;
   font-size: 1.6rem;
   font-style: italic;
   line-height: 1.4;
-  text-align: center;
 }
 
 figure.device img {
@@ -156,11 +151,13 @@ figure.device img {
 
 @media only screen and (min-width: 768px) {
   figure.callout {
-    img {
-      width: auto;
-      height: 36rem;
-      margin: auto;
-    }
+    margin-right: 4.8rem;
+    margin-left: 4.8rem;
+  }
+
+  figcaption {
+    margin-right: 4.8rem;
+    margin-left: 4.8rem;
   }
 }
 

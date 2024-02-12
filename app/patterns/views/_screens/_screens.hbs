@@ -1,6 +1,7 @@
 <section class="screens">
   {{#each screens}}
     <figure role="group" class="screens {{company}}">
+      <figcaption>{{{this.category}}}</figcaption>
       <section>
         {{#each this.screens}}
           <figure>
@@ -13,7 +14,6 @@
           </figure>
         {{/each}}
       </section>
-      <figcaption>{{{this.category}}}</figcaption>
     </figure>
   {{/each}}
 </section>

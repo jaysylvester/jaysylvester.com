@@ -1,17 +1,11 @@
 // Contact
 
 body[data-controller="contact"] {
-  @media only screen and (max-width: 767px) {
-    main > h2 {
-      margin-bottom: 2rem;
-    }
-  }
-
   ul.social {
     display: flex;
-    justify-content: space-around;
-    max-width: 26rem;
-    margin: 0 auto 6rem;
+    justify-content: space-between;
+    max-width: 24rem;
+    margin-top: 0;
     list-style: none;
   
     a {
@@ -38,7 +32,7 @@ body[data-controller="contact"] {
   }
   
   form {
-    padding: 0 2rem 6rem;
+    padding: 0 2.6rem 6rem;
 
     label {
       margin-bottom: 0.6rem;
@@ -107,39 +101,25 @@ body[data-controller="contact"] {
     }
 
     ul.actions {
-      margin: 4rem 0;
+      margin: 1.6rem 0 0;
       list-style-type: none;
-
-      li {
-        display: flex;
-        justify-content: center;
-      }
     }
   }
 
   @media only screen and (min-width: 425px) {
     form {
-      max-width: 40rem;
+      max-width: 50rem;
       margin: auto;
     }
   }
 
   @media only screen and (min-width: 768px) {
-    main h2 {
-      text-align: center;
+    ul.social {
+      margin: 0 4.8rem 2.6rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
-    main {
-      max-width: 80rem;
-      margin: auto;
-
-      h2 {
-        text-align: left;
-      }
-    }
-
     ul.social {
       justify-content: flex-start;
       margin-bottom: 2rem;
