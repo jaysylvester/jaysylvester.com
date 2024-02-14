@@ -310,7 +310,7 @@ a.new-tab {
       font-size: 6.4rem;
     }
     h2 {
-      margin: 2.4rem 4.8rem;
+      margin: 4.8rem 4.8rem 2.4rem;
       font-size: 3.6rem;
     }
     h3 {
@@ -346,7 +346,52 @@ a.new-tab {
 
 // 1024px and up
 @media only screen and (min-width: 1024px) {
+  body {
+    display: flex;
+    justify-content: flex-start;
+    background: none;
+    max-width: 144rem;
+    margin: auto;
+  }
+
+  main {
+    height: 100vh;
+    overflow: scroll;
+
+    h1 {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 501;
+      width: 33%;
+      padding: 3.6rem 4.8rem;
+      font-size: 3.8vw;
+      text-align: center;
+    }
+
+    h2 {
+      margin: 8.4rem 9.6rem 3.6rem;
+    }
+  }
+
+  section.content {
+    p, ul {
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
+    }
+  }
+
   a.primary-action {
     padding: 1.4rem 2.4rem;
+  }
+}
+
+
+// 1024px and up
+@media only screen and (min-width: 1440px) {
+  main {
+    h1 {
+      font-size: 6rem;
+    }
   }
 }

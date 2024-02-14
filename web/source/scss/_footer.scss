@@ -59,4 +59,16 @@ body > footer {
       }
     }
   }
+
+  @media only screen and (min-width: 1024px) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 67%;
+    background: none;
+
+    a, p {
+      color: black;
+    }
+  }
 }
