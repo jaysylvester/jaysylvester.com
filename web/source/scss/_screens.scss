@@ -20,7 +20,7 @@ section.screens {
     figure {
       flex: 0 0 30rem;
       margin-right: 2rem;
-      border-radius: 0.4rem;
+      border-radius: 0.6rem;
       border: 0.1rem solid hsl(175,25%,90%);
       overflow: hidden;
       position: relative;
@@ -41,6 +41,7 @@ section.screens {
 
     figcaption {
       margin-bottom: 1.6rem;
+      margin-left: 2.6rem;
     }
   }
 
@@ -62,6 +63,11 @@ section.screens {
     figure[role="group"] {
       padding: 0;
 
+      figcaption {
+        margin-left: 4.8rem;
+        text-align: left;
+      }
+
       section {
         padding-right: 4.8rem;
         padding-left: 4.8rem;
@@ -73,14 +79,22 @@ section.screens {
     }
   }
 
-  // Get rid of figure scroll at 840px and above (width of main with padding)
-  @media only screen and (min-width: 840px) {
+  // Get rid of figure scroll at 1024px and above
+  @media only screen and (min-width: 1024px) {
+    margin-right: 9.6rem;
+    margin-left: 9.6rem;
+
     figure[role="group"] {
+      figcaption {
+        margin-left: 0;
+      }
+
       section {
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
         padding-bottom: 0;
         overflow: visible;
+        padding: 0;
 
         &::after {
           display: none;
@@ -88,17 +102,8 @@ section.screens {
       }
 
       figure {
-        flex-basis: 23.5%;
-        margin: 0 2% 2rem 0;
-
-        &:first-child,
-        &:nth-child(5n) {
-          margin-left: 0;
-        }
-
-        &:nth-child(4n) {
-          margin-right: 0 !important;
-        }
+        flex-basis: 49%;
+        margin: 0 0 2%;
       }
     }
 
@@ -112,6 +117,12 @@ section.screens {
   }
 
   @media only screen and (min-width: 1280px) {
+    figure[role="group"] {
+      figure {
+        flex-basis: 23.5%;
+      }
+    }
+
     &.group {
       figure[role="group"] {
         figure {
@@ -131,15 +142,10 @@ figure.callout {
     border-radius: 0.4rem;
     border: 0.1rem solid #e6e6e6;
   }
-
-  figcaption {
-    margin-right: 0;
-    margin-left: 0;
-  }
 }
 
 figcaption {
-  margin: 1rem 2.6rem 0;
+  margin-top: 1.2rem;
   font-size: 1.6rem;
   font-style: italic;
   line-height: 1.4;
@@ -151,20 +157,20 @@ figure.device img {
 
 @media only screen and (min-width: 768px) {
   figure.callout {
-    margin-right: 4.8rem;
-    margin-left: 4.8rem;
+    margin: 4.8rem;
   }
 
   figcaption {
-    margin-right: 4.8rem;
-    margin-left: 4.8rem;
+    max-width: 60rem;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
   }
 }
 
-@media only screen and (min-width: 1280px) {
-  section.screens:not(.group) {
-    max-width: 128rem;
-    margin: auto;
+@media only screen and (min-width: 1024px) {
+  figure.callout {
+    margin: 6rem 9.6rem;
   }
 }
 

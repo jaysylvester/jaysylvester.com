@@ -1,13 +1,9 @@
 // Home / About
 
 body[data-controller="index"] {
-  section.endorsements {
-    padding-bottom: 8rem;
-  }
-
   blockquote {
     position: relative;
-    padding: 2rem 2.5rem 4rem;
+    padding: 4rem 2.6rem;
   
     &:before {
       content: '“'
@@ -20,65 +16,55 @@ body[data-controller="index"] {
     &:after {
       display: block;
       position: absolute;
-      z-index: 2;
-      height: 3rem;
+      z-index: 1;
+      height: 12.4rem;
       font-family: var(--font-primary);
       font-weight: 800;
-      font-size: 6.4rem;
-      color: white;
-      text-shadow: 0 2px 4px hsl(175,22%,55%);
+      font-size: 24.8rem;
+      color: hsl(0,0%,98%);
     }
   
     &:before {
-      top: 0.8rem;
-      left: 1.4rem;
+      top: 0;
+      left: 0;
     }
   
     &:after {
-      right: 1.4rem;
-      bottom: 3rem;
+      right: 0;
+      bottom: 0;
     }
   
     p {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       margin: 0;
-      padding: 2.2rem 3.2rem;
+      padding: 2.4rem 3.6rem;
+      font-family: var(--font-primary);
+      font-size: 1.8rem;
+      line-height: 1.8;
       color: #444;
-      background: hsl(175,100%,95%);
-      border-radius: 1rem;
     }
   }
 
   @media only screen and (min-width: 768px) {
-    section.endorsements {
-      padding: 2.4rem 0;
-    }
-
     section.quotes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin: 0 2.4rem;
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
-    section.endorsements {
-      margin: 0 4.8rem;
+    section.quotes {
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
     }
   }
 
   @media only screen and (min-width: 1440px) {
     section.quotes {
-      display: grid;
-      grid: 50% / 1fr 1fr;
-    }
-
-    blockquote {
-      display: flex;
-      height: 100%;
+      max-width: 84rem;
+      margin-right: auto !important;
+      margin-left: auto !important;
     }
   }
 }

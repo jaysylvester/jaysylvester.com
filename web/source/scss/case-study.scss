@@ -3,15 +3,20 @@
 body[data-controller="case-study"] {
 
   p.summary {
-    margin: 0 2.6rem 3rem;
+    margin: 2.4rem 2.6rem 5.6rem;
+    font-family: var(--font-primary);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.4;
   }
 
   section.devices {
-    margin-bottom: 2rem;
-    overflow-x: hidden;
+    height: 36vw;
+    margin-bottom: 2.4rem;
 
     img {
-      width: 100%;
+      height: 100%;
+      margin: auto;
     }
   }
 
@@ -90,33 +95,7 @@ body[data-controller="case-study"] {
     }
 
     section.devices {
-      width: auto;
-      margin-bottom: 4rem;
-      margin-left: 0;
-      padding: 0 4rem;
-    }
-
-    section.Linode,
-    section.Vidyo,
-    section.hibu,
-    section.Fitly {
-      section.devices img {
-        margin: 0 !important;
-        width: 100% !important;
-      }
-    }
-
-    section.Abercrombie-and-Fitch,
-    section.OncoTracker {
-      section.devices {
-        display: flex;
-        justify-content: center;
-
-        img {
-          width: auto;
-          height: 27rem;
-        }
-      }
+      margin-bottom: 3.6rem;
     }
 
     section.Linode {
@@ -124,24 +103,19 @@ body[data-controller="case-study"] {
         section {
           display: flex;
           justify-content: space-between;
-
-          figure {
-            img {
-              height: 23rem;
-            }
-          }
-        }
-
-        &.usability-testing {
-          img {
-            height: 12rem;
-          }
         }
       }
 
       figure[role="group"].callout {
         figure {
+          flex: 0 0 49%;
           margin-bottom: 0;
+        }
+
+        &.usability-testing {
+          figure {
+            flex: 0 0 32%;
+          }
         }
       }
     }
@@ -151,12 +125,16 @@ body[data-controller="case-study"] {
       &.zip-code {
         img {
           height: 30rem;
+          width: auto;
+          margin: auto;
         }
       }
 
       &.kitchen-view {
         img {
           height: 48rem;
+          width: auto;
+          margin: auto;
         }
       }
 
@@ -167,6 +145,8 @@ body[data-controller="case-study"] {
 
         img {
           height: 24rem;
+          width: auto;
+          margin: auto;
         }
       }
     }
@@ -187,66 +167,28 @@ body[data-controller="case-study"] {
     }
 
     main nav {
-      position: initial;
+      display: flex;
       justify-content: center;
       margin: 6rem 0;
     }
   }
 
-  @media only screen and (min-width: 840px) {
-    section.screens.group {
-      padding-bottom: 2rem;
-
-      figure[role="group"] {
-        figure {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
   @media only screen and (min-width: 1024px) {
     section.about {
-      display: grid;
-      grid-template: auto/37% 63%;
-      max-width: 120rem;
-      margin: 8rem auto 6rem;
+      margin-bottom: 6rem;
     }
 
     p.summary {
-      grid-column: 1;
-      margin-bottom: 0;
-      font-size: 1.8rem;
-      text-align: left;
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
     }
 
     section.devices {
-      grid-row: 1/4;
-      grid-column: 2;
-      margin: 2rem 0 0 4rem;
-      padding: 0;
+      height: 22vw;
     }
 
     section.screens.group {
       padding-top: 2rem;
-    }
-
-    section.Linode {
-      figure[role="group"]:not(.screens) {
-        section {
-          figure {
-            img {
-              height: 32rem;
-            }
-          }
-        }
-
-        &.usability-testing {
-          img {
-            height: 17rem;
-          }
-        }
-      }
     }
   }
 
@@ -263,6 +205,14 @@ body[data-controller="case-study"] {
           margin: 0 3rem 0 0;
         }
       }
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    section.devices {
+      height: 34rem;
+      display: flex;
+      justify-content: center;
     }
   }
 }

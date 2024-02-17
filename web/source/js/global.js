@@ -62,7 +62,7 @@ JAY.global = ( function () {
           if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
             image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
             image.classList.add('loaded')
-            if ( !mobile && image.parentNode.tagName === 'A' ) {
+            if ( !mobile && image.parentNode.tagName === 'A' && !image.parentNode.parentNode.classList.contains('devices') ) {
               methods.imageZoom(image)
             }
             images = document.querySelectorAll('img[data-src]:not(.loaded)')

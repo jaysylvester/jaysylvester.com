@@ -1,11 +1,13 @@
 // Contact
 
 body[data-controller="contact"] {
+  
   ul.social {
     display: flex;
     justify-content: space-between;
     max-width: 24rem;
     margin-top: 0;
+    margin-bottom: 4.8rem;
     list-style: none;
   
     a {
@@ -32,7 +34,8 @@ body[data-controller="contact"] {
   }
   
   form {
-    padding: 0 2.6rem 6rem;
+    max-width: 50rem;
+    margin: 0 2.6rem 6rem;
 
     label {
       margin-bottom: 0.6rem;
@@ -56,7 +59,7 @@ body[data-controller="contact"] {
 
       &:focus {
         outline: none;
-        border-color: hsl(2,86%,53%);
+        border-color: var(--color-links);
       }
     }
   
@@ -106,68 +109,29 @@ body[data-controller="contact"] {
     }
   }
 
-  @media only screen and (min-width: 425px) {
-    form {
-      max-width: 50rem;
-      margin: auto;
-    }
-  }
-
   @media only screen and (min-width: 768px) {
     ul.social {
       margin: 0 4.8rem 2.6rem;
+    }
+
+    form {
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
     ul.social {
-      justify-content: flex-start;
-      margin-bottom: 2rem;
-      margin-left: 0;
-      padding: 0 4rem;
+      margin-left: 9.6rem;
+      margin-bottom: 4.8rem;
 
       li {
-        margin-right: 2.8rem;
+        margin-right: 3.6rem;
       }
     }
 
     form {
-      max-width: 72rem;
-      padding-right: 0;
-      padding-left: 0;
-
-      ul.data {
-        display: grid;
-        grid-template: auto / 50% 50%;
-        row-gap: 2rem;
-        column-gap: 4rem;
-
-        li {
-          margin: 0;
-
-          &.email,
-          &.subject {
-            grid-column: 1;
-          }
-
-          &.message {
-            grid-row: 1 / 4;
-            grid-column: 2;
-            margin-bottom: 0;
-
-            textarea {
-              height: 23rem;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  &[data-action="confirmation"] {
-    h1,
-    section.content p {
-      text-align: center;
+      margin-left: 9.6rem;
     }
   }
 }

@@ -1,26 +1,15 @@
 <h1>Work History</h1>
 <section class="content">
-  <h2>I'm good at this. I've been doing it for a while.</h2>
+  <h2>I'm fairly good at this. I've been at it for a while.</h2>
   <p>
     I've led and contributed to just about every phase of the design-development lifecycle, including product strategy, discovery, user research, UX design, and full stack development.
   </p>
 </section>
 <section class="content resume">
-  <h2>Downlad My Résumé</h2>
-  <ul>
-    <li>
-      <a href="/documents/resume/Jay-Sylvester-resume.pdf">PDF</a>
-    </li>
-    <li>
-      <a href="/documents/resume/Jay-Sylvester-resume.docx">Word</a>
-    </li>
-    <li>
-      <a href="/documents/resume/Jay-Sylvester-resume.txt">Plain text</a>
-    </li>
-  </ul>
+  <h3><a href="/documents/resume/Jay-Sylvester-resume.pdf">Download My Résumé (PDF)</a></h3>
 </section>
 <section class="content competencies">
-  <h2>Core Competencies</h2>
+  <h3>Core Competencies</h3>
   <ul>
     <li>Accomplished manager and mentor of UX designers and front end developers</li>
     <li>Holistic strategist who balances business, design, and technical concerns</li>
@@ -31,12 +20,12 @@
   </ul>
 </section>
 <section class="content work-history">
-  <h2>Full-Time Roles</h2>
-  <p>In addition to the permanent positions listed below, I've freelanced at several points during my career and am comfortable with project-based work.</p>
+  <h3>Full-Time Roles</h3>
+  <p>In addition to the permanent positions listed below, I've consulted and freelanced throughout my career and am comfortable with project-based work.</p>
   {{#each employers}}
     <section class="employer">
-      <h3>{{job_title}}</h2>
-      <h4>{{employer_name}}</h3>
+      <h4>{{job_title}}</h4>
+      <h5>{{employer_name}}</h5>
       {{#if employed_to_formatted}}
         <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
       {{else}}

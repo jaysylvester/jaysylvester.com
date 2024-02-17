@@ -1,4 +1,6 @@
 // Fonts
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;1,400&family=Raleway:wght@500;600;700;800;900&display=swap');
+
 @font-face {
 	font-family: 'social';
 	src: url('/images/icons/social.woff') format('woff');
@@ -9,7 +11,7 @@
 // Custom properties
 :root {
   --color-links: hsl(207,54%,32%);
-  --color-primary: hsl(176,53%,47%);
+  --color-primary: hsl(176,70%,40%);
   --font-content: 'Libre Franklin', sans-serif;
   --font-primary: 'Raleway', sans-serif;
 }
@@ -20,16 +22,15 @@
 
 // Global styles
 html {
-  height: 100%;
   font-size: 62.5%;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  height: 100%;
   font-family: var(--font-content);
   font-size: 1.8rem;
-  background: var(--color-primary);
   text-rendering: optimizeLegibility;
 
   > * {
@@ -38,6 +39,7 @@ body {
 }
 
 main {
+  flex: 1 1 auto;
   color: black;
   background: white;
 
@@ -45,50 +47,60 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: 46vh;
-    padding: 2rem 2.6rem;
-    background: var(--color-primary);
-    font-size: 10vw;
-    color: white;
+    margin: 2rem 2.6rem;
+    padding-bottom: 2rem;
+    font-size: 4.8rem;
     text-transform: lowercase;
+    color: #333;
+    border-bottom: 0.1rem solid #efefef;
+
+    span {
+      font-size: 8vw;
+      font-weight: 600;
+      line-height: 1.2;
+    }
   }
 
   h2 {
-    margin: 2rem 2.6rem 2.4rem;
-    font-size: 7vw;
+    margin: 2.4rem 2.6rem;
+    font-size: 2.8rem;
     color: var(--color-primary);
-    text-transform: lowercase;
   }
 
   h3 {
-    margin: 0.6rem 2.6rem;
-    font-size: 2.6rem;
-    color: hsl(0,0%,30%);
+    margin: 4.8rem 2.6rem 1.2rem;
+    font-size: 2.4rem;
+    color: hsl(0,0%,10%);
   }
 
   h4 {
     margin: 0.6rem 2.6rem;
     font-size: 2rem;
     font-weight: 600;
-    color: hsl(0,0%,30%);
+    color: hsl(0,0%,20%);
   }
 
-  a {
-    color: var(--color-links);
-
-    &:hover {
-      text-decoration: none;
-    }
+  h5 {
+    margin: 0.4rem 2.6rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: hsl(0,0%,20%);
   }
   
   nav {
-    margin: 0 2.6rem;
+    margin: 4.8rem 2.6rem;
+    display: flex;
+    justify-content: center;
   }
 }
 
 section.content {
-  padding: 0.6rem 0; // Header margins will collapse and cause background gaps without this
+  margin-bottom: 6rem;
 
+  h2:not(:first-child) {
+    margin-top: 6rem;
+  }
+  
   p {
     margin: 0 2.6rem 2.6rem;
   }
@@ -103,6 +115,14 @@ section.content {
         color: hsl(0,0%,75%);
       }
     }
+  }
+}
+
+a {
+  color: var(--color-links);
+
+  &:hover {
+    text-decoration: none;
   }
 }
 
@@ -179,6 +199,7 @@ img[data-src]:not(.loaded) {
   height: 0;
   overflow: hidden;
   top: 0;
+  left: 0;
   opacity: 0;
   background: hsla(0,0%,0%,0.95);
   // Use a slightly more opaque background if backdrop-filter isn't supported
@@ -303,31 +324,33 @@ a.new-tab {
 
 // 768px and up
 @media only screen and (min-width: 768px) {
+  body {
+    font-size: 2rem;
+  }
+
   main {
     h1 {
-      max-height: 40rem;
-      padding: 2.4rem 4.8rem;
+      margin: 24rem 4.8rem 2.4rem;
+      padding-bottom: 2.4rem;
       font-size: 6.4rem;
+
+      span {
+        font-size: 4.8rem;
+      }
     }
     h2 {
-      margin: 4.8rem 4.8rem 2.4rem;
+      margin: 3.6rem 4.8rem 2.4rem;
       font-size: 3.6rem;
     }
-    h3 {
+    h3, h4, h5, nav {
       margin-right: 4.8rem;
       margin-left: 4.8rem;
-      font-size: 2.4rem;
-    }
-    h4 {
-      margin-right: 4.8rem;
-      margin-left: 4.8rem;
-    }
-    nav {
-      margin: 2rem 4.8rem;
     }
   }
 
   section.content {
+    margin-bottom: 10rem;
+
     p {
       margin-right: 4.8rem;
       margin-left: 4.8rem;
@@ -347,30 +370,23 @@ a.new-tab {
 // 1024px and up
 @media only screen and (min-width: 1024px) {
   body {
-    display: flex;
-    justify-content: flex-start;
+    flex-direction: row;
     background: none;
-    max-width: 144rem;
-    margin: auto;
+    padding-left: calc((100% - 144rem)/2);
   }
 
   main {
     height: 100vh;
     overflow: scroll;
+    padding-bottom: 6rem; // Provides a comfortable gap between content and browser bottom
 
     h1 {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      z-index: 501;
-      width: 33%;
-      padding: 3.6rem 4.8rem;
-      font-size: 3.8vw;
-      text-align: center;
+      margin: 13.6rem 9.6rem 5.6rem;
     }
 
-    h2 {
-      margin: 8.4rem 9.6rem 3.6rem;
+    h2, h3, h4, h5, nav {
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
     }
   }
 
@@ -387,11 +403,26 @@ a.new-tab {
 }
 
 
-// 1024px and up
 @media only screen and (min-width: 1440px) {
+  body {
+    // Allows absolute positioning of the footer
+    margin-left: calc((100% - 144rem)/2);
+    padding-left: 0;
+  }
+
+  // Make sure all content in main is 960px wide. This is a sledgehammer
+  // when I should be using a scalpel. I'm sure I'll regret this later.
   main {
-    h1 {
-      font-size: 6rem;
+    > {
+      h1, section, article {
+        max-width: 96rem;
+        margin-left: 9.6rem !important;
+
+        > *, > * > * {
+          margin-right: 0 !important;
+          margin-left: 0 !important;
+        }
+      }
     }
   }
 }

@@ -1,7 +1,5 @@
 // Baseline styles
 
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;1,400&family=Raleway:wght@500;600;700;800;900&display=swap');
-
 *,
 *::before,
 *::after {
@@ -18,12 +16,15 @@ body {
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: var(--font-primary);
-  font-weight: 900;
   line-height: 1.2;
 }
 
+h1 { font-weight: 800 }
+h2, h3 { font-weight: 600 }
+h4, h5, h6 { font-weight: 400 }
+
 h1 { font-size: 140%; }
-h2 { font-size: 130%; }
+h2 { font-size: 120%; }
 h3 { font-size: 105%; }
 h4, h5, h6 { font-size: 100%; }
 

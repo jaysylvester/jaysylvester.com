@@ -11,20 +11,20 @@ body[data-controller="portfolio"] {
   }
   
   @media only screen and (min-width: 1024px) {
-    section.documents p,
-    section.documents ul,
-    section.all-screens p {
-      max-width: 80rem;
-      margin-right: auto;
-      margin-left: auto;
-    }
-
     section.documents {
       ul {
         margin-top: 4rem;
         display: block;
         column-count: 2;
         column-gap: 2rem;
+      }
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    section.documents {
+      ul {
+        margin-left: 2.4rem !important;
       }
     }
   }

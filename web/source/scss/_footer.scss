@@ -6,13 +6,15 @@ body > footer {
   @media (hover: none) {
     padding-bottom: 4rem;
   }
-  color: white;
   text-align: center;
-  background: var(--color-primary);
 
   nav {
     margin: 2rem auto 4rem;
     font-family: var(--font-primary);
+
+    a.top {
+      margin-bottom: 4.8rem;
+    }
 
     ul {
       display: flex;
@@ -32,13 +34,10 @@ body > footer {
     }
   }
   
-  p.copyright {
-    margin: 0;
+  p {
+    margin-bottom: 0;
     font-size: 1.4rem;
-  }
-
-  a {
-    color: white;
+    color: hsl(0,0%,40%);
   }
 
   @media only screen and (min-width: 768px) {
@@ -47,28 +46,37 @@ body > footer {
     nav {
       width: 66rem;
       margin: 1rem auto 3rem;
-    }
 
-    ul {
-      display: flex;
-      justify-content: space-between;
-      margin: auto;
-
-      li {
-        margin: 0;
+      ul {
+        justify-content: space-around;
+        margin: auto;
+  
+        li {
+          margin: 0;
+        }
       }
     }
+
   }
 
   @media only screen and (min-width: 1024px) {
     position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 67%;
-    background: none;
+    left: 0;
+    bottom: 8.4rem;
+    z-index: 501;
+    width: 25%;
+    padding: 0 4rem;
 
-    a, p {
-      color: black;
+    nav {
+      display: none;
     }
+
+    p {
+      text-align: right;
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    width: 28.8rem;
   }
 }

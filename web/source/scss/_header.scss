@@ -2,8 +2,8 @@
 
 header {
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  position: absolute;
   padding: 0.8rem 1.2rem;
   font-family: var(--font-primary);
   font-size: 1.8rem;
@@ -49,7 +49,6 @@ header {
         padding: 0.6rem 1.2rem 1.2rem;
         text-decoration: none;
         text-transform: uppercase;
-        color: white;
       }
     }
   }
@@ -67,15 +66,10 @@ body[data-controller="contact"] header nav li.contact a {
     display: block;
     position: absolute;
     bottom: 0;
-    left: 0.5rem;
-    width: calc(100% - 1rem);
+    width: calc(100% - 2.4rem);
     height: 0.4rem;
-    background: var(--color-links);
+    background: var(--color-primary);
   }
-}
-
-header nav li a:hover:after {
-  background: hsl(175,75%,30%);
 }
 
 @media only screen and (min-width: 768px) {
@@ -83,14 +77,13 @@ header nav li a:hover:after {
     justify-content: space-between;
     padding: 0;
     font-size: 1.6rem;
-    background: hsla(176,55%,47%,.75);
 
     a {
       padding: 2.4rem 3.6rem;
     }
 
     nav {
-      margin: 1.8rem 2.4rem 0 0;
+      margin: 2.4rem 2.4rem 0 0;
 
       ul {
         flex-direction: row;
@@ -99,10 +92,22 @@ header nav li a:hover:after {
           margin: 0;
 
           a {
-            padding: 2rem 1.5rem 1.9rem;
+            padding: 2rem 1.6rem;
           }
         }
       }
+    }
+  }
+
+  header nav li a:hover,
+  body[data-controller="index"] header nav li.about a,
+  body[data-controller="case-study"] header nav li.case-studies a,
+  body[data-controller="case-studies"] header nav li.case-studies a,
+  body[data-controller="portfolio"] header nav li.portfolio a,
+  body[data-controller="work-history"] header nav li.work-history a,
+  body[data-controller="contact"] header nav li.contact a {
+    &:after {
+      width: calc(100% - 3.2rem);
     }
   }
 
@@ -113,7 +118,9 @@ header nav li a:hover:after {
       z-index: 500;
       backdrop-filter: blur(1rem);
       transition: top 0.5s;
+      background: hsla(0,0%,100%,0.65);
     }
+    
     body.hidden-header header {
       top: -11rem; // Header height
     }
@@ -123,12 +130,23 @@ header nav li a:hover:after {
 
 @media only screen and (min-width: 1024px) {
   header, html.js header {
-    position: static;
-    display: flex;
-    flex: 0 0 33%;
-    align-items: flex-start;
-    justify-content: space-between;
-    background-color: var(--color-primary);
+    position: relative;
+    flex: 0 0 25%;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 2.6rem 0;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 14rem;
+      width: 0.1rem;
+      height: calc(100% - 20rem);
+      background: #efefef;
+    }
 
     nav {
       ul {
@@ -143,5 +161,12 @@ header nav li a:hover:after {
         }
       }
     }
+  }
+}
+
+
+@media only screen and (min-width: 1440px) {
+  header, html.js header {
+    flex-basis: 28.8rem;
   }
 }
