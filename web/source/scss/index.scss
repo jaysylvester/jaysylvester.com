@@ -1,51 +1,9 @@
 // Home / About
 
 body[data-controller="index"] {
-  background: hsl(175,55%,76%);
-
-  header {
-    background: hsl(175,55%,76%);
-  }
-
-  main {
-    h1, h2 {
-      color: white;
-      text-shadow: 0 1px 3px hsl(175,42%,45%);
-    }
-
-    h2 {
-      font-weight: 800;
-    }
-  }
-
-  section.intro {
-    background: hsl(175,55%,70%);
-
-    p {
-      color: hsl(176,33%,30%);
-    }
-  }
-
-  section.case-studies h2 {
-    padding-bottom: 0;
-  }
-
-  section.screens {
-    margin: 3rem 0 2rem;
-
-    figure[role="group"] figure {
-      border: 0.1rem solid hsl(175,55%,66%);
-    }
-  }
-
-  section.endorsements {
-    background: hsl(175,55%,70%);
-    padding-bottom: 8rem;
-  }
-
   blockquote {
     position: relative;
-    padding: 2rem 2.5rem 4rem;
+    padding: 4rem 2.6rem;
   
     &:before {
       content: '“'
@@ -58,91 +16,46 @@ body[data-controller="index"] {
     &:after {
       display: block;
       position: absolute;
-      z-index: 2;
-      height: 3rem;
-      font-family: Raleway, sans-serif;
+      z-index: 1;
+      height: 12.4rem;
+      font-family: var(--font-primary);
       font-weight: 800;
-      font-size: 6.4rem;
-      color: white;
-      text-shadow: 0 2px 4px hsl(175,22%,55%);
+      font-size: 24.8rem;
+      color: hsl(0,0%,98%);
     }
   
     &:before {
-      top: 0.8rem;
-      left: 1.4rem;
+      top: 0;
+      left: 0;
     }
   
     &:after {
-      right: 1.4rem;
-      bottom: 3rem;
+      right: 0;
+      bottom: 0;
     }
   
     p {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       margin: 0;
-      padding: 2.2rem 3.2rem;
+      padding: 2.4rem 3.6rem;
+      font-family: var(--font-primary);
+      font-size: 1.8rem;
       color: #444;
-      background: hsl(175,100%,95%);
-      border-radius: 1rem;
     }
   }
 
   @media only screen and (min-width: 768px) {
-    section.case-studies {
-      margin-bottom: 4rem;
-    }
-
-    section.screens {
-      margin: 4rem 0 1rem;
-
-      figure[role="group"] section {
-        padding-left: 4rem;
-        padding-right: 4rem;
-  
-        &:after {
-          flex-basis: 4rem;
-        }
-      }
-    }
-    
     section.quotes {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin: 0 2.4rem;
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
-    section.case-studies {
-      margin: 6rem auto 8rem;
-    }
-
-    section.endorsements {
-      background: none;
-    }
-
-    blockquote {
-      flex: 0 0 50%;
-    }
-  }
-
-  @media only screen and (min-width: 1440px) {
-    main > section {
-      margin-bottom: 8rem;
-    }
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  html.js body[data-controller="index"] {
-    header {
-      background: hsla(175,55%,70%,0);
-    }
-    &.fixed-header header {
-      background: hsla(175,55%,65%,0.75);
+    section.quotes {
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
     }
   }
 }

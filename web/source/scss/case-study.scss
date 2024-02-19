@@ -1,78 +1,28 @@
 // Case study
 
 body[data-controller="case-study"] {
-  main h1 {
-    span.title {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-      line-height: 1.2;
-    }
-  }
-
-  ul.attributes {
-    display: flex;
-    flex-direction: column;
-    list-style-type: none;
-    margin: 2rem 0 0;
-    font-family: Avenir Next, Libre Franklin, sans-serif;
-    font-size: 2.4rem;
-    font-weight: 500;
-    color: hsl(176,33%,30%);
-    text-align: center;
-    line-height: 1.4;
-
-    li {
-      padding: 0.2rem 0;
-    }
-  }
-
-  h2.tagline {
-    padding: 0 2rem;
-    font-size: 2.4rem;
-    color: hsl(0,0%,20%);
-    text-align: center;
-  }
 
   p.summary {
-    margin: 3rem 2rem;
-    text-align: center;
+    margin: 2.4rem 2.6rem 5.6rem;
+    font-family: var(--font-primary);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: hsl(0,0%,30%);
   }
 
   section.devices {
-    margin-bottom: 2rem;
-    overflow-x: hidden;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  section.logo {
-    display: flex;
-    justify-content: center;
-    height: 5rem;
-    margin: 6rem auto 4rem;
+    height: 36vw;
+    margin-bottom: 2.4rem;
 
     img {
       height: 100%;
-      max-width: 100%;
-      object-fit: contain;
+      margin: auto;
     }
   }
 
   section.screens figure[role="group"]:only-child figcaption {
     display: none;
-  }
-
-  section.Linode,
-  section.Vidyo,
-  section.Fitly,
-  section.hibu {
-    section.devices img {
-      width: 142%;
-      margin-left: -21%;
-    }
   }
 
   section.Linode {
@@ -126,6 +76,7 @@ body[data-controller="case-study"] {
   }
 
   section.screens.group {
+    margin-bottom: 4rem;
     padding-top: 2rem;
     background: hsl(175,55%,76%);
     
@@ -139,70 +90,13 @@ body[data-controller="case-study"] {
       display: initial;
     }
 
-    ul.attributes {
-      text-align: left;
-      margin-top: 0.8rem;
-
-      li {
-        display: flex;
-        
-        &:before {
-          content: '•';
-          display: block;
-          padding: 0.6rem 1rem 0 0;
-          color: hsl(175,55%,76%);
-        }
-      }
-    }
-
-    section.logo {
-      height: 5.6rem;
-
-      img {
-        max-width: 50%;
-      }
-    }
-
-    h2.tagline {
-      padding: 0;
-      max-width: 50rem;
-      margin: auto;
-    }
-
     p.summary {
-      max-width: 64rem;
-      margin: 3rem auto 6rem;
-      font-size: 2rem;
+      margin-right: 4.8rem;
+      margin-left: 4.8rem;
     }
 
     section.devices {
-      width: auto;
-      margin-bottom: 4rem;
-      margin-left: 0;
-      padding: 0 4rem;
-    }
-
-    section.Linode,
-    section.Vidyo,
-    section.hibu,
-    section.Fitly {
-      section.devices img {
-        margin: 0 !important;
-        width: 100% !important;
-      }
-    }
-
-    section.Abercrombie-and-Fitch,
-    section.OncoTracker {
-      section.devices {
-        display: flex;
-        justify-content: center;
-
-        img {
-          width: auto;
-          height: 27rem;
-        }
-      }
+      margin-bottom: 3.6rem;
     }
 
     section.Linode {
@@ -210,24 +104,19 @@ body[data-controller="case-study"] {
         section {
           display: flex;
           justify-content: space-between;
-
-          figure {
-            img {
-              height: 24rem;
-            }
-          }
-        }
-
-        &.usability-testing {
-          img {
-            height: 12.6rem;
-          }
         }
       }
 
       figure[role="group"].callout {
         figure {
+          flex: 0 0 49%;
           margin-bottom: 0;
+        }
+
+        &.usability-testing {
+          figure {
+            flex: 0 0 32%;
+          }
         }
       }
     }
@@ -237,12 +126,16 @@ body[data-controller="case-study"] {
       &.zip-code {
         img {
           height: 30rem;
+          width: auto;
+          margin: auto;
         }
       }
 
       &.kitchen-view {
         img {
           height: 48rem;
+          width: auto;
+          margin: auto;
         }
       }
 
@@ -253,6 +146,8 @@ body[data-controller="case-study"] {
 
         img {
           height: 24rem;
+          width: auto;
+          margin: auto;
         }
       }
     }
@@ -273,112 +168,32 @@ body[data-controller="case-study"] {
     }
 
     main nav {
-      position: initial;
+      display: flex;
       justify-content: center;
       margin: 6rem 0;
     }
   }
 
-  @media only screen and (min-width: 840px) {
-    section.screens.group {
-      padding-bottom: 2rem;
-
-      figure[role="group"] {
-        figure {
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-
   @media only screen and (min-width: 1024px) {
-    section.case-study {
-      max-width: none;
+    section.about {
+      margin-bottom: 6rem;
     }
 
-    section.intro {
-      max-width: 128rem;
-      margin: auto;
+    p.summary {
+      margin-right: 9.6rem;
+      margin-left: 9.6rem;
+    }
+
+    section.devices {
+      height: 22vw;
     }
 
     section.screens.group {
       padding-top: 2rem;
     }
-
-    section.Linode {
-      figure[role="group"]:not(.screens) {
-        section {
-          figure {
-            img {
-              height: 28rem;
-            }
-          }
-        }
-
-        &.usability-testing {
-          img {
-            height: 14.6rem;
-          }
-        }
-      }
-    }
   }
 
   @media only screen and (min-width: 1280px) {
-    section.intro {
-      padding: 0 4rem;
-      background: none;
-    }
-
-    ul.attributes {
-      flex-direction: row;
-
-      li {
-        margin-right: 1rem;
-
-        &:first-child:before {
-          display: none;
-        }
-      }
-    }
-
-    section.about {
-      display: grid;
-      grid-template: auto/37% 63%;
-      max-width: 120rem;
-      margin: 8rem auto 6rem;
-    }
-
-    section.logo {
-      height: 5rem;
-      justify-content: left;
-      margin: 0 0 2rem;
-
-      img {
-        max-width: 40rem;
-      }
-    }
-
-    h2.tagline {
-      grid-column: 1;
-      font-size: 2.2rem;
-      text-align: left;
-    }
-
-    p.summary {
-      grid-column: 1;
-      margin-bottom: 0;
-      font-size: 1.8rem;
-      text-align: left;
-    }
-
-    section.devices {
-      grid-row: 1/4;
-      grid-column: 2;
-      margin: 2rem 0 0 4rem;
-      padding: 0;
-    }
-
     section.screens.group {
       padding: 0;
 
@@ -391,6 +206,14 @@ body[data-controller="case-study"] {
           margin: 0 3rem 0 0;
         }
       }
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    section.devices {
+      height: 34rem;
+      display: flex;
+      justify-content: center;
     }
   }
 }

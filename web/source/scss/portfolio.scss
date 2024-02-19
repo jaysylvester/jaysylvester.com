@@ -1,17 +1,6 @@
 // Portfolio
 
 body[data-controller="portfolio"] {
-  section.documents {
-    ul {
-      margin: 2rem auto 0;
-      color: #cccccc;
-    }
-
-    li {
-      margin: 0 0 0.8rem 2rem;
-    }
-  }
-
   // No borders around mobile screens
   section.screens figure[role="group"].Vidyo {
     &:nth-child(5) {
@@ -21,15 +10,7 @@ body[data-controller="portfolio"] {
     }
   }
   
-  @media only screen and (min-width: 768px) {
-    section.documents p,
-    section.documents ul,
-    section.all-screens p {
-      max-width: 80rem;
-      margin-right: auto;
-      margin-left: auto;
-    }
-
+  @media only screen and (min-width: 1024px) {
     section.documents {
       ul {
         margin-top: 4rem;

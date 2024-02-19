@@ -1,21 +1,29 @@
 // Footer
 
 body > footer {
-  padding: 2rem;
+  padding: 2rem 0;
   // Extra bottom padding for iPhone swipe-up indicator
   @media (hover: none) {
     padding-bottom: 4rem;
   }
-  color: white;
   text-align: center;
-  background: hsl(182,18%,51%);
 
   nav {
     margin: 2rem auto 4rem;
-    font-family: Raleway, sans-serif;
+    font-family: var(--font-primary);
+
+    a.top {
+      margin-bottom: 4.8rem;
+    }
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
     li {
-      margin-bottom: 1rem;
+      margin: 0 0.6rem 1.2rem;
     }
 
     a {
@@ -26,13 +34,10 @@ body > footer {
     }
   }
   
-  p.copyright {
-    margin: 0;
+  p {
+    margin-bottom: 0;
     font-size: 1.4rem;
-  }
-
-  a {
-    color: white;
+    color: hsl(0,0%,40%);
   }
 
   @media only screen and (min-width: 768px) {
@@ -41,16 +46,37 @@ body > footer {
     nav {
       width: 66rem;
       margin: 1rem auto 3rem;
-    }
 
-    ul {
-      display: flex;
-      justify-content: space-between;
-      margin: auto;
-
-      li {
-        margin: 0;
+      ul {
+        justify-content: space-around;
+        margin: auto;
+  
+        li {
+          margin: 0;
+        }
       }
     }
+
+  }
+
+  @media only screen and (min-width: 1024px) {
+    position: absolute;
+    left: 0;
+    bottom: 8.4rem;
+    z-index: 501;
+    width: 25%;
+    padding: 0 4rem;
+
+    nav {
+      display: none;
+    }
+
+    p {
+      text-align: right;
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    width: 28.8rem;
   }
 }

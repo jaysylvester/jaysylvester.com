@@ -1,4 +1,4 @@
-// _case-study model
+// case-study model
 
 
 export const caseStudies = async () => {
@@ -7,11 +7,9 @@ export const caseStudies = async () => {
   try {
     const result = await client.query({
       name: 'case_studies_caseStudies',
-      text: 'select cs.id, cs.company_name, cs.company_url, cs.title, cs.tagline, cs.vertical, cs.platform, cs.expertise, cs.summary, cs.sort, ' +
-            's.url as screen_url, s.alt, s.sort as screen_sort ' +
-            'from case_studies cs ' +
-            'join screens s on cs.company_url = s.company ' +
-            'order by s.sort asc, cs.sort asc;'
+      text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, sort ' +
+            'from case_studies ' +
+            'order by sort asc;'
     })
     // Transform the data to make it usable by the view
     let caseStudies = {}
@@ -20,15 +18,8 @@ export const caseStudies = async () => {
         caseStudies[item.sort] = {
           company_url: item.company_url,
           company_name: item.company_name,
-          summary: item.summary,
-          screens: {}
-        }
-      }
-      // Limit to 4 screens per case study
-      if ( Object.keys(caseStudies[item.sort].screens).length < 4 ) {
-        caseStudies[item.sort].screens[item.screen_sort] = {
-          url: item.screen_url,
-          alt: item.alt
+          title: item.title,
+          summary: item.summary
         }
       }
     })
@@ -45,31 +36,14 @@ export const caseStudy = async (company) => {
   try {
     const result = await client.query({
       name: 'case_studies_caseStudy',
-      text: 'select cs.id, cs.company_name, cs.company_url, cs.title, cs.tagline, cs.vertical, cs.platform, cs.expertise, cs.summary, cs.content, cs.sort, ' +
-            's.url as screen_url, s.alt, s.sort as screen_sort ' +
-            'from case_studies cs ' +
-            'join screens s on cs.company_url = s.company ' +
-            'where cs.company_url = $1 ' +
-            'order by s.sort asc, cs.sort asc;',
+      text: 'select id, company_name, company_url, title, tagline, vertical, platform, expertise, summary, content, sort ' +
+            'from case_studies ' +
+            'where company_url = $1 ' +
+            'order by sort asc;',
       values: [ company ]
     })
-    
-    // Transform the data to make it usable by the view
-    let caseStudy = result.rows[0]
 
-    if ( caseStudy ) {
-      caseStudy.screens = {}
-      result.rows.forEach( function (item) {
-        if ( Object.keys(caseStudy.screens).length < 4 ) {
-          caseStudy.screens[item.screen_sort] = {
-            url: item.screen_url,
-            alt: item.alt
-          }
-        }
-      })
-    }
-
-    return caseStudy
+    return result.rows[0]
   } finally {
     client.release()
   }
