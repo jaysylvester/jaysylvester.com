@@ -381,7 +381,7 @@ a.new-tab {
     padding-bottom: 6rem; // Provides a comfortable gap between content and browser bottom
 
     h1 {
-      margin: 13.6rem 9.6rem 5.6rem;
+      margin: 13.6rem 9.6rem 3.6rem;
     }
 
     h2, h3, h4, h5, nav {
@@ -414,11 +414,12 @@ a.new-tab {
   // when I should be using a scalpel. I'm sure I'll regret this later.
   main {
     > {
-      h1, section, article {
+      h1, section, article, nav {
         max-width: 96rem;
         margin-left: 9.6rem !important;
 
-        > *, > * > * {
+        // Target all nested elements except list items
+        > *, > * > *:not(li) {
           margin-right: 0 !important;
           margin-left: 0 !important;
         }
