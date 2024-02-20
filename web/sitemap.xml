@@ -26,28 +26,28 @@
 		<priority>0.9</priority>
 	</url>
 	<url>
-		<loc>http://jaysylvester.com/case-study/company/hibu</loc>
+		<loc>http://jaysylvester.com/case-study/hibu</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.9</priority>
 	</url>
 	<url>
-		<loc>http://jaysylvester.com/case-study/company/Abercrombie-and-Fitch</loc>
+		<loc>http://jaysylvester.com/case-study/Abercrombie-and-Fitch</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.9</priority>
 	</url>
 	<url>
-		<loc>http://jaysylvester.com/case-study/company/OncoTracker</loc>
+		<loc>http://jaysylvester.com/case-study/OncoTracker</loc>
 		<changefreq>monthly</changefreq>
 		<priority>0.9</priority>
 	</url>
-        <url>
-                <loc>http://jaysylvester.com/case-study/company/Fitly</loc>
-                <changefreq>monthly</changefreq>
-                <priority>0.9</priority>
-        </url>
-        <url>
-                <loc>http://jaysylvester.com/case-study/company/Vidyo</loc>
-                <changefreq>monthly</changefreq>
-                <priority>0.9</priority>
-        </url>
+	<url>
+		<loc>http://jaysylvester.com/case-study/Fitly</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.9</priority>
+	</url>
+	<url>
+		<loc>http://jaysylvester.com/case-study/Vidyo</loc>
+		<changefreq>monthly</changefreq>
+		<priority>0.9</priority>
+	</url>
 </urlset>
