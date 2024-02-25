@@ -1,47 +1,43 @@
 // Home / About
 
 body[data-controller="index"] {
+  section.quotes {
+    display: grid;
+    gap: 2.4rem;
+    margin: 4.8rem 2.6rem;
+  }
+
   blockquote {
     position: relative;
-    padding: 4rem 2.6rem;
+    padding: 4rem 2.6rem 2.4rem;
+    background: hsl(0,0%,99%);
+    border: 0.2rem solid hsl(0,0%,98%);
+    border-radius: 0.8rem;
   
-    &:before {
-      content: '“'
-    }
-    &:after {
-      content: '”'
-    }
-  
-    &:before,
-    &:after {
-      display: block;
-      position: absolute;
-      z-index: 1;
-      height: 12.4rem;
-      font-family: var(--font-primary);
-      font-weight: 800;
-      font-size: 24.8rem;
-      color: hsl(0,0%,98%);
-    }
-  
-    &:before {
-      top: 0;
-      left: 0;
-    }
-  
-    &:after {
-      right: 0;
-      bottom: 0;
-    }
+      &:before {
+        display: block;
+        content: '“';
+        position: absolute;
+        top: 1.2rem;
+        left: calc(50% - 3rem);
+        z-index: 2;
+        width: 6rem;
+        height: 6rem;
+        font-family: serif;
+        font-weight: 800;
+        font-size: 7.2rem;
+        text-align: center;
+        color: hsl(176,60%,70%);
+        opacity: 0.8;
+      }
   
     p {
       position: relative;
-      z-index: 2;
+      z-index: 1;
       margin: 0;
-      padding: 2.4rem 3.6rem;
-      font-family: var(--font-primary);
-      font-size: 1.8rem;
-      color: #444;
+      padding-top: 2.4rem;
+      font-size: 1.6rem;
+      color: hsl(0,0%,20%);
     }
   }
 
@@ -56,6 +52,13 @@ body[data-controller="index"] {
     section.quotes {
       margin-right: 9.6rem;
       margin-left: 9.6rem;
+    }
+  }
+
+  @media only screen and (min-width: 1440px) {
+    section.quotes {
+      grid: 50% / 1fr 1fr;
+      gap: 4.8rem;
     }
   }
 }
