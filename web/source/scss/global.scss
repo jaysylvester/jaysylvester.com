@@ -377,7 +377,8 @@ a.new-tab {
 
   main {
     height: 100vh;
-    overflow: scroll;
+    overflow-x: hidden; // Hide horizontal scrollbars in Windows browsers
+    overflow-y: scroll;
     padding-bottom: 6rem; // Provides a comfortable gap between content and browser bottom
 
     h1 {
