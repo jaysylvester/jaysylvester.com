@@ -152,7 +152,7 @@ p.error {
   font-family: var(--font-primary);
   font-weight: 600;
   color: hsl(0,0%,100%);
-  background: hsl(175,55%,50%);
+  background: var(--color-primary);
   border-radius: 0.6rem;
 
   &:before {
