@@ -6,10 +6,15 @@ body[data-controller="case-studies"] {
     
     h3 {
       margin-top: 1.8rem;
+      text-align: center;
     }
 
     p {
       margin: 0 2.6rem 2.6rem;
+    }
+
+    nav {
+      margin-top: 0;
     }
   }
 
@@ -54,8 +59,16 @@ body[data-controller="case-studies"] {
   }
 
   @media only screen and (min-width: 1440px) {
+    article {
+      p {
+        max-width: 80rem;
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
+    }
+
     section.devices {
-      height: 34rem;
+      height: 28rem;
       display: flex;
       justify-content: center;
     }

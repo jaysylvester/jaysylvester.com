@@ -1,5 +1,5 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;1,400&family=Raleway:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@500;600;700;800;900&display=swap');
 
 @font-face {
 	font-family: 'social';
@@ -61,6 +61,10 @@ main {
     }
   }
 
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-primary);
+  }
+
   h2 {
     margin: 2.4rem 2.6rem;
     font-size: 2.8rem;
@@ -88,7 +92,7 @@ main {
   }
   
   nav {
-    margin: 0 2.6rem 4.8rem;
+    margin: 4.8rem 2.6rem;
     display: flex;
     justify-content: center;
   }
@@ -170,6 +174,10 @@ p.error {
     background: hsl(0,0%,100%);
     border-radius: 50%;
   }
+}
+
+strong {
+  color: hsl(0,0%,20%);
 }
 
 // Override default width or height caused by alt attributes in unloaded images
