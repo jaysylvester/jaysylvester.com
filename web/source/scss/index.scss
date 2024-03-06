@@ -4,38 +4,37 @@ body[data-controller="index"] {
   section.quotes {
     display: grid;
     gap: 2.4rem;
-    margin: 4.8rem 2.6rem;
+    margin: 4.8rem 2.6rem 0;
   }
 
   blockquote {
     position: relative;
-    padding: 4rem 2.6rem 2.4rem;
-    background: hsl(0,0%,99%);
-    border: 0.2rem solid hsl(0,0%,98%);
+    margin-bottom: 4.8rem;
+    padding: 2.8rem;
+    border: 0.1rem solid hsl(176, 60%, 80%);
     border-radius: 0.8rem;
   
       &:before {
         display: block;
         content: '“';
         position: absolute;
-        top: 1.2rem;
-        left: calc(50% - 3rem);
+        top: -2.4rem;
+        left: calc(50% - 4rem);
         z-index: 2;
-        width: 6rem;
-        height: 6rem;
+        width: 8rem;
+        height: 4.8rem;
         font-family: serif;
         font-weight: 800;
         font-size: 7.2rem;
         text-align: center;
-        color: hsl(176,60%,70%);
-        opacity: 0.8;
+        color: hsl(176, 60%, 70%);
+        background: hsl(0, 0%, 100%);
       }
   
     p {
       position: relative;
       z-index: 1;
       margin: 0;
-      padding-top: 2.4rem;
       font-size: 1.6rem;
       color: hsl(0,0%,20%);
     }
