@@ -53,12 +53,6 @@ main {
     text-transform: lowercase;
     color: #333;
     border-bottom: 0.1rem solid #efefef;
-
-    span {
-      font-size: 8vw;
-      font-weight: 600;
-      line-height: 1.2;
-    }
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -332,23 +326,15 @@ a.new-tab {
 
 // 768px and up
 @media only screen and (min-width: 768px) {
-  body {
-    font-size: 2rem;
-  }
-
   main {
     h1 {
       margin: 24rem 4.8rem 2.4rem;
       padding-bottom: 2.4rem;
-      font-size: 6.4rem;
-
-      span {
-        font-size: 4.8rem;
-      }
+      font-size: 5.6rem;
     }
     h2 {
       margin: 3.6rem 4.8rem 2.4rem;
-      font-size: 3.6rem;
+      font-size: 3.2rem;
     }
     h3, h4, h5, nav {
       margin-right: 4.8rem;
@@ -390,7 +376,7 @@ a.new-tab {
     padding-bottom: 6rem; // Provides a comfortable gap between content and browser bottom
 
     h1 {
-      margin: 13.6rem 9.6rem 3.6rem;
+      margin: 13.8rem 9.6rem 3.6rem;
     }
 
     h2, h3, h4, h5, nav {
@@ -422,6 +408,7 @@ a.new-tab {
     // Allows absolute positioning of the footer
     margin-left: calc((100% - 144rem)/2);
     padding-left: 0;
+    font-size: 2rem;
   }
 
   // Make sure all content in main is 960px wide. This is a sledgehammer

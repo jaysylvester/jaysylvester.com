@@ -1,6 +1,15 @@
 // Case study
 
 body[data-controller="case-study"] {
+  main {
+    h1 {
+      span {
+        font-size: 3.2rem;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+    }
+  }
 
   p.summary {
     margin: 2.4rem 2.6rem 5.6rem;
@@ -86,8 +95,12 @@ body[data-controller="case-study"] {
   }
 
   @media only screen and (min-width: 768px) {
-    main h1 span.title {
-      display: initial;
+    main {
+      h1 {
+        span {
+          font-size: 4.2rem;
+        }
+      }
     }
 
     p.summary {
