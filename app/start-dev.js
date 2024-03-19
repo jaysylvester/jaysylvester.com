@@ -16,6 +16,7 @@ global.app = citizen
 
 // Register Handlebars partials
 consolidate.requires.handlebars = handlebars
+consolidate.requires.handlebars.registerHelper('eq', (a, b) => a == b)
 consolidate.requires.handlebars.registerPartial('caseStudyCallout', fs.readFileSync(app.views['case-study']._callout.path).toString())
 consolidate.requires.handlebars.registerPartial('screenGroup', fs.readFileSync(app.views._screens._group.path).toString())
 

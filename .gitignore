@@ -14,3 +14,6 @@ package-lock.json
 
 # VS Code
 settings.json
+
+# local dev certs
+_dev-certs
