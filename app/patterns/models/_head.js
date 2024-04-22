@@ -15,7 +15,7 @@ export const caseStudy = async (company) => {
 
   if ( caseStudy ) {
     return {
-      title:        'Jay Sylvester — Case Study: ' + caseStudy.company_name,
+      title:        'Jay Sylvester — Case Study: ' + caseStudy.title,
       description:  caseStudy.summary,
       keywords:     'UI, UX, user experience, UX case study, ' + caseStudy.company_name + ' case study'
     }
