@@ -1,14 +1,14 @@
-import autoprefixer from 'autoprefixer'
-import concat       from 'gulp-concat'
-import cssnano      from 'gulp-cssnano'
-import filter       from 'gulp-filter'
-import gulp         from 'gulp'
-import gulpsass     from 'gulp-sass'
-import browsersync  from 'browser-sync'
-import postcss      from 'gulp-postcss'
+import autoprefixer  from 'autoprefixer'
+import concat        from 'gulp-concat'
+import cssnano       from 'gulp-cssnano'
+import filter        from 'gulp-filter'
+import gulp          from 'gulp'
+import gulpsass      from 'gulp-sass'
+import browsersync   from 'browser-sync'
+import postcss       from 'gulp-postcss'
 import * as nodesass from 'sass'
-import sourcemaps   from 'gulp-sourcemaps'
-import uglify       from 'gulp-uglify-es'
+import sourcemaps    from 'gulp-sourcemaps'
+import uglify        from 'gulp-uglify-es'
 
 const sass = gulpsass(nodesass)
 
@@ -62,7 +62,9 @@ gulp.task('watch', function (done) {
   })
   gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
   gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
-  gulp.watch('app/patterns/**', gulp.parallel('reload'))
+  gulp.watch('app/controllers/**', gulp.parallel('reload'))
+  gulp.watch('app/models/**', gulp.parallel('reload'))
+  gulp.watch('app/views/**', gulp.parallel('reload'))
   gulp.watch('app/toolbox/**', gulp.parallel('reload'))
   done()
 })
