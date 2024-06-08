@@ -2,8 +2,8 @@
 
 body[data-controller="portfolio"] {
   // No borders around mobile screens
-  section.screens figure[role="group"].Vidyo {
-    &:nth-child(5) {
+  section.screens figure[role="group"] {
+    &:nth-child(6) {
       figure {
         border: none;
       }

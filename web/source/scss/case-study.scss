@@ -34,14 +34,6 @@ body[data-controller="case-study"] {
     display: none;
   }
 
-  section.Linode {
-    figure[role="group"].callout {
-      figure {
-        margin-bottom: 1rem;
-      }
-    }
-  }
-
   section.hibu {
     figure.callout.concept,
     figure.callout.prototype {
@@ -74,12 +66,10 @@ body[data-controller="case-study"] {
   }
 
   // No borders around mobile screens
-  section.Vidyo {
-    section.screens figure[role="group"] {
-      &:nth-child(4) {
-        figure {
-          border: none;
-        }
+  section.screens figure[role="group"].Vidyo {
+    &:nth-child(4) {
+      figure {
+        border: none;
       }
     }
   }
@@ -112,24 +102,29 @@ body[data-controller="case-study"] {
       margin-bottom: 3.6rem;
     }
 
-    section.Linode {
-      figure[role="group"]:not(.screens) {
-        section {
-          display: flex;
-          justify-content: space-between;
-        }
+    figure[role="group"]:not(.screens) {
+      section {
+        display: flex;
+        justify-content: space-between;
       }
 
-      figure[role="group"].callout {
-        figure {
-          flex: 0 0 49%;
-          margin-bottom: 0;
+      // Fitly
+      &.pricing-cta {
+        section {
+          display: initial;
         }
+      }
+    }
 
-        &.usability-testing {
-          figure {
-            flex: 0 0 32%;
-          }
+    figure[role="group"].callout {
+      figure {
+        flex: 0 0 49%;
+        margin-bottom: 0;
+      }
+
+      &.usability-testing {
+        figure {
+          flex: 0 0 32%;
         }
       }
     }
@@ -169,6 +164,7 @@ body[data-controller="case-study"] {
       figure.callout.concept,
       figure.callout.prototype {
         section {
+          max-height: 50rem; // Safari needs this, images are sometimes giant on page load for no reason
           justify-content: center;
 
           figure:nth-child(1),
