@@ -4,11 +4,11 @@
 // default action
 export const handler = (params) => {
   return {
-    public: {
+    local: {
       date: Date.now()
     },
     cache: {
-      route: false
+      request: false
     }
   }
 }
@@ -22,33 +22,33 @@ export const form = (params, request) => {
   } else {
     if ( !params.form.name.length || !params.form.email.length || !params.form.subject.length || !params.form.message.length ) {
       return {
-        public: {
+        local: {
           date: Date.now(),
           error: 'All fields are required'
         },
         cache: {
-          route: false
+          request: false
         }
       }
     } else if ( !emailRegex.test(params.form.email) ) {
       return {
-        public: {
+        local: {
           date: Date.now(),
           error: 'Your e-mail address doesn\'t look right'
         },
         cache: {
-          route: false
+          request: false
         }
       }
     // If they submit the form in less than 10 seconds, assume it's a bot.
     } else if ( params.form.date > ( Date.now() - 10000 ) ) {
       return {
-        public: {
+        local: {
           date: Date.now(),
           error: 'Are you a bot? If not, wait 10 seconds and try again.'
         },
         cache: {
-          route: false
+          request: false
         }
       }
     } else {

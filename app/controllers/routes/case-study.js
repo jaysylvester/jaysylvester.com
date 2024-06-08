@@ -7,7 +7,7 @@ export const handler = async (params) => {
 
   if ( caseStudy ) {
     return {
-      public: caseStudy,
+      local: caseStudy,
       include: {
         screens: {
           controller: '_screens'

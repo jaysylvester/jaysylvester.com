@@ -2,18 +2,12 @@
 
 
 // default action
-export const handler = () => {
+export const handler = ({ route }) => {
   return {
     include: {
-      head: {
-        controller: '_head'
-      },
-      header: {
-        controller: '_header'
-      },
-      footer: {
-        controller: '_footer'
-      }
+      head: '/_head/controller/' + route.controller,
+      header: '/_header',
+      footer: '/_footer'
     }
   }
 }

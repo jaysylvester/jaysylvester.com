@@ -4,7 +4,7 @@
 export const start = () => {
   return {
     cache: {
-      route: {
+      request: {
         lifespan: 'application'
       }
     }

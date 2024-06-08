@@ -6,11 +6,11 @@
   <li class="twitter"><a href="https://twitter.com/JayIsAngry" target="_blank" rel="noopener">Twitter</a></li>
 </ul>
 <h2>Say hey.</h2>
-{{#if error}}
-  <p class="error">{{error}}</p>
+{{#if local.error}}
+  <p class="error">{{local.error}}</p>
 {{/if}}
 <form id="contact-form" action="/contact/action/form" method="post" novalidate>
-  <input type="hidden" name="date" value="{{date}}">
+  <input type="hidden" name="date" value="{{local.date}}">
   <ul class="data">
     <li class="name text required">
       <label for="name">

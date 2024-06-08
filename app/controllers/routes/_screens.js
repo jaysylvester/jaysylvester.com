@@ -4,7 +4,7 @@
 // default action
 export const handler = async (params) => {
   return {
-    public: {
+    local: {
       screens: params.url.company || params.url['case-study'] ? await app.models.screens.companyScreens(params.url.company || params.url['case-study']) : await app.models.screens.screens()
     }
   }
@@ -14,7 +14,7 @@ export const handler = async (params) => {
 export const featured = async () => {
   return {
     view: '_group',
-    public: {
+    local: {
       screens: await app.models.screens.featuredScreens()
     }
   }

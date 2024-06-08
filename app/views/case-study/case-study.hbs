@@ -1,15 +1,15 @@
-<h1>Case Study: <span>{{{title}}}</span></h1>
+<h1>Case Study: <span>{{{local.title}}}</span></h1>
 <section class="about">
-  <h2>{{{tagline}}}</h2>
-  <p class="summary">{{summary}}</p>
+  <h2>{{{local.tagline}}}</h2>
+  <p class="summary">{{local.summary}}</p>
   <section class="devices">
     <noscript>
-      <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+      <img class="devices" src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50/jaysylvester.com/case-studies/{{local.company_url}}/{{local.company_url}}-devices.png" alt="{{local.company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
     </noscript>
-    <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{company_url}}/{{company_url}}-devices.png" alt="{{company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
+    <img class="devices" src="/images/placeholder-devices.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/case-studies/{{local.company_url}}/{{local.company_url}}-devices.png" alt="{{local.company_name}} products displayed on various devices (laptop, tablet, phone, etc.).">
   </section>
-  <section class="content case-study {{company_url}}">
-    {{{content}}}
+  <section class="content case-study {{local.company_url}}">
+    {{{local.content}}}
   </section>
   {{{include.screens}}}
 </section>

@@ -4,7 +4,7 @@
 // default action
 export const handler = async (params) => {
   return {
-    public: {
+    local: {
       employers: await app.models['work-history'].employers()
     }
   }

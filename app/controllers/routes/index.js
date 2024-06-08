@@ -2,4 +2,4 @@
 
 
 // default action
-export const handler = (params) => { }
+export const handler = () => {}

@@ -4,7 +4,7 @@
 // default action
 export const handler = async (params) => {
   return {
-    public: {
+    local: {
       caseStudies: await app.models['case-studies'].caseStudies(params.url.count)
     }
   }
