@@ -1,29 +1,36 @@
-{
-  "env": {
-    "es6": true,
-    "node": true,
-    "browser": true
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+
+
+export default [
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        app: 'writeable'
+      }
+    }
   },
-  "globals": {
-    "app": true
+  pluginJs.configs.recommended,
+  {
+    ignores: ['util/templates/']
   },
-  "extends": "eslint:recommended",
-  "parserOptions": {
-    "ecmaVersion": 2020,
-    "sourceType": "module"
-  },
-  "rules": {
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "never"
-    ]
+  {
+    rules: {
+      'linebreak-style': [
+        'error',
+        'unix'
+      ],
+      quotes: [
+        'error',
+        'single'
+      ],
+      semi: [
+        'error',
+        'never'
+      ],
+      'no-console': 0,
+      'no-debugger': 0
+    }
   }
-}
+]
