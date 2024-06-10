@@ -13,6 +13,7 @@ package-lock.json
 .sass-cache
 
 # VS Code
+.vscode
 settings.json
 
 # local dev certs
