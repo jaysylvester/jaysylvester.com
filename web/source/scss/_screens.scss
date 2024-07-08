@@ -45,20 +45,10 @@ section.screens {
     }
   }
 
-  &.group {
-    figure[role="group"] {
-      margin: 0 auto;
-
-      figure {
-        height: 22.5rem;
-      }
-    }
-  }
-
   @media only screen and (min-width: 768px) {
-    &.group {
-      margin: 0;
-    }
+    // &.group {
+    //   margin: 0;
+    // }
 
     figure[role="group"] {
       padding: 0;
@@ -107,13 +97,13 @@ section.screens {
       }
     }
 
-    &.group {
-      figure[role="group"] {
-        figure {
-          height: 16vw;
-        }
-      }
-    }
+    // &.group {
+    //   figure[role="group"] {
+    //     figure {
+    //       height: 16vw;
+    //     }
+    //   }
+    // }
   }
 
   @media only screen and (min-width: 1280px) {
@@ -123,13 +113,13 @@ section.screens {
       }
     }
 
-    &.group {
-      figure[role="group"] {
-        figure {
-          height: 21.2rem;
-        }
-      }
-    }
+    // &.group {
+    //   figure[role="group"] {
+    //     figure {
+    //       height: 21.2rem;
+    //     }
+    //   }
+    // }
   }
 }
 

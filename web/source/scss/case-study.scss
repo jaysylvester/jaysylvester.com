@@ -34,6 +34,12 @@ body[data-controller="case-study"] {
     display: none;
   }
 
+  figure[role="group"].callout {
+    figure {
+      margin-top: 1.6rem;
+    }
+  }
+
   section.hibu {
     figure.callout.concept,
     figure.callout.prototype {
@@ -119,7 +125,7 @@ body[data-controller="case-study"] {
     figure[role="group"].callout {
       figure {
         flex: 0 0 49%;
-        margin-bottom: 0;
+        margin: 0;
       }
 
       &.usability-testing {
