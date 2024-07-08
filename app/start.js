@@ -7,7 +7,7 @@ import path         from 'path'
 import * as helpers from './toolbox/helpers.js'
 // third party
 import citizen      from 'citizen'
-import consolidate  from 'consolidate'
+import consolidate  from '@ladjs/consolidate'
 import handlebars   from 'handlebars'
 import moment       from 'moment'
 import nodemailer   from 'nodemailer'
@@ -50,7 +50,7 @@ app.toolbox.dbPool.on('error', function (err) {
   })
 })
 
-app.server.start({
+app.start({
   citizen: {
     mode: 'production'
   },
