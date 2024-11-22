@@ -59,7 +59,7 @@ body[data-controller="index"] header nav li.about a,
 body[data-controller="case-study"] header nav li.case-studies a,
 body[data-controller="case-studies"] header nav li.case-studies a,
 body[data-controller="portfolio"] header nav li.portfolio a,
-body[data-controller="work-history"] header nav li.work-history a,
+body[data-controller="resume"] header nav li.resume a,
 body[data-controller="contact"] header nav li.contact a {
   &:after {
     content: '';
@@ -104,7 +104,7 @@ body[data-controller="contact"] header nav li.contact a {
   body[data-controller="case-study"] header nav li.case-studies a,
   body[data-controller="case-studies"] header nav li.case-studies a,
   body[data-controller="portfolio"] header nav li.portfolio a,
-  body[data-controller="work-history"] header nav li.work-history a,
+  body[data-controller="resume"] header nav li.resume a,
   body[data-controller="contact"] header nav li.contact a {
     &:after {
       width: calc(100% - 3.2rem);

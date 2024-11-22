@@ -1,7 +1,7 @@
 
 # comitium
 app/config/*
-app/logs/*
+logs/*
 
 # Mac
 .DS_Store

@@ -1,4 +1,4 @@
-// work-history model
+// resume model
 
 
 export const employers = async () => {

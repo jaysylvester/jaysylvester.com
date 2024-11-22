@@ -36,6 +36,7 @@ body[data-controller="index"] {
       z-index: 1;
       margin: 0;
       font-size: 1.6rem;
+      font-style: italic;
       color: hsl(0,0%,20%);
     }
   }
@@ -52,16 +53,20 @@ body[data-controller="index"] {
       margin-right: 9.6rem;
       margin-left: 9.6rem;
     }
+
+    blockquote {
+      padding: 4.8rem;
+      border-radius: 4.8rem;
+    }
   }
 
   @media only screen and (min-width: 1440px) {
-    section.quotes {
-      grid: 50% / 1fr 1fr;
-      gap: 4.8rem;
-    }
-
     blockquote {
-      margin-bottom: 0;
+      padding: 6.4rem;
+
+      p {
+        font-size: 2rem;
+      }
     }
   }
 }

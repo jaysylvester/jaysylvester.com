@@ -52,9 +52,9 @@ export const portfolio = () => {
 }
 
 
-export const workHistory = () => {
+export const resume = () => {
   return {
-    title:       'Jay Sylvester — Work History / Résumé',
+    title:       'Jay Sylvester — Résumé / Work History',
     description: 'I\'ve led and contributed to just about every phase of the development lifecycle, including team management, information architecture, UX design, and full stack development.',
     keywords:    'UI, UX, ux designer resume, ux designer cv, ux manager, ux director, front end developer, ui engineer'
   }

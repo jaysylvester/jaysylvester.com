@@ -56,7 +56,7 @@ export const screens = async () => {
   try {
     const result = await client.query({
       name: 'portfolio_screens',
-      text: 'select id, company, url, alt, category, sort from screens order by sort asc;'
+      text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url from screens s left join case_studies cs on s.company = cs.company_url order by sort asc;'
     })
     // Transform the data to make it usable by the view
     let screens = {}
@@ -65,6 +65,7 @@ export const screens = async () => {
         screens[screen.category] = {
           company: screen.company,
           category: screen.category,
+          case_study: screen.company_url,
           screens: {}
         }
       }

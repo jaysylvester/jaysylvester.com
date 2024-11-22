@@ -14,7 +14,7 @@
   "main": "index",
   "type": "module",
   "dependencies": {
-    "citizen": "https://github.com/jaysylvester/citizen#1.0.0",
+    "citizen": "^1.0.x",
     "@ladjs/consolidate": "^1.0.x",
     "handlebars": "^4.7.x",
     "moment": "^2.29.x",

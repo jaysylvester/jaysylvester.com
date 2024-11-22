@@ -1,7 +1,7 @@
 <section class="screens">
   {{#each local.screens}}
     <figure role="group" class="screens {{company}}">
-      <figcaption>{{{this.category}}}</figcaption>
+      <figcaption>{{{this.category}}}{{#if this.case_study}} <a href="case-study/{{this.case_study}}">(read my case study)</a>{{/if}}</figcaption>
       <section>
         {{#each this.screens}}
           <figure>
