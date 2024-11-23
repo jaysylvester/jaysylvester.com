@@ -41,7 +41,6 @@ body {
 main {
   flex: 1 1 auto;
   color: black;
-  background: white;
 
   h1 {
     display: flex;
@@ -131,7 +130,6 @@ li.primary-action input {
   color: hsl(0,0%,100%);
   font-family: var(--font-primary);
   font-size: 1.6rem;
-  font-weight: 600;
   line-height: 1.4;
   text-align: center;
   text-decoration: none;
@@ -365,7 +363,6 @@ a.new-tab {
 @media only screen and (min-width: 1024px) {
   body {
     flex-direction: row;
-    background: none;
     padding-left: calc((100% - 144rem)/2);
   }
 

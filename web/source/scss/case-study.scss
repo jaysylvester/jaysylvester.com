@@ -21,11 +21,10 @@ body[data-controller="case-study"] {
   }
 
   section.devices {
-    height: 36vw;
     margin-bottom: 2.4rem;
 
     img {
-      height: 100%;
+      width: 100%;
       margin: auto;
     }
   }
@@ -199,10 +198,6 @@ body[data-controller="case-study"] {
       margin-left: 9.6rem;
     }
 
-    section.devices {
-      height: 22vw;
-    }
-
     section.screens.group {
       padding-top: 2rem;
     }
@@ -226,7 +221,6 @@ body[data-controller="case-study"] {
 
   @media only screen and (min-width: 1440px) {
     section.devices {
-      height: 34rem;
       display: flex;
       justify-content: center;
     }
