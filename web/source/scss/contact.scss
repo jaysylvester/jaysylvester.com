@@ -6,8 +6,7 @@ body[data-controller="contact"] {
     display: flex;
     justify-content: space-between;
     max-width: 24rem;
-    margin-top: 0;
-    margin-bottom: 4.8rem;
+    margin: 0 0 4.8rem 2.6rem;
     list-style: none;
   
     a {
@@ -22,6 +21,10 @@ body[data-controller="contact"] {
       text-decoration: none;
       background: url('/images/icons.svg') no-repeat;
       background-size: cover;
+    }
+
+    li {
+      margin: 0 2.4rem 0.8rem 0;
     }
   
     li.github a {
@@ -106,6 +109,10 @@ body[data-controller="contact"] {
     ul.actions {
       margin: 1.6rem 0 0;
       list-style-type: none;
+
+      li {
+        margin-left: 0;
+      }
     }
   }
 
@@ -122,8 +129,7 @@ body[data-controller="contact"] {
 
   @media only screen and (min-width: 1024px) {
     ul.social {
-      margin-left: 9.6rem;
-      margin-bottom: 4.8rem;
+      margin-left: 5.6rem;
 
       li {
         margin-right: 3.6rem;
@@ -131,8 +137,8 @@ body[data-controller="contact"] {
     }
 
     form {
-      margin-left: 9.6rem;
-      margin-right: 9.6rem;
+      margin-left: 5.6rem;
+      margin-right: 5.6rem;
     }
   }
 }

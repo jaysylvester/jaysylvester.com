@@ -9,7 +9,7 @@ export const handler = async (params) => {
     return {
       local: caseStudy,
       include: {
-        teaserScreens: '/_screens/featured/true',
+        featuredScreens: '/_screens/featured/true',
         screens: '/_screens'
       }
     }

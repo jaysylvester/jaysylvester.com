@@ -1,45 +1,47 @@
 <h1>Contact Me</h1>
-<h2>Be social.</h2>
-<ul class="social">
-  <li class="linkedin"><a href="https://www.linkedin.com/in/jaysylvester" target="_blank" rel="noopener">LinkedIn</a></li>
-  <li class="github"><a href="https://github.com/jaysylvester" target="_blank" rel="noopener">GitHub</a></li>
-  <li class="twitter"><a href="https://twitter.com/JayIsAngry" target="_blank" rel="noopener">Twitter</a></li>
-</ul>
-<h2>Say hey.</h2>
-{{#if local.error}}
-  <p class="error">{{local.error}}</p>
-{{/if}}
-<form id="contact-form" action="/contact/action/form" method="post" novalidate>
-  <input type="hidden" name="date" value="{{local.date}}">
-  <ul class="data">
-    <li class="name text required">
-      <label for="name">
-        Name
-      </label>
-      <input id="name" name="name" value="{{form.name}}" required />
-    </li>
-    <li class="email text required">
-      <label for="email">
-        E-mail
-      </label>
-      <input id="email" name="email" type="email" value="{{form.email}}" required />
-    </li>
-    <li class="subject text required">
-      <label for="subject">
-        Subject
-      </label>
-      <input id="subject" name="subject" value="{{form.subject}}" required />
-    </li>
-    <li class="message textarea required">
-      <label for="message">
-        Message
-      </label>
-      <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
-    </li>
+<section class="content">
+  <h2>Be social.</h2>
+  <ul class="social">
+    <li class="linkedin"><a href="https://www.linkedin.com/in/jaysylvester" target="_blank" rel="noopener">LinkedIn</a></li>
+    <li class="github"><a href="https://github.com/jaysylvester" target="_blank" rel="noopener">GitHub</a></li>
+    <li class="twitter"><a href="https://twitter.com/JayIsAngry" target="_blank" rel="noopener">Twitter</a></li>
   </ul>
-  <ul class="actions">
-    <li class="submit primary-action">
-      <input id="submit" name="submit" type="submit" value="Send your message" />
-    </li>
-  </ul>
-</form>
+  <h2>Say hey.</h2>
+  {{#if local.error}}
+    <p class="error">{{local.error}}</p>
+  {{/if}}
+  <form id="contact-form" action="/contact/action/form" method="post" novalidate>
+    <input type="hidden" name="date" value="{{local.date}}">
+    <ul class="data">
+      <li class="name text required">
+        <label for="name">
+          Name
+        </label>
+        <input id="name" name="name" value="{{form.name}}" required />
+      </li>
+      <li class="email text required">
+        <label for="email">
+          E-mail
+        </label>
+        <input id="email" name="email" type="email" value="{{form.email}}" required />
+      </li>
+      <li class="subject text required">
+        <label for="subject">
+          Subject
+        </label>
+        <input id="subject" name="subject" value="{{form.subject}}" required />
+      </li>
+      <li class="message textarea required">
+        <label for="message">
+          Message
+        </label>
+        <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
+      </li>
+    </ul>
+    <ul class="actions">
+      <li class="submit primary-action">
+        <input id="submit" name="submit" type="submit" value="Send your message" />
+      </li>
+    </ul>
+  </form>
+</section>
