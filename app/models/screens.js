@@ -1,15 +1,24 @@
 // _screens model
 
 
-export const companyScreens = async (company) => {
+export const companyScreens = async (company, featured) => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
-    const result = await client.query({
-      name: 'case_study_screens',
-      text: 'select id, company, url, alt, category, sort from screens where company = $1 order by sort asc;',
-      values: [ company ]
-    })
+    let result
+    if ( featured ) {
+      result = await client.query({
+        name: 'case_study_screens_featured',
+        text: 'select id, company, url, alt, category, sort from screens where company = $1 and featured = true order by sort asc;',
+        values: [ company ]
+      })
+    } else {
+      result = await client.query({
+        name: 'case_study_screens',
+        text: 'select id, company, url, alt, category, sort from screens where company = $1 order by sort asc;',
+        values: [ company ]
+      })
+    }
     // Transform the data to make it usable by the view
     let screens = {}
     result.rows.forEach( function (screen) {

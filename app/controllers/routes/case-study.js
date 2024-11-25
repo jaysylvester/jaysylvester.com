@@ -9,9 +9,8 @@ export const handler = async (params) => {
     return {
       local: caseStudy,
       include: {
-        screens: {
-          controller: '_screens'
-        }
+        teaserScreens: '/_screens/featured/true',
+        screens: '/_screens'
       }
     }
   } else {

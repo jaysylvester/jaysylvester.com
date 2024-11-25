@@ -21,7 +21,7 @@ section.screens {
       flex: 0 0 30rem;
       margin-right: 2rem;
       border-radius: 0.6rem;
-      border: 0.1rem solid hsl(175,25%,90%);
+      box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
       overflow: hidden;
       position: relative;
 
@@ -41,10 +41,6 @@ section.screens {
   }
 
   @media only screen and (min-width: 768px) {
-    // &.group {
-    //   margin: 0;
-    // }
-
     figure[role="group"] {
       padding: 0;
 
@@ -66,8 +62,8 @@ section.screens {
 
   // Get rid of figure scroll at 1024px and above
   @media only screen and (min-width: 1024px) {
-    margin-right: 9.6rem;
-    margin-left: 9.6rem;
+    margin-right: 5.6rem;
+    margin-left: 5.6rem;
 
     figure[role="group"] {
       figcaption {
@@ -91,14 +87,6 @@ section.screens {
         margin: 0 0 2%;
       }
     }
-
-    // &.group {
-    //   figure[role="group"] {
-    //     figure {
-    //       height: 16vw;
-    //     }
-    //   }
-    // }
   }
 
   @media only screen and (min-width: 1280px) {
@@ -107,14 +95,6 @@ section.screens {
         flex-basis: 23.5%;
       }
     }
-
-    // &.group {
-    //   figure[role="group"] {
-    //     figure {
-    //       height: 21.2rem;
-    //     }
-    //   }
-    // }
   }
 }
 
@@ -125,7 +105,7 @@ figure.callout {
   img {
     width: 100%;
     border-radius: 0.4rem;
-    border: 0.1rem solid #e6e6e6;
+    box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
   }
 }
 
@@ -155,7 +135,7 @@ figure.device img {
 
 @media only screen and (min-width: 1024px) {
   figure.callout {
-    margin: 6rem 9.6rem;
+    margin: 6rem 5.6rem;
   }
 }
 
