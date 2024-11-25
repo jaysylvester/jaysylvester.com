@@ -21,7 +21,7 @@ body[data-controller="case-study"] {
   }
 
   section.devices {
-    margin-bottom: 2.4rem;
+    margin: 0 2.6rem 2.4rem;
 
     img {
       width: 100%;
@@ -104,7 +104,7 @@ body[data-controller="case-study"] {
     }
 
     section.devices {
-      margin-bottom: 3.6rem;
+      margin: 0 4.8rem 3.6rem;
     }
 
     figure[role="group"]:not(.screens) {
@@ -193,7 +193,7 @@ body[data-controller="case-study"] {
       margin-bottom: 6rem;
     }
 
-    p.summary {
+    section.devices, p.summary {
       margin-right: 9.6rem;
       margin-left: 9.6rem;
     }
@@ -216,13 +216,6 @@ body[data-controller="case-study"] {
           margin: 0 3rem 0 0;
         }
       }
-    }
-  }
-
-  @media only screen and (min-width: 1440px) {
-    section.devices {
-      display: flex;
-      justify-content: center;
     }
   }
 }

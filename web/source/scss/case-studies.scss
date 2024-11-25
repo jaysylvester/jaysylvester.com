@@ -21,10 +21,11 @@ body[data-controller="case-studies"] {
   }
 
   section.devices {
+    margin: 0 2.6rem;
+
     a {
       display: block;
       width: 100%;
-      padding: 0 2.6rem;
     }
 
     img {
@@ -37,13 +38,7 @@ body[data-controller="case-studies"] {
     article {
       margin-bottom: 12rem;
 
-      section.devices {
-        a {
-          padding: 0 4.8rem;
-        }
-      }
-
-      p {
+      section.devices, p {
         margin-right: 4.8rem;
         margin-left: 4.8rem;
       }
@@ -52,28 +47,9 @@ body[data-controller="case-studies"] {
 
   @media only screen and (min-width: 1024px) {
     article {
-      section.devices {
-        a {
-          padding: 0 9.6rem;
-        }
-      }
-
-      p, nav {
+      section.devices, p, nav {
         margin-right: 9.6rem;
         margin-left: 9.6rem;
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1440px) {
-    article {
-      section.devices {
-        display: flex;
-        justify-content: center;
-  
-        a {
-          padding: 0;
-        }
       }
     }
   }
