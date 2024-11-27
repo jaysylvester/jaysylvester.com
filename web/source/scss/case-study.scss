@@ -14,7 +14,7 @@ body[data-controller="case-study"] {
   p.summary {
     margin: 2.4rem 2.6rem 5.6rem;
     font-family: var(--font-primary);
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 500;
     line-height: 1.4;
     color: hsl(0,0%,30%);
@@ -51,7 +51,7 @@ body[data-controller="case-study"] {
           margin: 0;
         }
         figure:nth-child(2) {
-          flex: 0 0 60%;
+          flex: 0 0 60.45%;
           margin: 0;
         }
       }
@@ -169,12 +169,10 @@ body[data-controller="case-study"] {
       figure.callout.concept,
       figure.callout.prototype {
         section {
-          max-height: 50rem; // Safari needs this, images are sometimes giant on page load for no reason
           justify-content: center;
 
           figure:nth-child(1),
           figure:nth-child(2) {
-            flex-basis: auto;
             margin: 0 1rem;
           }
         }

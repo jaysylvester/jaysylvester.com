@@ -48,19 +48,9 @@ JAY.global = ( function () {
       const load = function () {
         window.addEventListener('scroll', load, { capture: true, passive: true})
         images.forEach( function (image) {
-          // Make sure all images have an explicit width or height set in CSS for best results
-          let dimension
-          // Default to width on mobile since most images are set to 100% width
-          if ( mobile ) {
-            dimension = image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight
-          // Default to height on larger devices
-          } else {
-            dimension = image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth
-          }
-
-          // If the image is within 1.5 viewport heights of the current offset, load it
-          if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 1.5 ) ) {
-            image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + dimension + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+          // If the image is within 2 viewport heights of the current offset, load it
+          if ( image.getBoundingClientRect().top < ( document.body.clientHeight * 2 ) ) {
+            image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + ( image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight ) + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
             image.classList.add('loaded')
             if ( !mobile && image.parentNode.tagName === 'A' && !image.parentNode.parentNode.classList.contains('devices') ) {
               methods.imageZoom(image)

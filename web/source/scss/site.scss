@@ -1,15 +1,15 @@
 // Global styles
-@import '_mixins';
-@import 'baseline';
-@import 'global';
-@import '_footer';
-@import '_header';
-@import '_screens';
+@use '_mixins';
+@use 'baseline';
+@use 'global';
+@use '_footer';
+@use '_header';
+@use '_screens';
 
 // Pattern styles
-@import 'case-studies';
-@import 'case-study';
-@import 'contact';
-@import 'index';
-@import 'portfolio';
-@import 'resume';
+@use 'case-studies';
+@use 'case-study';
+@use 'contact';
+@use 'index';
+@use 'portfolio';
+@use 'resume';

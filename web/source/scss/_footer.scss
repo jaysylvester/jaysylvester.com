@@ -2,11 +2,11 @@
 
 body > footer {
   padding: 2rem 0;
+  text-align: center;
   // Extra bottom padding for iPhone swipe-up indicator
   @media (hover: none) {
     padding-bottom: 4rem;
   }
-  text-align: center;
 
   nav {
     margin: 2rem auto 4rem;

@@ -64,10 +64,10 @@ nav {
 
 p {
   margin: 0 0 1rem;
+  line-height: 1.6;
   @media only screen and (min-width: 768px) {
     margin-bottom: 2rem;
   }
-  line-height: 1.6;
 }
 
 table {

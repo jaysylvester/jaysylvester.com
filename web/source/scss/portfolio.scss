@@ -1,6 +1,10 @@
 // Portfolio
 
 body[data-controller="portfolio"] {
+  figcaption {
+    max-width: none;
+  }
+
   // No borders around mobile screens
   section.screens figure[role="group"] {
     &:nth-child(6) {
