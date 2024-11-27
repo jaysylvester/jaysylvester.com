@@ -19,7 +19,7 @@ gulp.task('css', function (done) {
       .pipe(postcss([autoprefixer()]))
       .pipe(cssnano({ safe: true, colormin: false }))
       .pipe(concat('site.css'))
-      .pipe(sourcemaps.write())
+      .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest('web/min'))
       .pipe(filter('**/*.css*'))
       .pipe(browsersync.stream())
