@@ -100,12 +100,21 @@ section.screens {
 
 // Figures
 figure.callout {
+  display: flex;
+  flex-direction: column;
   margin: 4rem 2.6rem;
 
   img {
     width: 100%;
     border-radius: 0.4rem;
     box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  figure.callout img {
+    width: auto;
+    height: 44.8rem;
   }
 }
 
@@ -117,7 +126,8 @@ figcaption {
 }
 
 figure.device img {
-  border: none;
+  border-radius: none;
+  box-shadow: none;
 }
 
 @media only screen and (min-width: 768px) {

@@ -1,8 +1,8 @@
-// portfolio controller
+// artifacts controller
 
 
 // default action
-export const handler = (params) => {
+export const handler = () => {
   return {
     include: {
       screens: {

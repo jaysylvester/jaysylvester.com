@@ -64,7 +64,7 @@ export const screens = async () => {
 
   try {
     const result = await client.query({
-      name: 'portfolio_screens',
+      name: 'artifacts_screens',
       text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url from screens s left join case_studies cs on s.company = cs.company_url order by sort asc;'
     })
     // Transform the data to make it usable by the view

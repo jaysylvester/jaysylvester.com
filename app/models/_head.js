@@ -43,7 +43,7 @@ export const index = () => {
 }
 
 
-export const portfolio = () => {
+export const artifacts = () => {
   return {
     title:       'Jay Sylvester\'s Portfolio — UX Manager/Director, Product Designer, and Engineer',
     description: 'Enjoy my dry process documentation, research data, ugly sketches, plain-looking wireframes, and half-baked prototypes. And a few pretty screens for those of you who are into that.',

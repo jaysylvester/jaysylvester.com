@@ -33,6 +33,20 @@ body[data-controller="case-study"] {
     display: none;
   }
 
+  figure.callout {
+    // Override default width or height caused by alt attributes in unloaded images
+    // Coincides with JAY.global.imageLoad() in global.js
+    // Explicit width/height in the markup would be best though
+    img[data-src]:not(.loaded) {
+      @media only screen and (max-width: 767px) {
+        height: 34rem;
+      }
+      @media only screen and (min-width: 768px) {
+        height: 44.8rem;
+      }
+    }
+  }
+
   figure[role="group"].callout {
     figure {
       margin-top: 1.6rem;
@@ -74,7 +88,8 @@ body[data-controller="case-study"] {
   section.screens figure[role="group"].Vidyo {
     &:nth-child(4) {
       figure {
-        border: none;
+        border-radius: none;
+        box-shadow: none;
       }
     }
   }
@@ -123,6 +138,7 @@ body[data-controller="case-study"] {
 
     figure[role="group"].callout {
       figure {
+        display: flex;
         flex: 0 0 49%;
         margin: 0;
       }

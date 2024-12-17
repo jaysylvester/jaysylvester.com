@@ -174,11 +174,9 @@ strong {
 
 // Override default width or height caused by alt attributes in unloaded images
 // Coincides with JAY.global.imageLoad() in global.js
+// Explicit width/height in the markup would be best though
 img[data-src]:not(.loaded) {
   @media only screen and (max-width: 767px) {
-    height: 100%;
-  }
-  @media only screen and (min-width: 768px) {
     width: 100%;
   }
 }
@@ -288,21 +286,26 @@ img[data-src]:not(.loaded) {
 }
 
 a.new-tab {
-  display: block;
+  display: flex;
+  justify-content: center;
   position: relative;
+  margin: auto;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 4rem;
+    height: 4rem;
+    position: absolute;
+    background: url('/images/icons.svg') no-repeat;
+    background-size: cover;
+    background-position: -32rem 0;
+  }
 
   @media (hover: hover) {
     &::after {
-      content: '';
-      display: block;
-      width: 4rem;
-      height: 4rem;
-      position: absolute;
       top: calc(50% - 2rem);
       left: calc(50% - 2rem);
-      background: url('/images/icons.svg') no-repeat;
-      background-size: cover;
-      background-position: -32rem 0;
       opacity: 0;
       transition: opacity 0.2s;
     }
@@ -318,6 +321,19 @@ a.new-tab {
       img {
         filter: brightness(50%);
       }
+    }
+  }
+
+  @media (hover: none) {
+    &::after {
+      right: 1rem;
+      bottom: 1rem;
+      background-color: hsla(0, 0%, 50%, 0.8);
+      border-radius: 2rem;
+      background-size: 24rem;
+      width: 3rem;
+      height: 3rem;
+      background-position: -14.6rem 0.4rem;
     }
   }
 }

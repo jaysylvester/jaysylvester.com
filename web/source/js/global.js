@@ -50,7 +50,7 @@ JAY.global = ( function () {
         images.forEach( function (image) {
           // If the image is within 2 viewport heights of the current offset, load it
           if ( image.getBoundingClientRect().top < ( window.innerHeight * 2 ) ) {
-            image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + ( image.clientWidth ? 'w_' + image.clientWidth : 'h_' + image.clientHeight ) + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
+            image.src = image.dataset.src.replace('[parameters]', 'f_auto,q_80,' + ( image.clientHeight ? 'h_' + image.clientHeight : 'w_' + image.clientWidth ) + ',dpr_' + Math.ceil(window.devicePixelRatio) + '.0')
             image.classList.add('loaded')
             if ( !mobile && image.parentNode.tagName === 'A' && !image.parentNode.parentNode.classList.contains('devices') ) {
               methods.imageZoom(image)

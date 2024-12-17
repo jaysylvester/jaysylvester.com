@@ -1,6 +1,6 @@
-// Portfolio
+// Artifacts
 
-body[data-controller="portfolio"] {
+body[data-controller="artifacts"] {
   figcaption {
     max-width: none;
   }
@@ -9,7 +9,8 @@ body[data-controller="portfolio"] {
   section.screens figure[role="group"] {
     &:nth-child(6) {
       figure {
-        border: none;
+        border-radius: none;
+        box-shadow: none;
       }
     }
   }
