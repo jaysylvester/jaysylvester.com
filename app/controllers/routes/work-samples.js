@@ -1,4 +1,4 @@
-// artifacts controller
+// work samples controller
 
 
 // default action

@@ -58,7 +58,7 @@ header nav li a:hover,
 body[data-controller="index"] header nav li.about a,
 body[data-controller="case-study"] header nav li.case-studies a,
 body[data-controller="case-studies"] header nav li.case-studies a,
-body[data-controller="artifacts"] header nav li.artifacts a,
+body[data-controller="work-samples"] header nav li.work-samples a,
 body[data-controller="resume"] header nav li.resume a,
 body[data-controller="contact"] header nav li.contact a {
   &:after {
@@ -103,7 +103,7 @@ body[data-controller="contact"] header nav li.contact a {
   body[data-controller="index"] header nav li.about a,
   body[data-controller="case-study"] header nav li.case-studies a,
   body[data-controller="case-studies"] header nav li.case-studies a,
-  body[data-controller="artifacts"] header nav li.artifacts a,
+  body[data-controller="work-samples"] header nav li.work-samples a,
   body[data-controller="resume"] header nav li.resume a,
   body[data-controller="contact"] header nav li.contact a {
     &:after {

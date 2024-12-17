@@ -16,6 +16,17 @@ body[data-controller="resume"] {
     }
   }
 
+  section.competencies {
+    li {
+      list-style: none;
+      margin-left: 0;
+
+      h4 {
+        margin: 0;
+      }
+    }
+  }
+
   section.employer {
     margin: 6rem 0;
 
