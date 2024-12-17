@@ -2,7 +2,7 @@
 
 body[data-controller="case-studies"] {
   article {
-    margin: 8rem 0;
+    margin: 10rem 0;
     
     h3 {
       visibility: hidden;
@@ -34,18 +34,24 @@ body[data-controller="case-studies"] {
     }
   }
 
+  section.screens {
+    figure[role="group"] {
+      margin-bottom: 0;
+    }
+  }
+
   @media only screen and (min-width: 768px) {
     article {
-      margin-bottom: 12rem;
+      margin-bottom: 16rem;
 
-      section.devices, p {
+      section.devices, p, nav {
         margin-right: 4.8rem;
         margin-left: 4.8rem;
       }
     }
   }
 
-  @media only screen and (min-width: 1024px) {
+  @media only screen and (min-width: 1280px) {
     article {
       section.devices, p, nav {
         margin-right: 9.6rem;

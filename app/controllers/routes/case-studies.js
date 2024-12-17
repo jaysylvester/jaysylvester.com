@@ -2,7 +2,7 @@
 
 
 // default action
-export const handler = async (params) => {
+export const handler = async () => {
   return {
     local: {
       caseStudies: await app.models['case-studies'].caseStudies()

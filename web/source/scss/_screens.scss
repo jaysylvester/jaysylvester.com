@@ -18,7 +18,7 @@ section.screens {
     }
 
     figure {
-      flex: 0 0 30rem;
+      flex: 0 0 16.6rem;
       margin-right: 2rem;
       border-radius: 0.6rem;
       box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
@@ -43,6 +43,10 @@ section.screens {
   @media only screen and (min-width: 768px) {
     figure[role="group"] {
       padding: 0;
+
+      figure {
+        flex-basis: 28rem;
+      }
 
       figcaption {
         margin-left: 4.8rem;
@@ -83,16 +87,8 @@ section.screens {
       }
 
       figure {
-        flex-basis: 49%;
-        margin: 0 0 2%;
-      }
-    }
-  }
-
-  @media only screen and (min-width: 1280px) {
-    figure[role="group"] {
-      figure {
         flex-basis: 23.5%;
+        margin: 0 0 2%;
       }
     }
   }
