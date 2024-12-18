@@ -9,17 +9,15 @@ export const handler = async ({ url }) => {
 
   if ( app.models._head[modelMethod] ) {
     metaData = await app.models._head[modelMethod](url['case-study'])
+
+    return {
+      local: {
+        metaData: metaData,
+        tracking: app.config.citizen.mode === 'production' ? true : false
+      }
+    }
   } else {
-    metaData = {
-      title: 'Error',
-      description: 'This request generated an error.',
-      keywords: ''
-    }
-  }
-  return {
-    local: {
-      metaData: metaData,
-      tracking: app.config.citizen.mode === 'production' ? true : false
-    }
+    let err = new Error('No metadata model found for "' + modelMethod + '".')
+    throw err
   }
 }
