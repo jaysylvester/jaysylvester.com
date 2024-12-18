@@ -416,12 +416,36 @@ a.new-tab {
 }
 
 
+@media only screen and (min-width: 1280px) {
+  body {
+    // Allows absolute positioning of the footer
+    padding-left: 0;
+    font-size: 2rem;
+  }
+
+  // Make sure all content in main is 768px wide. This is a sledgehammer
+  // when I should be using a scalpel. I'm sure I'll regret this later.
+  main {
+    > {
+      h1, section, article, nav {
+        max-width: 76.8rem;
+        margin-left: 9.6rem !important;
+
+        // Target all nested elements except list items
+        > *, > * > *:not(li) {
+          margin-right: 0 !important;
+          margin-left: 0 !important;
+        }
+      }
+    }
+  }
+}
+
+
 @media only screen and (min-width: 1440px) {
   body {
     // Allows absolute positioning of the footer
     margin-left: calc((100% - 144rem)/2);
-    padding-left: 0;
-    font-size: 2rem;
   }
 
   // Make sure all content in main is 960px wide. This is a sledgehammer
@@ -430,13 +454,6 @@ a.new-tab {
     > {
       h1, section, article, nav {
         max-width: 96rem;
-        margin-left: 9.6rem !important;
-
-        // Target all nested elements except list items
-        > *, > * > *:not(li) {
-          margin-right: 0 !important;
-          margin-left: 0 !important;
-        }
       }
     }
   }
