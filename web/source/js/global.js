@@ -72,7 +72,7 @@ JAY.global = ( function () {
       let mask    = document.getElementById('mask') || document.createElement('div'),
           anchor  = image.parentNode,
           img     = document.createElement('img'),
-          src     = image.dataset.src.replace('[parameters]', 'f_auto,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0'),
+          src     = image.dataset.src.replace('[parameters]', 'f_auto,w_1500,q_80,dpr_' + Math.ceil(window.devicePixelRatio) + '.0'),
           loading = function () {
             // Add the loading spinner after a brief delay, otherwise it pops in and out and looks bad
             setTimeout( function () {

@@ -108,8 +108,16 @@ figure.callout {
 }
 
 @media only screen and (min-width: 768px) {
-  figure.callout img {
-    max-height: 44.8rem;
+  figure.callout {
+    img {
+      max-height: 44.8rem;
+    }
+
+    &:not([role="group"]) {
+      img {
+        width: auto;
+      }
+    }
   }
 }
 
