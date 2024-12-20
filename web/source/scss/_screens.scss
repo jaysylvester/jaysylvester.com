@@ -107,20 +107,6 @@ figure.callout {
   }
 }
 
-@media only screen and (min-width: 768px) {
-  figure.callout {
-    img {
-      max-height: 44.8rem;
-    }
-
-    &:not([role="group"]) {
-      img {
-        width: auto;
-      }
-    }
-  }
-}
-
 figcaption {
   margin-top: 1.2rem;
   font-size: 1.6rem;
@@ -136,6 +122,10 @@ figure.device img {
 @media only screen and (min-width: 768px) {
   figure.callout {
     margin: 4.8rem;
+    
+    img {
+      max-height: 44.8rem;
+    }
   }
 
   figcaption {
@@ -149,6 +139,16 @@ figure.device img {
 @media only screen and (min-width: 1024px) {
   figure.callout {
     margin: 6rem 5.6rem;
+  }
+}
+
+@media only screen and (min-width: 1280px) {
+  figure.callout {
+    &:not([role="group"]) {
+      img {
+        width: auto;
+      }
+    }
   }
 }
 
