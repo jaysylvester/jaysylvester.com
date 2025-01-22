@@ -39,7 +39,6 @@ body {
 }
 
 main {
-  flex: 1 1 auto;
   color: black;
 
   h1 {
@@ -385,7 +384,6 @@ a.new-tab {
   main {
     height: 100vh;
     overflow-x: hidden; // Hide horizontal scrollbars in Windows browsers
-    overflow-y: scroll;
     padding-bottom: 6rem; // Provides a comfortable gap between content and browser bottom
 
     h1 {
@@ -418,8 +416,6 @@ a.new-tab {
 
 @media only screen and (min-width: 1280px) {
   body {
-    // Allows absolute positioning of the footer
-    padding-left: 0;
     font-size: 2rem;
   }
 
@@ -443,11 +439,6 @@ a.new-tab {
 
 
 @media only screen and (min-width: 1440px) {
-  body {
-    // Allows absolute positioning of the footer
-    margin-left: calc((100% - 144rem)/2);
-  }
-
   // Make sure all content in main is 960px wide. This is a sledgehammer
   // when I should be using a scalpel. I'm sure I'll regret this later.
   main {
