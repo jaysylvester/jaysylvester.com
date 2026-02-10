@@ -61,13 +61,14 @@ body[data-controller="case-study"] {
         display: flex;
         justify-content: space-between;
 
-        figure:nth-child(1) {
-          flex: 0 0 35.3%;
+        figure {
           margin: 0;
         }
+        figure:nth-child(1) {
+          flex: 0 0 35%;
+        }
         figure:nth-child(2) {
-          flex: 0 0 60.45%;
-          margin: 0;
+          flex: 0 0 60%;
         }
       }
     }
@@ -75,11 +76,7 @@ body[data-controller="case-study"] {
 
   section.Fitly {
     figure.callout.pricing-cta {
-      figure:nth-child(1) {
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-      figure:nth-child(2) {
+      figure {
         margin: 0 auto 2rem;
       }
     }
@@ -120,7 +117,7 @@ body[data-controller="case-study"] {
       // Fitly
       &.pricing-cta {
         section {
-          display: initial;
+          flex-direction: column;
         }
       }
     }
@@ -176,9 +173,13 @@ body[data-controller="case-study"] {
         section {
           justify-content: center;
 
-          figure:nth-child(1),
-          figure:nth-child(2) {
+          figure {
             margin: 0 1rem;
+          }
+
+          figure:nth-child(1) {
+            flex-basis: 40%;
+            justify-content: flex-end;
           }
         }
       }
@@ -187,7 +188,8 @@ body[data-controller="case-study"] {
     main nav {
       display: flex;
       justify-content: center;
-      margin: 6rem 0;
+      max-width: 32rem;
+      margin: 6.4rem auto;
     }
   }
 
