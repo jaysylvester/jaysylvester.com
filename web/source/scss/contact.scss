@@ -4,24 +4,8 @@ body[data-controller="contact"] {
   
   ul.social {
     display: flex;
-    justify-content: space-between;
-    max-width: 24rem;
     margin: 0 0 4.8rem 2.6rem;
     list-style: none;
-  
-    a {
-      position: relative;
-      display: block;
-      margin: 0;
-      padding: 0 0 0 6rem;
-      width: 6rem;
-      height: 6rem;
-      text-indent: 110%;
-      overflow: hidden;
-      text-decoration: none;
-      background: url('/images/icons.svg') no-repeat;
-      background-size: cover;
-    }
 
     li {
       margin: 0 2.4rem 0.8rem 0;
@@ -33,6 +17,19 @@ body[data-controller="contact"] {
   
     li.twitter a {
       background-position: -16rem 0;
+    }
+  
+    a {
+      position: relative;
+      display: block;
+      margin: 0;
+      padding: 0 0 0 6rem;
+      width: 6rem;
+      height: 6rem;
+      overflow: hidden;
+      text-decoration: none;
+      background: url('/images/icons.svg') no-repeat;
+      background-size: cover;
     }
   }
   
@@ -130,15 +127,29 @@ body[data-controller="contact"] {
   @media only screen and (min-width: 1024px) {
     ul.social {
       margin-left: 5.6rem;
+  
+      li.github a {
+        background-position: -5.35rem 0;
+      }
+    
+      li.twitter a {
+        background-position: -10.65rem 0;
+      }
 
-      li {
-        margin-right: 3.6rem;
+      a {
+        padding: 0 0 0 4rem;
+        width: 4rem;
+        height: 4rem;
       }
     }
 
     form {
       margin-left: 5.6rem;
       margin-right: 5.6rem;
+    }
+
+    li.primary-action input {
+      width: auto;
     }
   }
 }

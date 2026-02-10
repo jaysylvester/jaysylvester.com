@@ -2,7 +2,7 @@
 
 body[data-controller="case-studies"] {
   article {
-    margin: 10rem 0;
+    margin-bottom: 10rem;
     
     h3 {
       visibility: hidden;
@@ -20,20 +20,6 @@ body[data-controller="case-studies"] {
     }
   }
 
-  section.devices {
-    margin: 0 2.6rem;
-
-    a {
-      display: block;
-      width: 100%;
-    }
-
-    img {
-      width: 100%;
-      margin: auto;
-    }
-  }
-
   section.screens {
     figure[role="group"] {
       margin-bottom: 0;
@@ -44,18 +30,12 @@ body[data-controller="case-studies"] {
     article {
       margin-bottom: 16rem;
 
-      section.devices, p, nav {
-        margin-right: 4.8rem;
-        margin-left: 4.8rem;
+      p {
+        margin: 2.4rem 5.6rem;
       }
-    }
-  }
 
-  @media only screen and (min-width: 1280px) {
-    article {
-      section.devices, p, nav {
-        margin-right: 9.6rem;
-        margin-left: 9.6rem;
+      nav {
+        justify-content: flex-start;
       }
     }
   }

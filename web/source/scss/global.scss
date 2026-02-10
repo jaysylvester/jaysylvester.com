@@ -30,7 +30,7 @@ body {
   flex-direction: column;
   position: relative;
   font-family: var(--font-content);
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   text-rendering: optimizeLegibility;
 
   > * {
@@ -46,8 +46,8 @@ main {
     flex-direction: column;
     justify-content: flex-end;
     margin: 2rem 2.6rem;
-    padding-bottom: 2rem;
-    font-size: 4.8rem;
+    padding-bottom: 1.6rem;
+    font-size: 3.6rem;
     text-transform: lowercase;
     color: #333;
     border-bottom: 0.1rem solid #efefef;
@@ -59,13 +59,13 @@ main {
 
   h2 {
     margin: 2.4rem 2.6rem;
-    font-size: 2.8rem;
+    font-size: 2.4rem;
     color: var(--color-primary);
   }
 
   h3 {
     margin: 4.8rem 2.6rem 1.2rem;
-    font-size: 2.4rem;
+    font-size: 2rem;
     color: hsl(0,0%,10%);
   }
 
@@ -125,6 +125,7 @@ a {
 a.primary-action,
 li.primary-action input {
   display: inline-block;
+  width: 100%;
   padding: 1.2rem 2.4rem;
   color: hsl(0,0%,100%);
   font-family: var(--font-primary);
@@ -341,13 +342,12 @@ a.new-tab {
 @media only screen and (min-width: 768px) {
   main {
     h1 {
-      margin: 24rem 4.8rem 2.4rem;
-      padding-bottom: 2.4rem;
-      font-size: 5.6rem;
+      margin: 2rem 4.8rem 2.4rem;
+      font-size: 4.8rem;
     }
     h2 {
       margin: 3.6rem 4.8rem 2.4rem;
-      font-size: 3.2rem;
+      font-size: 2.6rem;
     }
     h3, h4, h5, nav {
       margin-right: 4.8rem;
@@ -356,8 +356,6 @@ a.new-tab {
   }
 
   section.content {
-    margin-bottom: 10rem;
-
     p {
       margin-right: 4.8rem;
       margin-left: 4.8rem;
@@ -378,7 +376,7 @@ a.new-tab {
 @media only screen and (min-width: 1024px) {
   body {
     flex-direction: row;
-    padding-left: calc((100% - 144rem)/2);
+    padding-left: calc((100% - 140rem)/2);
   }
 
   main {
@@ -388,6 +386,7 @@ a.new-tab {
 
     h1 {
       margin: 13.8rem 5.6rem 3.6rem;
+      font-size: 4.2rem;
     }
 
     h2, h3, h4, h5, nav {
@@ -404,6 +403,7 @@ a.new-tab {
   }
 
   a.primary-action {
+    width: auto;
     padding: 1.4rem 2.4rem;
   }
 
@@ -415,10 +415,6 @@ a.new-tab {
 
 
 @media only screen and (min-width: 1280px) {
-  body {
-    font-size: 2rem;
-  }
-
   // Make sure all content in main is 768px wide. This is a sledgehammer
   // when I should be using a scalpel. I'm sure I'll regret this later.
   main {
@@ -444,7 +440,7 @@ a.new-tab {
   main {
     > {
       h1, section, article, nav {
-        max-width: 96rem;
+        max-width: 88rem;
       }
     }
   }

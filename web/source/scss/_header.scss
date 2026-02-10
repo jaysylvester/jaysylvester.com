@@ -6,7 +6,6 @@ header {
   justify-content: space-between;
   padding: 0.8rem 1.2rem;
   font-family: var(--font-primary);
-  font-size: 1.8rem;
   font-weight: 500;
 
   > a {
@@ -41,12 +40,12 @@ header {
     }
 
     li {
-      margin: 0.8rem 0.4rem;
+      margin: 0.8rem 0;
 
       a {
         display: block;
         position: relative;
-        padding: 0.6rem 1.2rem 1.2rem;
+        padding: 0.6rem 1.2rem;
         text-decoration: none;
         text-transform: uppercase;
       }
@@ -65,65 +64,11 @@ body[data-controller="contact"] header nav li.contact a {
     content: '';
     display: block;
     position: absolute;
-    bottom: 0;
-    width: calc(100% - 2.4rem);
-    height: 0.4rem;
+    top: 0;
+    right: -1.2rem;
+    width: 0.6rem;
+    height: 100%;
     background: var(--color-primary);
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  header {
-    justify-content: space-between;
-    padding: 0;
-    font-size: 1.6rem;
-
-    a {
-      padding: 2.4rem 3.6rem;
-    }
-
-    nav {
-      margin: 2.4rem 2.4rem 0 0;
-
-      ul {
-        flex-direction: row;
-
-        li {
-          margin: 0;
-
-          a {
-            padding: 2rem 1.6rem;
-          }
-        }
-      }
-    }
-  }
-
-  header nav li a:hover,
-  body[data-controller="index"] header nav li.about a,
-  body[data-controller="case-study"] header nav li.case-studies a,
-  body[data-controller="case-studies"] header nav li.case-studies a,
-  body[data-controller="work-samples"] header nav li.work-samples a,
-  body[data-controller="resume"] header nav li.resume a,
-  body[data-controller="contact"] header nav li.contact a {
-    &:after {
-      width: calc(100% - 3.2rem);
-    }
-  }
-
-  html.js {
-    header {
-      position: fixed;
-      top: 0;
-      z-index: 500;
-      backdrop-filter: blur(1rem);
-      transition: top 0.5s;
-      background: hsla(0,0%,100%,0.65);
-    }
-    
-    body.hidden-header header {
-      top: -11rem; // Header height
-    }
   }
 }
 
@@ -148,7 +93,13 @@ body[data-controller="contact"] header nav li.contact a {
       background: #efefef;
     }
 
+    & > a {
+      padding: 2.4rem;
+    }
+
     nav {
+      margin: 2.4rem 1.2rem;
+
       ul {
         flex-direction: column;
 
