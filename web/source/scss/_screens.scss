@@ -1,6 +1,9 @@
 // Screenshots
 
 section.screens {
+  width: 100vw;
+  margin-left: -2.6rem;
+
   // Override default height caused by alt attributes in unloaded images
   // Coincides with JAY.global.imageLoad() in global.js
   img[data-src]:not(.loaded) {
@@ -67,9 +70,6 @@ section.screens {
 
   // Get rid of figure scroll at 1024px and above
   @media only screen and (min-width: 1024px) {
-    margin-right: 5.6rem;
-    margin-left: 5.6rem;
-
     figure[role="group"] {
       figcaption {
         margin-left: 0;
@@ -99,10 +99,10 @@ section.screens {
 figure.callout {
   display: flex;
   flex-direction: column;
-  margin: 4rem 2.6rem;
+  margin: 4.8rem auto;
 
   img {
-    width: 100%;
+    max-width: 100%;
     border-radius: 0.4rem;
     box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
   }
@@ -121,9 +121,11 @@ figure.device img {
 }
 
 @media only screen and (min-width: 768px) {
+  section.screens {
+    margin-left: -4.8rem;
+  }
+
   figure.callout {
-    margin: 4.8rem;
-    
     img {
       max-height: 44.8rem;
     }
@@ -138,8 +140,14 @@ figure.device img {
 }
 
 @media only screen and (min-width: 1024px) {
+  section.screens {
+    width: 99.6%;
+    padding: 0 0.2%; // Keep drop shadows on screens visible
+    margin: 0;
+  }
+
   figure.callout {
-    margin: 6rem 5.6rem;
+    margin: 6.4rem 0.6rem; // Side margins for drop shadow visibility
   }
 }
 

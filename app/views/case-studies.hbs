@@ -1,4 +1,11 @@
 <h1>Case Studies</h1>
 {{#each local.caseStudies}}
-  {{> caseStudyCallout this}}
+  <article class="case-study {{company_url}}">
+    <h3>{{{title}}}</h3>
+    {{> screenGroup this}}
+    <p class="summary">{{{summary}}}</p>
+    <nav>
+      <a class="primary-action" href="/case-study/{{company_url}}" title="Read the full {{company_name}} case study.">Read my {{company_name}} case study</a>
+    </nav>
+  </article>
 {{/each}}

@@ -11,17 +11,18 @@ body[data-controller="case-study"] {
     }
   }
 
-  p.summary {
-    margin: 2.4rem 2.6rem 5.6rem;
-    font-family: var(--font-primary);
-    background: hsl(0 0% 99% / 1);
-    border: 1px solid hsl(0 0% 96% / 1);
-    border-radius: 1.6rem;
-    padding: 2.4rem 3.2rem;
-    font-size: 1.8rem;
-    font-weight: 500;
-    line-height: 1.6;
-    color: hsl(0,0%,30%);
+  section.about {
+    p.summary {
+      margin: 2.4rem 0 5.6rem;
+      padding: 2.4rem 3.2rem;
+      font-family: var(--font-primary);
+      font-weight: 500;
+      line-height: 1.6;
+      color: hsl(0,0%,30%);
+      background: hsl(0 0% 99% / 1);
+      border: 1px solid hsl(0 0% 96% / 1);
+      border-radius: 1.6rem;
+    }
   }
 
   section.screens {
@@ -92,20 +93,18 @@ body[data-controller="case-study"] {
     }
   }
 
-  section.screens.group {
-    margin-bottom: 4rem;
-    padding-top: 2rem;
-    background: hsl(175,55%,76%);
-    
-    figure[role="group"] figure {
-      border: 0.1rem solid hsl(175,55%,66%);
+  section.about {
+    section.screens.group {
+      margin-bottom: 4rem;
+      padding-top: 2rem;
     }
   }
 
   @media only screen and (min-width: 768px) {
-    p.summary {
-      margin-right: 4.8rem;
-      margin-left: 4.8rem;
+    section.about {
+      p.summary {
+        font-size: 1.8rem;
+      }
     }
 
     figure[role="group"]:not(.screens) {
@@ -184,40 +183,31 @@ body[data-controller="case-study"] {
         }
       }
     }
-
-    main nav {
-      display: flex;
-      justify-content: center;
-      margin: 6.4rem auto;
-    }
   }
 
   @media only screen and (min-width: 1024px) {
     section.about {
       margin-bottom: 6rem;
-    }
-
-    p.summary {
-      margin-right: 5.6rem;
-      margin-left: 5.6rem;
-    }
-
-    section.screens.group {
-      padding-top: 2rem;
+  
+      section.screens.group {
+        padding-top: 2rem;
+      }
     }
   }
 
   @media only screen and (min-width: 1280px) {
-    section.screens.group {
-      padding: 0;
-
-      figure[role="group"] {
-        section {
-          padding: 3rem;
-        }
-        figure {
-          flex-basis: 28rem;
-          margin: 0 3rem 0 0;
+    section.about {
+      section.screens.group {
+        padding: 0;
+  
+        figure[role="group"] {
+          section {
+            padding: 3rem;
+          }
+          figure {
+            flex-basis: 28rem;
+            margin: 0 3rem 0 0;
+          }
         }
       }
     }

@@ -4,7 +4,7 @@ body[data-controller="contact"] {
   
   ul.social {
     display: flex;
-    margin: 0 0 4.8rem 2.6rem;
+    margin-bottom: 4.8rem;
     list-style: none;
 
     li {
@@ -35,7 +35,7 @@ body[data-controller="contact"] {
   
   form {
     max-width: 57.6rem;
-    margin: 0 2.6rem 6rem;
+    margin-bottom: 6rem;
 
     label {
       margin-bottom: 0.6rem;
@@ -115,19 +115,12 @@ body[data-controller="contact"] {
 
   @media only screen and (min-width: 768px) {
     ul.social {
-      margin: 0 4.8rem 2.6rem;
-    }
-
-    form {
-      margin-right: 4.8rem;
-      margin-left: 4.8rem;
+      margin-bottom: 2.6rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
     ul.social {
-      margin-left: 5.6rem;
-  
       li.github a {
         background-position: -5.35rem 0;
       }
@@ -141,15 +134,6 @@ body[data-controller="contact"] {
         width: 4rem;
         height: 4rem;
       }
-    }
-
-    form {
-      margin-left: 5.6rem;
-      margin-right: 5.6rem;
-    }
-
-    li.primary-action input {
-      width: auto;
     }
   }
 }

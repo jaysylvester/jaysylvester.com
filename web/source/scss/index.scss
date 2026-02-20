@@ -4,7 +4,67 @@ body[data-controller="index"] {
   section.quotes {
     display: grid;
     gap: 3.6rem;
-    margin: 4.8rem 2.6rem 0;
+    margin-top: 4.8rem;
+
+    // Prevent FOUC: hide inactive quotes when JS is enabled but before carousel initializes
+    html.js &:not(.carousel) blockquote:not(:first-child) {
+      opacity: 0;
+    }
+
+    &.carousel {
+      gap: 0;
+      grid-template-columns: 1fr;
+
+      blockquote {
+        grid-row: 1;
+        grid-column: 1;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+
+        &.active {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+    }
+  }
+
+  nav.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 2.4rem;
+    margin: 2.4rem 0 0;
+
+    button {
+      width: 1rem;
+      height: 1rem;
+      padding: 0;
+      border: 0.1rem solid hsl(176, 60%, 70%);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &.active {
+        background: hsl(176, 60%, 70%);
+      }
+
+      @media (hover: hover) {
+        &:hover {
+          background: hsl(176, 60%, 70%);
+        }
+      }
+    }
+
+    @media (pointer: coarse) {
+      gap: 2.4rem;
+
+      button {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+    }
   }
 
   blockquote {
@@ -47,13 +107,6 @@ body[data-controller="index"] {
       font-size: 1.4rem;
       font-style: italic;
       color: hsl(0,0%,20%);
-    }
-  }
-
-  @media only screen and (min-width: 768px) {
-    section.quotes {
-      margin-right: 4.8rem;
-      margin-left: 4.8rem;
     }
   }
 

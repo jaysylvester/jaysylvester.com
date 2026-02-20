@@ -3,11 +3,23 @@
 
 // default action
 export const handler = async (params) => {
-  let caseStudy = await app.models['case-studies'].caseStudy(params.url.company || params.url['case-study'])
+  let currentCompany = params.url.company || params.url['case-study']
+  let caseStudy = await app.models['case-studies'].caseStudy(currentCompany)
 
   if ( caseStudy ) {
+    // Get all case studies to find the next one for the callout
+    const allCaseStudies = await app.models['case-studies'].caseStudies()
+    const caseStudiesArray = Object.values(allCaseStudies)
+
+    // Find current index and calculate next with wraparound
+    const currentIndex = caseStudiesArray.findIndex(cs => cs.company_url === currentCompany)
+    const nextIndex = (currentIndex + 1) % caseStudiesArray.length
+
     return {
-      local: caseStudy,
+      local: {
+        ...caseStudy,
+        callout: caseStudiesArray[nextIndex]
+      },
       include: {
         featuredScreens: '/_screens/featured/true',
         screens: '/_screens'
