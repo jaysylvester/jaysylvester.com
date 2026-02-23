@@ -63,6 +63,10 @@ JAY.index = ( function () {
       })
 
       startTimer()
+
+      // Trigger the image lazy loader to re-check positions now that the carousel
+      // has collapsed the stacked quotes and updated the page layout
+      window.dispatchEvent(new Event('scroll'))
     }
 
   }
