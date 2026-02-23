@@ -5,40 +5,7 @@ JAY.global = ( function () {
 
     init: function () {
       let mobile = document.body.clientWidth < 768
-      if ( !mobile ) {
-        methods.fixedHeader()
-      }
       methods.imageLoad(mobile)
-    },
-
-    fixedHeader: function () {
-      let body       = document.querySelector('body'),
-          bodyOffset = 0,
-          header     = document.querySelector('body > header')
-
-      window.addEventListener('scroll', () => {
-        // The second half of each of the following IF statements deals with Safari's bounceback when
-        // you scroll past the top of the page
-
-        // scroll down
-        if ( !body.classList.contains('hidden-header') && bodyOffset > body.getBoundingClientRect().top && Math.abs(body.getBoundingClientRect().top) > header.getBoundingClientRect().height ) {
-          body.classList.add('hidden-header')
-          body.classList.remove('fixed-header')
-        // scroll up
-        // The minus 10 pixels is to keep the header from popping in with only slight movements, which
-        // happens frequently when using touchscreens and touch input devices.
-        } else if ( !body.classList.contains('fixed-header') && body.getBoundingClientRect().top - 10 >= bodyOffset || Math.abs(body.getBoundingClientRect().top) <= header.getBoundingClientRect().height ) {
-          body.classList.remove('hidden-header')
-          if ( bodyOffset < -110 ) {
-            body.classList.add('fixed-header')
-          }
-        }
-        bodyOffset = body.getBoundingClientRect().top
-
-        if ( bodyOffset === 0 ) {
-          body.classList.remove('fixed-header')
-        }
-      }, { passive: true })
     },
 
     // Lazy load images
