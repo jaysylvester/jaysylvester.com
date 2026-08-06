@@ -1,0 +1,39 @@
+#!/bin/sh
+
+set -eu
+
+base_url=${1:-https://dev.jaysylvester.com}
+base_url=${base_url%/}
+cors_target=${SMOKE_CORS_TARGET:-https://localhost}
+cors_target=${cors_target%/}
+cors_origin=${SMOKE_CORS_ORIGIN:-https://dev.jaysylvester.com}
+
+if ! command -v curl >/dev/null 2>&1; then
+  echo 'curl is required to run the smoke test.' >&2
+  exit 1
+fi
+
+for route in / /case-studies /contact /resume /work-samples /shoplc/web/category.html; do
+  echo "GET $base_url$route"
+  curl --fail --silent --show-error --output /dev/null "$base_url$route"
+done
+
+headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke.XXXXXX")
+trap 'rm -f "$headers_file"' EXIT HUP INT TERM
+
+echo "OPTIONS $cors_target/ (Origin: $cors_origin)"
+curl \
+  --fail \
+  --silent \
+  --show-error \
+  --request OPTIONS \
+  --header "Origin: $cors_origin" \
+  --header 'Access-Control-Request-Method: GET' \
+  --dump-header "$headers_file" \
+  --output /dev/null \
+  "$cors_target/"
+
+tr -d '\r' < "$headers_file" | grep -iF "Access-Control-Allow-Origin: $cors_origin" >/dev/null
+tr -d '\r' < "$headers_file" | grep -i 'Access-Control-Allow-Methods:.*GET' >/dev/null
+
+echo 'Smoke test passed.'

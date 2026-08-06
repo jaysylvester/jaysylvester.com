@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+_dev-certs
+app/config
+docker/local-certs
+docs
+logs
+node_modules
+npm-debug.log
+resources
+web/shoplc/node_modules
+**/*.dump
+**/*.log

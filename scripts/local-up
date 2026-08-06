@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eu
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo 'Docker is required. Start Docker Desktop and try again.' >&2
+  exit 1
+fi
+
+if test ! -f .env; then
+  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  exit 1
+fi
+
+./scripts/local-cert
+
+exec docker compose \
+  --env-file .env \
+  -p jaysylvester-local \
+  -f compose.yaml \
+  -f compose.local.yaml \
+  up -d "$@"

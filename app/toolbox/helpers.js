@@ -7,3 +7,12 @@ export const getRandomIntInclusive = (min, max) => {
   // The maximum is inclusive and the minimum is inclusive
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
+
+
+export const requiredEnvironment = (name) => {
+  if ( !process.env[name] ) {
+    throw new Error(`Missing required environment variable: ${name}`)
+  }
+
+  return process.env[name]
+}

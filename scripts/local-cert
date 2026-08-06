@@ -1,0 +1,50 @@
+#!/bin/sh
+
+set -eu
+
+cert_directory=docker/local-certs
+certificate=$cert_directory/dev-cert.pem
+private_key=$cert_directory/dev-key.pem
+
+for command_name in mkcert openssl; do
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    echo "Required command not found: $command_name" >&2
+    exit 1
+  fi
+done
+
+certificate_is_valid() {
+  test -s "$certificate" \
+    && test -s "$private_key" \
+    && openssl x509 -in "$certificate" -noout -checkend 0 >/dev/null 2>&1 \
+    && openssl x509 -in "$certificate" -noout -checkhost dev.jaysylvester.com >/dev/null 2>&1 \
+    && openssl x509 -in "$certificate" -noout -checkhost localhost >/dev/null 2>&1 \
+    && openssl x509 -in "$certificate" -noout -checkip 127.0.0.1 >/dev/null 2>&1 \
+    && openssl x509 -in "$certificate" -noout -checkip ::1 >/dev/null 2>&1 \
+    && openssl pkey -in "$private_key" -noout -check >/dev/null 2>&1 \
+    && test "$(openssl x509 -in "$certificate" -pubkey -noout | openssl pkey -pubin -outform DER 2>/dev/null | openssl dgst -sha256)" = \
+            "$(openssl pkey -in "$private_key" -pubout -outform DER 2>/dev/null | openssl dgst -sha256)"
+}
+
+if certificate_is_valid; then
+  chmod 0644 "$certificate" "$private_key"
+  echo "Local certificate is valid: $certificate"
+  exit 0
+fi
+
+mkdir -p "$cert_directory"
+mkcert \
+  -cert-file "$certificate" \
+  -key-file "$private_key" \
+  dev.jaysylvester.com localhost 127.0.0.1 ::1
+
+# Both Nginx and the fixed non-root assets container must read this local-only
+# leaf key through Docker Desktop's bind mount.
+chmod 0644 "$certificate" "$private_key"
+
+if ! certificate_is_valid; then
+  echo 'mkcert generated a certificate that failed validation.' >&2
+  exit 1
+fi
+
+echo "Created local certificate: $certificate"

@@ -12,8 +12,9 @@ export const handler = async ({ url }) => {
 
     return {
       local: {
+        cacheBuster: app.toolbox.cacheBuster,
         metaData: metaData,
-        tracking: app.config.citizen.mode === 'production' ? true : false
+        tracking: app.config.mode === 'production' ? true : false
       }
     }
   } else {

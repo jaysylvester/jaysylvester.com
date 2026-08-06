@@ -1,6 +1,5 @@
 // contact controller
 
-
 // default action
 export const handler = () => {
   return {
@@ -53,7 +52,7 @@ export const form = (params, request) => {
       }
     } else {
       app.toolbox.mail.sendMail({
-        to: { name: app.config.mail.name, address: app.config.mail.address },
+        to: { name: app.toolbox.helpers.requiredEnvironment('MAIL_NAME'), address: app.toolbox.helpers.requiredEnvironment('MAIL_ADDRESS') },
         from: { name: params.form.name, address: params.form.email },
         subject: params.form.subject + ' (sent via contact form)',
         text: params.form.message
@@ -61,7 +60,7 @@ export const form = (params, request) => {
 
       app.toolbox.mail.sendMail({
         to: { name: params.form.name, address: params.form.email },
-        from: { name: app.config.mail.name, address: app.config.mail.addressNoReply },
+        from: { name: app.toolbox.helpers.requiredEnvironment('MAIL_NAME'), address: app.toolbox.helpers.requiredEnvironment('MAIL_ADDRESS_NO_REPLY') },
         subject: 'Message confirmation',
         text: 'Thanks for your message. I\'ll respond to you shortly.\n\nPlease don\'t reply to this e-mail; this address is unmonitored.'
       })

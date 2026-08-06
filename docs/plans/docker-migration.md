@@ -79,7 +79,7 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 - Citizen optionally loads exactly the project-root `.env`, found as the parent of the configured application directory; values already present in `process.env` take precedence.
 - Each checkout has its own ignored project-root `.env`: local values on the Mac and production values on the Droplet. During Phase 1, host production lets Citizen load that file natively. Docker Compose uses the same file for interpolation and injects it into `app` through `env_file`; it does not copy or bind-mount the secret file into the image or container filesystem.
 - Only `CITIZEN_*` variables are validated, coerced, and copied into the flat framework configuration under `app.config`.
-- Application-owned database, mail, and environment-specific CORS variables remain strings in `process.env`. Read them directly at the existing consumers, coerce numeric values where the PostgreSQL or other APIs require numbers, and do not log secrets. Do not introduce a separate application configuration module for these few uses.
+- Application-owned database and mail variables remain strings in `process.env`. Read them directly at the existing consumers, coerce numeric values where the PostgreSQL or other APIs require numbers, and do not log secrets. The global CORS policy is framework-owned and supplied as a JSON object through `CITIZEN_CORS`.
 - `app.start()` accepts no arguments.
 - Any `app/config/*.json` file causes Citizen 2.0 startup to fail. Legacy JSON files remain protected migration inputs or rollback artifacts only and must be excluded from the image and all active Citizen 2.0 mounts.
 - `CITIZEN_DIRECTORIES__APP` is process-only. This layout does not need to override it because the image preserves Citizen's expected sibling layout:
@@ -104,7 +104,7 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 Use one ignored project-root `.env` in each deployment checkout. The local and production files share a name but live on different hosts and contain their own values:
 
 - `CITIZEN_*` framework settings.
-- Application-owned `DB_*`, `MAIL_*`, and `CORS_*` settings.
+- Application-owned `DB_*` and `MAIL_*` settings, plus the framework-owned `CITIZEN_CORS` JSON policy.
 - `POSTGRES_INITDB_ARGS` for first-time database initialization.
 
 Pass the file in two distinct ways when using Docker:
@@ -118,7 +118,7 @@ Keep host-safe production endpoints in the Droplet's `.env` during Phase 1: the 
 
 Run the image directly as a fixed non-root user such as UID/GID `10001:10001`; no privileged configuration-copy entrypoint is needed. Keep `init: true` and direct exec-form Node commands.
 
-Citizen's startup log must show the expected mode and applied `CITIZEN_*` environment with no unknown-variable warning. Existing database, mail, and CORS behavior must work with the direct `process.env` reads; missing required values should produce a clear error at their initialization or use site without dumping the environment.
+Citizen's startup log must show the expected mode and applied `CITIZEN_*` environment with no unknown-variable warning. Existing database and mail behavior must work with the direct `process.env` reads; missing required values should produce a clear error at their initialization or use site without dumping the environment. Citizen must apply the validated global `CITIZEN_CORS` policy.
 
 Editing either environment file requires recreating `app` so Compose injects the new process environment. Recreate `proxy` afterward because it can retain the old app container's IP.
 
@@ -191,7 +191,7 @@ If another local project already owns ports 80, 443, or 5432, stop that project 
 - Remove all arguments from both `app.start()` calls.
 - Replace `app.config.citizen.*` and view `config.citizen.*` references with Citizen 2.0's flat framework paths.
 - Replace `app.config.db` and `app.config.mail` consumers with direct `process.env` reads at their existing use sites, coercing numeric database options with `Number(...)`.
-- Citizen 2.0 has no global `CITIZEN_CORS`; preserve the old global CORS behavior only on the controller/actions that actually require it, after reviewing the existing policy.
+- Preserve the old global CORS behavior through Citizen 2.0's `CITIZEN_CORS` JSON object. Use controller/action overrides only for a reviewed route-specific difference.
 - Do not arbitrarily change pool sizes, mail settings, CORS behavior, or other application behavior.
 - Connect to PostgreSQL at `db:5432`.
 - Expose port 8080 only on the Compose network.
@@ -370,12 +370,12 @@ Implement these application changes as a dedicated reviewable commit before the 
 - In `app/start.js` and `app/start-dev.js`, build each existing PostgreSQL `Pool` configuration directly from `process.env.DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`, `DB_MAX`, and `DB_CONNECTION_TIMEOUT_MILLIS`. Wrap the port, pool maximum, and timeout in `Number(...)` at construction.
 - In `app/start.js`, build the existing Nodemailer transport directly from `process.env.MAIL_SERVICE`, `MAIL_AUTH_USER`, and `MAIL_AUTH_PASS`.
 - In the contact controller, replace the existing `app.config.mail` address reads with direct `process.env.MAIL_NAME`, `MAIL_ADDRESS`, and `MAIL_ADDRESS_NO_REPLY` reads.
-- Read `process.env.CORS_ALLOW_ORIGIN` and `CORS_ALLOW_METHODS` directly when constructing only the reviewed controller/action `config.cors` objects, parsing the methods value only if the Citizen controller API requires a non-string type.
+- Translate the legacy `citizen.cors` object directly to the `CITIZEN_CORS` JSON value; do not duplicate the global policy in controller/action configuration.
 - Change `app.config.citizen.directories.app` to `app.config.directories.app` in both start files.
 - Change `app.config.citizen.mode` and view `config.citizen.mode` to `app.config.mode` and `config.mode`.
 - Replace every `app.config.db` and `app.config.mail` read with the direct `process.env` access described above.
 - Remove the arguments from both `app.start()` calls.
-- Move the legacy global CORS policy to the reviewed controller/action configuration required to preserve current requests; Citizen 2.0 deliberately has no global `CITIZEN_CORS`.
+- Preserve the legacy global CORS policy through `CITIZEN_CORS`; retain controller/action CORS configuration only where it represented a route-specific override.
 
 Run searches after the edit; each must return no active legacy use:
 
@@ -415,7 +415,7 @@ Use this mapping, preserving the source values unless the Docker target requires
 | Docker Desktop watcher requirement | `CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING=true` and `CITIZEN_DEVELOPMENT__WATCHER__INTERVAL=500` |
 | `db.*` | Corresponding `DB_*` variables read directly by the pool constructors; add `DB_HOST=db` |
 | `mail.*` | Corresponding `MAIL_*` variables read directly by the transport/contact consumers |
-| `citizen.cors` | Application-owned `CORS_ALLOW_ORIGIN`/`CORS_ALLOW_METHODS`, read directly by the reviewed controller/action `config.cors` |
+| `citizen.cors` | `CITIZEN_CORS` JSON object, used as the framework's global baseline |
 
 Also set `POSTGRES_INITDB_ARGS` from the local VM's inventoried encoding, `lc_collate`, and `lc_ctype`; verify those locale values exist in the selected PostgreSQL image before `dc up -d db` creates the local volume.
 
@@ -447,7 +447,7 @@ Confirm from the rendered Compose configuration and images that:
 - No environment file, legacy JSON, private key, dump, or host `node_modules` is in an image layer.
 - The app image contains Node.js 24, Citizen 2.0 at the recorded Git commit, `web/min/site.css`, `web/min/site.js`, and Linux `node_modules`.
 - No `app/config/*.json` exists in the app image.
-- The application runs non-root, constructs database/mail/CORS settings from direct `process.env` reads without logging secrets, and can write `/site/logs`.
+- The application runs non-root, constructs database/mail settings from direct `process.env` reads without logging secrets, receives the global CORS policy through `CITIZEN_CORS`, and can write `/site/logs`.
 - Citizen reports the expected mode and applied `CITIZEN_*` variables.
 - Container Nginx passes `nginx -t`, supplies `Forwarded`, and contains the reviewed redirects and locations.
 
@@ -562,7 +562,7 @@ Confirm:
 
 - Citizen reports no container-filesystem `.env`, applies the Compose-injected `CITIZEN_*` process variables, and starts in development mode.
 - The running image uses Node.js 24 and the recorded Citizen 2.0 Git commit.
-- Database, mail, and CORS consumers use the expected direct `process.env` values without logging secrets.
+- Database and mail consumers use the expected direct `process.env` values without logging secrets, and Citizen applies the expected `CITIZEN_CORS` object.
 - No `app/config/*.json` exists inside the container.
 - The app responds through Nginx with the required `Forwarded` header behavior.
 - `https://dev.jaysylvester.com` is trusted without `curl -k` or a browser exception.
@@ -1020,7 +1020,7 @@ Validate:
 
 - Citizen reports no container-filesystem `.env`, applies the Compose-injected production `CITIZEN_*` variables, and starts in production mode.
 - The running container uses Node.js 24 and the same recorded Citizen 2.0 Git commit tested locally.
-- Database, mail, and CORS consumers use the expected direct `process.env` values, no legacy JSON exists inside the container, Node is non-root, logs are writable, and the containers are healthy.
+- Database and mail consumers use the expected direct `process.env` values, Citizen applies the expected `CITIZEN_CORS` object, no legacy JSON exists inside the container, Node is non-root, logs are writable, and the containers are healthy.
 - All inventoried redirects have the same status and destination.
 - Existing application routes, static assets, `web/shoplc/`, 404 behavior, and HTTPS work.
 - The public certificate name, chain, and expiry are correct.

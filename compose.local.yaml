@@ -1,0 +1,51 @@
+services:
+  db:
+    ports:
+      - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
+
+  app:
+    build:
+      target: development
+    command: ["node", "app/start-dev.js"]
+    environment:
+      CITIZEN_MODE: development
+      CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING: ${CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING:-true}
+      CITIZEN_DEVELOPMENT__WATCHER__INTERVAL: ${CITIZEN_DEVELOPMENT__WATCHER__INTERVAL:-500}
+    volumes:
+      - ./app/controllers:/site/app/controllers
+      - ./app/models:/site/app/models
+      - ./app/views:/site/app/views
+      - ./app/toolbox:/site/app/toolbox
+      - ./web:/site/web
+
+  proxy:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/local-certs:/etc/nginx/certs:ro
+      - ./web:/usr/share/nginx/html:ro
+
+  assets:
+    build:
+      context: .
+      target: development
+    command: ["npm", "run", "assets:watch"]
+    environment:
+      BROWSERSYNC_HOST: ${BROWSERSYNC_HOST:-dev.jaysylvester.com}
+      BROWSERSYNC_KEY: /site/docker/local-certs/dev-key.pem
+      BROWSERSYNC_CERT: /site/docker/local-certs/dev-cert.pem
+      GULP_USE_POLLING: ${GULP_USE_POLLING:-true}
+      GULP_POLLING_INTERVAL: ${GULP_POLLING_INTERVAL:-500}
+    init: true
+    ports:
+      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:8282:8282"
+    user: "10001:10001"
+    volumes:
+      - ./app/controllers:/site/app/controllers
+      - ./app/models:/site/app/models
+      - ./app/views:/site/app/views
+      - ./app/toolbox:/site/app/toolbox
+      - ./web:/site/web
+      - ./docker/local-certs:/site/docker/local-certs:ro

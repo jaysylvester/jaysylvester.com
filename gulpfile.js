@@ -11,6 +11,12 @@ import sourcemaps    from 'gulp-sourcemaps'
 import uglify        from 'gulp-uglify-es'
 
 const sass = gulpsass(nodesass)
+const polling = process.env.GULP_USE_POLLING === 'true'
+const pollingInterval = Number(process.env.GULP_POLLING_INTERVAL || 500)
+const watchOptions = {
+  usePolling: polling,
+  interval: pollingInterval
+}
 
 gulp.task('css', function (done) {
   gulp.src(['web/source/scss/site.scss'])
@@ -51,21 +57,22 @@ gulp.task('reload', function (done) {
 gulp.task('watch', function (done) {
   browsersync.init({
     https: {
-      key: '_dev-certs/ssl-cert-snakeoil.key',
-      cert: '_dev-certs/ssl-cert-snakeoil.pem'
+      key: process.env.BROWSERSYNC_KEY || '_dev-certs/ssl-cert-snakeoil.key',
+      cert: process.env.BROWSERSYNC_CERT || '_dev-certs/ssl-cert-snakeoil.pem'
     },
+    host: process.env.BROWSERSYNC_HOST || 'dev.jaysylvester.com',
     ui: {
       port: 8282
     },
     notify: false,
     open: false
   })
-  gulp.watch('web/source/scss/**/**.scss', gulp.parallel('css'))
-  gulp.watch('web/source/js/**/**.js', gulp.parallel('js'))
-  gulp.watch('app/controllers/**', gulp.parallel('reload'))
-  gulp.watch('app/models/**', gulp.parallel('reload'))
-  gulp.watch('app/views/**', gulp.parallel('reload'))
-  gulp.watch('app/toolbox/**', gulp.parallel('reload'))
+  gulp.watch('web/source/scss/**/**.scss', watchOptions, gulp.parallel('css'))
+  gulp.watch('web/source/js/**/**.js', watchOptions, gulp.parallel('js'))
+  gulp.watch('app/controllers/**', watchOptions, gulp.parallel('reload'))
+  gulp.watch('app/models/**', watchOptions, gulp.parallel('reload'))
+  gulp.watch('app/views/**', watchOptions, gulp.parallel('reload'))
+  gulp.watch('app/toolbox/**', watchOptions, gulp.parallel('reload'))
   done()
 })
 

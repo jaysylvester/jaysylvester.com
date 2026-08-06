@@ -23,16 +23,23 @@ consolidate.requires.handlebars.registerPartial('screenGroup', fs.readFileSync(a
 
 // Get static file last modified times to populate cache buster variables
 let cacheBuster = {
-  css: fs.statSync(path.resolve(app.config.citizen.directories.app, '../web/min/site.css')).mtime.toString().replace(/[ :\-()]/g, ''),
-  js:  fs.statSync(path.resolve(app.config.citizen.directories.app, '../web/min/site.js')).mtime.toString().replace(/[ :\-()]/g, '')
+  css: fs.statSync(path.resolve(app.config.directories.app, '../web/min/site.css')).mtime.toString().replace(/[ :\-()]/g, ''),
+  js:  fs.statSync(path.resolve(app.config.directories.app, '../web/min/site.js')).mtime.toString().replace(/[ :\-()]/g, '')
 }
 
 app.toolbox = {
   helpers: helpers,
   // Third party modules
-  mail:    nodemailer.createTransport(app.config.mail),
-  moment:  moment,
-  pg:      pg
+  cacheBuster: cacheBuster,
+  mail: nodemailer.createTransport({
+    service: helpers.requiredEnvironment('MAIL_SERVICE'),
+    auth: {
+      user: helpers.requiredEnvironment('MAIL_AUTH_USER'),
+      pass: helpers.requiredEnvironment('MAIL_AUTH_PASS')
+    }
+  }),
+  moment: moment,
+  pg:     pg
 }
 
 // Overwrite pg's default date handler to convert to GMT
@@ -40,7 +47,15 @@ app.toolbox.pg.types.setTypeParser(1114, function (stringValue) {
   return new Date(Date.parse(stringValue + ' +0000')).toISOString()
 })
 // Create a connection pool
-app.toolbox.dbPool = new app.toolbox.pg.Pool(app.config.db)
+app.toolbox.dbPool = new app.toolbox.pg.Pool({
+  host:                    helpers.requiredEnvironment('DB_HOST'),
+  port:                    Number(helpers.requiredEnvironment('DB_PORT')),
+  database:                helpers.requiredEnvironment('DB_DATABASE'),
+  user:                    helpers.requiredEnvironment('DB_USER'),
+  password:                helpers.requiredEnvironment('DB_PASSWORD'),
+  max:                     Number(helpers.requiredEnvironment('DB_MAX')),
+  connectionTimeoutMillis: Number(helpers.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS'))
+})
 // Log errors in the connection pool
 app.toolbox.dbPool.on('error', function (err) {
   app.helpers.log({
@@ -50,9 +65,4 @@ app.toolbox.dbPool.on('error', function (err) {
   })
 })
 
-app.start({
-  citizen: {
-    mode: 'production'
-  },
-  cacheBuster: cacheBuster
-})
+app.start()
