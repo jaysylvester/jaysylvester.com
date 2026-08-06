@@ -83,10 +83,10 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 
 - Citizen resolves configuration when `citizen` is imported, before `app.start()`.
 - Citizen optionally loads exactly the project-root `.env`, found as the parent of the configured application directory; values already present in `process.env` take precedence.
-- Each checkout has its own ignored project-root `.env`: local values on the Mac and production values on the Droplet. During Phase 1, host production lets Citizen load that file natively. Docker Compose uses the same file for interpolation and injects it into `app` through `env_file`; it does not copy or bind-mount the secret file into the image or container filesystem.
+- Each checkout has its own ignored project-root `.env`: local values on the Mac and production values on the Droplet. During Phase 1, host production lets Citizen load that file natively. Docker Compose uses the same file for interpolation, explicitly injects only non-secret application settings, and exposes `DB_PASSWORD` and `MAIL_AUTH_PASS` to authorized services as files under `/run/secrets`. It does not copy or bind-mount the `.env` file into an image or container filesystem.
 - In Docker, Citizen can therefore log `No .env found.` and then report the applied `CITIZEN_*` process variables. That pair is expected: the first message describes the absent container file, not a failure of Compose injection. Acceptance must verify the applied variables and effective behavior rather than treating the first line alone as an error.
 - Only `CITIZEN_*` variables are validated, coerced, and copied into the flat framework configuration under `app.config`.
-- Application-owned database and mail variables remain strings in `process.env`. Read them directly at the existing consumers, coerce numeric values where the PostgreSQL or other APIs require numbers, and do not log secrets. The global CORS policy is framework-owned and supplied as a JSON object through `CITIZEN_CORS`.
+- Non-secret application-owned database and mail variables remain strings in `process.env`. Read them directly at the existing consumers and coerce numeric values where required. In Docker, read database and mail passwords from their Compose secret files; retain environment fallback only for the temporarily non-containerized Phase 1 production host. Do not log secrets. The global CORS policy is framework-owned and supplied as a JSON object through `CITIZEN_CORS`.
 - `app.start()` accepts no arguments.
 - Any `app/config/*.json` file causes Citizen 2.0 startup to fail. Legacy JSON files remain protected migration inputs or rollback artifacts only, must be excluded from every image, and must be removed from the active checkout before local startup.
 - `CITIZEN_DIRECTORIES__APP` is process-only. This layout does not need to override it because the image preserves Citizen's expected sibling layout:
@@ -115,20 +115,17 @@ Use one ignored project-root `.env` in each deployment checkout. The local and p
 - Application-owned `DB_*` and `MAIL_*` settings, plus the framework-owned `CITIZEN_CORS` JSON policy.
 - `POSTGRES_INITDB_ARGS` and `POSTGRES_TIMEZONE` for first-time database initialization with source-compatible locale and time behavior.
 
-Pass the file in two distinct ways when using Docker:
+Pass the file to `docker compose --env-file .env ...` for interpolation. Explicitly map only the non-secret settings required by `app`; do not use `env_file` to inject the entire file. Define `db-password` and `mail-auth-pass` secrets from the two password values and grant each service only the secrets it needs.
 
-1. `docker compose --env-file .env ...` supplies Compose interpolation.
-2. The `app` service's `env_file: .env` injects the same file into `process.env`.
-
-The `db` service must not receive the entire file. Map only `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`, and `POSTGRES_INITDB_ARGS` into its corresponding `POSTGRES_*` environment values, plus the non-secret `POSTGRES_TIMEZONE` into `TZ`, through Compose interpolation.
+The `db` service must not receive the entire file. Map `DB_DATABASE`, `DB_USER`, and `POSTGRES_INITDB_ARGS` into their corresponding `POSTGRES_*` environment values, map the non-secret `POSTGRES_TIMEZONE` to `TZ`, and set `POSTGRES_PASSWORD_FILE=/run/secrets/db-password`. The official PostgreSQL entrypoint reads that file during first initialization.
 
 Keep host-safe production endpoints in the Droplet's `.env` during Phase 1: the existing loopback Citizen binding and `DB_HOST=127.0.0.1` (or the inventoried equivalent). In Phase 2, `compose.production.yaml` overrides only the container-network values for `app`, such as `CITIZEN_HTTP__HOSTNAME=""` and `DB_HOST=db`. The protected credentials and all other application settings remain unchanged, so the same file supports host production before cutover and Compose afterward.
 
 Run the image directly as a fixed non-root user such as UID/GID `10001:10001`; no privileged configuration-copy entrypoint is needed. Keep `init: true` and direct exec-form Node commands.
 
-Citizen's startup log must show the expected mode and applied `CITIZEN_*` environment with no unknown-variable warning. The expected Docker-only `No .env found.` line is acceptable when followed by the applied process variables. Existing database and mail behavior must work with the direct `process.env` reads; missing required values should produce a clear error at their initialization or use site without dumping the environment. Citizen must apply the validated global `CITIZEN_CORS` policy.
+Citizen's startup log must show the expected mode and applied `CITIZEN_*` environment with no unknown-variable warning. The expected Docker-only `No .env found.` line is acceptable when followed by the applied process variables. Existing database and mail behavior must work with explicit non-secret environment reads and password secret files; missing required values should produce a clear error without dumping configuration. Citizen must apply the validated global `CITIZEN_CORS` policy.
 
-Editing either environment file requires recreating `app` so Compose injects the new process environment. Recreate `proxy` afterward because it can retain the old app container's IP.
+Editing non-password settings or the mail password requires recreating `app` so Compose refreshes its environment and secrets. Recreate `proxy` afterward because it can retain the old app container's IP. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password; changing the Compose secret alone does not update an existing data volume.
 
 ## 4. Repository Artifacts
 
@@ -201,7 +198,7 @@ If another local project already owns ports 80, 443, or 5432, stop that project 
 - Convert framework settings to `CITIZEN_*` names and application settings to explicit `DB_*`/`MAIL_*` variables without changing their values.
 - Remove all arguments from both `app.start()` calls.
 - Replace `app.config.citizen.*` and view `config.citizen.*` references with Citizen 2.0's flat framework paths.
-- Replace `app.config.db` and `app.config.mail` consumers with direct `process.env` reads at their existing use sites, coercing numeric database options with `Number(...)`.
+- Replace `app.config.db` and `app.config.mail` consumers with explicit configuration reads at their existing use sites: non-secret values from `process.env`, Docker passwords from Compose secret files, and passwords from the existing environment fallback on the temporarily non-containerized Phase 1 production host. Coerce numeric database options with `Number(...)`.
 - Move application utility modules that predate Citizen's helper convention into `app/helpers/<module>.js` when they are semantically helpers, and consume them through `app.helpers.<module>`. Mount and watch that directory locally so Citizen supplies native discovery and hot module replacement. Do not confuse Citizen's top-level `app.log()` API with auto-discovered `app.helpers` modules.
 - Preserve the old global CORS behavior through Citizen 2.0's `CITIZEN_CORS` JSON object. Use controller/action overrides only for a reviewed route-specific difference.
 - Do not arbitrarily change pool sizes, mail settings, CORS behavior, or other application behavior.
@@ -391,13 +388,13 @@ The branch name remains in `package.json`; `package-lock.json` records the exact
 Implement these application changes as a dedicated reviewable commit before the database migration:
 
 - Change this application's `engines.node` to `>=22.0.0`, matching Citizen's minimum. Test that minimum explicitly, while deploying this application on Node.js 24 LTS.
-- In `app/start.js` and `app/start-dev.js`, build each existing PostgreSQL `Pool` configuration directly from `process.env.DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`, `DB_MAX`, and `DB_CONNECTION_TIMEOUT_MILLIS`. Wrap the port, pool maximum, and timeout in `Number(...)` at construction.
-- In `app/start.js`, build the existing Nodemailer transport directly from `process.env.MAIL_SERVICE`, `MAIL_AUTH_USER`, and `MAIL_AUTH_PASS`.
+- In `app/start.js` and `app/start-dev.js`, build each existing PostgreSQL `Pool` from explicit host, port, database, user, password, pool maximum, and timeout inputs. Read non-secret values from `process.env`, prefer `/run/secrets/db-password` for the password, and fall back to `DB_PASSWORD` only for Phase 1 host production. Wrap the port, pool maximum, and timeout in `Number(...)` at construction.
+- In `app/start.js`, build the existing Nodemailer transport from `process.env.MAIL_SERVICE` and `MAIL_AUTH_USER`; prefer `/run/secrets/mail-auth-pass` for its password and fall back to `MAIL_AUTH_PASS` only for Phase 1 host production.
 - In the contact controller, replace the existing `app.config.mail` address reads with direct `process.env.MAIL_NAME`, `MAIL_ADDRESS`, and `MAIL_ADDRESS_NO_REPLY` reads.
 - Translate the legacy `citizen.cors` object directly to the `CITIZEN_CORS` JSON value; do not duplicate the global policy in controller/action configuration.
 - Change `app.config.citizen.directories.app` to `app.config.directories.app` in both start files.
 - Change `app.config.citizen.mode` and view `config.citizen.mode` to `app.config.mode` and `config.mode`.
-- Replace every `app.config.db` and `app.config.mail` read with the direct `process.env` access described above.
+- Replace every `app.config.db` and `app.config.mail` read with the explicit environment/secret access described above.
 - Remove the arguments from both `app.start()` calls.
 - Preserve the legacy global CORS policy through `CITIZEN_CORS`; retain controller/action CORS configuration only where it represented a route-specific override.
 
@@ -469,11 +466,11 @@ docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.
 Confirm from the rendered Compose configuration and images that:
 
 - Only proxy ports 80/443 and loopback Postico/BrowserSync ports are published.
-- `app` receives `.env` through `env_file`, while `db` receives only its mapped `POSTGRES_*` values.
+- `app` receives only its explicit non-secret environment allowlist plus `db-password` and `mail-auth-pass`; `db` receives only its mapped initialization settings plus `db-password`; `assets` receives neither secret.
 - No environment file, legacy JSON, private key, dump, or host `node_modules` is in an image layer.
 - The app image contains Node.js 24, Citizen 2.0 at the recorded Git commit, `web/min/site.css`, `web/min/site.js`, and Linux `node_modules`.
 - No `app/config/*.json` exists in the app image.
-- The application runs non-root, constructs database/mail settings from direct `process.env` reads without logging secrets, receives the global CORS policy through `CITIZEN_CORS`, and can write `/site/logs`.
+- The application runs non-root, constructs database/mail settings from explicit environment and secret-file reads without logging values, receives the global CORS policy through `CITIZEN_CORS`, and can write `/site/logs`.
 - Citizen reports the expected mode and applied `CITIZEN_*` variables.
 - Container Nginx passes `nginx -t`, supplies `Forwarded`, and contains the reviewed redirects and locations.
 
@@ -606,7 +603,7 @@ Confirm:
 
 - Citizen may report `No .env found.` because no secret file is copied or mounted into `/site`; it must then report the expected applied Compose-injected `CITIZEN_*` process variables and start in development mode.
 - The running image uses Node.js 24 and the recorded Citizen 2.0 Git commit.
-- Database and mail consumers use the expected direct `process.env` values without logging secrets, and Citizen applies the expected `CITIZEN_CORS` object.
+- Database and mail consumers use the expected non-secret environment values and password secret files without logging values, and Citizen applies the expected `CITIZEN_CORS` object.
 - No `app/config/*.json` exists inside the container.
 - The app responds through Nginx with the required `Forwarded` header behavior.
 - `https://dev.jaysylvester.com` is trusted without `curl -k` or a browser exception.
@@ -1125,11 +1122,11 @@ Validate:
 
 - Citizen reports no container-filesystem `.env`, applies the Compose-injected production `CITIZEN_*` variables, and starts in production mode.
 - The running container uses Node.js 24 and the same recorded Citizen 2.0 Git commit tested locally.
-- Database and mail consumers use the expected direct `process.env` values, Citizen applies the expected `CITIZEN_CORS` object, no legacy JSON exists inside the container, Node is non-root, logs are writable, PostgreSQL is healthy, and app/proxy are running.
+- Database and mail consumers use the expected explicit environment and password-secret inputs, Citizen applies the expected `CITIZEN_CORS` object, no legacy JSON exists inside the container, Node is non-root, logs are writable, PostgreSQL is healthy, and app/proxy are running.
 - All inventoried redirects have the same status and destination.
 - Existing application routes, static assets, `web/shoplc/`, 404 behavior, and HTTPS work.
 - The public certificate name, chain, and expiry are correct.
-- Production contact and confirmation email work with the direct `process.env` values and existing credentials.
+- Production contact and confirmation email work with the explicit configuration inputs and existing credentials.
 - The reviewed CORS requests and preflight behavior match the Citizen 1.x baseline.
 - Postico reaches remote `127.0.0.1:5432` through the existing SSH connection.
 
@@ -1199,7 +1196,7 @@ removed. Both preserve the PostgreSQL named volume. Use `npm run dev:db:backup`
 while the database is running, and restore one explicit archive with
 `npm run dev:db:restore -- /absolute/path/to/backup.dump`.
 
-After editing `.env`, recreate the app so Compose injects the new process environment, then recreate proxy because the app container IP changed:
+After editing non-database-password values in `.env`, recreate the app so Compose refreshes its environment and secrets, then recreate proxy because the app container IP changed. A database-password rotation must update the PostgreSQL role and is not accomplished by editing `.env` alone:
 
 ```sh
 dc() { docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml "$@"; }
@@ -1393,8 +1390,8 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - Local development runs on the Mac through Docker Desktop with no dependency on the old VM.
 - Citizen's native test suite passes under both Node.js 22 and Node.js 24 at the exact direct-branch commit resolved by this project's lockfile.
 - The local image uses Node.js 24 and Citizen 2.0 directly from `2.0-env-file-config-revised`; no unpublished framework patch exists only in this repository or image.
-- Citizen applies the local `CITIZEN_*` variables, including scoped polling, while application-owned settings are read directly from `process.env` and remain outside `app.config`.
-- Citizen's Docker startup may report that no filesystem `.env` exists, but it subsequently reports and applies the expected Compose-injected variables; no secret `.env` is present in the image or container.
+- Citizen applies the local `CITIZEN_*` variables, including scoped polling, while non-secret application settings come from the explicit process environment and passwords come from service-scoped Compose secrets; all remain outside `app.config`.
+- Citizen's Docker startup may report that no filesystem `.env` exists, but it subsequently reports and applies the expected explicitly injected variables; no `.env` is present in the image or container, and passwords are absent from container environments.
 - Both `app.start()` calls are argument-free; no active `app.config.citizen`, `config.citizen`, `app.config.db`, or `app.config.mail` consumer remains.
 - No `app/config/*.json` exists in the local Citizen 2.0 container; the local source JSON was converted without credential rotation and archived recoverably.
 - Node runs non-root, Citizen can write editor-visible local logs through the ignored root bind mount, and local source mounts do not mask image-owned `/site/node_modules`.
@@ -1467,7 +1464,7 @@ Otherwise, record it as a follow-up. In particular, do not reintroduce:
 
 Prefer the smallest check that proves a migration requirement. A successful logical restore plus focused data comparisons and application queries is sufficient; it does not need a permanent database-test framework. Citizen's own configuration log plus a working application is sufficient; it does not need `/proc` parentage assertions. Reviewing the effective Nginx configuration and testing its actual redirects is sufficient; it does not need a generalized response-manifest system.
 
-The direct Citizen test, explicit application `process.env` conversions, app-only local mount, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, passing string values where numeric database options are required, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
+The direct Citizen test, explicit application configuration consumers, service-scoped password secrets, app-only local mount, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, passing string values where numeric database options are required, exposing passwords broadly in container environments, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
 
 Any proposed expansion should identify the concrete migration failure it prevents, the evidence that the risk exists in this project, and why the existing focused check is inadequate. Without that justification, it should remain outside this plan.
 
@@ -1504,7 +1501,7 @@ counts, or Nginx file without re-inventorying the target project.
 1. Create the migration branch and a project-specific protected directory with mode `0700`; copy the source JSON and database dump into it with mode `0600`, checksums, and archive validation.
 2. Inventory the effective VM and production runtimes before editing code. Capture `nginx -T`, PostgreSQL metadata including timezone, the actual start/service commands, and all VM retirement dependencies.
 3. Audit every Citizen API/configuration reference against both the released Citizen 1.x documentation and the locked Citizen 2.0 branch. Do not infer that stale application code represents a 2.0 breaking change; this project's `app.helpers.log()` call came from an unreleased 2021 branch while released 1.x and 2.0 both document `app.log()`.
-4. Classify every legacy JSON value. Map framework-owned settings to typed `CITIZEN_*` variables, keep application-owned settings in `process.env`, coerce numeric consumers explicitly, and move application-owned values formerly passed through `app.start()` to their real owner.
+4. Classify every legacy JSON value. Map framework-owned settings to typed `CITIZEN_*` variables, keep non-secret application settings in `process.env`, expose passwords as service-scoped Compose secrets, coerce numeric consumers explicitly, and move application-owned values formerly passed through `app.start()` to their real owner.
 5. Run Citizen's full suite at the exact locked commit under its minimum supported Node major and the deployed Node major. Record any upstream change separately before refreshing the application lockfile.
 6. Build and inspect the images, confirm the secret file and legacy JSON are absent, prove the fixed non-root user can read required local leaf certificates and write logs, and confirm the app-only source mount does not hide image dependencies.
 7. Rehearse the source dump on the selected PostgreSQL image and locale before creating the final volume. Restore once, compare project-specific schema/data/sequence queries, and remember that later starts read the named volume rather than replaying the dump.

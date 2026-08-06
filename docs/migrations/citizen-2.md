@@ -26,7 +26,7 @@ The branch name remains in `package.json`; `package-lock.json` is the reproducib
 | Docker Desktop watcher | `CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING`, `CITIZEN_DEVELOPMENT__WATCHER__INTERVAL` | Local only; values are Boolean/number after Citizen coercion. |
 | `db.database` | `DB_DATABASE` | Read directly when constructing each PostgreSQL pool. |
 | `db.user` | `DB_USER` | Direct application environment read. |
-| `db.password` | `DB_PASSWORD` | Direct application environment read; never logged. |
+| `db.password` | `DB_PASSWORD` host source; `db-password` Docker secret | Docker reads `/run/secrets/db-password`; Phase 1 host production falls back to the existing environment value. Never logged. |
 | `db.port` | `DB_PORT` | Converted with `Number(...)`. |
 | `db.max` | `DB_MAX` | Converted with `Number(...)`; preserve the source value. |
 | `db.connectionTimeoutMillis` | `DB_CONNECTION_TIMEOUT_MILLIS` | Converted with `Number(...)`; preserve the source value. |
@@ -34,7 +34,7 @@ The branch name remains in `package.json`; `package-lock.json` is the reproducib
 | PostgreSQL server timezone | `POSTGRES_TIMEZONE` | Passed only to the database container as `TZ` so `initdb` preserves the source server's time behavior. |
 | `mail.service` | `MAIL_SERVICE` | Used by the production Nodemailer transport. |
 | `mail.auth.user` | `MAIL_AUTH_USER` | Used by the production Nodemailer transport. |
-| `mail.auth.pass` | `MAIL_AUTH_PASS` | Used by the production Nodemailer transport; never logged. |
+| `mail.auth.pass` | `MAIL_AUTH_PASS` host source; `mail-auth-pass` Docker secret | Docker reads `/run/secrets/mail-auth-pass`; Phase 1 host production falls back to the existing environment value. Never logged. |
 | `mail.name` | `MAIL_NAME` | Read by the contact action at its use site. |
 | `mail.address` | `MAIL_ADDRESS` | Read by the contact action at its use site. |
 | `mail.addressNoReply` | `MAIL_ADDRESS_NO_REPLY` | Read by the contact action at its use site. |
@@ -45,8 +45,8 @@ No controller-level CORS configuration is needed. Citizen merges optional contro
 ## Application changes
 
 - Both start files use flat `app.config.directories.app` and call `app.start()` with no arguments.
-- PostgreSQL pool options and the production mail transport are constructed from explicit environment values. Numeric PostgreSQL values are coerced at construction.
-- Required application variables are read through Citizen's auto-discovered `app/helpers/utility.js` module as `app.helpers.utility.requiredEnvironment`, which throws a focused error without exposing the environment. This module predated Citizen's helper convention under `app/toolbox/helpers.js`; moving and renaming it lets Citizen import and hot-reload it natively while distinguishing utility functions from the stateful `app.toolbox` services.
+- PostgreSQL pool options and the production mail transport are constructed from explicit configuration inputs. Numeric PostgreSQL values are coerced at construction; Docker passwords come from Compose secret files rather than the container environment.
+- Required application values are read through Citizen's auto-discovered `app/helpers/utility.js` module. `requiredEnvironment` handles non-secret settings, while `requiredSecret` prefers `/run/secrets/<name>` and falls back to the existing environment key for the temporarily non-containerized Phase 1 production host. Both throw focused errors without exposing values. This module predated Citizen's helper convention under `app/toolbox/helpers.js`; moving and renaming it lets Citizen import and hot-reload it natively while distinguishing utility functions from the stateful `app.toolbox` services.
 - Contact addresses are read from the application environment where mail is sent.
 - The development mail stub and both PostgreSQL pool error handlers now use the documented `app.log()` export. Their stale `app.helpers.log()` calls came from a 2021 pre-release Citizen branch API and were not valid for the released Citizen 1.x or 2.0 APIs.
 - The legacy global CORS object is supplied directly through `CITIZEN_CORS`; application controllers contain no duplicated CORS configuration.
@@ -80,7 +80,7 @@ Verified from 2026-08-05 through 2026-08-06:
 | Application `npm ci`, Node.js 24.19.0 | Pass; locked Citizen resolved over HTTPS at the recorded commit |
 | ESLint for `app/` and `gulpfile.js` | Pass inside the development `assets` container using the root `eslint.config.js`; the config is copied into the development image only. |
 | Citizen 2.0 development startup, Node.js 22.23.2 and 24.19.0 | Pass on both; application imports, views validate, polling watcher starts, and HTTP reaches listening state with 8 expected `CITIZEN_*` process values |
-| Citizen 2.0 production startup, Node.js 24.19.0 | Pass; production entrypoint initializes explicit database/mail environment consumers and reaches its HTTP listening state |
+| Citizen 2.0 production startup, Node.js 24.19.0 | Pass: the production entrypoint reads both Compose password secrets and reaches HTTP listening state in an isolated production-mode container; a dummy-value check also proves the temporarily non-containerized production-host fallback. |
 | Global CORS preflight without controller config, Node.js 24.19.0 | Pass; `OPTIONS /contact` returned the configured allow-origin and allow-methods headers from `CITIZEN_CORS` |
 | Legacy-reference searches | Run as part of repository verification; expected to return no active application use |
 | Compose render/build, Nginx test, image inspection | Pass on macOS with Docker Desktop 29.6.2 / Compose 5.3.1; app runs as UID/GID 10001, Node.js 24.19.0 and Citizen 2.0.0 are present, required bundles exist, and protected files are absent. |
@@ -90,7 +90,8 @@ Verified from 2026-08-05 through 2026-08-06:
 | Local development contact flow | Pass after replacing the stale, undocumented `app.helpers.log()` call with the released Citizen 1.x/2.0 `app.log()` API; the form redirected to confirmation and wrote exactly two unsent development messages. |
 | Citizen helper discovery and HMR | Pass: startup imports `/site/app/helpers/utility.js` instead of reporting `No helpers found`; touching the bind-mounted file logs `Helper reinitialized: utility`, and BrowserSync reloads. Startup database configuration and the route/CORS smoke test pass through `app.helpers.utility`. |
 | Local application source mount | Pass: both development services mount the checkout `app/` directory at `/site/app`, while image-owned dependencies remain at `/site/node_modules`. Citizen starts from the mounted entrypoint without an image rebuild, in-container ESLint passes, and the full route/CORS smoke test passes. |
-| Docker environment loading message | Pass: Citizen reports `No .env found.` because `/site/.env` is intentionally absent, then reports 8 applied `CITIZEN_*` process variables injected by Compose. Database and mail behavior confirms the application-owned variables are also present. |
+| Docker environment loading message | Pass: Citizen reports `No .env found.` because `/site/.env` is intentionally absent, then reports 8 applied `CITIZEN_*` process variables injected by Compose. Application behavior confirms the explicit non-secret environment and secret-file inputs are present. |
+| Compose password-secret isolation | Pass: `app` has readable `db-password` and `mail-auth-pass` files but no `DB_PASSWORD` or `MAIL_AUTH_PASS` environment variables; PostgreSQL has only its readable `db-password` file and `POSTGRES_PASSWORD_FILE`; `assets` has no password variables or secrets directory. PostgreSQL reused the accepted named volume, database-backed routes pass, and the full HTTPS/CORS smoke test passes. |
 | Editor-visible local logs | Pass: the ignored checkout `logs/` bind mount exposes `email.log` and `error.log` directly to the editor while production retains its named log volume. No `.gitkeep`, volume extraction, or root shell is required. |
 | Local lifecycle semantics | Pass: `dev:stop` retains stopped containers for fast reuse, `dev:destroy` removes containers/network without `--volumes`, `dev:status` includes stopped containers, and the PostgreSQL named volume persists across both paths. |
 | Local logical backup and recovery drill | Pass: a custom-format backup and SHA-256 checksum were published outside Docker with parent/directory mode `0700` and file mode `0600`; archive validation passed, and an isolated Compose project restored the expected `case_studies`, `screens`, and `work_history` row counts (`7`, `59`, `12`) before its test-only volume was removed. The accepted local volume was not overwritten. |
@@ -104,7 +105,7 @@ Verified from 2026-08-05 through 2026-08-06:
 ## Reusable lessons
 
 - Import timing matters: Citizen resolves environment configuration before application startup code runs.
-- Compose interpolation and container environment injection are separate from Citizen's optional dotenv file load. An expected `No .env found.` line does not mean variables are absent when the subsequent applied-variable log and application behavior prove injection.
+- Compose interpolation, explicit container environment injection, service-scoped secret files, and Citizen's optional dotenv load are separate mechanisms. An expected `No .env found.` line does not mean configuration is absent when the subsequent applied-variable log and application behavior prove the explicit environment/secret inputs.
 - Do not use `app.start()` as an application configuration channel in Citizen 2.0; move application-owned runtime data to its actual consumer.
 - Verify suspicious framework calls against released Citizen 1.x documentation and the locked 2.0 source before classifying them as migration breaks. The stale `app.helpers.log()` call was not a Citizen 2.0 change; `app.log()` is documented in both released major lines.
 - Distinguish Citizen's auto-discovered `app/helpers/*.js` namespace from arbitrary legacy utility directories. Older applications may predate the convention; moving a true helper into that directory requires updating its `app.helpers.<module>` consumers plus Docker bind mounts and external watcher paths.
@@ -112,7 +113,7 @@ Verified from 2026-08-05 through 2026-08-06:
 - Bind-mount the whole `app/` directory locally so entrypoint changes cannot be hidden behind a stale image. Do not mount the repository root, which would hide Linux `node_modules`. Keep protected legacy JSON outside the checkout; if `app/config/*.json` is mistakenly reintroduced, Citizen should fail loudly instead of Docker hiding it.
 - Bind-mount the ignored root-level `logs/` directory to `/site/logs` locally so development email and error logs remain directly accessible in the editor; retain the named log volume for production persistence.
 - Citizen creates a missing logs directory immediately before writing. Do not add `.gitkeep` or redundant startup directory creation unless a different application/framework actually requires it.
-- Keep the database service's environment narrow. Compose interpolation maps only the four PostgreSQL initialization values plus the non-secret timezone; mail and other application secrets are not injected into `db` or `assets`.
+- Keep each service's configuration narrow. PostgreSQL receives its database/user/init/timezone settings plus only the `db-password` secret; `app` receives an explicit non-secret environment allowlist plus the database and mail-password secrets; `assets` receives no database or mail credentials.
 - Inventory the source server timezone as well as encoding and locale. The official PostgreSQL container otherwise initialized in UTC; mapping the non-secret `POSTGRES_TIMEZONE` to `TZ` before `initdb` preserved the source behavior.
 - PostgreSQL 17 exposes the database collation and character type through `pg_database.datcollate` and `pg_database.datctype`; the PostgreSQL 13 `SHOW lc_collate`/`SHOW lc_ctype` checks are not portable to that target.
 - Recreate Nginx after recreating the app because its workers may retain the removed container's resolved IP.

@@ -119,7 +119,7 @@ Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local da
 
 ### Configuration and file watching
 
-Citizen resolves framework configuration when it is imported. Compose injects the ignored project-root `.env` into `app`; `CITIZEN_*` settings, including the JSON `CITIZEN_CORS` policy, become typed values under `app.config`, while database and mail values remain strings read from `process.env`. No `app/config/*.json` file may be active.
+Citizen resolves framework configuration when it is imported. Compose uses the ignored project-root `.env` for interpolation, explicitly injects non-secret application settings, and mounts `DB_PASSWORD` and `MAIL_AUTH_PASS` as service-scoped files under `/run/secrets`. `CITIZEN_*` settings, including the JSON `CITIZEN_CORS` policy, become typed values under `app.config`; other database and mail settings remain strings read from `process.env`. No `app/config/*.json` file may be active.
 
 The local app and Gulp watchers use polling for Docker Desktop. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. BrowserSync ports 3000 and 8282 and the Postico port are loopback-only.
 
@@ -127,7 +127,7 @@ Citizen's local file logs are written to the ignored root-level `logs/`
 directory, so `logs/email.log` and `logs/error.log` are directly available in
 the editor. Production continues to use its persistent Docker log volume.
 
-After changing `.env`, recreate `app` so Compose injects the new environment, then recreate `proxy` so Nginx resolves the current app container:
+After changing non-database-password values in `.env`, recreate `app` so Compose refreshes its environment and secrets, then recreate `proxy` so Nginx resolves the current app container. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password; editing `.env` alone does not change an existing database volume.
 
 ```sh
 dc up -d --no-deps --force-recreate app

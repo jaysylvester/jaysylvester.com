@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: ${DB_DATABASE:?Set DB_DATABASE in .env}
       POSTGRES_USER: ${DB_USER:?Set DB_USER in .env}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:?Set POSTGRES_INITDB_ARGS in .env}
       TZ: ${POSTGRES_TIMEZONE:?Set the inventoried POSTGRES_TIMEZONE in .env}
     healthcheck:
@@ -12,6 +12,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
+    secrets:
+      - db-password
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -23,11 +25,30 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    env_file:
-      - .env
+    environment:
+      CITIZEN_MODE: ${CITIZEN_MODE:?Set CITIZEN_MODE in .env}
+      CITIZEN_HTTP__HOSTNAME: ${CITIZEN_HTTP__HOSTNAME-}
+      CITIZEN_HTTP__PORT: ${CITIZEN_HTTP__PORT:?Set CITIZEN_HTTP__PORT in .env}
+      CITIZEN_LAYOUT__CONTROLLER: ${CITIZEN_LAYOUT__CONTROLLER:?Set CITIZEN_LAYOUT__CONTROLLER in .env}
+      CITIZEN_TEMPLATE_ENGINE: ${CITIZEN_TEMPLATE_ENGINE:?Set CITIZEN_TEMPLATE_ENGINE in .env}
+      CITIZEN_CORS: ${CITIZEN_CORS:?Set CITIZEN_CORS in .env}
+      DB_HOST: ${DB_HOST:?Set DB_HOST in .env}
+      DB_PORT: ${DB_PORT:?Set DB_PORT in .env}
+      DB_DATABASE: ${DB_DATABASE:?Set DB_DATABASE in .env}
+      DB_USER: ${DB_USER:?Set DB_USER in .env}
+      DB_MAX: ${DB_MAX:?Set DB_MAX in .env}
+      DB_CONNECTION_TIMEOUT_MILLIS: ${DB_CONNECTION_TIMEOUT_MILLIS:?Set DB_CONNECTION_TIMEOUT_MILLIS in .env}
+      MAIL_SERVICE: ${MAIL_SERVICE:?Set MAIL_SERVICE in .env}
+      MAIL_AUTH_USER: ${MAIL_AUTH_USER:?Set MAIL_AUTH_USER in .env}
+      MAIL_NAME: ${MAIL_NAME:?Set MAIL_NAME in .env}
+      MAIL_ADDRESS: ${MAIL_ADDRESS:?Set MAIL_ADDRESS in .env}
+      MAIL_ADDRESS_NO_REPLY: ${MAIL_ADDRESS_NO_REPLY:?Set MAIL_ADDRESS_NO_REPLY in .env}
     expose:
       - "8080"
     init: true
+    secrets:
+      - db-password
+      - mail-auth-pass
     user: "10001:10001"
     volumes:
       - app-logs:/site/logs
@@ -44,6 +65,13 @@ services:
     expose:
       - "80"
       - "443"
+
+secrets:
+  db-password:
+    environment: DB_PASSWORD
+  mail-auth-pass:
+    environment: MAIL_AUTH_PASS
+
 volumes:
   app-logs:
     name: ${COMPOSE_PROJECT_NAME}-logs

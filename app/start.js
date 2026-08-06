@@ -32,7 +32,7 @@ app.toolbox = {
     service: app.helpers.utility.requiredEnvironment('MAIL_SERVICE'),
     auth: {
       user: app.helpers.utility.requiredEnvironment('MAIL_AUTH_USER'),
-      pass: app.helpers.utility.requiredEnvironment('MAIL_AUTH_PASS')
+      pass: app.helpers.utility.requiredSecret('mail-auth-pass', 'MAIL_AUTH_PASS')
     }
   }),
   moment: moment,
@@ -49,7 +49,7 @@ app.toolbox.dbPool = new app.toolbox.pg.Pool({
   port:                    Number(app.helpers.utility.requiredEnvironment('DB_PORT')),
   database:                app.helpers.utility.requiredEnvironment('DB_DATABASE'),
   user:                    app.helpers.utility.requiredEnvironment('DB_USER'),
-  password:                app.helpers.utility.requiredEnvironment('DB_PASSWORD'),
+  password:                app.helpers.utility.requiredSecret('db-password', 'DB_PASSWORD'),
   max:                     Number(app.helpers.utility.requiredEnvironment('DB_MAX')),
   connectionTimeoutMillis: Number(app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS'))
 })
