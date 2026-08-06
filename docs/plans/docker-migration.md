@@ -105,14 +105,14 @@ Use one ignored project-root `.env` in each deployment checkout. The local and p
 
 - `CITIZEN_*` framework settings.
 - Application-owned `DB_*` and `MAIL_*` settings, plus the framework-owned `CITIZEN_CORS` JSON policy.
-- `POSTGRES_INITDB_ARGS` for first-time database initialization.
+- `POSTGRES_INITDB_ARGS` and `POSTGRES_TIMEZONE` for first-time database initialization with source-compatible locale and time behavior.
 
 Pass the file in two distinct ways when using Docker:
 
 1. `docker compose --env-file .env ...` supplies Compose interpolation.
 2. The `app` service's `env_file: .env` injects the same file into `process.env`.
 
-The `db` service must not receive the entire file. Map only `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`, and `POSTGRES_INITDB_ARGS` into its corresponding `POSTGRES_*` environment values through Compose interpolation.
+The `db` service must not receive the entire file. Map only `DB_DATABASE`, `DB_USER`, `DB_PASSWORD`, and `POSTGRES_INITDB_ARGS` into its corresponding `POSTGRES_*` environment values, plus the non-secret `POSTGRES_TIMEZONE` into `TZ`, through Compose interpolation.
 
 Keep host-safe production endpoints in the Droplet's `.env` during Phase 1: the existing loopback Citizen binding and `DB_HOST=127.0.0.1` (or the inventoried equivalent). In Phase 2, `compose.production.yaml` overrides only the container-network values for `app`, such as `CITIZEN_HTTP__HOSTNAME=""` and `DB_HOST=db`. The protected credentials and all other application settings remain unchanged, so the same file supports host production before cutover and Compose afterward.
 
@@ -178,7 +178,7 @@ If another local project already owns ports 80, 443, or 5432, stop that project 
 - Store data in the named volume.
 - Use `pg_isready` for health.
 - Initialize the database name, role, and reused password from the ignored environment file only when the volume is empty.
-- PostgreSQL fixes encoding, `lc_collate`, and `lc_ctype` when `initdb` first creates the volume. Before the first `db` start, put the inventoried values into each environment's `POSTGRES_INITDB_ARGS`, confirm the target image provides the required locale, and test them with the selected PostgreSQL image. If a source locale is unavailable, choose and rehearse the compatible target before creating either final volume; discovering this during cutover is too late.
+- PostgreSQL fixes encoding, `lc_collate`, `lc_ctype`, and its default server timezone when `initdb` first creates the volume. Before the first `db` start, put the inventoried locale values into each environment's `POSTGRES_INITDB_ARGS` and its timezone into `POSTGRES_TIMEZONE`, confirm the target image provides both, and test them with the selected PostgreSQL image. If a source locale or timezone is unavailable, choose and rehearse the compatible target before creating either final volume; discovering this during cutover is too late.
 - Do not use `resources/data.sql`; it is an untrusted historical initialization file.
 
 ### Application
@@ -417,7 +417,7 @@ Use this mapping, preserving the source values unless the Docker target requires
 | `mail.*` | Corresponding `MAIL_*` variables read directly by the transport/contact consumers |
 | `citizen.cors` | `CITIZEN_CORS` JSON object, used as the framework's global baseline |
 
-Also set `POSTGRES_INITDB_ARGS` from the local VM's inventoried encoding, `lc_collate`, and `lc_ctype`; verify those locale values exist in the selected PostgreSQL image before `dc up -d db` creates the local volume.
+Also set `POSTGRES_INITDB_ARGS` from the local VM's inventoried encoding, `lc_collate`, and `lc_ctype`, and set `POSTGRES_TIMEZONE` from `SHOW timezone`; verify those values exist in the selected PostgreSQL image before `dc up -d db` creates the local volume.
 
 Keep the existing credentials. Do not rotate or normalize values during conversion. The sanitized project-root `.env.example` must document every required variable and the PostgreSQL initialization argument shape without containing real values.
 
@@ -648,7 +648,7 @@ Translate the production JSON using the mapping under **Convert local configurat
 - Existing database, mail, pool, layout, template-engine, CORS, and credential values unchanged.
 - No development watcher variables.
 
-Do not include `POSTGRES_INITDB_ARGS` merely to run the host application; it is retained in the file for the later Docker database initialization and is not consumed by Citizen or the application.
+Do not include `POSTGRES_INITDB_ARGS` or `POSTGRES_TIMEZONE` merely to run the host application; they are retained in the file for the later Docker database initialization and are not consumed by Citizen or the application.
 
 Install a pinned official Node.js 24 LTS binary under `/opt`. The version below was current in the official Node 24 distribution when this plan was revised; check the official `latest-v24.x` index and update both the version and checksum input if a newer supported Node 24 release is selected:
 
@@ -894,7 +894,7 @@ find app/config -maxdepth 1 -type f -name '*.json' -print
 
 Stop if the tracked worktree is dirty or the `find` command returns a JSON file. In the DigitalOcean control panel, confirm `jaysylvester-pre-citizen2-docker-REPLACE_ME_DATE` is complete and available before continuing.
 
-Review the production `.env` without changing its credentials or application behavior. It must still contain the host-safe endpoints used by the running service plus the rehearsed `POSTGRES_INITDB_ARGS`. Confirm `compose.production.yaml` overrides `DB_HOST=db` and the Citizen HTTP bind address only inside the app container. Do not rewrite the protected file merely for Docker networking.
+Review the production `.env` without changing its credentials or application behavior. It must still contain the host-safe endpoints used by the running service plus the rehearsed `POSTGRES_INITDB_ARGS` and `POSTGRES_TIMEZONE`. Confirm `compose.production.yaml` overrides `DB_HOST=db` and the Citizen HTTP bind address only inside the app container. Do not rewrite the protected file merely for Docker networking.
 
 Verify the final target database volume is absent without starting Compose:
 

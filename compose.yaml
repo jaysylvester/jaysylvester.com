@@ -6,6 +6,7 @@ services:
       POSTGRES_USER: ${DB_USER:?Set DB_USER in .env}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:?Set POSTGRES_INITDB_ARGS in .env}
+      TZ: ${POSTGRES_TIMEZONE:?Set the inventoried POSTGRES_TIMEZONE in .env}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s

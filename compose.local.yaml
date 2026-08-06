@@ -16,6 +16,7 @@ services:
       - ./app/models:/site/app/models
       - ./app/views:/site/app/views
       - ./app/toolbox:/site/app/toolbox
+      - ./logs:/site/logs
       - ./web:/site/web
 
   proxy:

@@ -32,7 +32,7 @@ app.toolbox = {
   cacheBuster: cacheBuster,
   mail: {
     sendMail: function (args) {
-      app.helpers.log({
+      app.log({
         label: 'E-mail debug log (not sent)',
         content: {
           from: args.from,

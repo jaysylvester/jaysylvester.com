@@ -1,0 +1,129 @@
+#!/bin/sh
+
+set -eu
+
+usage() {
+  echo 'Usage: npm run dev:db:restore -- /absolute/path/to/backup.dump'
+}
+
+case ${1:-} in
+  -h|--help)
+    usage
+    exit 0
+    ;;
+esac
+
+if test "$#" -ne 1; then
+  usage >&2
+  exit 1
+fi
+
+backup_file=$1
+database_was_running=false
+started_database=false
+stopped_services=
+
+dc() {
+  docker compose \
+    --env-file .env \
+    -p jaysylvester-local \
+    -f compose.yaml \
+    -f compose.local.yaml \
+    "$@"
+}
+
+service_is_running() {
+  dc ps --status running --services "$1" | grep -qx "$1"
+}
+
+restore_service_state() {
+  for service in $stopped_services; do
+    if ! dc start "$service" >/dev/null; then
+      echo "Could not restart $service; run npm run dev:start." >&2
+    fi
+  done
+
+  if test "$started_database" = true && test -z "$stopped_services"; then
+    if ! dc stop db >/dev/null; then
+      echo 'Could not return db to its stopped state; run npm run dev:stop.' >&2
+    fi
+  fi
+}
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo 'Docker is required. Start Docker Desktop and try again.' >&2
+  exit 1
+fi
+
+if test ! -f .env; then
+  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  exit 1
+fi
+
+if test ! -f "$backup_file" || test ! -r "$backup_file"; then
+  echo "Backup is not a readable file: $backup_file" >&2
+  exit 1
+fi
+
+dc config --quiet
+
+if service_is_running db; then
+  database_was_running=true
+else
+  echo 'Starting PostgreSQL for archive validation...'
+  dc up -d --wait db
+  started_database=true
+fi
+
+trap restore_service_state EXIT
+
+echo 'Verifying backup archive...'
+if ! dc exec -T db pg_restore --list < "$backup_file" >/dev/null; then
+  echo "Invalid PostgreSQL backup archive: $backup_file" >&2
+  exit 1
+fi
+
+if test ! -t 0; then
+  echo 'Restore requires an interactive terminal.' >&2
+  exit 1
+fi
+
+echo "This will replace the local PostgreSQL database using:"
+echo "  $backup_file"
+printf 'Type RESTORE to continue: '
+IFS= read -r confirmation
+
+if test "$confirmation" != RESTORE; then
+  echo 'Restore cancelled.'
+  exit 1
+fi
+
+for service in app proxy; do
+  if service_is_running "$service"; then
+    stopped_services="$stopped_services $service"
+  fi
+done
+
+if test -n "$stopped_services"; then
+  dc stop $stopped_services
+fi
+
+echo 'Restoring PostgreSQL backup...'
+dc exec -T db sh -c \
+  'pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --exit-on-error --single-transaction --no-owner --no-privileges' \
+  < "$backup_file"
+
+dc exec -T db sh -c \
+  'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "ANALYZE;"' \
+  >/dev/null
+
+restore_service_state
+stopped_services=
+started_database=false
+trap - EXIT
+
+echo 'Database restore completed.'
+
+if test "$database_was_running" = false; then
+  echo 'PostgreSQL was returned to its previous stopped state. Run npm run dev:start when ready.'
+fi

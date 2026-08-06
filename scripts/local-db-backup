@@ -1,0 +1,77 @@
+#!/bin/sh
+
+set -eu
+
+backup_parent=${LOCAL_DB_BACKUP_PARENT:-"${HOME:?HOME must be set}/Documents/jaysylvester-docker-migration-local"}
+backup_directory=$backup_parent/backups
+timestamp=$(date '+%Y%m%d-%H%M%S')
+backup_file=$backup_directory/jaysylvester-$timestamp.dump
+checksum_file=$backup_file.sha256
+temporary_backup=
+
+dc() {
+  docker compose \
+    --env-file .env \
+    -p jaysylvester-local \
+    -f compose.yaml \
+    -f compose.local.yaml \
+    "$@"
+}
+
+cleanup() {
+  if test -n "$temporary_backup" && test -f "$temporary_backup"; then
+    rm -f "$temporary_backup"
+  fi
+}
+
+trap cleanup EXIT HUP INT TERM
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo 'Docker is required. Start Docker Desktop and try again.' >&2
+  exit 1
+fi
+
+if test ! -f .env; then
+  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  exit 1
+fi
+
+dc config --quiet
+
+if ! dc ps --status running --services db | grep -qx db; then
+  echo 'The local database is not running. Run npm run dev:start, then try again.' >&2
+  exit 1
+fi
+
+umask 077
+mkdir -p "$backup_parent" "$backup_directory"
+chmod 0700 "$backup_parent" "$backup_directory"
+
+if test -e "$backup_file" || test -e "$checksum_file"; then
+  echo "A backup already exists for timestamp $timestamp. Try again in one second." >&2
+  exit 1
+fi
+
+temporary_backup=$(mktemp "$backup_directory/.jaysylvester-$timestamp.XXXXXX")
+chmod 0600 "$temporary_backup"
+
+echo 'Creating PostgreSQL backup...'
+dc exec -T db sh -c \
+  'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" --format=custom --no-owner --no-privileges' \
+  > "$temporary_backup"
+
+if test ! -s "$temporary_backup"; then
+  echo 'PostgreSQL produced an empty backup.' >&2
+  exit 1
+fi
+
+echo 'Verifying backup archive...'
+dc exec -T db pg_restore --list < "$temporary_backup" >/dev/null
+
+mv "$temporary_backup" "$backup_file"
+temporary_backup=
+shasum -a 256 "$backup_file" > "$checksum_file"
+chmod 0600 "$backup_file" "$checksum_file"
+
+echo "Backup: $backup_file"
+echo "Checksum: $checksum_file"

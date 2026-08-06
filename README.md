@@ -41,7 +41,7 @@ cp .env.example .env
 chmod 600 .env
 ```
 
-Git does not supply credentials, certificates, or database data. Populate `.env` from the protected Citizen 1.x configuration using the mapping in [docs/migrations/citizen-2.md](docs/migrations/citizen-2.md). Preserve the existing values. Before starting PostgreSQL for the first time, inventory the source PostgreSQL major, encoding, collation, and character type; select the tested `POSTGRES_IMAGE` and set `POSTGRES_INITDB_ARGS` accordingly.
+Git does not supply credentials, certificates, or database data. Populate `.env` from the protected Citizen 1.x configuration using the mapping in [docs/migrations/citizen-2.md](docs/migrations/citizen-2.md). Preserve the existing values. Before starting PostgreSQL for the first time, inventory the source PostgreSQL major, encoding, collation, character type, and timezone; select the tested `POSTGRES_IMAGE`, set `POSTGRES_INITDB_ARGS`, and set `POSTGRES_TIMEZONE` accordingly.
 
 Obtain the authoritative custom-format dump outside this checkout and verify its checksum and archive:
 
@@ -69,25 +69,53 @@ The commands read the database name and user already mapped into the `db` contai
 
 ### Start, verify, and stop
 
-`local-up` checks or creates the ignored `mkcert` leaf certificate, then starts the stack:
+When host npm is available, the friendly development commands check or create
+the ignored `mkcert` leaf certificate and manage the local stack:
 
 ```sh
-./scripts/local-up --build
-./scripts/smoke-test https://dev.jaysylvester.com
+npm run dev:build
+npm run dev:test
 ```
+
+Host Node is optional. The equivalent Node-free startup command is
+`./scripts/local-up --build`, and the smoke test is available directly as
+`./scripts/smoke-test https://dev.jaysylvester.com`.
 
 Open <https://dev.jaysylvester.com>. The certificate covers `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. Its private key is local-only and is never the mkcert CA key.
 
 Useful commands:
 
 ```sh
-dc() { docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml "$@"; }
-dc ps
-dc logs -f app proxy assets
-dc down
+npm run dev:start
+npm run dev:stop
+npm run dev:restart
+npm run dev:destroy
+npm run dev:db:backup
+npm run dev:db:restore -- /absolute/path/to/backup.dump
+npm run dev:status
+npm run dev:logs
+npm run dev:test
 ```
 
-Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local database credentials. PostgreSQL is published only on loopback, and its data survives `dc down`.
+`dev:stop` keeps the containers for a fast next start. `dev:destroy` removes the
+containers and project network but preserves the PostgreSQL data and logs.
+
+`dev:db:backup` requires the local database to be running. It creates a
+timestamped, custom-format PostgreSQL archive and SHA-256 checksum under the
+protected `~/Documents/jaysylvester-docker-migration-local/backups/` directory.
+The command writes through a mode `0600` temporary file, verifies the archive,
+and publishes it only after verification succeeds. The backup directory remains
+mode `0700`.
+
+`dev:db:restore` accepts one explicit archive path, validates it before changing
+the database, and requires `RESTORE` confirmation in an interactive terminal.
+The restore uses a single transaction, temporarily stops running app and proxy
+services, and returns those services and PostgreSQL to their previous running
+state. Archives must remain outside Docker so deleting the named volume cannot
+delete its backups. The original VM dump is only the migration baseline; use
+fresh backups to preserve later local changes.
+
+Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local database credentials. PostgreSQL is published only on loopback, and its data survives both `npm run dev:stop` and `npm run dev:destroy`.
 
 ### Configuration and file watching
 
@@ -95,12 +123,16 @@ Citizen resolves framework configuration when it is imported. Compose injects th
 
 The local app and Gulp watchers use polling for Docker Desktop. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. BrowserSync ports 3000 and 8282 and the Postico port are loopback-only.
 
+Citizen's local file logs are written to the ignored root-level `logs/`
+directory, so `logs/email.log` and `logs/error.log` are directly available in
+the editor. Production continues to use its persistent Docker log volume.
+
 After changing `.env`, recreate `app` so Compose injects the new environment, then recreate `proxy` so Nginx resolves the current app container:
 
 ```sh
 dc up -d --no-deps --force-recreate app
 dc up -d --no-deps --force-recreate proxy
-./scripts/smoke-test https://dev.jaysylvester.com
+npm run dev:test
 ```
 
 ## Production during Phase 1
