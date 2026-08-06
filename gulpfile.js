@@ -72,7 +72,7 @@ gulp.task('watch', function (done) {
   gulp.watch('app/controllers/**', watchOptions, gulp.parallel('reload'))
   gulp.watch('app/models/**', watchOptions, gulp.parallel('reload'))
   gulp.watch('app/views/**', watchOptions, gulp.parallel('reload'))
-  gulp.watch('app/toolbox/**', watchOptions, gulp.parallel('reload'))
+  gulp.watch('app/helpers/**', watchOptions, gulp.parallel('reload'))
   done()
 })
 

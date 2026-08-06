@@ -12,10 +12,7 @@ services:
       CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING: ${CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING:-true}
       CITIZEN_DEVELOPMENT__WATCHER__INTERVAL: ${CITIZEN_DEVELOPMENT__WATCHER__INTERVAL:-500}
     volumes:
-      - ./app/controllers:/site/app/controllers
-      - ./app/models:/site/app/models
-      - ./app/views:/site/app/views
-      - ./app/toolbox:/site/app/toolbox
+      - ./app:/site/app
       - ./logs:/site/logs
       - ./web:/site/web
 
@@ -44,9 +41,6 @@ services:
       - "127.0.0.1:8282:8282"
     user: "10001:10001"
     volumes:
-      - ./app/controllers:/site/app/controllers
-      - ./app/models:/site/app/models
-      - ./app/views:/site/app/views
-      - ./app/toolbox:/site/app/toolbox
+      - ./app:/site/app
       - ./web:/site/web
       - ./docker/local-certs:/site/docker/local-certs:ro

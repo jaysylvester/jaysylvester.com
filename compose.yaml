@@ -27,16 +27,6 @@ services:
       - .env
     expose:
       - "8080"
-    healthcheck:
-      test:
-        - CMD
-        - node
-        - -e
-        - fetch('http://127.0.0.1:8080/').then(r=>{if(!r.ok)throw new Error(String(r.status))})
-      interval: 10s
-      timeout: 5s
-      retries: 12
-      start_period: 10s
     init: true
     user: "10001:10001"
     volumes:
@@ -50,16 +40,10 @@ services:
         NGINX_CONFIG: local.conf
     depends_on:
       app:
-        condition: service_healthy
+        condition: service_started
     expose:
       - "80"
       - "443"
-    healthcheck:
-      test: ["CMD", "wget", "--no-check-certificate", "--quiet", "--spider", "https://127.0.0.1/"]
-      interval: 10s
-      timeout: 5s
-      retries: 6
-
 volumes:
   app-logs:
     name: ${COMPOSE_PROJECT_NAME}-logs

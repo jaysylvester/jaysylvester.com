@@ -3,8 +3,6 @@
 // node
 import fs           from 'fs'
 import path         from 'path'
-// local
-import * as helpers from './toolbox/helpers.js'
 // third party
 import citizen      from 'citizen'
 import consolidate  from '@ladjs/consolidate'
@@ -27,7 +25,6 @@ let cacheBuster = {
 }
 
 app.toolbox = {
-  helpers: helpers,
   // Third party modules
   cacheBuster: cacheBuster,
   mail: {
@@ -55,17 +52,17 @@ app.toolbox.pg.types.setTypeParser(1114, function (stringValue) {
 })
 // Create a connection pool
 app.toolbox.dbPool = new app.toolbox.pg.Pool({
-  host:                    helpers.requiredEnvironment('DB_HOST'),
-  port:                    Number(helpers.requiredEnvironment('DB_PORT')),
-  database:                helpers.requiredEnvironment('DB_DATABASE'),
-  user:                    helpers.requiredEnvironment('DB_USER'),
-  password:                helpers.requiredEnvironment('DB_PASSWORD'),
-  max:                     Number(helpers.requiredEnvironment('DB_MAX')),
-  connectionTimeoutMillis: Number(helpers.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS'))
+  host:                    app.helpers.utility.requiredEnvironment('DB_HOST'),
+  port:                    Number(app.helpers.utility.requiredEnvironment('DB_PORT')),
+  database:                app.helpers.utility.requiredEnvironment('DB_DATABASE'),
+  user:                    app.helpers.utility.requiredEnvironment('DB_USER'),
+  password:                app.helpers.utility.requiredEnvironment('DB_PASSWORD'),
+  max:                     Number(app.helpers.utility.requiredEnvironment('DB_MAX')),
+  connectionTimeoutMillis: Number(app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS'))
 })
 // Log errors in the connection pool
 app.toolbox.dbPool.on('error', function (err) {
-  app.helpers.log({
+  app.log({
     type: 'error',
     label: 'Database pool error',
     contents: err
