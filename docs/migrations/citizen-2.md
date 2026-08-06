@@ -1,6 +1,8 @@
 # Citizen 1.x to 2.0 migration record
 
-Status: Phase 1 repository implementation and local Docker acceptance complete; optional Postico confirmation and the production host cutover remain.
+Status: Phase 1 repository implementation and local Docker acceptance complete;
+optional Postico confirmation and the production host cutover remain. The
+shared local VM remains until its other projects have been migrated.
 
 ## Framework source
 
@@ -52,6 +54,7 @@ No controller-level CORS configuration is needed. Citizen merges optional contro
 - The old startup object carried application-owned cache-buster values, which Citizen 2.0 rejects. Those values now live under `app.toolbox.cacheBuster` and are passed to the existing `_head` view as local controller data.
 - Legacy JSON configuration is excluded from every image and from the limited local bind mounts. Protected host copies must be archived outside the active checkout before host startup testing.
 - Gulp reads local certificate paths and host settings from its restricted process environment and uses polling for every watcher.
+- Local Compose overrides the production log volume with the ignored repository-root `logs/` bind mount so development email/error output is readable in the editor. Citizen creates its log directory when it first needs to write; no tracked `.gitkeep` or startup directory shim is required.
 
 ## Upstream behavior relied on
 
@@ -68,7 +71,7 @@ Global CORS support was added upstream in commit `49476d1102672d12696d1fa96bc239
 
 ## Verification results
 
-Verified on 2026-08-05:
+Verified from 2026-08-05 through 2026-08-06:
 
 | Check | Result |
 | --- | --- |
@@ -85,6 +88,10 @@ Verified on 2026-08-05:
 | Local HTTPS, route/CORS, proxy, and watcher automation | Pass over an explicit loopback resolution using the generated mkcert CA: six routes, CORS preflight, HTTP redirect, static gzip/cache headers, Nginx forwarding, Citizen polling, Gulp rebuild, and BrowserSync reload. The generated bundle diff from the watcher test was reviewed and restored rather than committed. |
 | Local system trust and hosts cutover | Pass: the mkcert CA is trusted in the macOS system keychain, `dev.jaysylvester.com` resolves to `127.0.0.1`, and the standard smoke script passes without `--insecure` or a custom CA argument. |
 | Local development contact flow | Pass after replacing the stale, undocumented `app.helpers.log()` call with the released Citizen 1.x/2.0 `app.log()` API; the form redirected to confirmation and wrote exactly two unsent development messages. |
+| Docker environment loading message | Pass: Citizen reports `No .env found.` because `/site/.env` is intentionally absent, then reports 8 applied `CITIZEN_*` process variables injected by Compose. Database and mail behavior confirms the application-owned variables are also present. |
+| Editor-visible local logs | Pass: the ignored checkout `logs/` bind mount exposes `email.log` and `error.log` directly to the editor while production retains its named log volume. No `.gitkeep`, volume extraction, or root shell is required. |
+| Local lifecycle semantics | Pass: `dev:stop` retains stopped containers for fast reuse, `dev:destroy` removes containers/network without `--volumes`, `dev:status` includes stopped containers, and the PostgreSQL named volume persists across both paths. |
+| Local logical backup and recovery drill | Pass: a custom-format backup and SHA-256 checksum were published outside Docker with parent/directory mode `0700` and file mode `0600`; archive validation passed, and an isolated Compose project restored the expected `case_studies`, `screens`, and `work_history` row counts (`7`, `59`, `12`) before its test-only volume was removed. The accepted local volume was not overwritten. |
 | Interactive browser acceptance | Pass: manually confirmed normal rendering through trusted `https://dev.jaysylvester.com`. BrowserSync's trusted client endpoint and loopback-only UI endpoint also pass automated checks. |
 | Postico acceptance | Optional manual confirmation remains; PostgreSQL is published only on `127.0.0.1:5432`, and both the application connection and direct container queries pass. |
 | Production Node 24/Citizen 2.0 host cutover | Pending production inventory, snapshot, and maintenance window |
@@ -94,12 +101,18 @@ Verified on 2026-08-05:
 ## Reusable lessons
 
 - Import timing matters: Citizen resolves environment configuration before application startup code runs.
+- Compose interpolation and container environment injection are separate from Citizen's optional dotenv file load. An expected `No .env found.` line does not mean variables are absent when the subsequent applied-variable log and application behavior prove injection.
 - Do not use `app.start()` as an application configuration channel in Citizen 2.0; move application-owned runtime data to its actual consumer.
+- Verify suspicious framework calls against released Citizen 1.x documentation and the locked 2.0 source before classifying them as migration breaks. The stale `app.helpers.log()` call was not a Citizen 2.0 change; `app.log()` is documented in both released major lines.
 - Preserve the direct HTTPS dependency string as well as the exact commit in the lockfile. Some npm GitHub shorthand normalization chooses an SSH resolved URL, which is unsuitable for unauthenticated container builds.
 - Mount only editable source subdirectories locally. Mounting the repository root hides Linux `node_modules`; mounting all of `app/` can expose protected legacy JSON and correctly make Citizen refuse startup.
 - Bind-mount the ignored root-level `logs/` directory to `/site/logs` locally so development email and error logs remain directly accessible in the editor; retain the named log volume for production persistence.
+- Citizen creates a missing logs directory immediately before writing. Do not add `.gitkeep` or redundant startup directory creation unless a different application/framework actually requires it.
 - Keep the database service's environment narrow. Compose interpolation maps only the four PostgreSQL initialization values plus the non-secret timezone; mail and other application secrets are not injected into `db` or `assets`.
 - Inventory the source server timezone as well as encoding and locale. The official PostgreSQL container otherwise initialized in UTC; mapping the non-secret `POSTGRES_TIMEZONE` to `TZ` before `initdb` preserved the source behavior.
 - PostgreSQL 17 exposes the database collation and character type through `pg_database.datcollate` and `pg_database.datctype`; the PostgreSQL 13 `SHOW lc_collate`/`SHOW lc_ctype` checks are not portable to that target.
 - Recreate Nginx after recreating the app because its workers may retain the removed container's resolved IP.
 - Compare the effective legacy proxy during operational inventory. That check restored the local VM's gzip, 30-day static expiry, and static access-log behavior before acceptance.
+- The migration dump is a one-time restore source, not a Compose startup input. Normal starts use PostgreSQL's named volume; `docker compose down` preserves it, while `down --volumes` or `docker volume rm` deletes it.
+- Use PostgreSQL logical custom-format backups outside Docker as the primary local recovery path. Publish only after `pg_restore --list` succeeds, checksum them, protect them with `0700`/`0600` modes, and prove the restore against a separately named disposable project/volume rather than the accepted database.
+- Give `stop` and `destroy` different developer-facing meanings: normal stop retains containers for speed; destroy removes containers/network but not volumes. Keep volume deletion out of both friendly commands.
