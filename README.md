@@ -1,6 +1,6 @@
 # jaysylvester.com
 
-Jay Sylvester's personal site, built with Citizen 2.0. Local development uses Docker Compose for Node.js, PostgreSQL, Nginx, Gulp, and BrowserSync; no host Node installation is required.
+Jay Sylvester's personal site, built with Citizen 2.0. Development uses Docker Compose for Node.js, PostgreSQL, Nginx, Gulp, and BrowserSync; no host Node installation is required.
 
 ## macOS development (supported)
 
@@ -18,7 +18,7 @@ docker version
 docker compose version
 ```
 
-Add the local hostname to `/etc/hosts`:
+Add the development hostname to `/etc/hosts`:
 
 ```text
 127.0.0.1 dev.jaysylvester.com
@@ -50,10 +50,10 @@ shasum -a 256 -c jaysylvester.dump.sha256
 pg_restore --list jaysylvester.dump >/dev/null
 ```
 
-The local Compose project is `jaysylvester-local`; its database volume is `jaysylvester-local-postgres`. Do not create that final volume until the PostgreSQL image and locale have been rehearsed.
+The development Compose project is `jaysylvester-dev`; its database volume is `jaysylvester-dev-postgres`. Do not create that final volume until the PostgreSQL image and locale have been rehearsed.
 
 ```sh
-dc() { docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml "$@"; }
+dc() { docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml "$@"; }
 
 dc config --quiet
 dc up -d db
@@ -70,7 +70,7 @@ The commands read the database name and user already mapped into the `db` contai
 ### Start, verify, and stop
 
 When host npm is available, the friendly development commands check or create
-the ignored `mkcert` leaf certificate and manage the local stack:
+the ignored `mkcert` leaf certificate and manage the development stack:
 
 ```sh
 npm run dev:build
@@ -78,10 +78,10 @@ npm run dev:test
 ```
 
 Host Node is optional. The equivalent Node-free startup command is
-`./scripts/local-up --build`, and the smoke test is available directly as
+`./scripts/dev-up --build`, and the smoke test is available directly as
 `./scripts/smoke-test https://dev.jaysylvester.com`.
 
-Open <https://dev.jaysylvester.com>. The certificate covers `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. Its private key is local-only and is never the mkcert CA key.
+Open <https://dev.jaysylvester.com>. The certificate covers `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. Its private key is development-only and is never the mkcert CA key.
 
 Useful commands:
 
@@ -100,9 +100,9 @@ npm run dev:test
 `dev:stop` keeps the containers for a fast next start. `dev:destroy` removes the
 containers and project network but preserves the PostgreSQL data and logs.
 
-`dev:db:backup` requires the local database to be running. It creates a
+`dev:db:backup` requires the development database to be running. It creates a
 timestamped, custom-format PostgreSQL archive and SHA-256 checksum under the
-protected `~/Documents/jaysylvester-docker-migration-local/backups/` directory.
+protected `REPLACE_ME_PROTECTED_DEVELOPMENT_BACKUP_DIRECTORY/` directory.
 The command writes through a mode `0600` temporary file, verifies the archive,
 and publishes it only after verification succeeds. The backup directory remains
 mode `0700`.
@@ -113,17 +113,17 @@ The restore uses a single transaction, temporarily stops running app and proxy
 services, and returns those services and PostgreSQL to their previous running
 state. Archives must remain outside Docker so deleting the named volume cannot
 delete its backups. The original VM dump is only the migration baseline; use
-fresh backups to preserve later local changes.
+fresh backups to preserve later development changes.
 
-Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local database credentials. PostgreSQL and the local HTTP/HTTPS proxy are published only on loopback, and database data survives both `npm run dev:stop` and `npm run dev:destroy`.
+Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing development database credentials. PostgreSQL and the development HTTP/HTTPS proxy are published only on loopback, and database data survives both `npm run dev:stop` and `npm run dev:destroy`.
 
 ### Configuration and file watching
 
 Citizen resolves framework configuration when it is imported. Compose uses the ignored project-root `.env` for interpolation, explicitly injects non-secret application settings, and mounts `DB_PASSWORD` and `MAIL_AUTH_PASS` as service-scoped files under `/run/secrets`. `CITIZEN_*` settings, including the JSON `CITIZEN_CORS` policy, become typed values under `app.config`; other database and mail settings remain strings read from `process.env`. No `app/config/*.json` file may be active.
 
-The local app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. Proxy ports 80 and 443, BrowserSync ports 3000 and 8282, and the Postico port are loopback-only.
+The development app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. Proxy ports 80 and 443, BrowserSync ports 3000 and 8282, and the Postico port are loopback-only.
 
-Citizen's local file logs are written to the ignored root-level `logs/`
+Citizen's development file logs are written to the ignored root-level `logs/`
 directory, so `logs/email.log` and `logs/error.log` are directly available in
 the editor. Production continues to use its persistent Docker log volume.
 
@@ -137,7 +137,7 @@ npm run dev:test
 
 ## Production during Phase 1
 
-Production remains host-based during the interval before Phase 2: Node.js 24 and Citizen 2.0 run the application, while Nginx, PostgreSQL, and Certbot remain host services. The protected production `.env` retains the inventoried loopback Citizen binding and `DB_HOST=127.0.0.1`; it must not use the local Docker endpoints.
+Production remains host-based during the interval before Phase 2: Node.js 24 and Citizen 2.0 run the application, while Nginx, PostgreSQL, and Certbot remain host services. The protected production `.env` retains the inventoried loopback Citizen binding and `DB_HOST=127.0.0.1`; it must not use the development Docker endpoints.
 
 Deploy application changes with the recorded production branch and systemd service:
 
@@ -153,7 +153,7 @@ curl -fsS https://jaysylvester.com/ >/dev/null
 
 Ordinary deployments use the Citizen commit already recorded in `package-lock.json`. To consume a newer commit from `2.0-env-file-config-revised`, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh this lockfile, and update the migration record.
 
-Phase 2 will add the Debian production Compose overlay, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. Until then, do not use the local Compose files to replace production host services.
+Phase 2 will add the Debian production Compose overlay, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. Until then, do not use the development Compose files to replace production host services.
 
 ## Future Linux development hosts (untested)
 

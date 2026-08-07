@@ -8,15 +8,15 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 
 if test ! -f .env; then
-  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
   exit 1
 fi
 
-./scripts/local-cert
+./scripts/dev-cert
 
 exec docker compose \
   --env-file .env \
-  -p jaysylvester-local \
+  -p jaysylvester-dev \
   -f compose.yaml \
-  -f compose.local.yaml \
+  -f compose.dev.yaml \
   up -d "$@"

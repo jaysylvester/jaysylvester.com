@@ -2,7 +2,7 @@
 
 set -eu
 
-cert_directory=docker/local-certs
+cert_directory=docker/dev-certs
 certificate=$cert_directory/dev-cert.pem
 private_key=$cert_directory/dev-key.pem
 
@@ -28,7 +28,7 @@ certificate_is_valid() {
 
 if certificate_is_valid; then
   chmod 0644 "$certificate" "$private_key"
-  echo "Local certificate is valid: $certificate"
+  echo "Development certificate is valid: $certificate"
   exit 0
 fi
 
@@ -38,7 +38,7 @@ mkcert \
   -key-file "$private_key" \
   dev.jaysylvester.com localhost 127.0.0.1 ::1
 
-# Both Nginx and the fixed non-root assets container must read this local-only
+# Both Nginx and the fixed non-root assets container must read this development
 # leaf key through Docker Desktop's bind mount.
 chmod 0644 "$certificate" "$private_key"
 
@@ -47,4 +47,4 @@ if ! certificate_is_valid; then
   exit 1
 fi
 
-echo "Created local certificate: $certificate"
+echo "Created development certificate: $certificate"

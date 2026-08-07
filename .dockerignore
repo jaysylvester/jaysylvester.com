@@ -5,7 +5,7 @@
 !.env.example
 _dev-certs
 app/config
-docker/local-certs
+docker/dev-certs
 docs
 logs
 node_modules

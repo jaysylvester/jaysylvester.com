@@ -16,15 +16,15 @@
   "scripts": {
     "assets:build": "gulp all",
     "assets:watch": "gulp",
-    "dev:build": "./scripts/local-up --build",
-    "dev:db:backup": "./scripts/local-db-backup",
-    "dev:db:restore": "./scripts/local-db-restore",
-    "dev:destroy": "docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml down",
-    "dev:logs": "docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml logs -f app proxy assets db",
+    "dev:build": "./scripts/dev-up --build",
+    "dev:db:backup": "./scripts/dev-db-backup",
+    "dev:db:restore": "./scripts/dev-db-restore",
+    "dev:destroy": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml down",
+    "dev:logs": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml logs -f app proxy assets db",
     "dev:restart": "npm run dev:stop && npm run dev:start",
-    "dev:start": "./scripts/local-up",
-    "dev:status": "docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml ps --all",
-    "dev:stop": "docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml stop",
+    "dev:start": "./scripts/dev-up",
+    "dev:status": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml ps --all",
+    "dev:stop": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml stop",
     "dev:test": "./scripts/smoke-test https://dev.jaysylvester.com"
   },
   "dependencies": {

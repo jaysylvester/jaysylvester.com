@@ -1,15 +1,15 @@
 # Docker and Citizen 2.0 Migration Plan
 
-Status: Phase 1 repository implementation and local Docker acceptance completed
-2026-08-06. Optional local Postico confirmation and the Phase 1 production host
-cutover remain; the shared local VM cannot be retired until its other projects
+Status: Phase 1 repository implementation and development Docker acceptance completed
+2026-08-07. Optional development Postico confirmation and the Phase 1 production host
+cutover remain; the shared development VM cannot be retired until its other projects
 are migrated; Phase 2 production Docker work has not started.
 
 Target: migrate this application to Citizen 2.0 from its Git branch and run the same Docker Compose architecture on a macOS development workstation and the Debian DigitalOcean production droplet.
 
 ## 1. Outcome
 
-Upgrade the application from Citizen 1.x to Citizen 2.0, then replace the project's local VM and the production host-installed Node, PostgreSQL, and Nginx runtimes with Docker Compose. This project is the first end-to-end consumer of Citizen 2.0's environment configuration and will produce a focused migration record for later Citizen projects.
+Upgrade the application from Citizen 1.x to Citizen 2.0, then replace the project's development VM and the production host-installed Node, PostgreSQL, and Nginx runtimes with Docker Compose. This project is the first end-to-end consumer of Citizen 2.0's environment configuration and will produce a focused migration record for later Citizen projects.
 
 ```text
 Browser
@@ -29,21 +29,21 @@ named PostgreSQL volume
 
 The result must provide:
 
-- Local development on macOS with Docker Desktop and no project-specific VM.
+- Development on macOS with Docker Desktop and no project-specific VM.
 - Production on the existing Debian DigitalOcean droplet with Docker Engine.
 - Citizen 2.0 on Node.js 24 LTS, with Citizen installed directly over HTTPS from `jaysylvester/citizen#2.0-env-file-config-revised` and the resolved Git commit recorded in `package-lock.json`.
 - Environment-based framework and application configuration with no active Citizen JSON files.
-- Separate local and production configuration, databases, certificates, and volumes.
+- Separate development and production configuration, databases, certificates, and volumes.
 - Direct migration from each environment's live PostgreSQL database.
-- Local HTTPS through `mkcert`, without copying certificates from the VM.
+- Development HTTPS through `mkcert`, without copying certificates from the VM.
 - Production HTTPS through the existing Let's Encrypt certificate and host Certbot renewal.
 - Preservation of the effective production Nginx routes and redirects.
 - A clone/bootstrap README for macOS, with clearly labeled guidance for future Linux and Windows hosts.
-- Friendly local lifecycle commands that distinguish stopping retained containers from destroying containers while preserving volumes.
-- Editor-visible local Citizen logs and a verified, developer-invoked PostgreSQL backup/restore path whose archives live outside Docker.
+- Friendly development lifecycle commands that distinguish stopping retained containers from destroying containers while preserving volumes.
+- Editor-visible development Citizen logs and a verified, developer-invoked PostgreSQL backup/restore path whose archives live outside Docker.
 - Removal of the retired host Nginx, PostgreSQL, and Node runtimes after production acceptance.
 
-Execute the migration in two separately accepted phases. Phase 1 moves local development to Docker and upgrades the application to Citizen 2.0 in both environments, while production continues using its host-installed Nginx, PostgreSQL, and Certbot. Phase 2 begins only after that application baseline is proven and moves the Debian production infrastructure to Docker. Production deployment remains SSH to the droplet and `git pull` in both phases; only the post-pull runtime commands change when production adopts Compose. DNS and the DigitalOcean server do not change.
+Execute the migration in two separately accepted phases. Phase 1 moves development to Docker and upgrades the application to Citizen 2.0 in both environments, while production continues using its host-installed Nginx, PostgreSQL, and Certbot. Phase 2 begins only after that application baseline is proven and moves the Debian production infrastructure to Docker. Production deployment remains SSH to the droplet and `git pull` in both phases; only the post-pull runtime commands change when production adopts Compose. DNS and the DigitalOcean server do not change.
 
 ## 2. Scope Boundaries
 
@@ -54,12 +54,12 @@ Execute the migration in two separately accepted phases. Phase 1 moves local dev
 - Execution of Citizen's own test suite at the exact branch commit consumed by this project.
 - A concise, reusable Citizen 2.0 migration record containing mappings, problems found, upstream fixes, and verification results for later projects.
 - A development override and a production override.
-- Migration of the existing local and production databases with `pg_dump` and `pg_restore`.
+- Migration of the existing development and production databases with `pg_dump` and `pg_restore`.
 - Classification and conversion of each environment's existing ignored Citizen JSON, followed by recoverable archival outside the active Citizen 2.0 application.
-- Local and production cutover, validation, rollback, and one-time cleanup commands.
+- Development and production cutover, validation, rollback, and one-time cleanup commands.
 - Postico endpoint changes.
-- Replacement of the current BrowserSync certificate-copy workflow with generated local certificates.
-- Developer-invoked local PostgreSQL backup and guarded restore commands, including an isolated restore drill.
+- Replacement of the current BrowserSync certificate-copy workflow with generated development certificates.
+- Developer-invoked development PostgreSQL backup and guarded restore commands, including an isolated restore drill.
 
 ### Excluded
 
@@ -69,7 +69,7 @@ Execute the migration in two separately accepted phases. Phase 1 moves local dev
 - A shared proxy or port registry for other projects.
 - Containerized Certbot in this migration.
 - Zero-downtime production migration; a maintenance window is acceptable.
-- Scheduled backups, retention automation, remote replication, or a general disaster-recovery system. The focused local logical backup/restore commands added during acceptance are included.
+- Scheduled backups, retention automation, remote replication, or a general disaster-recovery system. The focused development logical backup/restore commands added during acceptance are included.
 - General server hardening, monitoring, CI/CD, orchestration, horizontal scaling, or disaster-recovery projects.
 - A generalized Citizen codemod or migration service. This project records evidence for that later work but does not build tooling for every Citizen application.
 
@@ -83,12 +83,12 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 
 - Citizen resolves configuration when `citizen` is imported, before `app.start()`.
 - Citizen optionally loads exactly the project-root `.env`, found as the parent of the configured application directory; values already present in `process.env` take precedence.
-- Each checkout has its own ignored project-root `.env`: local values on the Mac and production values on the Droplet. During Phase 1, host production lets Citizen load that file natively. Docker Compose uses the same file for interpolation, explicitly injects only non-secret application settings, and exposes `DB_PASSWORD` and `MAIL_AUTH_PASS` to authorized services as files under `/run/secrets`. It does not copy or bind-mount the `.env` file into an image or container filesystem.
+- Each checkout has its own ignored project-root `.env`: development values on the Mac and production values on the Droplet. During Phase 1, host production lets Citizen load that file natively. Docker Compose uses the same file for interpolation, explicitly injects only non-secret application settings, and exposes `DB_PASSWORD` and `MAIL_AUTH_PASS` to authorized services as files under `/run/secrets`. It does not copy or bind-mount the `.env` file into an image or container filesystem.
 - In Docker, Citizen can therefore log `No .env found.` and then report the applied `CITIZEN_*` process variables. That pair is expected: the first message describes the absent container file, not a failure of Compose injection. Acceptance must verify the applied variables and effective behavior rather than treating the first line alone as an error.
 - Only `CITIZEN_*` variables are validated, coerced, and copied into the flat framework configuration under `app.config`.
 - Non-secret application-owned database and mail variables remain strings in `process.env`. Read them directly at the existing consumers and coerce numeric values where required. In Docker, read database and mail passwords from their Compose secret files; retain environment fallback only for the temporarily non-containerized Phase 1 production host. Do not log secrets. The global CORS policy is framework-owned and supplied as a JSON object through `CITIZEN_CORS`.
 - `app.start()` accepts no arguments.
-- Any `app/config/*.json` file causes Citizen 2.0 startup to fail. Legacy JSON files remain protected migration inputs or rollback artifacts only, must be excluded from every image, and must be removed from the active checkout before local startup.
+- Any `app/config/*.json` file causes Citizen 2.0 startup to fail. Legacy JSON files remain protected migration inputs or rollback artifacts only, must be excluded from every image, and must be removed from the active checkout before development startup.
 - `CITIZEN_DIRECTORIES__APP` is process-only. This layout does not need to override it because the image preserves Citizen's expected sibling layout:
 
 ```text
@@ -100,16 +100,16 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 
 - `app/start.js` and `app/start-dev.js` read `web/min/site.css` and `web/min/site.js` during startup. Both files must exist in the app image, and their paths must change from `app.config.citizen.directories.app` to `app.config.directories.app`.
 - Production Citizen logging needs a writable persistent `/site/logs` mount.
-- Local development uses `app/start-dev.js` and explicitly sets `CITIZEN_MODE=development`; production uses `app/start.js` and `CITIZEN_MODE=production`.
+- Development uses `app/start-dev.js` and explicitly sets `CITIZEN_MODE=development`; production uses `app/start.js` and `CITIZEN_MODE=production`.
 - File watching through Docker Desktop must use polling for both Citizen and Gulp.
-- The Citizen branch state reviewed on 2026-08-05 supports scoped Chokidar polling through `CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING` and `CITIZEN_DEVELOPMENT__WATCHER__INTERVAL`. Use those framework settings locally instead of Chokidar's process-global `CHOKIDAR_*` overrides. Do not set them in production, where no source tree is bind-mounted or watched for hot module replacement.
+- The Citizen branch state reviewed on 2026-08-05 supports scoped Chokidar polling through `CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING` and `CITIZEN_DEVELOPMENT__WATCHER__INTERVAL`. Use those framework settings in development instead of Chokidar's process-global `CHOKIDAR_*` overrides. Do not set them in production, where no source tree is bind-mounted or watched for hot module replacement.
 - Do not run continuous app or proxy HTTP health checks merely to populate Docker health status. They generated two synthetic Citizen requests every ten seconds in development, produced misleading Nginx child-process notices, and had no configured recovery or alerting consumer. Keep the quiet PostgreSQL readiness check for app startup ordering and use the explicit smoke test for end-to-end HTTP acceptance.
 - Do not add continuous app/proxy probes in production by default. Add a production probe only with a concrete consumer and response policy, such as external alerting or orchestration that will act on the result; prefer an external public-path monitor when the goal is to cover DNS, TLS, Nginx, Citizen, and the database together.
 - Citizen 2.0 reads the standardized `Forwarded` header and also falls back to the existing `X-Forwarded-For`, `X-Forwarded-Host`, and `X-Forwarded-Proto` headers. Verify correct HTTPS/host/client metadata during the Phase 1 host cutover; prefer the documented standardized header in new container Nginx without treating it as a prerequisite for host production when the existing headers pass.
 
 ### Docker environment design
 
-Use one ignored project-root `.env` in each deployment checkout. The local and production files share a name but live on different hosts and contain their own values:
+Use one ignored project-root `.env` in each deployment checkout. The development and production files share a name but live on different hosts and contain their own values:
 
 - `CITIZEN_*` framework settings.
 - Application-owned `DB_*` and `MAIL_*` settings, plus the framework-owned `CITIZEN_CORS` JSON policy.
@@ -133,16 +133,16 @@ Implement and commit these Phase 1 artifacts on `docker-citizen2-migration`:
 
 - `Dockerfile` with Node.js 24 development and production targets.
 - `.dockerignore`.
-- `.gitignore` updated to track `package-lock.json` and ignore the project-root `.env` and generated local certificates.
+- `.gitignore` updated to track `package-lock.json` and ignore the project-root `.env` and generated development certificates.
 - `compose.yaml` for common `db`, `app`, and `proxy` services.
-- `compose.local.yaml` for macOS development.
-- `docker/nginx/Dockerfile` and local Nginx configuration.
+- `compose.dev.yaml` for macOS development.
+- `docker/nginx/Dockerfile` and development Nginx configuration.
 - Project-root `.env.example`, sanitized and containing Citizen, application, and Docker/PostgreSQL initialization placeholders.
-- `scripts/local-cert` to create/check the local `mkcert` certificate.
-- `scripts/local-up` to run the certificate check and start local Compose.
-- `scripts/local-db-backup` to create and verify protected logical backups outside Docker.
-- `scripts/local-db-restore` to validate, confirm, and atomically restore one explicit archive while preserving prior service state.
-- `scripts/smoke-test` for the small set of existing local routes and CORS/preflight cases.
+- `scripts/dev-cert` to create/check the development `mkcert` certificate.
+- `scripts/dev-up` to run the certificate check and start development Compose.
+- `scripts/dev-db-backup` to create and verify protected logical backups outside Docker.
+- `scripts/dev-db-restore` to validate, confirm, and atomically restore one explicit archive while preserving prior service state.
+- `scripts/smoke-test` for the small set of existing development routes and CORS/preflight cases.
 - Friendly `package.json` scripts for build, start, stop, restart, destroy, status, logs, smoke testing, database backup, and database restore.
 - `package.json` updated for Node.js 24 and the direct Citizen branch dependency.
 - A tracked `package-lock.json`, with its existing `.gitignore` entry removed, resolving the reviewed Citizen branch commit so container installs can use `npm ci`.
@@ -162,19 +162,19 @@ Do not add generalized HTTP-manifest, `/proc` inspection, or permanent database-
 Keep ignored and untracked:
 
 - Project-root `.env` in every checkout.
-- `docker/local-certs/*`.
+- `docker/dev-certs/*`.
 - Database dumps, runtime log contents, and Let's Encrypt material.
 
 Use distinct Compose project names and database volumes:
 
 | Environment | Compose project | PostgreSQL volume |
 | --- | --- | --- |
-| Local | `jaysylvester-local` | `jaysylvester-local-postgres` |
+| Development | `jaysylvester-dev` | `jaysylvester-dev-postgres` |
 | Production | `jaysylvester-production` | `jaysylvester-production-postgres` |
 
 Both environment overrides may publish PostgreSQL as `127.0.0.1:5432:5432` for Postico. Never publish it on `0.0.0.0`.
 
-If another local project already owns ports 80, 443, or 5432, stop that project while working on this one or assign this project a different loopback-only database port. Designing shared workstation infrastructure is outside this plan.
+If another development project already owns ports 80, 443, or 5432, stop that project while working on this one or assign this project a different loopback-only database port. Designing shared workstation infrastructure is outside this plan.
 
 ## 5. Compose and Image Design
 
@@ -194,37 +194,37 @@ If another local project already owns ports 80, 443, or 5432, stop that project 
 - Build Node.js 24 development and production targets from the same Dockerfile and lockfile.
 - Install Citizen from `git+https://github.com/jaysylvester/citizen.git#2.0-env-file-config-revised`; the lockfile's resolved commit is the reproducible build input.
 - The dependency-install build stage needs Git and CA certificates to resolve the direct HTTPS dependency. Do not carry Git into the final runtime image solely for this purpose.
-- Run `node app/start-dev.js` locally and `node app/start.js` in production.
+- Run `node app/start-dev.js` in development and `node app/start.js` in production.
 - Convert framework settings to `CITIZEN_*` names and application settings to explicit `DB_*`/`MAIL_*` variables without changing their values.
 - Remove all arguments from both `app.start()` calls.
 - Replace `app.config.citizen.*` and view `config.citizen.*` references with Citizen 2.0's flat framework paths.
 - Replace `app.config.db` and `app.config.mail` consumers with explicit configuration reads at their existing use sites: non-secret values from `process.env`, Docker passwords from Compose secret files, and passwords from the existing environment fallback on the temporarily non-containerized Phase 1 production host. Coerce numeric database options with `Number(...)`.
-- Move application utility modules that predate Citizen's helper convention into `app/helpers/<module>.js` when they are semantically helpers, and consume them through `app.helpers.<module>`. Mount and watch that directory locally so Citizen supplies native discovery and hot module replacement. Do not confuse Citizen's top-level `app.log()` API with auto-discovered `app.helpers` modules.
+- Move application utility modules that predate Citizen's helper convention into `app/helpers/<module>.js` when they are semantically helpers, and consume them through `app.helpers.<module>`. Mount and watch that directory in development so Citizen supplies native discovery and hot module replacement. Do not confuse Citizen's top-level `app.log()` API with auto-discovered `app.helpers` modules.
 - Preserve the old global CORS behavior through Citizen 2.0's `CITIZEN_CORS` JSON object. Use controller/action overrides only for a reviewed route-specific difference.
 - Do not arbitrarily change pool sizes, mail settings, CORS behavior, or other application behavior.
 - Connect to PostgreSQL at `db:5432`.
 - Expose port 8080 only on the Compose network.
 - Retain the independent `pg_isready` database check because the app must not start before PostgreSQL accepts connections. Let proxy depend on app with `service_started`; do not continuously request an application route from either app or proxy.
-- Mount writable persistent logs. Use the named log volume in production, but override it locally with the ignored repository-root `logs/` bind mount so development email and error logs are visible in the editor.
-- Do not add a tracked `.gitkeep` or a startup-only `mkdir` solely for Citizen logs. Citizen creates a missing logs directory immediately before its first file write; the local bind mount also establishes the host path when Compose starts.
-- In the local override, bind-mount the whole checkout `app/` directory at `/site/app` and bind-mount `web/` separately. This keeps startup files and Citizen-managed source synchronized with the editor while leaving image-owned Linux dependencies visible at `/site/node_modules`. Never mount the repository root at `/site`. Keep legacy `app/config/*.json` outside the active checkout; if one is mistakenly reintroduced, Citizen should reject it visibly rather than Docker silently hiding it.
+- Mount writable persistent logs. Use the named log volume in production, but override it in development with the ignored repository-root `logs/` bind mount so development email and error logs are visible in the editor.
+- Do not add a tracked `.gitkeep` or a startup-only `mkdir` solely for Citizen logs. Citizen creates a missing logs directory immediately before its first file write; the development bind mount also establishes the host path when Compose starts.
+- In the development override, bind-mount the whole checkout `app/` directory at `/site/app` and bind-mount `web/` separately. This keeps startup files and Citizen-managed source synchronized with the editor while leaving image-owned Linux dependencies visible at `/site/node_modules`. Never mount the repository root at `/site`. Keep legacy `app/config/*.json` outside the active checkout; if one is mistakenly reintroduced, Citizen should reject it visibly rather than Docker silently hiding it.
 
 ### Nginx
 
 - Use one proxy image with environment-specific server configuration.
 - Serve static files and send dynamic requests to `http://app:8080`.
-- Copy production static files into the image; bind-mount `web/` read-only locally.
+- Copy production static files into the image; bind-mount `web/` read-only in development.
 - Preserve the reviewed current redirects, static routing, TLS behavior, headers, error handling, and `web/shoplc/` content.
-- Compare the effective source configuration for `try_files`, named fallbacks, gzip, static expiration, and static access-log behavior. The local VM inventory for this project required all of those details to be restored before acceptance.
+- Compare the effective source configuration for `try_files`, named fallbacks, gzip, static expiration, and static access-log behavior. The development VM inventory for this project required all of those details to be restored before acceptance.
 - Do not add proxy headers, caching changes, or other Nginx behavior unless required for container networking or explicitly found in the effective source configuration.
 - Set a correct standardized `Forwarded` header in the new proxy configuration while preserving any inventoried `X-Forwarded-*` behavior relied on by the application.
 - Serve `/.well-known/acme-challenge/` from `/var/www/certbot` in production and redirect other HTTP traffic to HTTPS.
 
 Nginx resolves the literal `app` hostname when its workers start and can retain the old container IP after `app` is recreated. Therefore every production workflow that recreates `app` must recreate `proxy` afterward. `depends_on` does not handle later app recreation.
 
-### Local asset development
+### Development asset development
 
-The local override should include an `assets` service using the development image so macOS does not need a host Node installation. It runs the existing Gulp watcher with bind mounts for `app/` and `web/`.
+The development override should include an `assets` service using the development image so macOS does not need a host Node installation. It runs the existing Gulp watcher with bind mounts for `app/` and `web/`.
 
 Do not attach the application's full `.env` to `assets`; it does not need database or mail credentials. Map only the BrowserSync certificate/host settings and watcher values it consumes.
 
@@ -232,16 +232,16 @@ Copy development-tool configuration such as `eslint.config.js` into the developm
 
 Update Gulp only as needed to:
 
-- Read BrowserSync key/certificate paths supplied by the local container.
+- Read BrowserSync key/certificate paths supplied by the development container.
 - Use the generated `mkcert` certificate.
 - Enable polling for every watcher so Docker Desktop file changes are detected.
 - Keep BrowserSync ports 3000 and 8282 loopback-only.
 
 Do not rebuild and commit new front-end output merely to establish a Docker-era baseline. Existing tracked bundles remain authoritative unless the required Gulp changes actually alter them and that difference is reviewed separately.
 
-## 6. Phase 1 — Citizen 2.0 and Local Docker Deployment
+## 6. Phase 1 — Citizen 2.0 and Development Docker Deployment
 
-Phase 1 ends with the application running locally through Docker Desktop, the local database restored into Docker PostgreSQL, local HTTPS and file watching accepted, and the custom local VM retired when its other workloads permit. It also performs a one-time production application cutover to Node.js 24 LTS, Citizen 2.0, and environment configuration while leaving production Nginx, PostgreSQL, Certbot, ports, and database data on the Debian host.
+Phase 1 ends with the development environment running through Docker Desktop, the development database restored into Docker PostgreSQL, development HTTPS and file watching accepted, and the custom development VM retired when its other workloads permit. It also performs a one-time production application cutover to Node.js 24 LTS, Citizen 2.0, and environment configuration while leaving production Nginx, PostgreSQL, Certbot, ports, and database data on the Debian host.
 
 ### Coordinate the shared application migration
 
@@ -256,11 +256,11 @@ git switch -c docker-citizen2-migration
 git push -u origin docker-citizen2-migration
 ```
 
-If the migration branch already exists, switch to it instead of creating it. Apply any intervening production hotfix to the production branch first, then merge that commit into the migration branch and repeat the affected local checks.
+If the migration branch already exists, switch to it instead of creating it. Apply any intervening production hotfix to the production branch first, then merge that commit into the migration branch and repeat the affected development checks.
 
-Do not merge the migration branch until local Citizen 2.0/Docker acceptance passes and the production host has been prepared for the same Citizen 2.0 application. The merge and the one-time production application cutover are the final steps of Phase 1. After that cutover, ordinary application commits developed locally can be pulled into production without waiting for production Docker.
+Do not merge the migration branch until development Citizen 2.0/Docker acceptance passes and the production host has been prepared for the same Citizen 2.0 application. The merge and the one-time production application cutover are the final steps of Phase 1. After that cutover, ordinary application commits developed in the development environment can be pulled into production without waiting for production Docker.
 
-### Inventory the local VM
+### Inventory the development VM
 
 Save inventory output outside Git. Do not print secret JSON contents into the record.
 
@@ -272,7 +272,7 @@ it is intentionally holding the connection open; verify it with a harmless
 remote `hostname` command before copying protected inputs. Never record or pass
 the password through command arguments or logs.
 
-`[LOCAL VM]`
+`[DEVELOPMENT VM]`
 
 ```sh
 hostname
@@ -296,8 +296,8 @@ Capture effective Nginx configuration outside Git:
 ```sh
 sudo nginx -t
 umask 077
-sudo nginx -T > /tmp/jaysylvester-local-nginx.txt 2>&1
-sudo chown "$(id -un):$(id -gn)" /tmp/jaysylvester-local-nginx.txt
+sudo nginx -T > /tmp/jaysylvester-dev-nginx.txt 2>&1
+sudo chown "$(id -un):$(id -gn)" /tmp/jaysylvester-dev-nginx.txt
 ```
 
 Before the VM is eventually deleted, confirm that no other project, database, cron job, shared directory, or service still relies on it. This is a deletion gate, not a request to design the migrations for those other projects here.
@@ -327,7 +327,7 @@ sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_colla
 
 Record the exact production branch, application service name and user, `ExecStart`, working directory, Citizen JSON path, Nginx upstream hostname/port, PostgreSQL connection values, and existing deployment/restart commands. Do not print the JSON or its credentials into the inventory record.
 
-### Migrate Citizen and implement Docker locally
+### Migrate Citizen and implement Docker in development
 
 #### Pin and test the Citizen branch
 
@@ -407,21 +407,21 @@ grep -RInE 'app\.start\([[:space:]]*\{' app || true
 
 Exercise current routes, the contact form, CORS behavior, development logging, and cache-buster paths under Citizen 2.0 before attributing any failure to Docker.
 
-#### Convert local configuration
+#### Convert development configuration
 
-Copy the authoritative local JSON from the VM to protected storage outside Git, then translate it without printing its values:
+Copy the authoritative development JSON from the VM to protected storage outside Git, then translate it without printing its values:
 
-`[LOCAL DOCKER HOST — macOS]`
+`[DEVELOPMENT DOCKER HOST — macOS]`
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-MIGRATION_INPUT_DIR="$HOME/Documents/REPLACE_ME_PROJECT-docker-migration-local"
+MIGRATION_INPUT_DIR="$HOME/Documents/REPLACE_ME_PROJECT-docker-migration-dev"
 install -d -m 0700 "$MIGRATION_INPUT_DIR"
-LOCAL_CONFIG_ARCHIVE="$MIGRATION_INPUT_DIR/citizen1-local.json"
+DEV_CONFIG_ARCHIVE="$MIGRATION_INPUT_DIR/citizen1-dev.json"
 umask 077
-scp REPLACE_ME_VM_SSH_ALIAS:/var/www/jaysylvester.com/app/config/REPLACE_ME_CURRENT_CONFIG.json "$LOCAL_CONFIG_ARCHIVE"
+scp REPLACE_ME_VM_SSH_ALIAS:/var/www/jaysylvester.com/app/config/REPLACE_ME_CURRENT_CONFIG.json "$DEV_CONFIG_ARCHIVE"
 cp .env.example .env
-chmod 600 .env "$LOCAL_CONFIG_ARCHIVE"
+chmod 600 .env "$DEV_CONFIG_ARCHIVE"
 ${EDITOR:-vi} .env
 ```
 
@@ -440,32 +440,32 @@ Use this mapping, preserving the source values unless the Docker target requires
 | `mail.*` | Corresponding `MAIL_*` variables read directly by the transport/contact consumers |
 | `citizen.cors` | `CITIZEN_CORS` JSON object, used as the framework's global baseline |
 
-Also set `POSTGRES_INITDB_ARGS` from the local VM's inventoried encoding, `lc_collate`, and `lc_ctype`, and set `POSTGRES_TIMEZONE` from `SHOW timezone`; verify those values exist in the selected PostgreSQL image before `dc up -d db` creates the local volume.
+Also set `POSTGRES_INITDB_ARGS` from the development VM's inventoried encoding, `lc_collate`, and `lc_ctype`, and set `POSTGRES_TIMEZONE` from `SHOW timezone`; verify those values exist in the selected PostgreSQL image before `dc up -d db` creates the development volume.
 
 Keep the existing credentials. Do not rotate or normalize values during conversion. The sanitized project-root `.env.example` must document every required variable and the PostgreSQL initialization argument shape without containing real values.
 
-After the local environment has been verified, archive any workstation `app/config/*.json` outside the active checkout and remove it from `app/config`. Citizen 2.0 deliberately refuses to start when one is present:
+After the development environment has been verified, archive any workstation `app/config/*.json` outside the active checkout and remove it from `app/config`. Citizen 2.0 deliberately refuses to start when one is present:
 
 ```sh
 find app/config -maxdepth 1 -type f -name '*.json' -print 2>/dev/null
-git check-ignore -v .env docker/local-certs/dev-key.pem
+git check-ignore -v .env docker/dev-certs/dev-key.pem
 git status --short
 ```
 
-The `find` command must produce no files before starting the local app or testing it outside Docker. Docker builds must exclude legacy JSON, and the active checkout must not contain it.
+The `find` command must produce no files before starting the development app or testing it outside Docker. Docker builds must exclude legacy JSON, and the active checkout must not contain it.
 
 #### Build and validate the artifacts
 
 Implement the Phase 1 artifacts listed in section 4, then run:
 
 ```sh
-docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml config --quiet
-docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml build --pull app proxy assets
+docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml config --quiet
+docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml build --pull app proxy assets
 ```
 
 Confirm from the rendered Compose configuration and images that:
 
-- Only loopback-bound proxy ports 80/443 and loopback Postico/BrowserSync ports are published locally.
+- Only loopback-bound proxy ports 80/443 and loopback Postico/BrowserSync ports are published in development.
 - `app` receives only its explicit non-secret environment allowlist plus `db-password` and `mail-auth-pass`; `db` receives only its mapped initialization settings plus `db-password`; `assets` receives neither secret.
 - No environment file, legacy JSON, private key, dump, or host `node_modules` is in an image layer.
 - The app image contains Node.js 24, Citizen 2.0 at the recorded Git commit, `web/min/site.css`, `web/min/site.js`, and Linux `node_modules`.
@@ -477,7 +477,7 @@ Confirm from the rendered Compose configuration and images that:
 
 Update `docs/migrations/citizen-2.md` with the application diff categories, test results, any upstream Citizen commits, and lessons that apply to the next project. Do not include environment values or secrets.
 
-#### Configure local HTTPS
+#### Configure development HTTPS
 
 Install Docker Desktop and `mkcert` on macOS:
 
@@ -493,7 +493,7 @@ mkcert -install
 
 `nss` is needed only for Firefox's separate trust store.
 
-Update macOS `/etc/hosts` so local development resolves to the workstation rather than the retired VM:
+Update macOS `/etc/hosts` so development resolves to the workstation rather than the retired VM:
 
 ```text
 127.0.0.1 dev.jaysylvester.com
@@ -506,7 +506,7 @@ sudo killall -HUP mDNSResponder
 dscacheutil -q host -a name dev.jaysylvester.com
 ```
 
-`scripts/local-cert` must generate ignored `docker/local-certs/dev-cert.pem` and `dev-key.pem` for `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. It should reuse a valid certificate and regenerate an expired or missing one. Never copy or mount mkcert's CA private key.
+`scripts/dev-cert` must generate ignored `docker/dev-certs/dev-cert.pem` and `dev-key.pem` for `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. It should reuse a valid certificate and regenerate an expired or missing one. Never copy or mount mkcert's CA private key.
 
 The ignored leaf private key may need host mode `0644` so fixed non-root app/assets
 container users can read it through Docker Desktop's bind mount. This is only
@@ -516,20 +516,20 @@ never apply that mode to the mkcert CA key or production private keys.
 Run:
 
 ```sh
-./scripts/local-cert
-openssl x509 -in docker/local-certs/dev-cert.pem -noout -checkhost dev.jaysylvester.com
+./scripts/dev-cert
+openssl x509 -in docker/dev-certs/dev-cert.pem -noout -checkhost dev.jaysylvester.com
 ```
 
-The local Nginx and BrowserSync services mount the generated leaf certificate. Remove `_dev-certs` only after both work with the generated certificate.
+The development Nginx and BrowserSync services mount the generated leaf certificate. Remove `_dev-certs` only after both work with the generated certificate.
 
-### Migrate local development
+### Migrate development
 
 #### Dump the authoritative VM database
 
-`[LOCAL VM]`
+`[DEVELOPMENT VM]`
 
 ```sh
-MIGRATION_DIR=REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/docker-migration-local
+MIGRATION_DIR=REPLACE_ME_PROTECTED_DEVELOPMENT_STAGING_DIRECTORY
 sudo install -d -m 0700 -o "$(id -un)" -g "$(id -gn)" "$MIGRATION_DIR"
 sudo -u postgres pg_dump -Fc --no-owner --no-acl -d jaysylvester > "$MIGRATION_DIR/jaysylvester.dump"
 cd "$MIGRATION_DIR"
@@ -540,32 +540,32 @@ pg_restore --list jaysylvester.dump >/dev/null
 
 Transfer the dump outside the Git checkout:
 
-`[LOCAL DOCKER HOST — macOS]`
+`[DEVELOPMENT DOCKER HOST — macOS]`
 
 ```sh
-mkdir -p /absolute/private/path/docker-migration-local
-chmod 700 /absolute/private/path/docker-migration-local
-scp REPLACE_ME_VM_SSH_ALIAS:REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/docker-migration-local/jaysylvester.dump /absolute/private/path/docker-migration-local/
-scp REPLACE_ME_VM_SSH_ALIAS:REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/docker-migration-local/jaysylvester.dump.sha256 /absolute/private/path/docker-migration-local/
-chmod 600 /absolute/private/path/docker-migration-local/jaysylvester.dump /absolute/private/path/docker-migration-local/jaysylvester.dump.sha256
-cd /absolute/private/path/docker-migration-local
+mkdir -p /absolute/private/path/docker-migration-dev
+chmod 700 /absolute/private/path/docker-migration-dev
+scp REPLACE_ME_VM_SSH_ALIAS:REPLACE_ME_PROTECTED_DEVELOPMENT_STAGING_DIRECTORY/jaysylvester.dump /absolute/private/path/docker-migration-dev/
+scp REPLACE_ME_VM_SSH_ALIAS:REPLACE_ME_PROTECTED_DEVELOPMENT_STAGING_DIRECTORY/jaysylvester.dump.sha256 /absolute/private/path/docker-migration-dev/
+chmod 600 /absolute/private/path/docker-migration-dev/jaysylvester.dump /absolute/private/path/docker-migration-dev/jaysylvester.dump.sha256
+cd /absolute/private/path/docker-migration-dev
 shasum -a 256 -c jaysylvester.dump.sha256
 ```
 
-#### Restore into a new local volume
+#### Restore into a new development volume
 
-`[LOCAL DOCKER HOST — macOS]`
+`[DEVELOPMENT DOCKER HOST — macOS]`
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-dc() { docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml "$@"; }
+dc() { docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml "$@"; }
 dc config --quiet
-if docker volume inspect jaysylvester-local-postgres >/dev/null 2>&1; then
+if docker volume inspect jaysylvester-dev-postgres >/dev/null 2>&1; then
   echo 'Target volume already exists; identify and back it up before continuing.' >&2
 else
   dc up -d db
   dc exec -T db pg_isready -U jaysylvester -d jaysylvester
-  dc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < /absolute/private/path/docker-migration-local/jaysylvester.dump
+  dc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < /absolute/private/path/docker-migration-dev/jaysylvester.dump
   dc exec -T db psql -U jaysylvester -d jaysylvester -v ON_ERROR_STOP=1 -c 'ANALYZE;'
 fi
 ```
@@ -580,7 +580,7 @@ Compare the source and target using concise SQL checks:
 Do not validate against `resources/data.sql`.
 
 The archive is a one-time migration input. It is not mounted into Compose and is
-not replayed by `local-up` or `docker compose up`. After the one-time restore,
+not replayed by `dev-up` or `docker compose up`. After the one-time restore,
 PostgreSQL reads and writes `/var/lib/postgresql/data` in the named volume. A
 normal `down` preserves that volume; `down --volumes` or an explicit volume
 removal deletes the active database.
@@ -591,11 +591,11 @@ character type are available as `pg_database.datcollate` and
 `pg_database.datctype`; do not assume every source-major `SHOW` command exists
 unchanged on the target.
 
-#### Start and accept local Docker
+#### Start and accept development Docker
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-./scripts/local-up --build
+./scripts/dev-up --build
 dc ps
 dc logs --tail=200 db app proxy assets
 ```
@@ -612,16 +612,16 @@ Confirm:
 - Existing routes, static files, and `web/shoplc/` work.
 - CSS/JavaScript rebuild and BrowserSync reload work after a source edit.
 - A controller/view edit is detected through polling.
-- The development contact flow uses the migrated mail/address configuration and writes its normal local email log without sending mail. Inspect the project-specific expected message count; this application writes one recipient copy and one site-owner copy per submission.
+- The development contact flow uses the migrated mail/address configuration and writes its normal development email log without sending mail. Inspect the project-specific expected message count; this application writes one recipient copy and one site-owner copy per submission.
 - The ignored root-level `logs/email.log` and `logs/error.log` are visible directly in the editor. No named-volume extraction or root shell should be required to read development logs.
 - With browsers idle, the app and proxy logs remain idle; PostgreSQL readiness checks do not create Citizen requests.
 - The reviewed CORS requests and preflight behavior match the Citizen 1.x baseline.
-- Postico connects to `127.0.0.1:5432` with the existing local credentials.
-- Data survives `dc down` followed by `./scripts/local-up`.
+- Postico connects to `127.0.0.1:5432` with the existing development credentials.
+- Data survives `dc down` followed by `./scripts/dev-up`.
 
-#### Establish local lifecycle and recovery
+#### Establish development lifecycle and recovery
 
-Expose the raw Compose workflow through consistent, project-local npm commands:
+Expose the raw Compose workflow through consistent, project-development npm commands:
 
 ```sh
 npm run dev:build
@@ -637,7 +637,7 @@ npm run dev:test
 `dev:stop` must use `docker compose stop`, retaining the containers for a fast
 next `dev:start`. `dev:destroy` must use `docker compose down` without
 `--volumes`, removing containers and the project network while preserving the
-PostgreSQL volume and local logs. `dev:status` should include stopped containers.
+PostgreSQL volume and development logs. `dev:status` should include stopped containers.
 Reserve volume deletion for an explicit, separately reviewed recovery or test
 operation; neither friendly command removes it.
 
@@ -651,11 +651,11 @@ npm run dev:db:restore -- /absolute/path/to/verified-backup.dump
 
 The backup command must:
 
-- require the existing local database to be running so it cannot silently initialize and archive an empty replacement volume;
+- require the existing development database to be running so it cannot silently initialize and archive an empty replacement volume;
 - default to a project-specific directory under the protected migration-input parent, with parent/backup directory mode `0700` and archive/checksum mode `0600`;
 - write `pg_dump --format=custom --no-owner --no-privileges` through a temporary file with `umask 077`;
 - reject an empty result, validate it with `pg_restore --list`, and only then publish the timestamped archive and SHA-256 checksum; and
-- leave both the original migration dump and later local backups outside Git, the checkout, images, containers, and named volumes.
+- leave both the original migration dump and later development backups outside Git, the checkout, images, containers, and named volumes.
 
 The restore command must accept exactly one readable archive, start only the
 database temporarily when necessary, validate the archive before changing data,
@@ -677,20 +677,20 @@ into a separately named temporary Compose project/volume. Compare the same
 schema, row counts, maximum IDs, sequence values, and representative queries,
 then inspect the temporary volume's Compose project label before removing only
 that test project with `down --volumes`. Never test the destructive path against
-the accepted local volume merely to prove the script.
+the accepted development volume merely to prove the script.
 
 After acceptance, shut down the old project's VM services and observe the Docker setup. Delete the VM only after its migration dump is stored somewhere independent of that VM and every other workload on the VM has been migrated or retired.
 
-#### Retire the local VM
+#### Retire the development VM
 
 Once the deletion gate is clear:
 
 1. Stop the old application, Nginx, and PostgreSQL in the VM.
 2. Power off the VM with `sudo poweroff`.
-3. Run local Docker through the agreed observation period and confirm the protected dump is still readable.
+3. Run development Docker through the agreed observation period and confirm the protected dump is still readable.
 4. Delete the powered-off VM and its virtual disks/snapshots using the VM product that created it. Record that product and its exact deletion command during inventory; do not guess it in advance.
 5. Remove the obsolete VM SSH alias, shared-folder entry, port-forwarding rule, and any hosts entry pointing `dev.jaysylvester.com` to the VM.
-6. Confirm `dev.jaysylvester.com` still resolves to `127.0.0.1` and local Docker still passes the smoke test.
+6. Confirm `dev.jaysylvester.com` still resolves to `127.0.0.1` and development Docker still passes the smoke test.
 
 ### Create the single production rollback snapshot
 
@@ -745,7 +745,7 @@ sudo chown "$APP_USER" .env
 sudo chmod 0600 .env
 ```
 
-Translate the production JSON using the mapping under **Convert local configuration**, but retain host endpoints:
+Translate the production JSON using the mapping under **Convert development configuration**, but retain host endpoints:
 
 - `CITIZEN_MODE=production`.
 - `CITIZEN_HTTP__HOSTNAME` and `CITIZEN_HTTP__PORT` equal the current host application's Nginx upstream binding.
@@ -778,7 +778,7 @@ The production service will call `/opt/node24/bin/node` explicitly. There is no 
 
 #### Publish and cut over the Citizen 2.0 application
 
-Once local acceptance passes and the production `.env` has been reviewed, fast-forward the production deployment branch to the migration branch:
+Once development acceptance passes and the production `.env` has been reviewed, fast-forward the production deployment branch to the migration branch:
 
 `[WORKSTATION — macOS]`
 
@@ -795,7 +795,7 @@ git merge --ff-only "$MIGRATION_BRANCH"
 git push origin "$PRODUCTION_BRANCH"
 ```
 
-If either merge does not fast-forward, reconcile the branches on the workstation, rerun the affected local tests, and repeat. Do not resolve application conflicts on the droplet.
+If either merge does not fast-forward, reconcile the branches on the workstation, rerun the affected development tests, and repeat. Do not resolve application conflicts on the droplet.
 
 Perform the short production application cutover:
 
@@ -839,11 +839,11 @@ PATH=/opt/node24/bin:/usr/local/bin:/usr/bin:/bin npm ci --omit=dev  # only when
 sudo systemctl restart REPLACE_ME_APP_SERVICE
 ```
 
-Application-only work from the new local Docker environment can now ship through this method. Production Docker is not required until Phase 2.
+Application-only work from the new development Docker environment can now ship through this method. Production Docker is not required until Phase 2.
 
 ### Phase 1 acceptance gate
 
-Phase 1 is complete when the local acceptance criteria pass, the protected local database dump is independent of the VM, and production runs the same Citizen 2.0 application through its existing host Nginx and PostgreSQL. Normal development can then proceed on macOS and deploy to production through the host-based procedure above for as long as desired.
+Phase 1 is complete when the development acceptance criteria pass, the protected development database dump is independent of the VM, and production runs the same Citizen 2.0 application through its existing host Nginx and PostgreSQL. Normal development can then proceed on macOS and deploy to production through the host-based procedure above for as long as desired.
 
 ## 7. Phase 2 — Production Deployment
 
@@ -894,7 +894,7 @@ sudo certbot renew --help all | grep -F -- '--run-deploy-hooks'
 
 If either Certbot feature check fails, upgrade Certbot through its existing supported installation channel during preparation, before the maintenance window, and repeat the checks.
 
-Review the local and production Nginx captures and list only application-relevant behavior to reproduce:
+Review the development and production Nginx captures and list only application-relevant behavior to reproduce:
 
 - Server names and canonical-host redirects.
 - HTTP-to-HTTPS and legacy redirects, including status codes and query-string behavior.
@@ -942,7 +942,7 @@ git commit -m "Add production Docker deployment"
 git push -u origin "$PRODUCTION_DOCKER_BRANCH"
 ```
 
-If the branch already exists, switch to it rather than creating it. Use syntactically valid placeholders in the temporary review file, not production credentials. Review the staged file list before committing in case the implementation changed a different focused file. Re-run the local smoke test after these shared-file changes; Phase 2 must not regress the accepted Phase 1 environment.
+If the branch already exists, switch to it rather than creating it. Use syntactically valid placeholders in the temporary review file, not production credentials. Review the staged file list before committing in case the implementation changed a different focused file. Re-run the development smoke test after these shared-file changes; Phase 2 must not regress the accepted Phase 1 environment.
 
 ### Prepare production
 
@@ -1064,7 +1064,7 @@ git merge --ff-only "$PRODUCTION_DOCKER_BRANCH"
 git push origin "$PRODUCTION_BRANCH"
 ```
 
-The first merge must fast-forward because the Docker branch should contain every intervening production commit. If it does not, stop and reconcile the branches on the workstation, rerun affected local checks, and retry; do not resolve application conflicts on the droplet.
+The first merge must fast-forward because the Docker branch should contain every intervening production commit. If it does not, stop and reconcile the branches on the workstation, rerun affected development checks, and retry; do not resolve application conflicts on the droplet.
 
 The Docker files are inert while the host service continues running Citizen 2.0. Production may pull this commit before the maintenance window and continue using the Phase 1 host deployment method. Do not invoke Compose or change the host endpoints until the cutover steps below.
 
@@ -1119,12 +1119,12 @@ pdc ps
 pdc logs --tail=200 db app proxy
 ```
 
-Run the same concise schema, row-count, maximum-ID, sequence, extension, and representative-query comparison used locally.
+Run the same concise schema, row-count, maximum-ID, sequence, extension, and representative-query comparison used in development.
 
 Validate:
 
 - Citizen reports no container-filesystem `.env`, applies the Compose-injected production `CITIZEN_*` variables, and starts in production mode.
-- The running container uses Node.js 24 and the same recorded Citizen 2.0 Git commit tested locally.
+- The running container uses Node.js 24 and the same recorded Citizen 2.0 Git commit tested in development.
 - Database and mail consumers use the expected explicit environment and password-secret inputs, Citizen applies the expected `CITIZEN_CORS` object, no legacy JSON exists inside the container, Node is non-root, logs are writable, PostgreSQL is healthy, and app/proxy are running.
 - All inventoried redirects have the same status and destination.
 - Existing application routes, static assets, `web/shoplc/`, 404 behavior, and HTTPS work.
@@ -1183,7 +1183,7 @@ This restores the whole server to its pre-migration condition, including Citizen
 
 ### Normal use after migration
 
-#### Local development
+#### Development
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
@@ -1202,7 +1202,7 @@ while the database is running, and restore one explicit archive with
 After editing non-database-password values in `.env`, recreate the app so Compose refreshes its environment and secrets, then recreate proxy because the app container IP changed. A database-password rotation must update the PostgreSQL role and is not accomplished by editing `.env` alone:
 
 ```sh
-dc() { docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.local.yaml "$@"; }
+dc() { docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml "$@"; }
 dc up -d --no-deps --force-recreate app
 dc up -d --no-deps --force-recreate proxy
 npm run dev:test
@@ -1231,10 +1231,10 @@ This ordered app-then-proxy recreation prevents Nginx from retaining the deleted
 
 #### Postico
 
-Local:
+Development:
 
 - Host `127.0.0.1`, port `5432`.
-- Existing local database, user, and password.
+- Existing development database, user, and password.
 
 Production:
 
@@ -1242,9 +1242,9 @@ Production:
 - Remote database host `127.0.0.1`, port `5432`.
 - Existing production database, user, and password.
 
-Local logical backup/restore uses the friendly development commands above.
+Development logical backup/restore uses the friendly development commands above.
 Production database backup remains governed by the Phase 2 cutover and the
-eventual production operations policy; do not point the local helper scripts at
+eventual production operations policy; do not point the development helper scripts at
 production.
 
 ### Remove retired production services
@@ -1351,10 +1351,10 @@ Replace the current placeholder README during implementation. It must contain:
 - Install Docker Desktop and `mkcert` with Homebrew.
 - Clone the repository.
 - Copy the sanitized project-root `.env.example` to ignored project-root `.env`, supply the environment's protected values, and obtain an authoritative database dump; Git does not supply credentials or data.
-- Add the local hostname to `/etc/hosts`.
-- Run `scripts/local-up` and restore the database on a first clone.
+- Add the development hostname to `/etc/hosts`.
+- Run `scripts/dev-up` and restore the database on a first clone.
 - Use Postico at `127.0.0.1:5432`.
-- Explain Citizen 2.0's process-environment model, including the expected Docker `No .env found.`/applied-variable log pair, local HTTPS, Gulp/BrowserSync, editor-visible logs, normal stop versus destroy semantics, logical database backup/restore, and environment-driven app/proxy recreation.
+- Explain Citizen 2.0's process-environment model, including the expected Docker `No .env found.`/applied-variable log pair, development HTTPS, Gulp/BrowserSync, editor-visible logs, normal stop versus destroy semantics, logical database backup/restore, and environment-driven app/proxy recreation.
 
 ### Future Linux host differences
 
@@ -1390,33 +1390,34 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 
 ### Phase 1 is complete when
 
-- Local development runs on the Mac through Docker Desktop with no dependency on the old VM.
+- Development runs on the Mac through Docker Desktop with no dependency on the old VM.
 - Citizen's native test suite passes under both Node.js 22 and Node.js 24 at the exact direct-branch commit resolved by this project's lockfile.
-- The local image uses Node.js 24 and Citizen 2.0 directly from `2.0-env-file-config-revised`; no unpublished framework patch exists only in this repository or image.
-- Citizen applies the local `CITIZEN_*` variables, including scoped polling, while non-secret application settings come from the explicit process environment and passwords come from service-scoped Compose secrets; all remain outside `app.config`.
+- The development image uses Node.js 24 and Citizen 2.0 directly from `2.0-env-file-config-revised`; no unpublished framework patch exists only in this repository or image.
+- Citizen applies the development `CITIZEN_*` variables, including scoped polling, while non-secret application settings come from the explicit process environment and passwords come from service-scoped Compose secrets; all remain outside `app.config`.
 - Citizen's Docker startup may report that no filesystem `.env` exists, but it subsequently reports and applies the expected explicitly injected variables; no `.env` is present in the image or container, and passwords are absent from container environments.
 - Both `app.start()` calls are argument-free; no active `app.config.citizen`, `config.citizen`, `app.config.db`, or `app.config.mail` consumer remains.
-- No `app/config/*.json` exists in the local Citizen 2.0 container; the local source JSON was converted without credential rotation and archived recoverably.
-- Node runs non-root, Citizen can write editor-visible local logs through the ignored root bind mount, and local source mounts do not mask image-owned `/site/node_modules`.
-- The local Docker database was restored from the live VM database with schema, row counts, maximum IDs, sequences, extensions, and representative queries matching.
-- The local database volume was initialized with the reviewed source encoding, `lc_collate`, `lc_ctype`, and timezone; `resources/data.sql` was not used.
-- Existing local routes, static content, `web/shoplc/`, email logging, CORS behavior, `Forwarded` behavior, and HTTPS work as before.
+- No `app/config/*.json` exists in the development Citizen 2.0 container; the development source JSON was converted without credential rotation and archived recoverably.
+- Node runs non-root, Citizen can write editor-visible development logs through the ignored root bind mount, and development source mounts do not mask image-owned `/site/node_modules`.
+- The development Docker database was restored from the live VM database with schema, row counts, maximum IDs, sequences, extensions, and representative queries matching.
+- The development database volume was initialized with the reviewed source encoding, `lc_collate`, `lc_ctype`, and timezone; `resources/data.sql` was not used.
+- Existing development routes, static content, `web/shoplc/`, email logging, CORS behavior, `Forwarded` behavior, and HTTPS work as before.
 - Contact-form owner delivery is awaited before success; the visitor confirmation follows sequentially, and a confirmation-only failure is logged without producing an error page that encourages a duplicate owner submission.
 - No continuous app/proxy health check generates synthetic Citizen requests; the explicit smoke test proves the end-to-end path, while `pg_isready` gates app startup on PostgreSQL readiness.
-- Local HTTPS is trusted without certificate copying, proxy ports 80/443 are bound to loopback, and source watching plus BrowserSync work through Docker Desktop.
+- Development HTTPS is trusted without certificate copying, proxy ports 80/443 are bound to loopback, and source watching plus BrowserSync work through Docker Desktop.
 - Containerized asset builds use the tracked browser targets and match host-build targeting.
-- Local PostgreSQL is reachable by Postico only through loopback and its data survives container recreation.
+- Development PostgreSQL is reachable by Postico only through loopback and its data survives container recreation.
+- Development artifacts and Docker resources use `dev` identifiers; environment prose uses “development,” reserving `local` for Citizen's response namespace, `localhost`, and genuine workstation or loopback semantics.
 - Normal `dev:stop` retains containers, explicit `dev:destroy` removes containers/network without volumes, and a verified logical backup exists outside Docker. That backup restores successfully into an isolated temporary project/volume with focused data comparisons matching.
 - `package-lock.json` is tracked, records the tested Citizen Git commit, and builds pass with `npm ci`.
-- `docs/migrations/citizen-2.md` and the macOS README instructions contain no secrets and record the local migration evidence.
+- `docs/migrations/citizen-2.md` and the macOS README instructions contain no secrets and record the development migration evidence.
 - Required secrets, dumps, and private keys are absent from Git and image layers.
 - Production runs the same locked Citizen 2.0 application under Node.js 24, with its original JSON preserved in the DigitalOcean rollback snapshot and its protected environment loaded by the existing application service.
-- Production Nginx, PostgreSQL, Certbot, public ports, and database remain host-installed and unchanged, and application-only work from local Docker can deploy through SSH, `git pull`, conditional `npm ci`, and service restart.
-- The local VM is deleted only after its remaining workloads and backups are accounted for.
+- Production Nginx, PostgreSQL, Certbot, public ports, and database remain host-installed and unchanged, and application-only work from development Docker can deploy through SSH, `git pull`, conditional `npm ci`, and service restart.
+- The development VM is deleted only after its remaining workloads and backups are accounted for.
 
 ### Phase 2 is complete when
 
-- Production runs the app, Nginx, and PostgreSQL through Docker Compose on Debian using the locally accepted Citizen 2.0 application revision plus the reviewed production overlay.
+- Production runs the app, Nginx, and PostgreSQL through Docker Compose on Debian using the Citizen 2.0 application revision accepted in development plus the reviewed production overlay.
 - The production JSON converted in Phase 1 remains absent from the Citizen 2.0 container, with the original retained in the DigitalOcean snapshot and no credential rotation.
 - The production Docker database was restored from the live host database with its initialization settings and focused data comparisons matching.
 - Existing public routes, static content, `web/shoplc/`, redirects, 404 behavior, email, CORS, proxy headers, and HTTPS work as before.
@@ -1429,9 +1430,9 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 
 ## 10. Scope-Control Rationale for Reviewers
 
-This plan was deliberately reduced after earlier reviews expanded it beyond the migration's needs. Its approved purpose now has two connected parts: migrate this application to the direct Citizen 2.0 branch as the first real-project validation, and move the application plus its two databases into Docker. It must preserve behavior, remove the custom local VM, reproduce production, maintain HTTPS, capture reusable Citizen migration evidence, and retire the replaced production services. It is not a general infrastructure-modernization program.
+This plan was deliberately reduced after earlier reviews expanded it beyond the migration's needs. Its approved purpose now has two connected parts: migrate this application to the direct Citizen 2.0 branch as the first real-project validation, and move the application plus its two databases into Docker. It must preserve behavior, remove the custom development VM, reproduce production, maintain HTTPS, capture reusable Citizen migration evidence, and retire the replaced production services. It is not a general infrastructure-modernization program.
 
-The two-phase boundary is deliberate. Phase 1 changes the shared application baseline everywhere: local Docker and the existing production host both move to Node.js 24, Citizen 2.0, and environment configuration. That small production application cutover is required so work developed locally can continue shipping immediately. It does not authorize production Docker work: Nginx, PostgreSQL, Certbot, database data, and their host service topology remain untouched until Phase 2. Do not add backward-compatibility layers or dual Citizen 1.x/2.0 application paths; update the production application runtime once instead.
+The two-phase boundary is deliberate. Phase 1 changes the shared application baseline everywhere: development Docker and the existing production host both move to Node.js 24, Citizen 2.0, and environment configuration. That small production application cutover is required so work developed in the development environment can continue shipping immediately. It does not authorize production Docker work: Nginx, PostgreSQL, Certbot, database data, and their host service topology remain untouched until Phase 2. Do not add backward-compatibility layers or dual Citizen 1.x/2.0 application paths; update the production application runtime once instead.
 
 Phase 2 contains the infrastructure complications the user explicitly chose to defer: Docker Engine on Debian, the production Compose/Nginx overlay, live database dump and restore, Certbot integration with container Nginx, and host-runtime cleanup. Reviewers must not pull those tasks into Phase 1 merely because the production application already uses Citizen 2.0.
 
@@ -1444,11 +1445,11 @@ The following requested outcomes are not scope creep and must remain:
 - Both live databases are migrated directly.
 - Citizen 1.x JSON is fully classified and converted to Citizen 2.0 framework/application environment variables without silent loss; legacy JSON is rejected by the new containers and retained in the rollback snapshot.
 - Existing Nginx redirects and site behavior are inventoried before replacement.
-- Local `mkcert` and production Let's Encrypt continue to provide HTTPS.
+- Development `mkcert` and production Let's Encrypt continue to provide HTTPS.
 - The README supports the tested macOS path and identifies future Linux/Windows differences.
 - Retired Nginx, PostgreSQL, and Node packages/data are removed from production after safe acceptance.
 - Production app recreation is followed by proxy recreation to avoid Nginx's cached upstream IP.
-- Local logical backups are stored outside Docker, verified before publication, and restore-tested against an isolated disposable volume. This is the narrow recovery path for accidental local named-volume deletion, not a scheduled backup platform.
+- Development logical backups are stored outside Docker, verified before publication, and restore-tested against an isolated disposable volume. This is the narrow recovery path for accidental development named-volume deletion, not a scheduled backup platform.
 
 Reviewers should not add a new requirement merely because it is a generally desirable operational practice. An addition belongs in this plan only when at least one of these is true:
 
@@ -1462,14 +1463,14 @@ Otherwise, record it as a follow-up. In particular, do not reintroduce:
 - Cross-project gateways, port registries, or orchestration design.
 - New application routes, proxy behavior, pool tuning, caching policy, or dependency upgrades.
 - Custom process-inspection frameworks or exhaustive HTTP/database test harnesses.
-- Scheduled backup automation, monitoring, retention policy, remote replication, or a general disaster-recovery design. Keep the developer-invoked local logical backup/restore path.
+- Scheduled backup automation, monitoring, retention policy, remote replication, or a general disaster-recovery design. Keep the developer-invoked development logical backup/restore path.
 - Extra production hardening unrelated to replacing the three host runtimes.
 - Fully implemented Linux and Windows variants before either host is actually used.
 - A generalized Citizen migration utility, codemod, or speculative refactor of other projects. Reusable findings are required; implementing the next project's migration is not.
 
 Prefer the smallest check that proves a migration requirement. A successful logical restore plus focused data comparisons and application queries is sufficient; it does not need a permanent database-test framework. Citizen's own configuration log plus a working application is sufficient; it does not need `/proc` parentage assertions. Reviewing the effective Nginx configuration and testing its actual redirects is sufficient; it does not need a generalized response-manifest system.
 
-The direct Citizen test, explicit application configuration consumers, finite-number validation, service-scoped password secrets, app-only local mount, copied build-tool configuration, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, silently defaulting malformed numeric database options, exposing passwords broadly in container environments, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, producing host/container asset differences, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
+The direct Citizen test, explicit application configuration consumers, finite-number validation, service-scoped password secrets, app-only development mount, copied build-tool configuration, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, silently defaulting malformed numeric database options, exposing passwords broadly in container environments, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, producing host/container asset differences, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
 
 Any proposed expansion should identify the concrete migration failure it prevents, the evidence that the risk exists in this project, and why the existing focused check is inadequate. Without that justification, it should remain outside this plan.
 
@@ -1489,8 +1490,8 @@ Create a non-secret inventory with at least:
 | Repository and deployment branch | Checkout paths, current commit, dirty-worktree policy, and production branch |
 | Source runtime | Citizen commit/version, Node version, start command, service name/user, and working directory |
 | Protected configuration | Active Citizen 1.x JSON path and every framework-owned versus application-owned key |
-| Local source host | VM product, SSH alias/command, application root, other workloads, and retirement gate |
-| Local hostname and ports | HTTPS hostname, Nginx ports, Postico port, BrowserSync ports, and conflicts with other migrated projects |
+| Development source host | VM product, SSH alias/command, application root, other workloads, and retirement gate |
+| Development hostname and ports | HTTPS hostname, Nginx ports, Postico port, BrowserSync ports, and conflicts with other migrated projects |
 | Database | Database/role names, source PostgreSQL major, size, encoding, collation, character type, timezone, extensions, schemas, tables, sequences, and representative queries |
 | Nginx | Effective server blocks, redirects, `try_files`, named locations, proxy headers, gzip, static expiry, access logging, TLS names, and special static trees |
 | Application behavior | Focused routes, CORS cases, contact/email behavior, secure-cookie behavior, log filenames/message count, and watcher-triggered outputs |
@@ -1508,24 +1509,24 @@ counts, or Nginx file without re-inventorying the target project.
 3. Audit every Citizen API/configuration reference against both the released Citizen 1.x documentation and the locked Citizen 2.0 branch. Do not infer that stale application code represents a 2.0 breaking change; this project's `app.helpers.log()` call came from an unreleased 2021 branch while released 1.x and 2.0 both document `app.log()`.
 4. Classify every legacy JSON value. Map framework-owned settings to typed `CITIZEN_*` variables, keep non-secret application settings in `process.env`, expose passwords as service-scoped Compose secrets, coerce numeric consumers explicitly, and move application-owned values formerly passed through `app.start()` to their real owner.
 5. Run Citizen's full suite at the exact locked commit under its minimum supported Node major and the deployed Node major. Record any upstream change separately before refreshing the application lockfile.
-6. Build and inspect the images, confirm the secret file and legacy JSON are absent, prove the fixed non-root user can read required local leaf certificates and write logs, and confirm the app-only source mount does not hide image dependencies.
+6. Build and inspect the images, confirm the secret file and legacy JSON are absent, prove the fixed non-root user can read required development leaf certificates and write logs, and confirm the app-only source mount does not hide image dependencies.
 7. Rehearse the source dump on the selected PostgreSQL image and locale before creating the final volume. Restore once, compare project-specific schema/data/sequence queries, and remember that later starts read the named volume rather than replaying the dump.
 8. Reproduce the effective Nginx behavior, create and trust a fresh project-specific mkcert leaf certificate, move the hostname to loopback, and test HTTP redirect, trusted HTTPS, proxy metadata, static caching/compression, routes, CORS, watchers, BrowserSync, and development email logs.
 9. Add the friendly lifecycle and guarded logical backup/restore commands. Create a real backup, validate its modes/checksum, restore it into an isolated project/volume, compare the data, and delete only the labeled test resources.
-10. Record local acceptance before beginning that project's production Citizen cutover. Keep production Docker as its own later phase unless the project explicitly chooses a different boundary.
+10. Record development acceptance before beginning that project's production Citizen cutover. Keep production Docker as its own later phase unless the project explicitly chooses a different boundary.
 
 ### What may be copied after parameterization
 
 - The multi-stage Node 24 Dockerfile pattern and non-root runtime model.
-- The common/local Compose service shape, PostgreSQL readiness gate, narrow database environment, named production logs, editor-visible local logs, and app-only local source mount.
-- The local certificate, start, smoke, database backup, and database restore script patterns.
+- The common and development Compose service shape, PostgreSQL readiness gate, narrow database environment, named production logs, editor-visible development logs, and app-only development source mount.
+- The development certificate, start, smoke, database backup, and database restore script patterns.
 - The ignored `.env`/`.env.example` model, direct HTTPS Citizen dependency, tracked lockfile, and app-then-proxy recreation rule.
 - The focused migration-dump, isolated-restore, checksum, and file-permission controls.
 
-Parameterize scripts before reuse; none should retain `jaysylvester-local`, the
+Parameterize scripts before reuse; none should retain `jaysylvester-dev`, the
 `jaysylvester` database, `dev.jaysylvester.com`, this project's protected path,
 or this project's table checks. Give every project unique Compose and volume
-names. Because the projects may compete for local ports 80/443, either run one
+names. Because the projects may compete for development ports 80/443, either run one
 site stack at a time or deliberately assign different host ports; do not build a
 shared cross-project proxy as an incidental part of these migrations.
 

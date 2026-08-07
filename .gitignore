@@ -11,13 +11,13 @@ node_modules
 npm-debug.log
 .sass-cache
 
-# Docker/local environment
+# Docker development environment
 .env
-docker/local-certs/*
+docker/dev-certs/*
 
 # VS Code
 .vscode
 settings.json
 
-# local dev certs
+# Development certificates
 _dev-certs

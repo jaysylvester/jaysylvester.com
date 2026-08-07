@@ -21,7 +21,7 @@ services:
       - "127.0.0.1:80:80"
       - "127.0.0.1:443:443"
     volumes:
-      - ./docker/local-certs:/etc/nginx/certs:ro
+      - ./docker/dev-certs:/etc/nginx/certs:ro
       - ./web:/usr/share/nginx/html:ro
 
   assets:
@@ -31,8 +31,8 @@ services:
     command: ["npm", "run", "assets:watch"]
     environment:
       BROWSERSYNC_HOST: ${BROWSERSYNC_HOST:-dev.jaysylvester.com}
-      BROWSERSYNC_KEY: /site/docker/local-certs/dev-key.pem
-      BROWSERSYNC_CERT: /site/docker/local-certs/dev-cert.pem
+      BROWSERSYNC_KEY: /site/docker/dev-certs/dev-key.pem
+      BROWSERSYNC_CERT: /site/docker/dev-certs/dev-cert.pem
       GULP_USE_POLLING: ${GULP_USE_POLLING:-true}
       GULP_POLLING_INTERVAL: ${GULP_POLLING_INTERVAL:-500}
     init: true
@@ -43,4 +43,4 @@ services:
     volumes:
       - ./app:/site/app
       - ./web:/site/web
-      - ./docker/local-certs:/site/docker/local-certs:ro
+      - ./docker/dev-certs:/site/docker/dev-certs:ro

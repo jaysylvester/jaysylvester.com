@@ -2,7 +2,7 @@
 
 set -eu
 
-backup_parent=${LOCAL_DB_BACKUP_PARENT:-"${HOME:?HOME must be set}/Documents/jaysylvester-docker-migration-local"}
+backup_parent=${DEV_DB_BACKUP_PARENT:-"${HOME:?HOME must be set}/Documents/jaysylvester-docker-migration-dev"}
 backup_directory=$backup_parent/backups
 timestamp=$(date '+%Y%m%d-%H%M%S')
 backup_file=$backup_directory/jaysylvester-$timestamp.dump
@@ -12,9 +12,9 @@ temporary_backup=
 dc() {
   docker compose \
     --env-file .env \
-    -p jaysylvester-local \
+    -p jaysylvester-dev \
     -f compose.yaml \
-    -f compose.local.yaml \
+    -f compose.dev.yaml \
     "$@"
 }
 
@@ -32,14 +32,14 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 
 if test ! -f .env; then
-  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
   exit 1
 fi
 
 dc config --quiet
 
 if ! dc ps --status running --services db | grep -qx db; then
-  echo 'The local database is not running. Run npm run dev:start, then try again.' >&2
+  echo 'The development database is not running. Run npm run dev:start, then try again.' >&2
   exit 1
 fi
 

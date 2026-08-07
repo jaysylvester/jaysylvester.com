@@ -58,7 +58,7 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
       args:
-        NGINX_CONFIG: local.conf
+        NGINX_CONFIG: dev.conf
     depends_on:
       app:
         condition: service_started

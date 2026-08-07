@@ -26,9 +26,9 @@ stopped_services=
 dc() {
   docker compose \
     --env-file .env \
-    -p jaysylvester-local \
+    -p jaysylvester-dev \
     -f compose.yaml \
-    -f compose.local.yaml \
+    -f compose.dev.yaml \
     "$@"
 }
 
@@ -63,7 +63,7 @@ if ! command -v docker >/dev/null 2>&1; then
 fi
 
 if test ! -f .env; then
-  echo 'Missing .env. Copy .env.example and migrate the protected local values first.' >&2
+  echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
   exit 1
 fi
 
@@ -98,7 +98,7 @@ if test ! -t 0; then
   exit 1
 fi
 
-echo "This will replace the local PostgreSQL database using:"
+echo "This will replace the development PostgreSQL database using:"
 echo "  $backup_file"
 printf 'Type RESTORE to continue: '
 IFS= read -r confirmation
