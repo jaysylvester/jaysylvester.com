@@ -13,7 +13,7 @@ export const handler = () => {
 }
 
 
-export const form = (params, request) => {
+export const form = async (params, request) => {
   let emailRegex = new RegExp(/[a-z0-9!##$%&''*+/=?^_`{|}~-]+(?:\.[a-z0-9!##$%&''*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i)
 
   if ( request.method !== 'POST' ) {
@@ -51,19 +51,28 @@ export const form = (params, request) => {
         }
       }
     } else {
-      app.toolbox.mail.sendMail({
+      await app.toolbox.mail.sendMail({
         to: { name: app.helpers.utility.requiredEnvironment('MAIL_NAME'), address: app.helpers.utility.requiredEnvironment('MAIL_ADDRESS') },
         from: { name: params.form.name, address: params.form.email },
         subject: params.form.subject + ' (sent via contact form)',
         text: params.form.message
       })
 
-      app.toolbox.mail.sendMail({
-        to: { name: params.form.name, address: params.form.email },
-        from: { name: app.helpers.utility.requiredEnvironment('MAIL_NAME'), address: app.helpers.utility.requiredEnvironment('MAIL_ADDRESS_NO_REPLY') },
-        subject: 'Message confirmation',
-        text: 'Thanks for your message. I\'ll respond to you shortly.\n\nPlease don\'t reply to this e-mail; this address is unmonitored.'
-      })
+      try {
+        await app.toolbox.mail.sendMail({
+          to: { name: params.form.name, address: params.form.email },
+          from: { name: app.helpers.utility.requiredEnvironment('MAIL_NAME'), address: app.helpers.utility.requiredEnvironment('MAIL_ADDRESS_NO_REPLY') },
+          subject: 'Message confirmation',
+          text: 'Thanks for your message. I\'ll respond to you shortly.\n\nPlease don\'t reply to this e-mail; this address is unmonitored.'
+        })
+      } catch (err) {
+        app.log({
+          type: 'error',
+          label: 'Contact confirmation e-mail failed',
+          content: err,
+          file: 'error.log'
+        })
+      }
   
       return {
         redirect: '/contact/action/confirmation'

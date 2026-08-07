@@ -26,7 +26,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      CITIZEN_MODE: ${CITIZEN_MODE:?Set CITIZEN_MODE in .env}
+      CITIZEN_MODE: production
       CITIZEN_HTTP__HOSTNAME: ${CITIZEN_HTTP__HOSTNAME-}
       CITIZEN_HTTP__PORT: ${CITIZEN_HTTP__PORT:?Set CITIZEN_HTTP__PORT in .env}
       CITIZEN_LAYOUT__CONTROLLER: ${CITIZEN_LAYOUT__CONTROLLER:?Set CITIZEN_LAYOUT__CONTROLLER in .env}

@@ -36,6 +36,7 @@ USER 10001:10001
 
 FROM runtime AS development
 
+COPY --chown=10001:10001 .browserslistrc ./
 COPY --chown=10001:10001 eslint.config.js ./
 COPY --from=dependency-installer --chown=10001:10001 /site/node_modules ./node_modules
 

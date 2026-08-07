@@ -43,11 +43,18 @@ restore_service_state() {
     fi
   done
 
-  if test "$started_database" = true && test -z "$stopped_services"; then
+  if test "$started_database" = true; then
     if ! dc stop db >/dev/null; then
       echo 'Could not return db to its stopped state; run npm run dev:stop.' >&2
     fi
   fi
+}
+
+restore_and_exit() {
+  exit_status=$1
+  trap - EXIT HUP INT TERM
+  restore_service_state
+  exit "$exit_status"
 }
 
 if ! command -v docker >/dev/null 2>&1; then
@@ -75,7 +82,10 @@ else
   started_database=true
 fi
 
-trap restore_service_state EXIT
+trap 'restore_and_exit $?' EXIT
+trap 'restore_and_exit 129' HUP
+trap 'restore_and_exit 130' INT
+trap 'restore_and_exit 143' TERM
 
 echo 'Verifying backup archive...'
 if ! dc exec -T db pg_restore --list < "$backup_file" >/dev/null; then
@@ -120,7 +130,7 @@ dc exec -T db sh -c \
 restore_service_state
 stopped_services=
 started_database=false
-trap - EXIT
+trap - EXIT HUP INT TERM
 
 echo 'Database restore completed.'
 

@@ -115,13 +115,13 @@ state. Archives must remain outside Docker so deleting the named volume cannot
 delete its backups. The original VM dump is only the migration baseline; use
 fresh backups to preserve later local changes.
 
-Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local database credentials. PostgreSQL is published only on loopback, and its data survives both `npm run dev:stop` and `npm run dev:destroy`.
+Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing local database credentials. PostgreSQL and the local HTTP/HTTPS proxy are published only on loopback, and database data survives both `npm run dev:stop` and `npm run dev:destroy`.
 
 ### Configuration and file watching
 
 Citizen resolves framework configuration when it is imported. Compose uses the ignored project-root `.env` for interpolation, explicitly injects non-secret application settings, and mounts `DB_PASSWORD` and `MAIL_AUTH_PASS` as service-scoped files under `/run/secrets`. `CITIZEN_*` settings, including the JSON `CITIZEN_CORS` policy, become typed values under `app.config`; other database and mail settings remain strings read from `process.env`. No `app/config/*.json` file may be active.
 
-The local app and Gulp watchers use polling for Docker Desktop. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. BrowserSync ports 3000 and 8282 and the Postico port are loopback-only.
+The local app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. Proxy ports 80 and 443, BrowserSync ports 3000 and 8282, and the Postico port are loopback-only.
 
 Citizen's local file logs are written to the ignored root-level `logs/`
 directory, so `logs/email.log` and `logs/error.log` are directly available in

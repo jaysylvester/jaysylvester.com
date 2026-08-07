@@ -46,19 +46,19 @@ app.toolbox.pg.types.setTypeParser(1114, function (stringValue) {
 // Create a connection pool
 app.toolbox.dbPool = new app.toolbox.pg.Pool({
   host:                    app.helpers.utility.requiredEnvironment('DB_HOST'),
-  port:                    Number(app.helpers.utility.requiredEnvironment('DB_PORT')),
+  port:                    app.helpers.utility.requiredEnvironment('DB_PORT', 'number'),
   database:                app.helpers.utility.requiredEnvironment('DB_DATABASE'),
   user:                    app.helpers.utility.requiredEnvironment('DB_USER'),
   password:                app.helpers.utility.requiredSecret('db-password', 'DB_PASSWORD'),
-  max:                     Number(app.helpers.utility.requiredEnvironment('DB_MAX')),
-  connectionTimeoutMillis: Number(app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS'))
+  max:                     app.helpers.utility.requiredEnvironment('DB_MAX', 'number'),
+  connectionTimeoutMillis: app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS', 'number')
 })
 // Log errors in the connection pool
 app.toolbox.dbPool.on('error', function (err) {
   app.log({
     type: 'error',
     label: 'Database pool error',
-    contents: err
+    content: err
   })
 })
 

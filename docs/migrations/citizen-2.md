@@ -26,15 +26,15 @@ The branch name remains in `package.json`; `package-lock.json` is the reproducib
 | Docker Desktop watcher | `CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING`, `CITIZEN_DEVELOPMENT__WATCHER__INTERVAL` | Local only; values are Boolean/number after Citizen coercion. |
 | `db.database` | `DB_DATABASE` | Read directly when constructing each PostgreSQL pool. |
 | `db.user` | `DB_USER` | Direct application environment read. |
-| `db.password` | `DB_PASSWORD` host source; `db-password` Docker secret | Docker reads `/run/secrets/db-password`; Phase 1 host production falls back to the existing environment value. Never logged. |
-| `db.port` | `DB_PORT` | Converted with `Number(...)`. |
-| `db.max` | `DB_MAX` | Converted with `Number(...)`; preserve the source value. |
-| `db.connectionTimeoutMillis` | `DB_CONNECTION_TIMEOUT_MILLIS` | Converted with `Number(...)`; preserve the source value. |
+| `db.password` | `DB_PASSWORD` host source; `db-password` Docker secret | Docker reads `/run/secrets/db-password`; a missing file falls back to the Phase 1 host production environment, while unreadable and empty mounted files produce distinct errors. Never logged. |
+| `db.port` | `DB_PORT` | Converted to a number and rejected unless finite. |
+| `db.max` | `DB_MAX` | Converted to a number and rejected unless finite; preserve the source value. |
+| `db.connectionTimeoutMillis` | `DB_CONNECTION_TIMEOUT_MILLIS` | Converted to a number and rejected unless finite; preserve the source value. |
 | Existing/default database host | `DB_HOST` | `db` locally; host loopback during the Phase 1 production interval. |
 | PostgreSQL server timezone | `POSTGRES_TIMEZONE` | Passed only to the database container as `TZ` so `initdb` preserves the source server's time behavior. |
 | `mail.service` | `MAIL_SERVICE` | Used by the production Nodemailer transport. |
 | `mail.auth.user` | `MAIL_AUTH_USER` | Used by the production Nodemailer transport. |
-| `mail.auth.pass` | `MAIL_AUTH_PASS` host source; `mail-auth-pass` Docker secret | Docker reads `/run/secrets/mail-auth-pass`; Phase 1 host production falls back to the existing environment value. Never logged. |
+| `mail.auth.pass` | `MAIL_AUTH_PASS` host source; `mail-auth-pass` Docker secret | Docker reads `/run/secrets/mail-auth-pass`; a missing file falls back to the Phase 1 host production environment, while unreadable and empty mounted files produce distinct errors. Never logged. |
 | `mail.name` | `MAIL_NAME` | Read by the contact action at its use site. |
 | `mail.address` | `MAIL_ADDRESS` | Read by the contact action at its use site. |
 | `mail.addressNoReply` | `MAIL_ADDRESS_NO_REPLY` | Read by the contact action at its use site. |
@@ -71,14 +71,14 @@ Global CORS support was added upstream in commit `49476d1102672d12696d1fa96bc239
 
 ## Verification results
 
-Verified from 2026-08-05 through 2026-08-06:
+Verified from 2026-08-05 through 2026-08-07:
 
 | Check | Result |
 | --- | --- |
 | Citizen native suite, Node.js 22.23.2 | Pass: 17 tests, 0 failures |
 | Citizen native suite, Node.js 24.19.0 | Pass: 17 tests, 0 failures |
 | Application `npm ci`, Node.js 24.19.0 | Pass; locked Citizen resolved over HTTPS at the recorded commit |
-| ESLint for `app/` and `gulpfile.js` | Pass inside the development `assets` container using the root `eslint.config.js`; the config is copied into the development image only. |
+| ESLint and browser targets for `app/` and `gulpfile.js` | Pass inside the development `assets` container using the root `eslint.config.js`; both it and `.browserslistrc` are copied into the development image so containerized Autoprefixer uses the same targets as a host build. |
 | Citizen 2.0 development startup, Node.js 22.23.2 and 24.19.0 | Pass on both; application imports, views validate, polling watcher starts, and HTTP reaches listening state with 8 expected `CITIZEN_*` process values |
 | Citizen 2.0 production startup, Node.js 24.19.0 | Pass: the production entrypoint reads both Compose password secrets and reaches HTTP listening state in an isolated production-mode container; a dummy-value check also proves the temporarily non-containerized production-host fallback. |
 | Global CORS preflight without controller config, Node.js 24.19.0 | Pass; `OPTIONS /contact` returned the configured allow-origin and allow-methods headers from `CITIZEN_CORS` |
@@ -87,7 +87,7 @@ Verified from 2026-08-05 through 2026-08-06:
 | Local database restore/comparison | Pass: PostgreSQL 13.23 custom dump restored into PostgreSQL 17.10; UTF-8, `en_US.UTF-8`, `America/New_York`, three tables/sequences/indexes/constraints, row counts, maximum IDs, sequence values, extension, and representative queries match. Data persisted across `docker compose down` and restart. |
 | Local HTTPS, route/CORS, proxy, and watcher automation | Pass over an explicit loopback resolution using the generated mkcert CA: six routes, CORS preflight, HTTP redirect, static gzip/cache headers, Nginx forwarding, Citizen polling, Gulp rebuild, and BrowserSync reload. The generated bundle diff from the watcher test was reviewed and restored rather than committed. |
 | Local system trust and hosts cutover | Pass: the mkcert CA is trusted in the macOS system keychain, `dev.jaysylvester.com` resolves to `127.0.0.1`, and the standard smoke script passes without `--insecure` or a custom CA argument. |
-| Local development contact flow | Pass after replacing the stale, undocumented `app.helpers.log()` call with the released Citizen 1.x/2.0 `app.log()` API; the form redirected to confirmation and wrote exactly two unsent development messages. |
+| Local development contact flow | Pass after replacing the stale, undocumented `app.helpers.log()` call with the released Citizen 1.x/2.0 `app.log()` API; the form awaits owner delivery before sending the visitor confirmation, logs a confirmation-only failure without turning an already-delivered message into an error response, and wrote exactly two unsent development messages. |
 | Citizen helper discovery and HMR | Pass: startup imports `/site/app/helpers/utility.js` instead of reporting `No helpers found`; touching the bind-mounted file logs `Helper reinitialized: utility`, and BrowserSync reloads. Startup database configuration and the route/CORS smoke test pass through `app.helpers.utility`. |
 | Local application source mount | Pass: both development services mount the checkout `app/` directory at `/site/app`, while image-owned dependencies remain at `/site/node_modules`. Citizen starts from the mounted entrypoint without an image rebuild, in-container ESLint passes, and the full route/CORS smoke test passes. |
 | Docker environment loading message | Pass: Citizen reports `No .env found.` because `/site/.env` is intentionally absent, then reports 8 applied `CITIZEN_*` process variables injected by Compose. Application behavior confirms the explicit non-secret environment and secret-file inputs are present. |
@@ -114,6 +114,8 @@ Verified from 2026-08-05 through 2026-08-06:
 - Bind-mount the ignored root-level `logs/` directory to `/site/logs` locally so development email and error logs remain directly accessible in the editor; retain the named log volume for production persistence.
 - Citizen creates a missing logs directory immediately before writing. Do not add `.gitkeep` or redundant startup directory creation unless a different application/framework actually requires it.
 - Keep each service's configuration narrow. PostgreSQL receives its database/user/init/timezone settings plus only the `db-password` secret; `app` receives an explicit non-secret environment allowlist plus the database and mail-password secrets; `assets` receives no database or mail credentials.
+- Use one required-environment helper with an explicit type argument, and validate numeric values as finite before passing them to libraries. A plain `Number(...)` can produce `NaN`, and option-defaulting code may silently replace that invalid value.
+- Copy build-tool configuration such as `.browserslistrc` into the development image alongside the build tools. Otherwise containerized asset output can differ from the same checkout built on the host.
 - Inventory the source server timezone as well as encoding and locale. The official PostgreSQL container otherwise initialized in UTC; mapping the non-secret `POSTGRES_TIMEZONE` to `TZ` before `initdb` preserved the source behavior.
 - PostgreSQL 17 exposes the database collation and character type through `pg_database.datcollate` and `pg_database.datctype`; the PostgreSQL 13 `SHOW lc_collate`/`SHOW lc_ctype` checks are not portable to that target.
 - Recreate Nginx after recreating the app because its workers may retain the removed container's resolved IP.
@@ -121,4 +123,7 @@ Verified from 2026-08-05 through 2026-08-06:
 - The migration dump is a one-time restore source, not a Compose startup input. Normal starts use PostgreSQL's named volume; `docker compose down` preserves it, while `down --volumes` or `docker volume rm` deletes it.
 - Use PostgreSQL logical custom-format backups outside Docker as the primary local recovery path. Publish only after `pg_restore --list` succeeds, checksum them, protect them with `0700`/`0600` modes, and prove the restore against a separately named disposable project/volume rather than the accepted database.
 - Give `stop` and `destroy` different developer-facing meanings: normal stop retains containers for speed; destroy removes containers/network but not volumes. Keep volume deletion out of both friendly commands.
+- Bind every locally published port to loopback unless another machine must reach it. This includes proxy ports 80/443 as well as PostgreSQL and BrowserSync.
+- Restore scripts must preserve the database's prior state independently of whether app/proxy were running, and must run the same cleanup on `HUP`, `INT`, and `TERM` as on normal exit.
+- Await the owner notification before treating a contact submission as successful. Send the visitor confirmation afterward and log its failure without returning an error for an owner message that was already delivered; this avoids both unhandled rejections and duplicate owner messages on resubmission.
 - A Compose health check runs continuously, not only during startup. Do not add app/proxy HTTP probes without a consumer that will alert or recover; otherwise they create load and misleading development logs while merely changing displayed health status. Keep dependency readiness checks only where an actual startup race exists, such as PostgreSQL accepting connections.

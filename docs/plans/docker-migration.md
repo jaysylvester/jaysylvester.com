@@ -465,12 +465,13 @@ docker compose --env-file .env -p jaysylvester-local -f compose.yaml -f compose.
 
 Confirm from the rendered Compose configuration and images that:
 
-- Only proxy ports 80/443 and loopback Postico/BrowserSync ports are published.
+- Only loopback-bound proxy ports 80/443 and loopback Postico/BrowserSync ports are published locally.
 - `app` receives only its explicit non-secret environment allowlist plus `db-password` and `mail-auth-pass`; `db` receives only its mapped initialization settings plus `db-password`; `assets` receives neither secret.
 - No environment file, legacy JSON, private key, dump, or host `node_modules` is in an image layer.
 - The app image contains Node.js 24, Citizen 2.0 at the recorded Git commit, `web/min/site.css`, `web/min/site.js`, and Linux `node_modules`.
 - No `app/config/*.json` exists in the app image.
-- The application runs non-root, constructs database/mail settings from explicit environment and secret-file reads without logging values, receives the global CORS policy through `CITIZEN_CORS`, and can write `/site/logs`.
+- The application runs non-root, constructs database/mail settings from explicit environment and secret-file reads without logging values, rejects non-finite numeric database settings, receives the global CORS policy through `CITIZEN_CORS`, and can write `/site/logs`.
+- The development image contains the repository `.browserslistrc` so containerized Autoprefixer uses the same targets as host builds.
 - Citizen reports the expected mode and applied `CITIZEN_*` variables.
 - Container Nginx passes `nginx -t`, supplies `Forwarded`, and contains the reviewed redirects and locations.
 
@@ -667,7 +668,9 @@ restore flags:
 
 Stop running app/proxy connections for the restore, run
 `ANALYZE`, and return app, proxy, and database services to their prior running
-state even when validation or restore fails.
+state even when validation or restore fails or the script receives `HUP`, `INT`,
+or `TERM`. If the restore script started a previously stopped database, it must
+stop it again regardless of whether app or proxy had been running.
 
 Before accepting these commands, create one real protected backup and restore it
 into a separately named temporary Compose project/volume. Compare the same
@@ -1398,8 +1401,10 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - The local Docker database was restored from the live VM database with schema, row counts, maximum IDs, sequences, extensions, and representative queries matching.
 - The local database volume was initialized with the reviewed source encoding, `lc_collate`, `lc_ctype`, and timezone; `resources/data.sql` was not used.
 - Existing local routes, static content, `web/shoplc/`, email logging, CORS behavior, `Forwarded` behavior, and HTTPS work as before.
+- Contact-form owner delivery is awaited before success; the visitor confirmation follows sequentially, and a confirmation-only failure is logged without producing an error page that encourages a duplicate owner submission.
 - No continuous app/proxy health check generates synthetic Citizen requests; the explicit smoke test proves the end-to-end path, while `pg_isready` gates app startup on PostgreSQL readiness.
-- Local HTTPS is trusted without certificate copying, and source watching plus BrowserSync work through Docker Desktop.
+- Local HTTPS is trusted without certificate copying, proxy ports 80/443 are bound to loopback, and source watching plus BrowserSync work through Docker Desktop.
+- Containerized asset builds use the tracked browser targets and match host-build targeting.
 - Local PostgreSQL is reachable by Postico only through loopback and its data survives container recreation.
 - Normal `dev:stop` retains containers, explicit `dev:destroy` removes containers/network without volumes, and a verified logical backup exists outside Docker. That backup restores successfully into an isolated temporary project/volume with focused data comparisons matching.
 - `package-lock.json` is tracked, records the tested Citizen Git commit, and builds pass with `npm ci`.
@@ -1464,7 +1469,7 @@ Otherwise, record it as a follow-up. In particular, do not reintroduce:
 
 Prefer the smallest check that proves a migration requirement. A successful logical restore plus focused data comparisons and application queries is sufficient; it does not need a permanent database-test framework. Citizen's own configuration log plus a working application is sufficient; it does not need `/proc` parentage assertions. Reviewing the effective Nginx configuration and testing its actual redirects is sufficient; it does not need a generalized response-manifest system.
 
-The direct Citizen test, explicit application configuration consumers, service-scoped password secrets, app-only local mount, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, passing string values where numeric database options are required, exposing passwords broadly in container environments, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
+The direct Citizen test, explicit application configuration consumers, finite-number validation, service-scoped password secrets, app-only local mount, copied build-tool configuration, pre-init PostgreSQL arguments, intentional lockfile transition, powered-off production snapshot, and logical database dump are included under this test. They prevent concrete failures: consuming an untested framework commit, silently defaulting malformed numeric database options, exposing passwords broadly in container environments, hiding edited application files behind a stale image or masking Linux dependencies with a repository-root mount, producing host/container asset differences, expensive volume reinitialization, an unreproducible dependency, an incomplete whole-server rollback, and an unusable database migration source. They are narrow protections, not invitations to restore the broader tooling removed from earlier drafts.
 
 Any proposed expansion should identify the concrete migration failure it prevents, the evidence that the risk exists in this project, and why the existing focused check is inadequate. Without that justification, it should remain outside this plan.
 
