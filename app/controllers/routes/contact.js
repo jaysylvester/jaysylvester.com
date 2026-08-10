@@ -52,7 +52,7 @@ export const form = async (params, request) => {
       }
     } else {
       await app.toolbox.mail.sendMail({
-        to: { name: process.env.MAIL_NAME, address: process.env.MAIL_ADDRESS },
+        to: { name: app.config.mail.name, address: app.config.mail.address },
         from: { name: params.form.name, address: params.form.email },
         subject: params.form.subject + ' (sent via contact form)',
         text: params.form.message
@@ -61,7 +61,7 @@ export const form = async (params, request) => {
       try {
         await app.toolbox.mail.sendMail({
           to: { name: params.form.name, address: params.form.email },
-          from: { name: process.env.MAIL_NAME, address: process.env.MAIL_ADDRESS_NO_REPLY },
+          from: { name: app.config.mail.name, address: app.config.mail.addressNoReply },
           subject: 'Message confirmation',
           text: 'Thanks for your message. I\'ll respond to you shortly.\n\nPlease don\'t reply to this e-mail; this address is unmonitored.'
         })

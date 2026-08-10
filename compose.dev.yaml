@@ -8,10 +8,8 @@ services:
   app:
     build:
       target: development
-    command: ["node", "app/start-dev.js"]
-    env_file:
-      - .env
     volumes:
+      - ./.env:/site/.env:ro
       - ./app:/site/app
       - ./citizen.config.js:/site/citizen.config.js:ro
       - ./logs:/site/logs
@@ -37,7 +35,7 @@ services:
       target: development
     command: ["npm", "run", "assets:watch"]
     environment:
-      BROWSERSYNC_ORIGIN: ${CORS_ALLOW_ORIGIN:?Set CORS_ALLOW_ORIGIN in .env}
+      BROWSERSYNC_ORIGIN: ${BROWSERSYNC_ORIGIN:?Set BROWSERSYNC_ORIGIN in .env}
       GULP_USE_POLLING: ${GULP_USE_POLLING:-true}
       GULP_POLLING_INTERVAL: ${GULP_POLLING_INTERVAL:-500}
     expose:

@@ -40,7 +40,7 @@ COPY --chown=10001:10001 .browserslistrc ./
 COPY --chown=10001:10001 eslint.config.js ./
 COPY --from=dependency-installer --chown=10001:10001 /site/node_modules ./node_modules
 
-CMD ["node", "app/start-dev.js"]
+CMD ["node", "app/start.js"]
 
 
 FROM runtime AS production

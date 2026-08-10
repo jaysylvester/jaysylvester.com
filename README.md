@@ -41,7 +41,7 @@ cp .env.example .env
 chmod 600 .env
 ```
 
-Git does not supply credentials, certificates, or database data. Populate `.env` from the protected Citizen 1.x configuration using the mapping in [docs/migrations/citizen-2.md](docs/migrations/citizen-2.md). Preserve the existing values. Before starting PostgreSQL for the first time, inventory the source PostgreSQL major, encoding, collation, character type, and timezone; select the tested `POSTGRES_IMAGE`, set `POSTGRES_INITDB_ARGS`, and set `POSTGRES_TIMEZONE` accordingly.
+Git does not supply credentials, certificates, or database data. Populate `.env` with the protected secrets and deployment inputs described in [docs/migrations/citizen-2.md](docs/migrations/citizen-2.md); stable typed application settings are already committed in `citizen.config.js`. Before starting PostgreSQL for the first time, inventory the source PostgreSQL major, encoding, collation, character type, and timezone; select the tested `POSTGRES_IMAGE`, set `POSTGRES_INITDB_ARGS`, and set `POSTGRES_TIMEZONE` accordingly.
 
 Obtain the authoritative custom-format dump outside this checkout and verify its checksum and archive:
 
@@ -119,7 +119,11 @@ Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing developm
 
 ### Configuration and file watching
 
-Citizen resolves framework configuration when it is imported. Stable typed framework settings live in committed `citizen.config.js`; the deployment-specific CORS origin and application-owned database/mail settings remain in the ignored project-root `.env`. Development Compose passes that file only to `app` through `env_file` and maps the required PostgreSQL values explicitly into `db`. Development does not use Compose secrets. No `app/config/*.json` file may be active.
+Citizen resolves configuration when it is imported. Committed `citizen.config.js` contains namespaced framework settings under `citizen` and typed, non-secret application settings under top-level `db` and `mail` properties. The ignored project-root `.env` contains only secrets and deployment inputs. Development bind-mounts it read-only at `/site/.env` so Citizen loads it natively, while Compose maps the required PostgreSQL values explicitly into `db`. Development does not use Compose secrets. No `app/config/*.json` file may be active.
+
+Both Docker targets run the shared `app/start.js`. Citizen's resolved mode selects the development mail logger and direct development database password, or the production Nodemailer transport and service-scoped password files. Passwords are passed only to their consumers and never added to `app.config`.
+
+Citizen's CORS configuration is intentionally unset because the application has no known cross-origin browser consumer. Cross-origin requests and preflights fail closed with `403` and no CORS response headers. `BROWSERSYNC_ORIGIN` is a separate development-only assets input for the same-origin BrowserSync proxy.
 
 The development app, log rotation, and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. BrowserSync runs as plain HTTP only on the Compose network; Nginx proxies its client and WebSocket traffic under the public development origin. The `assets` service receives only that nonsecret origin and Gulp watcher variables—not certificates, database values, or mail credentials. Only Nginx ports 80/443 and the Postico port are published, all on loopback.
 
@@ -129,18 +133,11 @@ Citizen's development file logs are written to the ignored root-level `logs/`
 directory, so `logs/email.log` and `logs/error.log` are directly available in
 the editor. Production continues to use its persistent Docker log volume.
 
-After changing values in `.env`, recreate `app` so Compose refreshes its environment, then recreate `proxy` so Nginx resolves the current app container. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password and recreating `db`; editing `.env` alone does not change an existing database volume. A `citizen.config.js` edit needs only an app restart because the file is bind-mounted read-only in development.
-
-```sh
-dc up -d --no-deps --force-recreate app
-dc up -d --no-deps --force-recreate proxy
-npm run dev:test
-```
-
-For a config-module-only edit:
+After changing application values in `.env`, restart `app`; the bind-mounted file is reread without recreating the container or changing its IP. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password and recreating `db`; editing `.env` alone does not change an existing database volume. A `citizen.config.js` edit likewise needs only an app restart because the file is bind-mounted read-only in development.
 
 ```sh
 dc restart app
+npm run dev:test
 ```
 
 ## Production during Phase 1
@@ -149,7 +146,7 @@ Production remains on its pre-migration host application, Nginx, PostgreSQL, and
 
 Phase 2 will add the Debian production Compose overlay, service-scoped database/mail password secrets, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. The production `.env` will provide Compose interpolation and secret source values but will not be injected or mounted wholesale into `app`.
 
-The Citizen dependency is pinned to the reviewed `2.0-project-config-module` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile, and update the migration record.
+The Citizen dependency is pinned to the reviewed `2.0-project-config-module-revised` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile without allowing npm to normalize the HTTPS source to SSH, and update the migration record.
 
 ## Future Linux development hosts (untested)
 

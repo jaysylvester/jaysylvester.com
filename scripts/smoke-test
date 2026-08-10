@@ -4,12 +4,7 @@ set -eu
 
 base_url=${1:-https://dev.jaysylvester.com}
 base_url=${base_url%/}
-# Keep the default CORS target distinct from the allowed origin. Citizen correctly
-# omits CORS response headers for same-origin requests. Phase 2 supplies explicit
-# production values after its public hostnames are inventoried.
-cors_target=${SMOKE_CORS_TARGET:-https://localhost}
-cors_target=${cors_target%/}
-cors_origin=${SMOKE_CORS_ORIGIN:-https://dev.jaysylvester.com}
+cors_origin=${SMOKE_CORS_ORIGIN:-https://cross-origin.invalid}
 
 if ! command -v curl >/dev/null 2>&1; then
   echo 'curl is required to run the smoke test.' >&2
@@ -29,12 +24,38 @@ for route in / /case-studies /contact /resume /work-samples /shoplc/web/category
     "$base_url$route"
 done
 
-headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke.XXXXXX")
-trap 'rm -f "$headers_file"' EXIT HUP INT TERM
+request_headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke-request.XXXXXX")
+preflight_headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke-preflight.XXXXXX")
+trap 'rm -f "$request_headers_file" "$preflight_headers_file"' EXIT HUP INT TERM
 
-echo "OPTIONS $cors_target/ (Origin: $cors_origin)"
-curl \
-  --fail \
+assert_cors_rejected() {
+  if [ "$1" != 403 ]; then
+    echo "$3 returned HTTP $1; expected 403." >&2
+    exit 1
+  fi
+
+  if grep -i '^Access-Control-Allow-' "$2" >/dev/null; then
+    echo "$3 returned an unexpected Access-Control-Allow-* header." >&2
+    exit 1
+  fi
+}
+
+echo "GET $base_url/ (Origin: $cors_origin; expected: 403)"
+request_status=$(curl \
+  --silent \
+  --show-error \
+  --retry 12 \
+  --retry-delay 1 \
+  --retry-connrefused \
+  --header "Origin: $cors_origin" \
+  --dump-header "$request_headers_file" \
+  --output /dev/null \
+  --write-out '%{http_code}' \
+  "$base_url/")
+assert_cors_rejected "$request_status" "$request_headers_file" 'Cross-origin GET'
+
+echo "OPTIONS $base_url/ (Origin: $cors_origin; expected: 403)"
+preflight_status=$(curl \
   --silent \
   --show-error \
   --retry 12 \
@@ -43,11 +64,10 @@ curl \
   --request OPTIONS \
   --header "Origin: $cors_origin" \
   --header 'Access-Control-Request-Method: GET' \
-  --dump-header "$headers_file" \
+  --dump-header "$preflight_headers_file" \
   --output /dev/null \
-  "$cors_target/"
-
-tr -d '\r' < "$headers_file" | grep -iF "Access-Control-Allow-Origin: $cors_origin" >/dev/null
-tr -d '\r' < "$headers_file" | grep -i 'Access-Control-Allow-Methods:.*GET' >/dev/null
+  --write-out '%{http_code}' \
+  "$base_url/")
+assert_cors_rejected "$preflight_status" "$preflight_headers_file" 'Cross-origin preflight'
 
 echo 'Smoke test passed.'
