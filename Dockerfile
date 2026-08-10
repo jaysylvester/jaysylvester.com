@@ -25,7 +25,7 @@ RUN groupadd --gid 10001 site \
 
 WORKDIR /site
 
-COPY --chown=10001:10001 package.json package-lock.json gulpfile.js ./
+COPY --chown=10001:10001 package.json package-lock.json gulpfile.js citizen.config.js ./
 COPY --chown=10001:10001 app ./app
 COPY --chown=10001:10001 web ./web
 

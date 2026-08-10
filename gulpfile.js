@@ -56,13 +56,12 @@ gulp.task('reload', function (done) {
 
 gulp.task('watch', function (done) {
   browsersync.init({
-    https: {
-      key: process.env.BROWSERSYNC_KEY || '_dev-certs/ssl-cert-snakeoil.key',
-      cert: process.env.BROWSERSYNC_CERT || '_dev-certs/ssl-cert-snakeoil.pem'
-    },
-    host: process.env.BROWSERSYNC_HOST || 'dev.jaysylvester.com',
-    ui: {
-      port: 8282
+    listen: '0.0.0.0',
+    port: 3000,
+    ui: false,
+    logSnippet: false,
+    socket: {
+      domain: 'https://dev.jaysylvester.com'
     },
     notify: false,
     open: false

@@ -1,5 +1,7 @@
 services:
   db:
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
     ports:
       - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
 
@@ -7,16 +9,18 @@ services:
     build:
       target: development
     command: ["node", "app/start-dev.js"]
-    environment:
-      CITIZEN_MODE: development
-      CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING: ${CITIZEN_DEVELOPMENT__WATCHER__USE_POLLING:-true}
-      CITIZEN_DEVELOPMENT__WATCHER__INTERVAL: ${CITIZEN_DEVELOPMENT__WATCHER__INTERVAL:-500}
+    env_file:
+      - .env
     volumes:
       - ./app:/site/app
+      - ./citizen.config.js:/site/citizen.config.js:ro
       - ./logs:/site/logs
       - ./web:/site/web
 
   proxy:
+    depends_on:
+      assets:
+        condition: service_started
     ports:
       - "127.0.0.1:80:80"
       - "127.0.0.1:443:443"
@@ -30,17 +34,12 @@ services:
       target: development
     command: ["npm", "run", "assets:watch"]
     environment:
-      BROWSERSYNC_HOST: ${BROWSERSYNC_HOST:-dev.jaysylvester.com}
-      BROWSERSYNC_KEY: /site/docker/dev-certs/dev-key.pem
-      BROWSERSYNC_CERT: /site/docker/dev-certs/dev-cert.pem
       GULP_USE_POLLING: ${GULP_USE_POLLING:-true}
       GULP_POLLING_INTERVAL: ${GULP_POLLING_INTERVAL:-500}
+    expose:
+      - "3000"
     init: true
-    ports:
-      - "127.0.0.1:3000:3000"
-      - "127.0.0.1:8282:8282"
     user: "10001:10001"
     volumes:
       - ./app:/site/app
       - ./web:/site/web
-      - ./docker/dev-certs:/site/docker/dev-certs:ro

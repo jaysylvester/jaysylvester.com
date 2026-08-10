@@ -27,7 +27,8 @@ certificate_is_valid() {
 }
 
 if certificate_is_valid; then
-  chmod 0644 "$certificate" "$private_key"
+  chmod 0644 "$certificate"
+  chmod 0600 "$private_key"
   echo "Development certificate is valid: $certificate"
   exit 0
 fi
@@ -38,9 +39,10 @@ mkcert \
   -key-file "$private_key" \
   dev.jaysylvester.com localhost 127.0.0.1 ::1
 
-# Both Nginx and the fixed non-root assets container must read this development
-# leaf key through Docker Desktop's bind mount.
-chmod 0644 "$certificate" "$private_key"
+# Nginx terminates development TLS. Its root master process can read the protected
+# leaf key before handing requests to unprivileged workers.
+chmod 0644 "$certificate"
+chmod 0600 "$private_key"
 
 if ! certificate_is_valid; then
   echo 'mkcert generated a certificate that failed validation.' >&2

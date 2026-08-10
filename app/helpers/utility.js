@@ -12,6 +12,22 @@ export const getRandomIntInclusive = (min, max) => {
 
 
 export const requiredEnvironment = (name, type = 'string') => {
+  if ( type === 'secret' && process.env[`${name}_FILE`] ) {
+    let value
+
+    try {
+      value = fs.readFileSync(process.env[`${name}_FILE`], 'utf8').replace(/\r?\n$/, '')
+    } catch (err) {
+      throw new Error(`Missing or unreadable required secret: ${name}`, { cause: err })
+    }
+
+    if ( !value ) {
+      throw new Error(`Required secret is empty: ${name}`)
+    }
+
+    return value
+  }
+
   if ( !process.env[name] ) {
     throw new Error(`Missing required environment variable: ${name}`)
   }
@@ -26,32 +42,10 @@ export const requiredEnvironment = (name, type = 'string') => {
 
       return value
     }
+    case 'secret':
     case 'string':
       return process.env[name]
     default:
       throw new Error(`Unsupported environment variable type: ${type}`)
   }
-}
-
-
-export const requiredSecret = (name, environmentName) => {
-  const filename = `/run/secrets/${name}`
-
-  if ( !fs.existsSync(filename) ) {
-    return requiredEnvironment(environmentName)
-  }
-
-  let value
-
-  try {
-    value = fs.readFileSync(filename, 'utf8').replace(/\r?\n$/, '')
-  } catch (err) {
-    throw new Error(`Missing or unreadable required secret: ${name}`, { cause: err })
-  }
-
-  if ( !value ) {
-    throw new Error(`Required secret is empty: ${name}`)
-  }
-
-  return value
 }

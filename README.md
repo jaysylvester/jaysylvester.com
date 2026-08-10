@@ -119,15 +119,17 @@ Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing developm
 
 ### Configuration and file watching
 
-Citizen resolves framework configuration when it is imported. Compose uses the ignored project-root `.env` for interpolation, explicitly injects non-secret application settings, and mounts `DB_PASSWORD` and `MAIL_AUTH_PASS` as service-scoped files under `/run/secrets`. `CITIZEN_*` settings, including the JSON `CITIZEN_CORS` policy, become typed values under `app.config`; other database and mail settings remain strings read from `process.env`. No `app/config/*.json` file may be active.
+Citizen resolves framework configuration when it is imported. Stable typed framework settings live in committed `citizen.config.js`; the deployment-specific CORS origin and application-owned database/mail settings remain in the ignored project-root `.env`. Development Compose passes that file only to `app` through `env_file` and maps the required PostgreSQL values explicitly into `db`. Development does not use Compose secrets. No `app/config/*.json` file may be active.
 
-The development app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. The `assets` service receives only BrowserSync certificate/host and watcher variables—not database or mail credentials. Proxy ports 80 and 443, BrowserSync ports 3000 and 8282, and the Postico port are loopback-only.
+The development app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. BrowserSync runs as plain HTTP only on the Compose network; Nginx proxies its client and WebSocket traffic under `https://dev.jaysylvester.com/browser-sync/`. The `assets` service receives only Gulp watcher variables—not certificates, database values, or mail credentials. Only Nginx ports 80/443 and the Postico port are published, all on loopback.
+
+Nginx resolves both `app` and the development-only `assets` hostname when its workers start. Recreate `proxy` after recreating either container; ordinary source changes handled by the running watchers do not require container recreation.
 
 Citizen's development file logs are written to the ignored root-level `logs/`
 directory, so `logs/email.log` and `logs/error.log` are directly available in
 the editor. Production continues to use its persistent Docker log volume.
 
-After changing non-database-password values in `.env`, recreate `app` so Compose refreshes its environment and secrets, then recreate `proxy` so Nginx resolves the current app container. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password; editing `.env` alone does not change an existing database volume.
+After changing values in `.env`, recreate `app` so Compose refreshes its environment, then recreate `proxy` so Nginx resolves the current app container. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password and recreating `db`; editing `.env` alone does not change an existing database volume. A `citizen.config.js` edit needs only an app restart because the file is bind-mounted read-only in development.
 
 ```sh
 dc up -d --no-deps --force-recreate app
@@ -135,25 +137,19 @@ dc up -d --no-deps --force-recreate proxy
 npm run dev:test
 ```
 
-## Production during Phase 1
-
-Production remains host-based during the interval before Phase 2: Node.js 24 and Citizen 2.0 run the application, while Nginx, PostgreSQL, and Certbot remain host services. The protected production `.env` retains the inventoried loopback Citizen binding and `DB_HOST=127.0.0.1`; it must not use the development Docker endpoints.
-
-Deploy application changes with the recorded production branch and systemd service:
+For a config-module-only edit:
 
 ```sh
-cd /var/www/jaysylvester.com
-git status --short
-git pull --ff-only
-PATH=/opt/node24/bin:/usr/local/bin:/usr/bin:/bin npm ci --omit=dev  # when dependencies changed
-sudo systemctl restart REPLACE_WITH_INVENTORIED_APP_SERVICE
-sudo systemctl status REPLACE_WITH_INVENTORIED_APP_SERVICE --no-pager
-curl -fsS https://jaysylvester.com/ >/dev/null
+dc restart app
 ```
 
-Ordinary deployments use the Citizen commit already recorded in `package-lock.json`. To consume a newer commit from `2.0-env-file-config-revised`, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh this lockfile, and update the migration record.
+## Production during Phase 1
 
-Phase 2 will add the Debian production Compose overlay, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. Until then, do not use the development Compose files to replace production host services.
+Production remains on its pre-migration host application, Nginx, PostgreSQL, and Certbot until Phase 2. Do not deploy this branch's container-oriented `citizen.config.js` revision through the existing host process; it intentionally binds Citizen for the private Docker network and expects Docker deployment inputs.
+
+Phase 2 will add the Debian production Compose overlay, service-scoped database/mail password secrets, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. The production `.env` will provide Compose interpolation and secret source values but will not be injected or mounted wholesale into `app`.
+
+The Citizen dependency is pinned to the reviewed `2.0-project-config-module` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile, and update the migration record.
 
 ## Future Linux development hosts (untested)
 

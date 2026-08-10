@@ -56,7 +56,7 @@ app.toolbox.dbPool = new app.toolbox.pg.Pool({
   port:                    app.helpers.utility.requiredEnvironment('DB_PORT', 'number'),
   database:                app.helpers.utility.requiredEnvironment('DB_DATABASE'),
   user:                    app.helpers.utility.requiredEnvironment('DB_USER'),
-  password:                app.helpers.utility.requiredSecret('db-password', 'DB_PASSWORD'),
+  password:                app.helpers.utility.requiredEnvironment('DB_PASSWORD', 'secret'),
   max:                     app.helpers.utility.requiredEnvironment('DB_MAX', 'number'),
   connectionTimeoutMillis: app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS', 'number')
 })
