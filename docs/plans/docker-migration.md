@@ -36,7 +36,7 @@ The result must provide:
 
 - Development on macOS with Docker Desktop and no project-specific VM.
 - Production on the existing Debian DigitalOcean droplet with Docker Engine.
-- Citizen 2.0 on Node.js 24 LTS, with Citizen installed directly over HTTPS from `jaysylvester/citizen#2.0-project-config-module-revised` and the resolved Git commit recorded in `package-lock.json`.
+- Citizen 2.0 on Node.js 24 LTS, with Citizen installed directly over HTTPS from `jaysylvester/citizen#2.0` and the resolved Git commit recorded in `package-lock.json`.
 - Typed framework and nonsecret application configuration in committed `citizen.config.js`, secrets and deployment inputs in the ignored project-root `.env`, and no active Citizen JSON files.
 - Separate development and production configuration, databases, certificates, and volumes.
 - Direct migration from each environment's live PostgreSQL database.
@@ -82,7 +82,7 @@ Do not introduce a behavior change merely because it would be a useful improveme
 
 ## 3. Citizen 2.0 and Configuration Constraints
 
-Use the `2.0-project-config-module-revised` branch directly until a later decision switches this project to a registry release. The implementation reviewed on 2026-08-10 was commit `68cd4c597171cc271019da64c73cc07784bcd450`, whose 38-test native suite passed under Node.js 22 and Node.js 24. At each dependency refresh, record the branch commit and require the same two-major test matrix before updating this project's lockfile.
+Use the merged `2.0` branch directly until a later decision switches this project to a registry release. The implementation reviewed on 2026-08-10 was commit `c6610ace80046f294ac85d358a75fd6f3880f6fd`, whose 38-test native suite passed under Node.js 22 and Node.js 24. At each dependency refresh, record the branch commit and require the same two-major test matrix before updating this project's lockfile.
 
 The implementation must follow Citizen 2.0's actual configuration behavior:
 
@@ -222,7 +222,7 @@ If another development project already owns ports 80, 443, or 5432, stop that pr
 ### Application
 
 - Build Node.js 24 development and production targets from the same Dockerfile and lockfile.
-- Install Citizen from `git+https://github.com/jaysylvester/citizen.git#2.0-project-config-module-revised`; the lockfile's resolved commit is the reproducible build input.
+- Install Citizen from `git+https://github.com/jaysylvester/citizen.git#2.0`; the lockfile's resolved commit is the reproducible build input.
 - The dependency-install build stage needs Git and CA certificates to resolve the direct HTTPS dependency. Do not carry Git into the final runtime image solely for this purpose.
 - Run `node app/start.js` in both environments. Keep the development and production image commands identical; select their database-password and mail behavior from `app.config.citizen.mode` after Citizen resolves configuration.
 - Put typed framework settings under `citizen` in the root `citizen.config.js`; put typed nonsecret database and mail settings beside that namespace. Keep secrets and deployment-specific values in `.env` without changing their values.
@@ -377,11 +377,11 @@ Use an existing Citizen checkout or clone the direct branch next to this project
 CITIZEN_REPO=/absolute/path/to/citizen
 if test -d "$CITIZEN_REPO/.git"; then
   git -C "$CITIZEN_REPO" status --short
-  git -C "$CITIZEN_REPO" fetch origin 2.0-project-config-module-revised
-  git -C "$CITIZEN_REPO" switch 2.0-project-config-module-revised
+  git -C "$CITIZEN_REPO" fetch origin 2.0
+  git -C "$CITIZEN_REPO" switch 2.0
   git -C "$CITIZEN_REPO" pull --ff-only
 else
-  git clone --branch 2.0-project-config-module-revised https://github.com/jaysylvester/citizen.git "$CITIZEN_REPO"
+  git clone --branch 2.0 https://github.com/jaysylvester/citizen.git "$CITIZEN_REPO"
 fi
 git -C "$CITIZEN_REPO" log -1 --format='%H %cs %s'
 ```
@@ -408,7 +408,7 @@ cd /absolute/path/to/jaysylvester.com
 git check-ignore -v package-lock.json
 ${EDITOR:-vi} .gitignore
 docker run --rm -v "$PWD:/site" -w /site node:24-bookworm \
-  npm install --package-lock-only --save-exact 'citizen@git+https://github.com/jaysylvester/citizen.git#2.0-project-config-module-revised'
+  npm install --package-lock-only --save-exact 'citizen@git+https://github.com/jaysylvester/citizen.git#2.0'
 git add .gitignore package.json package-lock.json
 git diff --cached --check
 git status --short
@@ -1310,7 +1310,7 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 
 - Development runs on the Mac through Docker Desktop with no dependency on the old VM.
 - Citizen's native test suite passes under both Node.js 22 and Node.js 24 at the exact direct-branch commit resolved by this project's lockfile.
-- The development image uses Node.js 24 and Citizen 2.0 directly from `2.0-project-config-module-revised`; no unpublished framework patch exists only in this repository or image.
+- The development image uses Node.js 24 and Citizen 2.0 directly from `2.0`; no unpublished framework patch exists only in this repository or image.
 - Development bind-mounts the protected project-root `.env` read-only at `/site/.env`, Citizen loads committed `/site/citizen.config.js`, framework settings are exposed under `app.config.citizen`, and typed nonsecret database/mail settings are exposed beside it.
 - No `.env` is present in an image layer; the development app alone receives the runtime bind. `/site/citizen.config.js` is copied into the image and bind-mounted for development editing. Secret values do not appear in Git, image layers, logs, `app.config`, `assets`, or `proxy`.
 - The shared `app.start()` call receives only the application-owned cache buster; active framework reads use `app.config.citizen`/`config.citizen`, and application reads use `app.config.db`/`app.config.mail`.
@@ -1463,8 +1463,8 @@ shared cross-project proxy as an incidental part of these migrations.
 
 ## 12. References
 
-- Citizen 2.0 branch: <https://github.com/jaysylvester/citizen/tree/2.0-project-config-module-revised>.
-- Citizen 1.x-to-2.x guide: <https://github.com/jaysylvester/citizen/blob/2.0-project-config-module-revised/MIGRATION.md>.
+- Citizen 2.0 branch: <https://github.com/jaysylvester/citizen/tree/2.0>.
+- Citizen 1.x-to-2.x guide: <https://github.com/jaysylvester/citizen/blob/2.0/MIGRATION.md>.
 - Citizen 2.0 configuration: `node_modules/citizen/README.md` at the commit resolved by this project's lockfile.
 - Citizen 2.0 config loader: `node_modules/citizen/init/config.js` at that same commit.
 - Official Node.js 24 distribution index: <https://nodejs.org/download/release/latest-v24.x/>.

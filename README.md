@@ -146,7 +146,7 @@ Production remains on its pre-migration host application, Nginx, PostgreSQL, and
 
 Phase 2 will add the Debian production Compose overlay, service-scoped database/mail password secrets, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. The production `.env` will provide Compose interpolation and secret source values but will not be injected or mounted wholesale into `app`.
 
-The Citizen dependency is pinned to the reviewed `2.0-project-config-module-revised` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile without allowing npm to normalize the HTTPS source to SSH, and update the migration record.
+The Citizen dependency is pinned to the reviewed `2.0` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile without allowing npm to normalize the HTTPS source to SSH, and update the migration record.
 
 ## Future Linux development hosts (untested)
 

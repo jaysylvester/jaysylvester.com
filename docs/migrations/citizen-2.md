@@ -8,12 +8,12 @@ post-acceptance Phase 1 follow-up removed it and verified Citizen's fail-closed 
 
 ## Framework source
 
-- Target dependency: `git+https://github.com/jaysylvester/citizen.git#2.0-project-config-module-revised`
-- Upstream commit reviewed on 2026-08-10: `68cd4c597171cc271019da64c73cc07784bcd450`
-- Superseded project-configuration-module commit: `6bc03c6c7c906317954d5c02493fefc7dd70f8d4`
+- Target dependency: `git+https://github.com/jaysylvester/citizen.git#2.0`
+- Upstream commit reviewed on 2026-08-10: `c6610ace80046f294ac85d358a75fd6f3880f6fd`
+- Superseded feature-branch commit: `68cd4c597171cc271019da64c73cc07784bcd450` from `2.0-project-config-module-revised`
 - Citizen version at the reviewed commit: `2.0.0`
 - Review result: all 38 native tests passed under Node.js 22 and Node.js 24.
-- Application lockfile: direct HTTPS branch dependency resolving exact commit `68cd4c597171cc271019da64c73cc07784bcd450`.
+- Application lockfile: direct HTTPS branch dependency resolving exact commit `c6610ace80046f294ac85d358a75fd6f3880f6fd`.
 - No Citizen source is patched in this application or its images.
 
 The HTTPS branch name remains in `package.json`; the exact commit in
@@ -122,7 +122,7 @@ application CORS input.
 
 ## Verification state
 
-- Citizen's 38-test native suite passed under Node.js 22 and Node.js 24 at commit `68cd4c597171cc271019da64c73cc07784bcd450`; the application lock resolves that commit through HTTPS.
+- Citizen's 38-test native suite passed under Node.js 22 and Node.js 24 at merged `2.0` commit `c6610ace80046f294ac85d358a75fd6f3880f6fd`; the application lock resolves that commit through HTTPS.
 - Development and production Docker targets built successfully with `npm ci` from the refreshed HTTPS lockfile.
 - Development startup reported `Loaded project environment: /site/.env`, loaded `/site/citizen.config.js`, and ran in development mode on port `8080`.
 - The protected development `.env` was readable by the fixed non-root app user through its read-only bind at mode `0600`, without placeholder values.
