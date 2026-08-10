@@ -11,6 +11,7 @@ import sourcemaps    from 'gulp-sourcemaps'
 import uglify        from 'gulp-uglify-es'
 
 const sass = gulpsass(nodesass)
+const browserSyncOrigin = process.env.BROWSERSYNC_ORIGIN
 const polling = process.env.GULP_USE_POLLING === 'true'
 const pollingInterval = Number(process.env.GULP_POLLING_INTERVAL || 500)
 const watchOptions = {
@@ -18,8 +19,8 @@ const watchOptions = {
   interval: pollingInterval
 }
 
-gulp.task('css', function (done) {
-  gulp.src(['web/source/scss/site.scss'])
+gulp.task('css', function () {
+  return gulp.src(['web/source/scss/site.scss'])
       .pipe(sourcemaps.init())
       .pipe(sass().on('error', sass.logError))
       .pipe(postcss([autoprefixer()]))
@@ -29,11 +30,10 @@ gulp.task('css', function (done) {
       .pipe(gulp.dest('web/min'))
       .pipe(filter('**/*.css*'))
       .pipe(browsersync.stream())
-  done()
 })
 
-gulp.task('js', function (done) {
-  gulp.src([
+gulp.task('js', function () {
+  return gulp.src([
             'web/source/js/immediate.js',
             'web/source/js/**/*.js'
           ])
@@ -43,7 +43,6 @@ gulp.task('js', function (done) {
       .pipe(sourcemaps.write(''))
       .pipe(gulp.dest('web/min'))
       .pipe(browsersync.stream())
-  done()
 })
 
 gulp.task('reload', function (done) {
@@ -55,13 +54,17 @@ gulp.task('reload', function (done) {
 })
 
 gulp.task('watch', function (done) {
+  if ( !browserSyncOrigin ) {
+    throw new Error('Missing required environment variable: BROWSERSYNC_ORIGIN')
+  }
+
   browsersync.init({
     listen: '0.0.0.0',
     port: 3000,
     ui: false,
     logSnippet: false,
     socket: {
-      domain: 'https://dev.jaysylvester.com'
+      domain: browserSyncOrigin
     },
     notify: false,
     open: false

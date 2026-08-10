@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+
+exec docker compose \
+  --env-file .env \
+  -p jaysylvester-dev \
+  -f compose.yaml \
+  -f compose.dev.yaml \
+  "$@"

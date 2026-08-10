@@ -29,10 +29,10 @@ app.toolbox = {
   // Third party modules
   cacheBuster: cacheBuster,
   mail: nodemailer.createTransport({
-    service: app.helpers.utility.requiredEnvironment('MAIL_SERVICE'),
+    service: process.env.MAIL_SERVICE,
     auth: {
-      user: app.helpers.utility.requiredEnvironment('MAIL_AUTH_USER'),
-      pass: app.helpers.utility.requiredEnvironment('MAIL_AUTH_PASS', 'secret')
+      user: process.env.MAIL_AUTH_USER,
+      pass: fs.readFileSync(process.env.MAIL_AUTH_PASS_FILE, 'utf8').replace(/\r?\n$/, '')
     }
   }),
   moment: moment,
@@ -45,13 +45,13 @@ app.toolbox.pg.types.setTypeParser(1114, function (stringValue) {
 })
 // Create a connection pool
 app.toolbox.dbPool = new app.toolbox.pg.Pool({
-  host:                    app.helpers.utility.requiredEnvironment('DB_HOST'),
-  port:                    app.helpers.utility.requiredEnvironment('DB_PORT', 'number'),
-  database:                app.helpers.utility.requiredEnvironment('DB_DATABASE'),
-  user:                    app.helpers.utility.requiredEnvironment('DB_USER'),
-  password:                app.helpers.utility.requiredEnvironment('DB_PASSWORD', 'secret'),
-  max:                     app.helpers.utility.requiredEnvironment('DB_MAX', 'number'),
-  connectionTimeoutMillis: app.helpers.utility.requiredEnvironment('DB_CONNECTION_TIMEOUT_MILLIS', 'number')
+  host:                    process.env.DB_HOST,
+  port:                    Number(process.env.DB_PORT),
+  database:                process.env.DB_DATABASE,
+  user:                    process.env.DB_USER,
+  password:                fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf8').replace(/\r?\n$/, ''),
+  max:                     Number(process.env.DB_MAX),
+  connectionTimeoutMillis: Number(process.env.DB_CONNECTION_TIMEOUT_MILLIS)
 })
 // Log errors in the connection pool
 app.toolbox.dbPool.on('error', function (err) {

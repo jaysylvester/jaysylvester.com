@@ -4,6 +4,9 @@ set -eu
 
 base_url=${1:-https://dev.jaysylvester.com}
 base_url=${base_url%/}
+# Keep the default CORS target distinct from the allowed origin. Citizen correctly
+# omits CORS response headers for same-origin requests. Phase 2 supplies explicit
+# production values after its public hostnames are inventoried.
 cors_target=${SMOKE_CORS_TARGET:-https://localhost}
 cors_target=${cors_target%/}
 cors_origin=${SMOKE_CORS_ORIGIN:-https://dev.jaysylvester.com}
@@ -15,7 +18,15 @@ fi
 
 for route in / /case-studies /contact /resume /work-samples /shoplc/web/category.html; do
   echo "GET $base_url$route"
-  curl --fail --silent --show-error --output /dev/null "$base_url$route"
+  curl \
+    --fail \
+    --silent \
+    --show-error \
+    --retry 12 \
+    --retry-delay 1 \
+    --retry-connrefused \
+    --output /dev/null \
+    "$base_url$route"
 done
 
 headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke.XXXXXX")
@@ -26,6 +37,9 @@ curl \
   --fail \
   --silent \
   --show-error \
+  --retry 12 \
+  --retry-delay 1 \
+  --retry-connrefused \
   --request OPTIONS \
   --header "Origin: $cors_origin" \
   --header 'Access-Control-Request-Method: GET' \

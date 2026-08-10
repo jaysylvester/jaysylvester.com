@@ -18,6 +18,9 @@ services:
       - ./web:/site/web
 
   proxy:
+    build:
+      args:
+        NGINX_CONFIG: dev.conf
     depends_on:
       assets:
         condition: service_started
@@ -34,6 +37,7 @@ services:
       target: development
     command: ["npm", "run", "assets:watch"]
     environment:
+      BROWSERSYNC_ORIGIN: ${CORS_ALLOW_ORIGIN:?Set CORS_ALLOW_ORIGIN in .env}
       GULP_USE_POLLING: ${GULP_USE_POLLING:-true}
       GULP_POLLING_INTERVAL: ${GULP_POLLING_INTERVAL:-500}
     expose:

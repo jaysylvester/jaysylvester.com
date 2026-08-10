@@ -24,12 +24,7 @@ started_database=false
 stopped_services=
 
 dc() {
-  docker compose \
-    --env-file .env \
-    -p jaysylvester-dev \
-    -f compose.yaml \
-    -f compose.dev.yaml \
-    "$@"
+  ./scripts/dev-compose "$@"
 }
 
 service_is_running() {

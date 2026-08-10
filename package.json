@@ -19,12 +19,12 @@
     "dev:build": "./scripts/dev-up --build",
     "dev:db:backup": "./scripts/dev-db-backup",
     "dev:db:restore": "./scripts/dev-db-restore",
-    "dev:destroy": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml down",
-    "dev:logs": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml logs -f app proxy assets db",
+    "dev:destroy": "./scripts/dev-compose down",
+    "dev:logs": "./scripts/dev-compose logs -f app proxy assets db",
     "dev:restart": "npm run dev:stop && npm run dev:start",
     "dev:start": "./scripts/dev-up",
-    "dev:status": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml ps --all",
-    "dev:stop": "docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml stop",
+    "dev:status": "./scripts/dev-compose ps --all",
+    "dev:stop": "./scripts/dev-compose stop",
     "dev:test": "./scripts/smoke-test https://dev.jaysylvester.com"
   },
   "dependencies": {

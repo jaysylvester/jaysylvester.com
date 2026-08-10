@@ -53,7 +53,7 @@ pg_restore --list jaysylvester.dump >/dev/null
 The development Compose project is `jaysylvester-dev`; its database volume is `jaysylvester-dev-postgres`. Do not create that final volume until the PostgreSQL image and locale have been rehearsed.
 
 ```sh
-dc() { docker compose --env-file .env -p jaysylvester-dev -f compose.yaml -f compose.dev.yaml "$@"; }
+dc() { ./scripts/dev-compose "$@"; }
 
 dc config --quiet
 dc up -d db
@@ -121,7 +121,7 @@ Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing developm
 
 Citizen resolves framework configuration when it is imported. Stable typed framework settings live in committed `citizen.config.js`; the deployment-specific CORS origin and application-owned database/mail settings remain in the ignored project-root `.env`. Development Compose passes that file only to `app` through `env_file` and maps the required PostgreSQL values explicitly into `db`. Development does not use Compose secrets. No `app/config/*.json` file may be active.
 
-The development app and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. BrowserSync runs as plain HTTP only on the Compose network; Nginx proxies its client and WebSocket traffic under `https://dev.jaysylvester.com/browser-sync/`. The `assets` service receives only Gulp watcher variables—not certificates, database values, or mail credentials. Only Nginx ports 80/443 and the Postico port are published, all on loopback.
+The development app, log rotation, and Gulp watchers use polling for Docker Desktop. The development image includes the root `.browserslistrc`, so containerized Autoprefixer uses the repository's browser targets. BrowserSync runs as plain HTTP only on the Compose network; Nginx proxies its client and WebSocket traffic under the public development origin. The `assets` service receives only that nonsecret origin and Gulp watcher variables—not certificates, database values, or mail credentials. Only Nginx ports 80/443 and the Postico port are published, all on loopback.
 
 Nginx resolves both `app` and the development-only `assets` hostname when its workers start. Recreate `proxy` after recreating either container; ordinary source changes handled by the running watchers do not require container recreation.
 

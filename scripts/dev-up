@@ -14,9 +14,4 @@ fi
 
 ./scripts/dev-cert
 
-exec docker compose \
-  --env-file .env \
-  -p jaysylvester-dev \
-  -f compose.yaml \
-  -f compose.dev.yaml \
-  up -d "$@"
+exec ./scripts/dev-compose up -d "$@"
