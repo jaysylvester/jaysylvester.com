@@ -158,7 +158,7 @@ This focused Phase 1 follow-up was completed on 2026-08-10:
 
 ## 4. Repository Artifacts
 
-Implement and commit these Phase 1 artifacts on `docker-citizen2-migration`:
+Phase 1 implemented and committed these artifacts on `maintenance/docker-migration`:
 
 - `Dockerfile` with Node.js 24 development and production targets.
 - `.dockerignore`.
@@ -179,7 +179,7 @@ Implement and commit these Phase 1 artifacts on `docker-citizen2-migration`:
 - `docs/migrations/citizen-2.md` recording the source-to-target config mapping, exact Citizen commit, test results, issues found, upstream fixes, and reusable lessons.
 - A real project `README.md` containing the tested macOS development instructions required by section 8.
 
-Add and commit these production-specific artifacts on a new production-Docker branch during Phase 2, after inventorying the effective production configuration:
+Add and commit these production-specific artifacts on `maintenance/docker-migration` during Phase 2, after inventorying the effective production configuration. After review and local acceptance, fast-forward `main` to the completed migration branch as the production release gate:
 
 - `compose.production.yaml` for Debian production.
 - The production Nginx configuration, preserving the inventoried redirects and other application-relevant behavior.
@@ -283,20 +283,20 @@ Phase 1 ends with the development environment running through Docker Desktop, th
 
 ### Coordinate the shared application migration
 
-Create the Docker and Citizen 2.0 work on a dedicated migration branch while it is under development:
+Create the Docker and Citizen 2.0 work on a dedicated migration branch while it is under development. For this project, that branch is `maintenance/docker-migration`:
 
 `[WORKSTATION — macOS]`
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
 git status --short
-git switch -c docker-citizen2-migration
-git push -u origin docker-citizen2-migration
+git switch -c maintenance/docker-migration
+git push -u origin maintenance/docker-migration
 ```
 
 If the migration branch already exists, switch to it instead of creating it. Apply any intervening production hotfix to the production branch first, then merge that commit into the migration branch and repeat the affected development checks.
 
-Do not merge the container-oriented migration branch into the production deployment branch during Phase 1. Complete revised development Citizen 2.0/Docker acceptance, then reconcile it with the production branch while preparing the Phase 2 production-Docker branch. Production receives the application and infrastructure changes together during the maintenance window.
+Do not merge the container-oriented migration branch into `main` during Phase 1. Complete revised development Citizen 2.0/Docker acceptance, then add and review the production artifacts on that same migration branch during Phase 2. Fast-forward `main` only after the complete production definition passes local review. Production receives the application and infrastructure changes together when the production checkout pulls `main` during the maintenance window.
 
 ### Inventory the development VM
 
@@ -769,6 +769,20 @@ Phase 1 was accepted on 2026-08-09 after the revised project-config-module crite
 
 Phase 2 starts from the accepted development Docker application while production still runs its pre-migration host stack. It inventories and prepares the Debian infrastructure, adds the production Compose overlay, migrates the live production database, switches Nginx and the app to Docker with the accepted Citizen revision, preserves Let's Encrypt, and finally removes the retired host runtimes. The existing production stack can remain in service indefinitely before this phase begins.
 
+### Operator-presence gates
+
+Most inventory, implementation, builds, configuration review, and automated tests can proceed without continuous operator involvement once access is available. The operator must be present for these explicit gates:
+
+1. Authenticate to the production host and provide `sudo` access when the SSH session cannot reuse credentials.
+2. Confirm the powered-off DigitalOcean rollback snapshot in the control panel before any production mutation. If the existing snapshot is absent or stale, create and verify a replacement before installing Docker, changing Certbot, or modifying production files.
+3. Supply or verify the protected production `.env` values without copying secrets into Git, chat, logs, or shell history.
+4. Review the complete branch diff and approve the fast-forward merge from `maintenance/docker-migration` into `main` and the push of `main`.
+5. Start the maintenance window and approve stopping the host application, Nginx, and PostgreSQL, pulling the new `main`, and restoring the production dump into Docker.
+6. Perform or confirm the human-facing acceptance checks: public browsing, production contact and confirmation email delivery, Postico over SSH, and the certificate details.
+7. Choose rollback through the DigitalOcean control panel if acceptance fails. If acceptance succeeds, separately approve the pre-cleanup reboot rehearsal, later destructive host-runtime purge, final reboot, and eventual snapshot deletion.
+
+The operator does not need to remain present while images build, the production overlay is authored, static configuration is reviewed, or automated tests run. Stop at each gate rather than carrying approval from one gate into the next.
+
 ### Inventory the production Debian droplet
 
 `[PRODUCTION]`
@@ -780,6 +794,7 @@ cat /etc/os-release
 test "$(. /etc/os-release && printf '%s' "$ID")" = debian
 git status --short
 git branch --show-current
+test "$(git branch --show-current)" = main
 git rev-parse HEAD
 node --version
 node -p "require('./node_modules/citizen/package.json').version"
@@ -827,7 +842,7 @@ Production is authoritative for public behavior. Record its exact static expiry 
 
 ### Implement and review the production overlay
 
-Copy the protected effective Nginx capture to a protected workstation path outside Git, then create a short-lived production-Docker branch from the accepted development migration branch reconciled with the current production branch. This branch carries the project-config-module application and all production-specific artifacts listed in section 4:
+Copy the protected effective Nginx capture to a protected workstation path outside Git, then update the accepted `maintenance/docker-migration` branch and confirm that current `main` is still its ancestor. Continue the production implementation on the migration branch; do not introduce a second short-lived production branch. If `main` has advanced independently, reconcile it on the workstation, rerun affected development checks, and review the result before continuing:
 
 `[WORKSTATION — macOS]`
 
@@ -836,18 +851,16 @@ mkdir -p /absolute/private/path/docker-migration-production
 chmod 700 /absolute/private/path/docker-migration-production
 scp REPLACE_ME_PRODUCTION_SSH:REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/nginx-before-docker/effective.txt /absolute/private/path/docker-migration-production/
 cd /absolute/path/to/jaysylvester.com
-PRODUCTION_BRANCH=REPLACE_ME_RECORDED_PRODUCTION_BRANCH
-MIGRATION_BRANCH=docker-citizen2-migration
-PRODUCTION_DOCKER_BRANCH=docker-production-migration
-git fetch origin "$PRODUCTION_BRANCH" "$MIGRATION_BRANCH"
-git switch "$MIGRATION_BRANCH"
-git pull --ff-only origin "$MIGRATION_BRANCH"
-git merge --ff-only "origin/$PRODUCTION_BRANCH"
-git switch -c "$PRODUCTION_DOCKER_BRANCH"
+git fetch origin main maintenance/docker-migration
+git switch maintenance/docker-migration
+git pull --ff-only origin maintenance/docker-migration
+git merge-base --is-ancestor origin/main HEAD
 git status --short
 ```
 
 Implement `compose.production.yaml`, a new production Nginx configuration derived from the effective production capture—not from `docker/nginx/dev.conf`—the Certbot reload hook, the focused production smoke-test cases, and the production README sections. Confirm the production overlay injects only `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`, sets `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`, grants the matching secrets, and gives `db` only its explicit `POSTGRES_*` inputs plus `POSTGRES_PASSWORD_FILE`. It must not use `env_file`, mount `.env`, override the config module's container binding, or give application secrets to `assets` or `proxy`. Use the effective configuration to preserve redirects, locations, headers, static behavior including the inventoried cache policy, and ACME handling; do not copy unrelated host-wide Nginx content.
+
+Set `restart: unless-stopped` for production `db`, `app`, and `proxy` in the production overlay. Development keeps its existing explicit lifecycle. Enabling Docker at boot is not sufficient by itself; the production containers must have restart policies so the accepted stack returns after a Droplet reboot.
 
 Render and build the production definitions on the Mac with a temporary, non-secret review environment outside Git:
 
@@ -862,12 +875,14 @@ git status --short
 git add compose.production.yaml docker/nginx scripts/reload-production-proxy scripts/smoke-test README.md citizen.config.js Dockerfile compose.yaml .env.example
 git diff --cached --check
 git commit -m "Add production Docker deployment"
-git push -u origin "$PRODUCTION_DOCKER_BRANCH"
+git push origin maintenance/docker-migration
 ```
 
-If the branch already exists, switch to it rather than creating it. Use syntactically valid placeholders and dummy passwords in the temporary review file, not production credentials. In addition to rendering and building, perform one focused production-target app startup with those dummy Compose secrets and prove the application's direct file reads obtain both passwords while the values remain absent from the rendered app environment and `docker inspect`. Review the staged file list before committing in case the implementation changed a different focused file. Re-run the development smoke test after these shared-file changes; Phase 2 must not regress the accepted Phase 1 environment.
+Use syntactically valid placeholders and dummy passwords in the temporary review file, not production credentials. In addition to rendering and building, perform one focused production-target app startup with those dummy Compose secrets and prove the application's direct file reads obtain both passwords while the values remain absent from the rendered app environment and `docker inspect`. Review the staged file list before committing in case the implementation changed a different focused file. Re-run the development smoke test after these shared-file changes; Phase 2 must not regress the accepted Phase 1 environment.
 
 ### Prepare production
+
+Before running any command in this section that changes the production host, confirm in the DigitalOcean control panel that the powered-off pre-migration snapshot is complete, current for the accepted rollback assumptions, and restorable onto the existing Droplet. Stop and replace it if production state has changed since it was created.
 
 #### Install Docker Engine on Debian
 
@@ -910,10 +925,9 @@ Confirm the DigitalOcean and Debian firewalls expose only the intended public po
 
 ```sh
 cd /var/www/jaysylvester.com
-PRODUCTION_DOCKER_BRANCH=docker-production-migration
 git status --short
-git fetch origin "$PRODUCTION_DOCKER_BRANCH"
-git diff --stat HEAD "origin/$PRODUCTION_DOCKER_BRANCH"
+git fetch origin maintenance/docker-migration
+git diff --stat HEAD origin/maintenance/docker-migration
 find app/config -maxdepth 1 -type f -name '*.json' -print
 ```
 
@@ -964,29 +978,30 @@ sudo rm /var/www/certbot/.well-known/acme-challenge/docker-migration-test
 
 Do not install the container reload hook until container Nginx is running.
 
-#### Publish the production Docker overlay
+#### Merge the reviewed migration into `main`
 
-After review, fast-forward the production deployment branch to the production-Docker branch and push it:
+After the production overlay, dummy-secret checks, and development regression checks pass, review the complete migration diff and fast-forward `main` to `maintenance/docker-migration`. This is the release gate for all Citizen 2.0 and Docker changes; do not merge only the production overlay or omit the accepted Phase 1 commits:
 
 `[WORKSTATION — macOS]`
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-PRODUCTION_BRANCH=REPLACE_ME_RECORDED_PRODUCTION_BRANCH
-PRODUCTION_DOCKER_BRANCH=docker-production-migration
-git fetch origin "$PRODUCTION_BRANCH" "$PRODUCTION_DOCKER_BRANCH"
-git switch "$PRODUCTION_DOCKER_BRANCH"
-git merge --ff-only "origin/$PRODUCTION_BRANCH"
+git fetch origin main maintenance/docker-migration
+git switch maintenance/docker-migration
+git pull --ff-only origin maintenance/docker-migration
+git merge-base --is-ancestor origin/main HEAD
+git diff --stat origin/main...HEAD
+git log --oneline origin/main..HEAD
 git status --short
-git switch "$PRODUCTION_BRANCH"
-git pull --ff-only origin "$PRODUCTION_BRANCH"
-git merge --ff-only "$PRODUCTION_DOCKER_BRANCH"
-git push origin "$PRODUCTION_BRANCH"
+git switch main
+git pull --ff-only origin main
+git merge --ff-only maintenance/docker-migration
+git push origin main
 ```
 
-The first merge must fast-forward because the Docker branch should contain every intervening production commit. If it does not, stop and reconcile the branches on the workstation, rerun affected development checks, and retry; do not resolve application conflicts on the droplet.
+The merge must fast-forward because the migration branch should contain every intervening `main` commit. If it does not, stop and reconcile the branches on the workstation, rerun affected development checks, and retry; do not resolve application conflicts on the droplet. Keep `maintenance/docker-migration` until production acceptance and cleanup are complete.
 
-Do not pull the production-Docker commit into the active production checkout before the maintenance window. Unlike an inert overlay-only change, it includes the container-oriented Citizen configuration and application environment contract. Keep the existing host application revision running until the coordinated cutover below.
+Do not pull the new `main` into the active production checkout before the maintenance window. Unlike an inert overlay-only change, it includes the container-oriented Citizen configuration and application environment contract. Keep the existing host application revision running until the coordinated cutover below.
 
 ### Production cutover
 
@@ -999,9 +1014,9 @@ Downtime is acceptable. Pause manual Postico changes until cutover validation co
 ```sh
 cd /var/www/jaysylvester.com
 APP_SERVICE=REPLACE_ME_RECORDED_APP_SERVICE
-DEPLOY_BRANCH="$(git branch --show-current)"
+test "$(git branch --show-current)" = main
 sudo systemctl stop "$APP_SERVICE"
-git pull --ff-only origin "$DEPLOY_BRANCH"
+git pull --ff-only origin main
 OLD_PRODUCTION_CONFIG=app/config/REPLACE_ME_CURRENT_PRODUCTION_CONFIG.json
 PRODUCTION_ENV_SOURCE=/absolute/protected/path/production.env
 rm -- "$OLD_PRODUCTION_CONFIG"
@@ -1090,6 +1105,32 @@ After all checks pass, disable the stopped host services so a reboot cannot make
 sudo systemctl disable "$APP_SERVICE" nginx postgresql
 sudo systemctl enable docker
 ```
+
+#### Rehearse reboot recovery before cleanup
+
+Before deleting any host runtime or data, reboot once with the stopped host services disabled and the production containers configured with `restart: unless-stopped`:
+
+```sh
+sudo reboot
+```
+
+Reconnect and verify that Docker restored the stack without a manual `compose up`:
+
+```sh
+cd /var/www/jaysylvester.com
+APP_SERVICE=REPLACE_ME_RECORDED_APP_SERVICE
+pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
+pdc ps
+pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
+./scripts/smoke-test https://jaysylvester.com
+sudo certbot certificates
+sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
+sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]'
+sudo systemctl is-enabled docker
+sudo systemctl is-enabled "$APP_SERVICE" nginx postgresql || true
+```
+
+Confirm public HTTPS, email, and Postico still work. If the containers did not return automatically or a retired service reclaimed a port, stop and correct the production overlay or service state before cleanup.
 
 ### Production rollback
 
