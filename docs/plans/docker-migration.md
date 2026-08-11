@@ -42,6 +42,7 @@ The result must provide:
 - Direct migration from each environment's live PostgreSQL database.
 - Development HTTPS through `mkcert`, without copying certificates from the VM.
 - Production HTTPS through the existing Let's Encrypt certificate and host Certbot renewal.
+- Replacement of the production host's PM2 process supervision with Docker's production restart policy and Compose/Docker status and log commands. Inventory any PM2 behavior beyond crash recovery before removing it.
 - Preservation of the effective production Nginx routes and redirects.
 - A clone/bootstrap README for macOS, with clearly labeled guidance for future Linux and Windows hosts.
 - Friendly development lifecycle commands that distinguish stopping retained containers from destroying containers while preserving volumes.
@@ -141,6 +142,8 @@ The production Compose wrapper loads the ignored project-root `.env`; Compose ma
 Both accepted deployments run Citizen in Docker, so `citizen.config.js` sets `citizen.http.hostname: ''` and `citizen.http.port: 8080` directly. Host exposure remains controlled by the proxy's loopback/public port mappings and Docker network. Do not add an `APP_HTTP_HOSTNAME` variable or deploy this revision through the temporary host-run production process. The production `.env` uses `NODE_ENV=production`; the database host remains the typed `db` value in `citizen.config.js`.
 
 Run the image directly as a fixed non-root user such as UID/GID `10001:10001`; no privileged configuration-copy entrypoint is needed. Keep `init: true` and direct exec-form Node commands.
+
+Do not install PM2 in the application image. The container runs `node app/start.js` directly, and production sets `restart: unless-stopped` so Docker restarts the container when Node exits unexpectedly and restores it after Docker starts at boot. Use Compose logs/status plus Docker restart counts and resource statistics in place of `pm2 logs`, `pm2 status`, and `pm2 monit`. This replaces PM2's supervision only; if inventory finds cluster mode, memory thresholds, scheduled restarts, alerts, or another PM2-specific policy, preserve or deliberately retire that concrete behavior separately rather than assuming the restart policy covers it.
 
 Development startup must report `Loaded project environment: /site/.env` followed by `Loaded Citizen configuration: /site/citizen.config.js`, then start in development mode. Production will report that no project `.env` was loaded because it receives an explicit allowlist and secret files. Existing database and mail behavior must work without logging secrets. Citizen settings must appear under `app.config.citizen`; typed database, mail, and runtime application settings must appear beside that namespace.
 
@@ -356,14 +359,19 @@ git rev-parse HEAD
 command -v node npm
 node --version
 npm --version
+command -v pm2 || true
+pm2 --version
 node -p "require('./node_modules/citizen/package.json').version"
-systemctl list-units --type=service --all | grep -Ei 'citizen|node|jay'
+systemctl list-units --type=service --all | grep -Ei 'citizen|node|pm2|jay'
+systemctl list-unit-files | grep -Ei '^pm2|citizen|node|jay'
+ps -eo user,pid,ppid,args | grep -E '[P]M2|[p]m2'
+sudo -u REPLACE_ME_PM2_OWNER env PM2_HOME=REPLACE_ME_PM2_HOME pm2 status
 sudo systemctl cat REPLACE_ME_APP_SERVICE
 sudo nginx -T 2>/dev/null | grep -nE 'proxy_pass|proxy_set_header[[:space:]]+(Forwarded|X-Forwarded)'
 sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_collate; SHOW lc_ctype; SHOW timezone;"
 ```
 
-Record the exact production branch, application service name and user, `ExecStart`, working directory, Citizen JSON path, Nginx upstream hostname/port, PostgreSQL connection values, and existing deployment/restart commands. Do not print the JSON or its credentials into the inventory record.
+Record the exact production branch, PM2 owner and home, application name, application service/startup unit, `ExecStart`, working directory, Citizen JSON path, Nginx upstream hostname/port, PostgreSQL connection values, and existing deployment/restart commands. Inspect the applicable PM2 ecosystem/startup configuration without copying its environment into the inventory. Determine whether PM2 provides only crash recovery/status/logs or also cluster mode, multiple instances, memory limits, scheduled restarts, file watching, log rotation, alerts, or another behavior that must be mapped explicitly. Do not print the JSON, PM2 environment, or credentials into the inventory record.
 
 ### Migrate Citizen and implement Docker in development
 
@@ -798,12 +806,16 @@ test "$(git branch --show-current)" = main
 git rev-parse HEAD
 node --version
 node -p "require('./node_modules/citizen/package.json').version"
+command -v pm2 || true
+pm2 --version
 nginx -v
 psql --version
 sudo certbot --version
 sudo systemctl status nginx postgresql --no-pager
-systemctl list-units --type=service --all | grep -Ei 'citizen|node|jay'
-ps -ef | grep -E '[n]ode|[n]pm'
+systemctl list-units --type=service --all | grep -Ei 'citizen|node|pm2|jay'
+systemctl list-unit-files | grep -Ei '^pm2|citizen|node|jay'
+ps -eo user,pid,ppid,args | grep -E '[P]M2|[p]m2|[n]ode|[n]pm'
+sudo -u REPLACE_ME_PM2_OWNER env PM2_HOME=REPLACE_ME_PM2_HOME pm2 status
 sudo ss -lntp
 df -h
 sudo -u postgres psql -Atqc "SELECT version();"
@@ -811,7 +823,7 @@ sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_colla
 sudo -u postgres psql -d jaysylvester -Atqc "SELECT extname FROM pg_extension ORDER BY extname;"
 ```
 
-Record the exact production deployment branch, current Citizen application unit/process command, active legacy JSON path, normal host deployment commands, and current Git/Citizen revisions. Confirm the legacy JSON remains available to the running pre-migration app and that the recorded DigitalOcean snapshot exists. The protected production `.env` for the target containers is prepared separately and is not activated until cutover.
+Record the exact production deployment branch, current Citizen application command, PM2 application name, owner, home, startup unit, active legacy JSON path, normal host deployment commands, and current Git/Citizen revisions. Inspect the PM2 ecosystem/startup configuration without recording its environment or secrets. Identify any behavior beyond keeping the single app process alive—such as cluster mode, multiple instances, memory or scheduled restarts, watching, log rotation, or alerting—so it can be preserved or explicitly retired. Confirm the legacy JSON remains available to the running pre-migration app and that the recorded DigitalOcean snapshot exists. The protected production `.env` for the target containers is prepared separately and is not activated until cutover.
 
 Capture the complete effective Nginx configuration and certificate setup:
 
@@ -860,7 +872,7 @@ git status --short
 
 Implement `compose.production.yaml`, a new production Nginx configuration derived from the effective production capture—not from `docker/nginx/dev.conf`—the Certbot reload hook, the focused production smoke-test cases, and the production README sections. Confirm the production overlay injects only `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`, sets `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`, grants the matching secrets, and gives `db` only its explicit `POSTGRES_*` inputs plus `POSTGRES_PASSWORD_FILE`. It must not use `env_file`, mount `.env`, override the config module's container binding, or give application secrets to `assets` or `proxy`. Use the effective configuration to preserve redirects, locations, headers, static behavior including the inventoried cache policy, and ACME handling; do not copy unrelated host-wide Nginx content.
 
-Set `restart: unless-stopped` for production `db`, `app`, and `proxy` in the production overlay. Development keeps its existing explicit lifecycle. Enabling Docker at boot is not sufficient by itself; the production containers must have restart policies so the accepted stack returns after a Droplet reboot.
+Set `restart: unless-stopped` for production `db`, `app`, and `proxy` in the production overlay. Development keeps its existing explicit lifecycle. Enabling Docker at boot is not sufficient by itself; the production containers must have restart policies so the accepted stack returns after a Droplet reboot. Do not add PM2 to the image: the direct Node process must determine container health by exiting, allowing Docker to perform the restart.
 
 Render and build the production definitions on the Mac with a temporary, non-secret review environment outside Git:
 
@@ -1040,7 +1052,7 @@ sudo systemctl stop postgresql
 sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]' || true
 ```
 
-If the application is not managed by systemd, use the recorded stop command instead. The image checks must report Node.js 24, the Citizen commit accepted in development, both root configuration files, and no JSON path. Confirm the tracked lockfile resolves the commit recorded in `docs/migrations/citizen-2.md`.
+If systemd starts the PM2 daemon, `APP_SERVICE` is the recorded PM2 startup unit and stopping it must stop this application. If PM2 is not managed by systemd, use the recorded PM2 owner, home, application name, and exact stop command instead. Do not stop every PM2 process unless inventory confirms this host runs no other PM2 applications. The image checks must report Node.js 24, the Citizen commit accepted in development, both root configuration files, and no JSON path. Confirm the tracked lockfile resolves the commit recorded in `docs/migrations/citizen-2.md`.
 
 Do not remove the stopped host services until Docker has passed acceptance and reboot checks. The DigitalOcean snapshot remains the authoritative rollback.
 
@@ -1079,6 +1091,28 @@ Suggested external checks:
 curl -fsSI http://jaysylvester.com/
 curl -fsS -o /dev/null https://jaysylvester.com/
 ```
+
+After the app has remained up for at least ten seconds, prove that Docker replaces PM2's crash-recovery behavior. Record the current restart count, terminate the Node child under the container's init process, and require the same container to return with a higher restart count:
+
+```sh
+APP_CONTAINER="$(pdc ps -q app)"
+RESTARTS_BEFORE="$(sudo docker inspect --format '{{.RestartCount}}' "$APP_CONTAINER")"
+pdc exec -T app sh -c 'set -- $(cat /proc/1/task/1/children); test -n "$1"; kill -9 "$1"' || true
+for attempt in $(seq 1 30); do
+  RESTARTS_AFTER="$(sudo docker inspect --format '{{.RestartCount}}' "$APP_CONTAINER")"
+  RUNNING="$(sudo docker inspect --format '{{.State.Running}}' "$APP_CONTAINER")"
+  if test "$RUNNING" = true && test "$RESTARTS_AFTER" -gt "$RESTARTS_BEFORE"; then
+    break
+  fi
+  sleep 1
+done
+test "$RUNNING" = true
+test "$RESTARTS_AFTER" -gt "$RESTARTS_BEFORE"
+pdc logs --tail=100 app
+./scripts/smoke-test https://jaysylvester.com
+```
+
+This test covers unexpected process exit. It does not claim hang detection, alerting, cluster management, or resource-threshold restarts; preserve any such inventoried PM2 behavior explicitly if it exists.
 
 #### Complete Certbot integration
 
@@ -1193,6 +1227,15 @@ pdc ps
 
 This ordered app-then-proxy recreation prevents Nginx from retaining the deleted app container's IP. `--no-deps` ensures routine deployments do not recreate PostgreSQL.
 
+Use these Docker equivalents for the former PM2 operational views:
+
+```sh
+pdc ps app
+pdc logs --tail=100 --follow app
+sudo docker inspect --format '{{.RestartCount}}' "$(pdc ps -q app)"
+sudo docker stats --no-stream "$(pdc ps -q app)"
+```
+
 #### Postico
 
 Development:
@@ -1235,7 +1278,7 @@ After confirming that the simulation removes only the retired host runtime:
 sudo apt-get purge REPLACE_ME_EXACT_NGINX_POSTGRESQL_NODE_PACKAGES
 ```
 
-Remove the retired custom application unit after confirming its exact path is under `/etc/systemd/system`:
+Remove the retired application/PM2 startup unit after confirming its exact path is under `/etc/systemd/system`:
 
 ```sh
 APP_UNIT_PATH="$(systemctl show -p FragmentPath --value "$APP_SERVICE")"
@@ -1246,6 +1289,8 @@ esac
 sudo rm -rf -- "/etc/systemd/system/$APP_SERVICE.d"
 sudo systemctl daemon-reload
 ```
+
+Before removing the unit, confirm from the inventory that the recorded PM2 daemon supervised no other application. PM2 itself is part of the retired host Node toolchain and must not be installed in the container. Remove its global package with the inventoried Node runtime, and remove the exact inventoried PM2 home only after confirming it contains no other applications or logs that must be retained. Do not use a guessed user or a broad home-directory deletion.
 
 If inventory found a NodeSource or PostgreSQL apt source used only by the removed host packages, remove that exact source/key file as well. Do not remove Docker's repository or Certbot's installation source.
 
@@ -1293,8 +1338,8 @@ pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
 sudo certbot certificates
 sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
 sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]'
-command -v nginx node npm postgres psql || true
-systemctl list-unit-files | grep -E 'nginx|postgresql|REPLACE_ME_APP_UNIT_PATTERN' || true
+command -v nginx node npm pm2 postgres psql || true
+systemctl list-unit-files | grep -Ei 'nginx|postgresql|pm2|REPLACE_ME_APP_UNIT_PATTERN' || true
 ```
 
 The last two commands should produce no retired host runtime or unit. Confirm Postico still connects through SSH. Record in the README that Node, Nginx, and PostgreSQL now run only in Docker while Certbot intentionally remains on the Debian host.
@@ -1336,6 +1381,7 @@ Replace the current placeholder README during implementation. It must contain:
 - During the interval between phases, clearly state that production remains on its pre-migration host application and services and must not pull the container-oriented Citizen revision before the maintenance-window cutover.
 - Debian host architecture and required ignored inputs.
 - SSH, `git pull`, ordered app/proxy Compose deployment, and smoke test.
+- Docker's `restart: unless-stopped` supervision in place of PM2, including Compose/Docker commands for status, logs, restart count, and one-shot resource statistics. Record any intentionally retained PM2-specific behavior; do not imply that a restart policy supplies alerting or hang detection.
 - Direct Citizen branch dependency behavior: ordinary deploys use the locked commit; consuming a newer branch commit requires upstream tests, a deliberate lockfile refresh, and an updated migration record.
 - Postico through SSH to remote loopback port 5432.
 - Host Certbot/webroot/timer/deploy-hook arrangement.
@@ -1377,6 +1423,7 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 ### Phase 2 is complete when
 
 - Production runs the app, Nginx, and PostgreSQL through Docker Compose on Debian using the Citizen 2.0 application revision accepted in development plus the reviewed production overlay.
+- The app image runs Node directly without PM2; `restart: unless-stopped` is active, the focused Node crash drill increments the Docker restart count and restores the public app, and the reboot rehearsal restores all three production services without a manual `compose up`. Any PM2 behavior beyond supervision was inventoried and either preserved explicitly or intentionally retired.
 - Production injects only the explicit nonsecret application environment, supplies database and mail passwords through service-scoped Compose secret files, and exposes neither password through app/database container environments, rendered configuration, logs, `assets`, or `proxy`.
 - A focused dummy-secret production-target startup was accepted before deployment, and the live production startup uses the same direct password-file reads.
 - The production JSON converted during Phase 2 is absent from the Citizen 2.0 container, with the original retained in the DigitalOcean snapshot and no credential rotation.
