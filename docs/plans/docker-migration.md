@@ -758,7 +758,7 @@ sudo shutdown -h now
 `[DIGITALOCEAN CONTROL PANEL]`
 
 1. Open the existing Droplet's **Backups & Snapshots** page.
-2. Create a snapshot named `jaysylvester-pre-citizen2-docker-REPLACE_ME_DATE`.
+2. Create the snapshot. The completed rollback snapshot is named `REPLACE_ME_ROLLBACK_SNAPSHOT`.
 3. Wait until the snapshot is complete and record its name in the migration notes.
 4. Turn the same Droplet back on.
 5. Confirm its existing public IP, SSH access, application, Nginx, PostgreSQL, and HTTPS all work.
@@ -898,7 +898,7 @@ Use syntactically valid placeholders and dummy passwords in the temporary review
 
 ### Prepare the destructive rebuild
 
-Before changing the Droplet, confirm the powered-off snapshot is complete and record its exact name. The rebuild preserves the existing Droplet and public IP but replaces the entire disk. Do not begin it until both the preliminary export and the maintenance-window database dump exist off-host and pass checksums.
+The powered-off rollback snapshot is complete and recorded as `REPLACE_ME_ROLLBACK_SNAPSHOT`. Before changing the Droplet, confirm that exact snapshot remains available. The rebuild preserves the existing Droplet and public IP but replaces the entire disk. Do not begin it until both the preliminary export and the maintenance-window database dump exist off-host and pass checksums.
 
 #### Create and verify the protected off-host export
 
@@ -1083,7 +1083,7 @@ This rollback applies to an unacceptable Debian 13 rebuild or Docker cutover. Be
 
 `[DIGITALOCEAN CONTROL PANEL]`
 
-1. Open the existing Droplet and choose the restore action for `jaysylvester-pre-citizen2-docker-REPLACE_ME_DATE`.
+1. Open the existing Droplet and choose the restore action for `REPLACE_ME_ROLLBACK_SNAPSHOT`.
 2. Confirm that the restore will overwrite the existing Droplet's disk.
 3. Wait for restoration to complete, then power on that same Droplet if necessary.
 4. Confirm the Droplet still has its existing public IP.
