@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+cd /var/www/jaysylvester.com
+
+exec /usr/bin/docker compose \
+  --env-file .env \
+  -p jaysylvester-production \
+  -f compose.yaml \
+  -f compose.production.yaml \
+  exec -T proxy nginx -s reload

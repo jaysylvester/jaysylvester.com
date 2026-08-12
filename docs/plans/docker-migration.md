@@ -7,10 +7,12 @@ allowance had no known consumer; it was removed and Citizen's fail-closed defaul
 validated on 2026-08-10. The temporary
 host-based production Citizen cutover is canceled; production will adopt the accepted
 Citizen revision as part of its Docker cutover. The shared development VM cannot be
-retired until its other projects are migrated, and Phase 2 production Docker work has
-not started.
+retired until its other projects are migrated. Phase 2 inventory, protected preliminary
+export, production implementation, and local production rehearsal were completed on
+2026-08-12. Production remains live on the unchanged Debian 10 stack pending the
+review/merge and maintenance-window gates.
 
-Target: migrate this application to Citizen 2.0 from its Git branch and run the same Docker Compose architecture on a macOS development workstation and the Debian DigitalOcean production droplet.
+Target: migrate this application to Citizen 2.0 from its Git branch and run the same Docker Compose architecture on a macOS development workstation and a clean Debian 13 rebuild of the existing DigitalOcean production Droplet.
 
 ## 1. Outcome
 
@@ -35,7 +37,7 @@ named PostgreSQL volume
 The result must provide:
 
 - Development on macOS with Docker Desktop and no project-specific VM.
-- Production on the existing Debian DigitalOcean droplet with Docker Engine.
+- Production on the existing DigitalOcean Droplet, rebuilt in place from Debian 10 to a clean Debian 13 image and then provisioned with Docker Engine. The rebuild retains the Droplet identity and public IP while replacing its disk.
 - Citizen 2.0 on Node.js 24 LTS, with Citizen installed directly over HTTPS from `jaysylvester/citizen#2.0` and the resolved Git commit recorded in `package-lock.json`.
 - Typed framework and nonsecret application configuration in committed `citizen.config.js`, secrets and deployment inputs in the ignored project-root `.env`, and no active Citizen JSON files.
 - Separate development and production configuration, databases, certificates, and volumes.
@@ -47,9 +49,9 @@ The result must provide:
 - A clone/bootstrap README for macOS, with clearly labeled guidance for future Linux and Windows hosts.
 - Friendly development lifecycle commands that distinguish stopping retained containers from destroying containers while preserving volumes.
 - Editor-visible development Citizen logs and a verified, developer-invoked PostgreSQL backup/restore path whose archives live outside Docker.
-- Removal of the retired host Nginx, PostgreSQL, and Node runtimes after production acceptance.
+- Elimination of the retired host Nginx, PostgreSQL, Node, and PM2 runtimes through the clean Debian 13 rebuild rather than an in-place package purge.
 
-Execute the migration in two separately accepted phases. Phase 1 moves development to Docker and proves the Citizen 2.0 application there, while production continues using its existing host-installed application, Nginx, PostgreSQL, and Certbot. Phase 2 begins only after that development baseline is proven and moves the Debian production infrastructure and the accepted Citizen revision to Docker together. Production deployment remains SSH to the droplet and `git pull`; its runtime commands change when production adopts Compose. DNS and the DigitalOcean server do not change.
+Execute the migration in two separately accepted phases. Phase 1 moves development to Docker and proves the Citizen 2.0 application there, while production continues using its existing host-installed application, Nginx, PostgreSQL, PM2, and Certbot. Phase 2 begins only after that development baseline is proven. Inventory found Debian 10 after its security-support lifetime and outside Docker Engine's supported Debian releases, so Phase 2 exports all required production state, rebuilds the same Droplet with Debian 13, and restores the accepted application through Docker Compose. Production deployment remains SSH to the same Droplet and `git pull`; DNS and the public IP do not change.
 
 ## 2. Scope Boundaries
 
@@ -63,6 +65,7 @@ Execute the migration in two separately accepted phases. Phase 1 moves developme
 - Migration of the existing development and production databases with `pg_dump` and `pg_restore`.
 - Classification and conversion of each environment's existing ignored Citizen JSON, followed by recoverable archival outside the active Citizen 2.0 application.
 - Development and production cutover, validation, rollback, and one-time cleanup commands.
+- A protected off-host export of the current database, legacy configuration, Nginx, Certbot, SSH-access reference, PM2 state, logs, firewall state, and package inventory before the destructive Droplet rebuild.
 - Postico endpoint changes.
 - Replacement of the current certificate-copy workflow with generated development certificates, with Nginx as the sole development TLS endpoint.
 - Developer-invoked development PostgreSQL backup and guarded restore commands, including an isolated restore drill.
@@ -74,9 +77,11 @@ Execute the migration in two separately accepted phases. Phase 1 moves developme
 - Custom health routes.
 - A shared proxy or port registry for other projects.
 - Containerized Certbot in this migration.
+- Sequential in-place Debian 10-to-11-to-12-to-13 upgrades. The approved path is a clean Debian 13 rebuild of the existing Droplet.
+- Creation of a replacement Droplet or DNS/IP migration. DigitalOcean rebuilds the existing Droplet and retains its IP.
 - Zero-downtime production migration; a maintenance window is acceptable.
 - Scheduled backups, retention automation, remote replication, or a general disaster-recovery system. The focused development logical backup/restore commands added during acceptance are included.
-- General server hardening, monitoring, CI/CD, orchestration, horizontal scaling, or disaster-recovery projects.
+- General server hardening, new monitoring or alerting, CI/CD, orchestration, horizontal scaling, or disaster-recovery projects. Reinstalling the existing DigitalOcean metrics agent after the clean rebuild is preservation, not a new monitoring project.
 - A generalized Citizen codemod or migration service. This project records evidence for that later work but does not build tooling for every Citizen application.
 
 Do not introduce a behavior change merely because it would be a useful improvement. Record it as a follow-up unless Docker cannot work correctly without it.
@@ -775,19 +780,20 @@ Phase 1 was accepted on 2026-08-09 after the revised project-config-module crite
 
 ## 7. Phase 2 — Production Deployment
 
-Phase 2 starts from the accepted development Docker application while production still runs its pre-migration host stack. It inventories and prepares the Debian infrastructure, adds the production Compose overlay, migrates the live production database, switches Nginx and the app to Docker with the accepted Citizen revision, preserves Let's Encrypt, and finally removes the retired host runtimes. The existing production stack can remain in service indefinitely before this phase begins.
+Phase 2 starts from the accepted development Docker application while production still runs its pre-migration Debian 10 host stack. Inventory on 2026-08-11 found Debian 10 Buster on `amd64`, Git 2.20.1, Node.js 22.11.0, Citizen 1.0.1, PostgreSQL 11.16, Certbot 0.31.0, PM2 5.3.1 supervising one unwatched fork-mode application process, and DigitalOcean's `do-agent.service` enabled and running. Debian 10 is no longer security-supported by Debian and is not a supported target for the current Docker Engine Debian repository. The approved Phase 2 path therefore exports the authoritative host state, rebuilds the same Droplet with Debian 13, and restores the accepted application, database, certificates, DigitalOcean metrics agent, and operating procedures onto the clean host.
 
 ### Operator-presence gates
 
 Most inventory, implementation, builds, configuration review, and automated tests can proceed without continuous operator involvement once access is available. The operator must be present for these explicit gates:
 
 1. Authenticate to the production host and provide `sudo` access when the SSH session cannot reuse credentials.
-2. Confirm the powered-off DigitalOcean rollback snapshot in the control panel before any production mutation. If the existing snapshot is absent or stale, create and verify a replacement before installing Docker, changing Certbot, or modifying production files.
+2. Confirm the powered-off DigitalOcean rollback snapshot in the control panel and provide its exact name. If production state changes after that snapshot, replace it immediately before the rebuild.
 3. Supply or verify the protected production `.env` values without copying secrets into Git, chat, logs, or shell history.
 4. Review the complete branch diff and approve the fast-forward merge from `maintenance/docker-migration` into `main` and the push of `main`.
-5. Start the maintenance window and approve stopping the host application, Nginx, and PostgreSQL, pulling the new `main`, and restoring the production dump into Docker.
-6. Perform or confirm the human-facing acceptance checks: public browsing, production contact and confirmation email delivery, Postico over SSH, and the certificate details.
-7. Choose rollback through the DigitalOcean control panel if acceptance fails. If acceptance succeeds, separately approve the pre-cleanup reboot rehearsal, later destructive host-runtime purge, final reboot, and eventual snapshot deletion.
+5. Start the maintenance window and approve stopping PM2/the application and Nginx, taking and exporting the final PostgreSQL dump, and rebuilding the existing Droplet with Debian 13. The rebuild is destructive to the current disk but retains the Droplet and public IP.
+6. Authenticate to the rebuilt host, recreate the `jay` account and `sudo` access, and verify the new SSH host key through the DigitalOcean console before replacing the old known-host entry.
+7. Perform or confirm the human-facing acceptance checks: public browsing, production contact and confirmation email delivery, Postico over SSH, and the certificate details.
+8. Choose rollback through the DigitalOcean control panel if acceptance fails. If acceptance succeeds, separately approve the reboot rehearsal and eventual snapshot deletion.
 
 The operator does not need to remain present while images build, the production overlay is authored, static configuration is reviewed, or automated tests run. Stop at each gate rather than carrying approval from one gate into the next.
 
@@ -801,21 +807,21 @@ hostname
 cat /etc/os-release
 test "$(. /etc/os-release && printf '%s' "$ID")" = debian
 git status --short
-git branch --show-current
-test "$(git branch --show-current)" = main
+git symbolic-ref --short HEAD
+test "$(git symbolic-ref --short HEAD)" = main
 git rev-parse HEAD
 node --version
 node -p "require('./node_modules/citizen/package.json').version"
 command -v pm2 || true
 pm2 --version
-nginx -v
+/usr/sbin/nginx -v
 psql --version
 sudo certbot --version
 sudo systemctl status nginx postgresql --no-pager
 systemctl list-units --type=service --all | grep -Ei 'citizen|node|pm2|jay'
 systemctl list-unit-files | grep -Ei '^pm2|citizen|node|jay'
 ps -eo user,pid,ppid,args | grep -E '[P]M2|[p]m2|[n]ode|[n]pm'
-sudo -u REPLACE_ME_PM2_OWNER env PM2_HOME=REPLACE_ME_PM2_HOME pm2 status
+sudo -u jay env PM2_HOME=/home/jay/.pm2 /usr/local/bin/pm2 status
 sudo ss -lntp
 df -h
 sudo -u postgres psql -Atqc "SELECT version();"
@@ -823,23 +829,22 @@ sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_colla
 sudo -u postgres psql -d jaysylvester -Atqc "SELECT extname FROM pg_extension ORDER BY extname;"
 ```
 
-Record the exact production deployment branch, current Citizen application command, PM2 application name, owner, home, startup unit, active legacy JSON path, normal host deployment commands, and current Git/Citizen revisions. Inspect the PM2 ecosystem/startup configuration without recording its environment or secrets. Identify any behavior beyond keeping the single app process alive—such as cluster mode, multiple instances, memory or scheduled restarts, watching, log rotation, or alerting—so it can be preserved or explicitly retired. Confirm the legacy JSON remains available to the running pre-migration app and that the recorded DigitalOcean snapshot exists. The protected production `.env` for the target containers is prepared separately and is not activated until cutover.
+Record the exact production deployment branch, current Citizen application command, PM2 application name, owner, home, startup behavior, active legacy JSON path, normal host deployment commands, and current Git/Citizen revisions. Inventory found PM2 user `jay`, home `/home/jay/.pm2`, one live fork-mode application named `start`, no watching, no cluster/memory/scheduled-restart policy, and no systemd or cron startup entry. Its saved list also contained a stale `start-dev` entry and did not match the live list; do not restore it. Confirm the legacy JSON remains available to the running pre-migration app and that the recorded DigitalOcean snapshot exists. The protected production `.env` for the target containers is prepared separately and is not activated until cutover.
 
 Capture the complete effective Nginx configuration and certificate setup:
 
 ```sh
-sudo nginx -t
+sudo /usr/sbin/nginx -t
 sudo install -d -m 0700 REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/nginx-before-docker
-sudo sh -c 'nginx -T > REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/nginx-before-docker/effective.txt 2>&1'
+sudo sh -c '/usr/sbin/nginx -T > REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/nginx-before-docker/effective.txt 2>&1'
 sudo certbot certificates
 sudo find /etc/letsencrypt/renewal -maxdepth 1 -type f -name '*.conf' -print
 sudo grep -RE '^(authenticator|installer|webroot_path)[[:space:]]*=' /etc/letsencrypt/renewal
 sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
-sudo certbot reconfigure --help >/dev/null
-sudo certbot renew --help all | grep -F -- '--run-deploy-hooks'
+sudo certbot --version
 ```
 
-If either Certbot feature check fails, upgrade Certbot through its existing supported installation channel during preparation, before the maintenance window, and repeat the checks.
+The Debian 10 Certbot is version 0.31 and uses the Nginx authenticator. Do not upgrade it on the disk that will be replaced. Restore its certificate state onto Debian 13, install current Certbot there, and use the current supported reconfiguration command after container Nginx serves the webroot.
 
 Review the development and production Nginx captures and list only application-relevant behavior to reproduce:
 
@@ -852,16 +857,15 @@ Review the development and production Nginx captures and list only application-r
 
 Production is authoritative for public behavior. Record its exact static expiry and emitted cache headers explicitly, even if the result is 30 days, and do not derive them from development's `no-store` policy or the retired development VM's 30-day value. Do not copy unrelated Debian-wide Nginx defaults or module-loading files into the image.
 
+The captured production configuration used 30-day static expiry, gzip, a 16 MB request limit, the recorded security headers, canonical redirects, seven legacy rewrites, and one `Forwarded` header. Preserve those effective behaviors. It also enabled OCSP stapling while Nginx reported that the certificate supplied no OCSP responder URL; omit that ineffective directive and its external resolver list from the container configuration rather than preserving a startup warning. Use current Nginx HTTP/2 syntax without changing the public protocol behavior.
+
 ### Implement and review the production overlay
 
-Copy the protected effective Nginx capture to a protected workstation path outside Git, then update the accepted `maintenance/docker-migration` branch and confirm that current `main` is still its ancestor. Continue the production implementation on the migration branch; do not introduce a second short-lived production branch. If `main` has advanced independently, reconcile it on the workstation, rerun affected development checks, and review the result before continuing:
+Use the protected effective Nginx capture inside `REPLACE_ME_PROTECTED_PRODUCTION_EXPORT_DIRECTORY/REPLACE_ME_PRELIMINARY_EXPORT_DIRECTORY/`, then update the accepted `maintenance/docker-migration` branch and confirm that current `main` is still its ancestor. Continue the production implementation on the migration branch; do not introduce a second short-lived production branch. If `main` has advanced independently, reconcile it on the workstation, rerun affected development checks, and review the result before continuing:
 
 `[WORKSTATION — macOS]`
 
 ```sh
-mkdir -p /absolute/private/path/docker-migration-production
-chmod 700 /absolute/private/path/docker-migration-production
-scp REPLACE_ME_PRODUCTION_SSH:REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/nginx-before-docker/effective.txt /absolute/private/path/docker-migration-production/
 cd /absolute/path/to/jaysylvester.com
 git fetch origin main maintenance/docker-migration
 git switch maintenance/docker-migration
@@ -892,107 +896,21 @@ git push origin maintenance/docker-migration
 
 Use syntactically valid placeholders and dummy passwords in the temporary review file, not production credentials. In addition to rendering and building, perform one focused production-target app startup with those dummy Compose secrets and prove the application's direct file reads obtain both passwords while the values remain absent from the rendered app environment and `docker inspect`. Review the staged file list before committing in case the implementation changed a different focused file. Re-run the development smoke test after these shared-file changes; Phase 2 must not regress the accepted Phase 1 environment.
 
-### Prepare production
+### Prepare the destructive rebuild
 
-Before running any command in this section that changes the production host, confirm in the DigitalOcean control panel that the powered-off pre-migration snapshot is complete, current for the accepted rollback assumptions, and restorable onto the existing Droplet. Stop and replace it if production state has changed since it was created.
+Before changing the Droplet, confirm the powered-off snapshot is complete and record its exact name. The rebuild preserves the existing Droplet and public IP but replaces the entire disk. Do not begin it until both the preliminary export and the maintenance-window database dump exist off-host and pass checksums.
 
-#### Install Docker Engine on Debian
+#### Create and verify the protected off-host export
 
-Use Docker's official Debian repository:
+The preliminary export must contain the live custom-format PostgreSQL dump and list, effective `nginx -T`, `/etc/letsencrypt` plus the current ACME webroot, Certbot inventory, the legacy Citizen JSON, `jay`'s authorized keys, PM2 state and logs, Citizen logs, firewall state, APT sources, host/service inventory, and PostgreSQL encoding/locale/timezone/schema metadata. Create it with `umask 077`; use directory mode `0700` and file mode `0600`; never print the JSON, passwords, private keys, or PM2 environment.
 
-```sh
-sudo apt update
-sudo apt install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
-Types: deb
-URIs: https://download.docker.com/linux/debian
-Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
-Components: stable
-Architectures: $(dpkg --print-architecture)
-Signed-By: /etc/apt/keyrings/docker.asc
-EOF
-sudo apt update
-sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-```
+Copy it to `REPLACE_ME_PROTECTED_PRODUCTION_EXPORT_DIRECTORY/`, verify every checksum, and prove a current PostgreSQL client can list the archive. Generate a separate mode-`0600` `production.env` from the legacy JSON without printing values. It contains only `NODE_ENV=production`, database name/user/password, mail password, `POSTGRES_IMAGE=postgres:17-bookworm`, `POSTGRES_INITDB_ARGS=--encoding=UTF8 --locale=en_US.UTF-8`, `POSTGRES_TIMEZONE=Etc/UTC`, and the loopback Postico port. It does not contain BrowserSync, Gulp, CORS, or stable typed application settings.
 
-Compare these commands with Docker's current Debian instructions immediately before running them, and update the README if Docker has changed its repository setup.
-
-Verify:
-
-```sh
-sudo systemctl enable --now docker
-sudo docker version
-sudo docker compose version
-sudo docker run --rm hello-world
-```
-
-Confirm the DigitalOcean and Debian firewalls expose only the intended public ports, especially SSH, 80, and 443. PostgreSQL must remain loopback-only.
-
-#### Verify the snapshot and production environment
-
-`[PRODUCTION]`
-
-```sh
-cd /var/www/jaysylvester.com
-git status --short
-git fetch origin maintenance/docker-migration
-git diff --stat HEAD origin/maintenance/docker-migration
-find app/config -maxdepth 1 -type f -name '*.json' -print
-```
-
-Stop if the tracked worktree is dirty. A legacy production JSON file is expected while the pre-migration host app remains active; record its path without printing it and remove it only during the maintenance-window cutover after the snapshot is confirmed. In the DigitalOcean control panel, confirm `jaysylvester-pre-citizen2-docker-REPLACE_ME_DATE` is complete and available before continuing.
-
-Prepare the ignored project-root production `.env` by translating the inventoried legacy JSON without printing its values. It must contain `NODE_ENV=production`, the database and role names, the existing database/mail passwords, and the rehearsed `POSTGRES_INITDB_ARGS` and `POSTGRES_TIMEZONE`. Do not add the development-only `BROWSERSYNC_ORIGIN` or the retired `CORS_ALLOW_ORIGIN`. Stable host/port/pool/mail values are committed in `citizen.config.js`. Protect `.env` with mode `0600`. Compose will use it for interpolation and as the source of the two production secrets; it must not be passed wholesale to `app`.
-
-Verify the final target database volume is absent without starting Compose:
-
-```sh
-if sudo docker volume inspect jaysylvester-production-postgres >/dev/null 2>&1; then
-  echo 'Target production volume already exists; identify and back it up before continuing.' >&2
-else
-  echo 'Target production volume is absent as required.'
-fi
-```
-
-#### Prepare Certbot for container Nginx
-
-Keep Certbot on the Debian host. The proxy mounts `/etc/letsencrypt` read-only and shares `/var/www/certbot` as the HTTP-01 webroot.
-
-```sh
-CERT_NAME=REPLACE_ME_CERT_NAME
-sudo install -d -m 0755 /var/www/certbot/.well-known/acme-challenge
-sudo certbot certificates
-sudo test -r "/etc/letsencrypt/live/$CERT_NAME/fullchain.pem"
-sudo test -r "/etc/letsencrypt/live/$CERT_NAME/privkey.pem"
-```
-
-The DigitalOcean snapshot contains the original renewal configuration and hooks. No separate Certbot rollback archive is required.
-
-If the existing renewal configuration uses the Nginx authenticator, add the same ACME location to the current host Nginx server before cutover and verify it publicly:
-
-```nginx
-location ^~ /.well-known/acme-challenge/ {
-    root /var/www/certbot;
-    try_files $uri =404;
-}
-```
-
-```sh
-sudo nginx -t
-sudo systemctl reload nginx
-printf '%s\n' docker-migration-test | sudo tee /var/www/certbot/.well-known/acme-challenge/docker-migration-test >/dev/null
-curl -fsS http://jaysylvester.com/.well-known/acme-challenge/docker-migration-test
-sudo rm /var/www/certbot/.well-known/acme-challenge/docker-migration-test
-```
-
-Do not install the container reload hook until container Nginx is running.
+The 2026-08-12 preliminary export `REPLACE_ME_PRELIMINARY_EXPORT_DIRECTORY` passed all checksums and PostgreSQL archive validation. Its PostgreSQL 11 source contained 6 case studies (maximum ID and sequence 17), 59 screens (maximum ID and sequence 137), and 12 work-history rows (maximum ID and sequence 28). The disposable PostgreSQL 17 restore matched all values plus UTF-8, `en_US.UTF-8`, `Etc/UTC`, and `plpgsql`.
 
 #### Merge the reviewed migration into `main`
 
-After the production overlay, dummy-secret checks, and development regression checks pass, review the complete migration diff and fast-forward `main` to `maintenance/docker-migration`. This is the release gate for all Citizen 2.0 and Docker changes; do not merge only the production overlay or omit the accepted Phase 1 commits:
+After the production overlay, dummy-secret startup, disposable production restore, production Nginx/HTTPS tests, PM2-replacement crash drill, and development regression checks pass, review the complete migration diff and fast-forward `main` to `maintenance/docker-migration`:
 
 `[WORKSTATION — macOS]`
 
@@ -1011,164 +929,157 @@ git merge --ff-only maintenance/docker-migration
 git push origin main
 ```
 
-The merge must fast-forward because the migration branch should contain every intervening `main` commit. If it does not, stop and reconcile the branches on the workstation, rerun affected development checks, and retry; do not resolve application conflicts on the droplet. Keep `maintenance/docker-migration` until production acceptance and cleanup are complete.
+The merge must fast-forward. If `main` advanced independently, reconcile it on the workstation and rerun affected checks. Keep the migration branch through final acceptance. The Debian 10 checkout must not pull the new `main`; the clean Debian 13 host clones it after rebuild.
 
-Do not pull the new `main` into the active production checkout before the maintenance window. Unlike an inert overlay-only change, it includes the container-oriented Citizen configuration and application environment contract. Keep the existing host application revision running until the coordinated cutover below.
+### Production cutover and Debian 13 rebuild
 
-### Production cutover
+Downtime is acceptable. Pause Postico and any other database changes until validation completes.
 
-Downtime is acceptable. Pause manual Postico changes until cutover validation completes.
+#### Freeze the old host and export the final database
 
-#### Stop the host stack and dump PostgreSQL
-
-`[PRODUCTION]`
+`[PRODUCTION — Debian 10]`
 
 ```sh
 cd /var/www/jaysylvester.com
-APP_SERVICE=REPLACE_ME_RECORDED_APP_SERVICE
-test "$(git branch --show-current)" = main
-sudo systemctl stop "$APP_SERVICE"
-git pull --ff-only origin main
-OLD_PRODUCTION_CONFIG=app/config/REPLACE_ME_CURRENT_PRODUCTION_CONFIG.json
-PRODUCTION_ENV_SOURCE=/absolute/protected/path/production.env
-rm -- "$OLD_PRODUCTION_CONFIG"
-install -m 0600 "$PRODUCTION_ENV_SOURCE" .env
-pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
-pdc config --quiet
-pdc build --pull app proxy
-pdc run --rm --no-deps --entrypoint node app --version
-pdc run --rm --no-deps --entrypoint node app -p "require('./node_modules/citizen/package.json').version"
-pdc run --rm --no-deps --entrypoint sh app -c "test -r /site/citizen.config.js && test -r /run/secrets/db-password && test -r /run/secrets/mail-auth-pass && ! find /site/app/config -maxdepth 1 -type f -name '*.json' -print 2>/dev/null | grep ."
+test "$(git symbolic-ref --short HEAD)" = main
+git status --short
+pm2 stop start
 sudo systemctl stop nginx
-sudo systemctl is-active "$APP_SERVICE" nginx || true
-MIGRATION_DIR="REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/docker-migration-$(date -u +%Y%m%dT%H%M%SZ)"
-sudo install -d -m 0700 -o "$(id -un)" -g "$(id -gn)" "$MIGRATION_DIR"
-sudo -u postgres pg_dump -Fc --no-owner --no-acl -d jaysylvester > "$MIGRATION_DIR/jaysylvester-production.dump"
-cd "$MIGRATION_DIR"
-sha256sum jaysylvester-production.dump > jaysylvester-production.dump.sha256
-sha256sum -c jaysylvester-production.dump.sha256
-pg_restore --list jaysylvester-production.dump >/dev/null
+FINAL_DIR="REPLACE_ME_PROTECTED_FINAL_DUMP_DIRECTORY"
+install -d -m 0700 "$FINAL_DIR"
+sudo -u postgres pg_dump -Fc --no-owner --no-acl -d jaysylvester > "$FINAL_DIR/jaysylvester-production.dump"
+chmod 0600 "$FINAL_DIR/jaysylvester-production.dump"
+pg_restore --list "$FINAL_DIR/jaysylvester-production.dump" > "$FINAL_DIR/jaysylvester-production.dump.list"
+chmod 0600 "$FINAL_DIR/jaysylvester-production.dump.list"
+cd "$FINAL_DIR"
+sha256sum jaysylvester-production.dump jaysylvester-production.dump.list > SHA256SUMS
+chmod 0600 SHA256SUMS
+sha256sum -c SHA256SUMS
 sudo systemctl stop postgresql
 sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]' || true
 ```
 
-If systemd starts the PM2 daemon, `APP_SERVICE` is the recorded PM2 startup unit and stopping it must stop this application. If PM2 is not managed by systemd, use the recorded PM2 owner, home, application name, and exact stop command instead. Do not stop every PM2 process unless inventory confirms this host runs no other PM2 applications. The image checks must report Node.js 24, the Citizen commit accepted in development, both root configuration files, and no JSON path. Confirm the tracked lockfile resolves the commit recorded in `docs/migrations/citizen-2.md`.
+Copy the entire final directory into the protected workstation directory, enforce 0700/0600 again, verify its checksums and archive, and repeat the source aggregate counts. If any production state changed after the recorded snapshot, power off and replace the snapshot now. Do not rebuild until the final off-host checks pass.
 
-Do not remove the stopped host services until Docker has passed acceptance and reboot checks. The DigitalOcean snapshot remains the authoritative rollback.
+#### Rebuild the existing Droplet
+
+`[DIGITALOCEAN CONTROL PANEL — OPERATOR REQUIRED]`
+
+1. Open the existing Droplet's rebuild action and select the current Debian 13 x64 image.
+2. Confirm the action targets the existing Droplet and will retain its public IP while replacing its disk.
+3. Confirm the rollback snapshot and both protected exports are available.
+4. Start the rebuild and wait for completion. Do not create a replacement Droplet.
+5. Use the DigitalOcean console to obtain the new SSH host-key fingerprints and initial root access.
+
+On the workstation, compare the console fingerprints before removing the exact old `jaysylvester.com` and IP entries from `known_hosts`. Do not accept a changed key based only on the SSH prompt.
+
+#### Bootstrap Debian 13
+
+Log in through the verified root access, create `jay`, set its password for `sudo`, install the exported `authorized_keys` with directory mode `0700` and file mode `0600`, add the account to `sudo`, and prove a second SSH session works before closing root access. Apply only reviewed SSH settings; do not restore the Debian 10 `sshd_config` wholesale.
+
+Update Debian, install Git, Certbot, CA certificates, and curl, then install Docker Engine from Docker's current official Debian repository instructions. Verify the official instructions immediately before execution.
+
+```sh
+sudo apt update
+sudo apt full-upgrade
+sudo apt install ca-certificates curl git certbot
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker certbot.timer
+sudo docker version
+sudo docker compose version
+sudo docker run --rm hello-world
+```
+
+The old host had DigitalOcean's `do-agent.service` enabled and running. Reinstall the current metrics agent using DigitalOcean's official instructions rather than restoring its Debian 10 files, then verify it before continuing:
+
+```sh
+curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
+sudo systemctl is-enabled do-agent
+sudo systemctl is-active do-agent
+```
+
+Recheck the official installation URL immediately before running this command. This preserves existing Droplet metrics; it does not add a new application-health check or replace external alert configuration.
+
+Recreate only the required host directories and checkout:
+
+```sh
+sudo install -d -m 0755 -o jay -g jay /var/www/jaysylvester.com
+git clone --branch main https://github.com/jaysylvester/jaysylvester.com.git /var/www/jaysylvester.com
+sudo install -d -m 0700 -o jay -g jay REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY
+sudo install -d -m 0755 /var/www/certbot/.well-known/acme-challenge
+```
+
+Restore the protected Certbot archive at `/` as root and verify `jaysylvester.com` covers both apex and `www`. Restore the protected `production.env` as `/var/www/jaysylvester.com/.env` owned by `jay`, mode `0600`; restore the final dump beneath `REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/`, mode `0600`. Do not restore host Node, PM2, Nginx, PostgreSQL, their units, the legacy JSON, old APT sources, or the old SSH daemon configuration.
+
+Recreate only the inventoried firewall policy. The old host had no UFW or nftables rules; confirm the attached DigitalOcean firewall and the rebuilt host expose only SSH, HTTP, and HTTPS publicly. Docker publishes PostgreSQL only on `127.0.0.1`.
 
 #### Restore and start Docker
 
 ```sh
 cd /var/www/jaysylvester.com
 pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
+pdc config --quiet
+if sudo docker volume inspect jaysylvester-production-postgres >/dev/null 2>&1; then
+  echo 'Unexpected production PostgreSQL volume; stop and inspect it.' >&2
+  exit 1
+fi
+pdc build --pull app proxy
+pdc run --rm --no-deps --entrypoint node app --version
+pdc run --rm --no-deps --entrypoint node app -p "require('./node_modules/citizen/package.json').version"
+pdc run --rm --no-deps --entrypoint sh app -c "test -r /site/citizen.config.js && test -r /run/secrets/db-password && test -r /run/secrets/mail-auth-pass && ! find /site/app/config -maxdepth 1 -type f -name '*.json' -print 2>/dev/null | grep ."
 pdc up -d db
 pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
-pdc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < "$MIGRATION_DIR/jaysylvester-production.dump"
+pdc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/REPLACE_ME_FINAL_DUMP.dump
 pdc exec -T db psql -U jaysylvester -d jaysylvester -v ON_ERROR_STOP=1 -c 'ANALYZE;'
 pdc up -d app proxy
 pdc ps
 pdc logs --tail=200 db app proxy
 ```
 
-Run the same concise schema, row-count, maximum-ID, sequence, extension, and representative-query comparison used in development.
-
-Validate:
-
-- Citizen reports the optional/process-environment message, loads `/site/citizen.config.js`, and starts in production mode.
-- The running container uses Node.js 24 and the same recorded Citizen 2.0 Git commit tested in development.
-- Database and mail consumers use typed `app.config` values plus the explicit nonsecret deployment allowlist and password secret files. Password values are absent from app/database container environments; Citizen applies the typed config module with CORS unset; no legacy JSON exists inside the container; Node is non-root; logs are writable; PostgreSQL is healthy; and app/proxy are running.
-- All inventoried redirects have the same status and destination.
-- Existing application routes, static assets, `web/shoplc/`, 404 behavior, and HTTPS work.
-- The public certificate name, chain, and expiry are correct.
-- Production contact and confirmation email work with the explicit configuration inputs and existing credentials.
-- Cross-origin requests and preflights fail closed with `403` and no CORS response headers unless Phase 2 inventories and documents a real production cross-origin consumer.
-- Postico reaches remote `127.0.0.1:5432` through the existing SSH connection.
-
-Suggested external checks:
+Repeat the schema, row-count, maximum-ID, sequence, extension, locale, timezone, and representative-query comparisons. Validate routes, legacy and canonical redirects, 30-day static caching, `web/shoplc/`, static 404s, security headers, TLS, the contact and confirmation emails, fail-closed CORS, secret isolation, non-root Node, writable logs, and Postico through SSH. Run production smoke cases with:
 
 ```sh
-./scripts/smoke-test https://jaysylvester.com
-curl -fsSI http://jaysylvester.com/
-curl -fsS -o /dev/null https://jaysylvester.com/
+SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
 ```
 
-After the app has remained up for at least ten seconds, prove that Docker replaces PM2's crash-recovery behavior. Record the current restart count, terminate the Node child under the container's init process, and require the same container to return with a higher restart count:
-
-```sh
-APP_CONTAINER="$(pdc ps -q app)"
-RESTARTS_BEFORE="$(sudo docker inspect --format '{{.RestartCount}}' "$APP_CONTAINER")"
-pdc exec -T app sh -c 'set -- $(cat /proc/1/task/1/children); test -n "$1"; kill -9 "$1"' || true
-for attempt in $(seq 1 30); do
-  RESTARTS_AFTER="$(sudo docker inspect --format '{{.RestartCount}}' "$APP_CONTAINER")"
-  RUNNING="$(sudo docker inspect --format '{{.State.Running}}' "$APP_CONTAINER")"
-  if test "$RUNNING" = true && test "$RESTARTS_AFTER" -gt "$RESTARTS_BEFORE"; then
-    break
-  fi
-  sleep 1
-done
-test "$RUNNING" = true
-test "$RESTARTS_AFTER" -gt "$RESTARTS_BEFORE"
-pdc logs --tail=100 app
-./scripts/smoke-test https://jaysylvester.com
-```
-
-This test covers unexpected process exit. It does not claim hang detection, alerting, cluster management, or resource-threshold restarts; preserve any such inventoried PM2 behavior explicitly if it exists.
+After the app remains stable for at least ten seconds, repeat the reviewed Node-child crash drill and require the Docker restart count to increase before the smoke test passes again. This proves the PM2 keepalive replacement; it does not claim alerting or hang detection.
 
 #### Complete Certbot integration
 
-If the certificate currently uses the Nginx authenticator, verify that the installed Certbot supports `reconfigure`, then switch that existing certificate to the shared webroot. Do not hand-edit renewal files:
+The restored renewal configuration uses the old Nginx authenticator. With container Nginx serving `/var/www/certbot`, use the current Certbot-supported command to reconfigure the existing `jaysylvester.com` certificate for webroot; do not hand-edit the renewal file. Then install the deploy hook and test renewal:
 
 ```sh
-sudo certbot reconfigure --help >/dev/null
-sudo certbot reconfigure --cert-name REPLACE_ME_CERT_NAME --webroot --webroot-path /var/www/certbot
-```
-
-Install the minimal deploy hook only after proxy is running:
-
-```sh
+sudo certbot reconfigure --cert-name jaysylvester.com --webroot --webroot-path /var/www/certbot
 sudo install -m 0755 scripts/reload-production-proxy /etc/letsencrypt/renewal-hooks/deploy/reload-jaysylvester-proxy
 sudo certbot renew --dry-run --run-deploy-hooks
 sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
 ```
 
-The hook must use the fixed production Compose project/files and run `nginx -s reload` inside `proxy`. It does not need a permanent host-Nginx fallback. Snapshot restoration returns the original renewal behavior automatically.
+If the installed Certbot uses a different documented reconfiguration command, use that supported command and update the README. Confirm the public ACME test path before reconfiguration and remove only the test file afterward.
 
-After all checks pass, disable the stopped host services so a reboot cannot make them compete for ports:
-
-```sh
-sudo systemctl disable "$APP_SERVICE" nginx postgresql
-sudo systemctl enable docker
-```
-
-#### Rehearse reboot recovery before cleanup
-
-Before deleting any host runtime or data, reboot once with the stopped host services disabled and the production containers configured with `restart: unless-stopped`:
+#### Rehearse reboot recovery
 
 ```sh
 sudo reboot
 ```
 
-Reconnect and verify that Docker restored the stack without a manual `compose up`:
-
-```sh
-cd /var/www/jaysylvester.com
-APP_SERVICE=REPLACE_ME_RECORDED_APP_SERVICE
-pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
-pdc ps
-pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
-./scripts/smoke-test https://jaysylvester.com
-sudo certbot certificates
-sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
-sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]'
-sudo systemctl is-enabled docker
-sudo systemctl is-enabled "$APP_SERVICE" nginx postgresql || true
-```
-
-Confirm public HTTPS, email, and Postico still work. If the containers did not return automatically or a retired service reclaimed a port, stop and correct the production overlay or service state before cleanup.
+Reconnect and prove Docker restored `db`, `app`, and `proxy` without `compose up`; repeat database readiness, smoke, certificate, email, Postico, ports, Docker service, Certbot timer, and `do-agent.service` checks. Confirm host commands `node`, `npm`, `pm2`, `nginx`, `postgres`, and `psql` are absent. The clean rebuild itself removed the retired runtimes, so no production package purge or legacy-data deletion follows.
 
 ### Production rollback
 
-This rollback applies to an unacceptable Phase 2 Docker cutover. Because the site and database do not change between the snapshot and cutover, do not reconstruct packages, Git revisions, configuration, Certbot, or PostgreSQL manually.
+This rollback applies to an unacceptable Debian 13 rebuild or Docker cutover. Because the snapshot is the authoritative whole-disk rollback, do not reconstruct the Debian 10 packages, Git revision, configuration, Certbot, PostgreSQL, or PM2 manually.
 
 `[DIGITALOCEAN CONTROL PANEL]`
 
@@ -1176,9 +1087,9 @@ This rollback applies to an unacceptable Phase 2 Docker cutover. Because the sit
 2. Confirm that the restore will overwrite the existing Droplet's disk.
 3. Wait for restoration to complete, then power on that same Droplet if necessary.
 4. Confirm the Droplet still has its existing public IP.
-5. Verify SSH, the public site, HTTPS, Nginx, PostgreSQL, the application service, and Postico.
+5. Obtain the restored SSH host-key fingerprints from the console, replace only the exact rebuilt-host entries in `known_hosts`, and verify SSH, the public site, HTTPS, Nginx, PostgreSQL, PM2/application startup, and Postico.
 
-This restores the whole server to its pre-migration condition, including Citizen 1.x, the original Node runtime, Git checkout, JSON configuration, Nginx, PostgreSQL data, Certbot configuration, systemd units, and removal of any Docker state created later. Do not create a replacement Droplet, because a newly created Droplet does not inherit the original IP from the snapshot.
+This restores the whole server to the snapshot condition, including Debian 10, Citizen 1.x, the original Node/PM2 runtime, Git checkout, JSON configuration, Nginx, PostgreSQL data, Certbot configuration, and removal of the Debian 13/Docker disk state. Do not create a replacement Droplet. If the snapshot was refreshed immediately before rebuild as required after any state change, its database is authoritative; otherwise use the separately verified final dump only through a separately reviewed recovery procedure.
 
 ### Normal use after migration
 
@@ -1222,7 +1133,7 @@ pdc ps app
 pdc logs --tail=100 app
 pdc up -d --no-deps --force-recreate proxy
 pdc ps
-./scripts/smoke-test https://jaysylvester.com
+SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
 ```
 
 This ordered app-then-proxy recreation prevents Nginx from retaining the deleted app container's IP. `--no-deps` ensures routine deployments do not recreate PostgreSQL.
@@ -1254,97 +1165,22 @@ Production database backup remains governed by the Phase 2 cutover and the
 eventual production operations policy; do not point the development helper scripts at
 production.
 
-### Remove retired production services
+### Post-rebuild retention and cleanup
 
-Perform cleanup only after:
-
-- Docker production has passed the application, database, HTTPS, email, Postico, and Certbot checks.
-- Docker survives a droplet reboot.
-- The final migration dump and checksum remain readable.
-- The DigitalOcean snapshot is still available for whole-server rollback.
-
-#### Remove host runtimes
-
-First identify exact installed packages and review a simulated purge:
-
-```sh
-dpkg -l | grep -E '^(ii)[[:space:]]+(nginx|postgresql|nodejs|npm)'
-sudo apt-get -s purge REPLACE_ME_EXACT_NGINX_POSTGRESQL_NODE_PACKAGES
-```
-
-After confirming that the simulation removes only the retired host runtime:
-
-```sh
-sudo apt-get purge REPLACE_ME_EXACT_NGINX_POSTGRESQL_NODE_PACKAGES
-```
-
-Remove the retired application/PM2 startup unit after confirming its exact path is under `/etc/systemd/system`:
-
-```sh
-APP_UNIT_PATH="$(systemctl show -p FragmentPath --value "$APP_SERVICE")"
-case "$APP_UNIT_PATH" in
-  /etc/systemd/system/*) sudo rm -- "$APP_UNIT_PATH" ;;
-  *) echo "Unexpected app unit path: $APP_UNIT_PATH; inspect it instead of deleting it." >&2 ;;
-esac
-sudo rm -rf -- "/etc/systemd/system/$APP_SERVICE.d"
-sudo systemctl daemon-reload
-```
-
-Before removing the unit, confirm from the inventory that the recorded PM2 daemon supervised no other application. PM2 itself is part of the retired host Node toolchain and must not be installed in the container. Remove its global package with the inventoried Node runtime, and remove the exact inventoried PM2 home only after confirming it contains no other applications or logs that must be retained. Do not use a guessed user or a broad home-directory deletion.
-
-If inventory found a NodeSource or PostgreSQL apt source used only by the removed host packages, remove that exact source/key file as well. Do not remove Docker's repository or Certbot's installation source.
-
-Do not run an unreviewed `apt autoremove`. Do not remove Docker, Certbot, SSH, the firewall, or shared system accounts such as `www-data`.
-
-Confirm the following exact paths contain only retired host data, then remove them:
-
-```sh
-sudo du -sh /var/lib/postgresql /etc/postgresql /etc/nginx /var/log/postgresql /var/log/nginx 2>/dev/null || true
-sudo rm -rf -- /var/lib/postgresql /etc/postgresql /etc/nginx /var/log/postgresql /var/log/nginx
-```
-
-Remove the host-installed application `node_modules` and any application-specific host Node runtime after confirming the production container uses the explicit nonsecret environment plus readable password secret files and contains no `app/config/*.json`:
-
-```sh
-cd /var/www/jaysylvester.com
-rm -rf -- /var/www/jaysylvester.com/node_modules
-```
-
-Remove a host Node runtime only when the production inventory proves it was dedicated to this application; use its exact inventoried package or installation path rather than assuming the canceled `/opt/node24` layout. The Docker build excludes host `node_modules` and installs the locked Linux dependency tree inside its image. The DigitalOcean snapshot contains the removed host dependency tree and runtime if rollback is required.
-
-The Docker app uses its persistent logs mount rather than the checkout's retired host log files. Remove the old host log files after confirming the container logs are writable; preserve the directory itself if the repository expects it.
+The clean Debian 13 rebuild removes the retired host Node, PM2, Nginx, PostgreSQL, their data directories, startup state, and obsolete APT sources as part of replacing the disk. Do not add purge or broad filesystem-removal commands to the rebuilt host.
 
 Preserve:
 
-- `/var/lib/docker` and all Docker volumes.
+- `/var/lib/docker` and the production PostgreSQL and Citizen-log volumes.
 - `/etc/letsencrypt`, `/var/www/certbot`, Certbot, its timer, and the container reload hook.
-- `/var/www/jaysylvester.com`, project-root `.env`, `.env.example`, `docs/migrations/citizen-2.md`, and the tracked Citizen 2.0 lockfile.
-- The migration dump until final acceptance.
+- DigitalOcean's installed `do-agent.service` and its enabled/running state.
+- `/var/www/jaysylvester.com`, its mode-`0600` `.env`, and the tracked Citizen lockfile and migration record.
+- The final verified production dump on the rebuilt host and workstation through the acceptance and rollback window.
+- The protected preliminary export on the workstation until the same window ends.
 
-#### Final verification
+After the reboot rehearsal and final acceptance, remove the temporary export directory and script from the old disk only implicitly through the rebuild; do not copy PM2 state, old logs, legacy JSON, or Debian 10 host configuration onto the new host. Remove any temporary bootstrap copies from the rebuilt host after their installed destinations and checksums are verified.
 
-```sh
-sudo reboot
-```
-
-Reconnect and run:
-
-```sh
-cd /var/www/jaysylvester.com
-pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
-pdc ps
-pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
-./scripts/smoke-test https://jaysylvester.com
-sudo certbot certificates
-sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
-sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]'
-command -v nginx node npm pm2 postgres psql || true
-systemctl list-unit-files | grep -Ei 'nginx|postgresql|pm2|REPLACE_ME_APP_UNIT_PATTERN' || true
-```
-
-The last two commands should produce no retired host runtime or unit. Confirm Postico still connects through SSH. Record in the README that Node, Nginx, and PostgreSQL now run only in Docker while Certbot intentionally remains on the Debian host.
-
-After final acceptance, keep or delete `jaysylvester-pre-citizen2-docker-REPLACE_ME_DATE` according to the desired rollback window. Deleting it ends whole-server rollback and stops its snapshot storage charge.
+Keep the powered-off pre-rebuild snapshot for the chosen rollback window. Deleting it ends whole-server rollback and stops its storage charge; that is a separate operator decision after production has remained accepted.
 
 ## 8. README Requirements
 
@@ -1416,25 +1252,26 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - `package-lock.json` is tracked, records the tested Citizen Git commit, and builds pass with `npm ci`.
 - `docs/migrations/citizen-2.md` and the macOS README instructions contain no secrets and record the development migration evidence.
 - Required secrets, dumps, and private keys are absent from Git and image layers.
-- Production remains on its pre-migration host application, Nginx, PostgreSQL, and Certbot until Phase 2; its original JSON is preserved in the DigitalOcean rollback snapshot.
+- Production remains on its pre-migration host application, PM2, Nginx, PostgreSQL, and Certbot until Phase 2; its original JSON is preserved in the DigitalOcean rollback snapshot and protected off-host export.
 - The container-oriented Citizen revision is not deployed to the host process. It reaches production only in the reviewed Docker cutover.
 - The development VM is deleted only after its remaining workloads and backups are accounted for.
 
 ### Phase 2 is complete when
 
-- Production runs the app, Nginx, and PostgreSQL through Docker Compose on Debian using the Citizen 2.0 application revision accepted in development plus the reviewed production overlay.
+- The existing Droplet runs a clean supported Debian 13 image with its original public IP; production runs the app, Nginx, and PostgreSQL through Docker Compose using the Citizen 2.0 application revision accepted in development plus the reviewed production overlay.
 - The app image runs Node directly without PM2; `restart: unless-stopped` is active, the focused Node crash drill increments the Docker restart count and restores the public app, and the reboot rehearsal restores all three production services without a manual `compose up`. Any PM2 behavior beyond supervision was inventoried and either preserved explicitly or intentionally retired.
 - Production injects only the explicit nonsecret application environment, supplies database and mail passwords through service-scoped Compose secret files, and exposes neither password through app/database container environments, rendered configuration, logs, `assets`, or `proxy`.
 - A focused dummy-secret production-target startup was accepted before deployment, and the live production startup uses the same direct password-file reads.
-- The production JSON converted during Phase 2 is absent from the Citizen 2.0 container, with the original retained in the DigitalOcean snapshot and no credential rotation.
-- The production Docker database was restored from the live host database with its initialization settings and focused data comparisons matching.
+- The production JSON converted during Phase 2 is absent from the Debian 13 checkout and Citizen 2.0 container, with the original retained only in the protected export and rollback snapshot and no credential rotation.
+- The final maintenance-window database dump was copied off-host and verified before rebuild; the production Docker database was restored from it with UTF-8, `en_US.UTF-8`, UTC, schema, row counts, maximum IDs, sequence states, extensions, and representative queries matching.
 - Existing public routes, static content, `web/shoplc/`, redirects, 404 behavior, email, proxy headers, and HTTPS work as before; CORS remains unset and fail-closed unless a real production cross-origin consumer was inventoried during Phase 2.
 - Production Let's Encrypt renewal succeeds and reloads container Nginx.
+- DigitalOcean's metrics agent is reinstalled from its current official source and remains enabled and active after reboot.
 - Production PostgreSQL is reachable by Postico only through the existing SSH tunnel and survives container recreation.
 - Routine production app deployment recreates proxy afterward and does not recreate the database.
 - The powered-off pre-migration DigitalOcean snapshot remains available through the rollback window and restores the existing Droplet in place.
-- The README documents the final Debian production, deployment, Postico, Certbot, and cleanup procedures.
-- Retired production host runtimes and data are removed only after the Docker stack, migration dump, reboot, and Certbot checks pass.
+- The README documents the Debian 13 rebuild, final production deployment, Docker equivalents for PM2 operations, Postico, Certbot, retention, and rollback procedures.
+- Host Node, PM2, Nginx, and PostgreSQL are absent because the old disk was replaced; no legacy runtime purge is performed on the clean host.
 
 ## 10. Scope-Control Rationale for Reviewers
 
@@ -1442,9 +1279,9 @@ This plan was deliberately reduced after earlier reviews expanded it beyond the 
 
 The two-phase boundary is deliberate. Phase 1 proves the shared application baseline in development Docker while the existing production host remains untouched. Because the accepted config module uses a container-only HTTP binding and mounted project environment, the production application and infrastructure adopt that revision together in Phase 2. Do not add an interim hostname variable or a second host-compatible configuration path merely to preserve the canceled application-only cutover.
 
-Phase 2 contains the infrastructure complications the user explicitly chose to defer: Docker Engine on Debian, the production Compose/Nginx overlay, Citizen/config deployment, live database dump and restore, Certbot integration with container Nginx, and host-runtime cleanup. Reviewers must not pull those tasks into Phase 1.
+Phase 2 contains the infrastructure complications the user explicitly chose to defer: the protected production export, clean Debian 13 rebuild of the same Droplet, Docker Engine installation, production Compose/Nginx overlay, Citizen/config deployment, live database dump and restore, Certbot restoration and integration, SSH bootstrap, and reboot validation. Reviewers must not pull those tasks into Phase 1.
 
-Production rollback is intentionally one operation: restore the single powered-off DigitalOcean snapshot onto the existing Droplet. The accepted assumptions are that downtime is unimportant and no production state changes between the snapshot and completion of both phases. Do not add parallel runtime archives, dependency archives, configuration archives, Git-detach recovery, targeted service reconstruction, or a second snapshot unless those assumptions change.
+Production rollback remains one operation: restore the powered-off DigitalOcean snapshot onto the existing Droplet. The protected preliminary export and final database dump are required inputs to the destructive clean rebuild, not an alternate hand-built rollback system. Do not reconstruct Debian 10 piecemeal from them. If production state changes after the snapshot, replace the snapshot immediately before rebuild so whole-disk rollback remains authoritative.
 
 The following requested outcomes are not scope creep and must remain:
 
@@ -1455,7 +1292,7 @@ The following requested outcomes are not scope creep and must remain:
 - Existing Nginx redirects and site behavior are inventoried before replacement.
 - Development `mkcert` and production Let's Encrypt continue to provide HTTPS.
 - The README supports the tested macOS path and identifies future Linux/Windows differences.
-- Retired Nginx, PostgreSQL, and Node packages/data are removed from production after safe acceptance.
+- Retired Nginx, PostgreSQL, Node, and PM2 packages/data disappear with the replaced Debian 10 disk and are not restored onto Debian 13.
 - Production app recreation is followed by proxy recreation to avoid Nginx's cached upstream IP.
 - Development logical backups are stored outside Docker, verified before publication, and restore-tested against an isolated disposable volume. This is the narrow recovery path for accidental development named-volume deletion, not a scheduled backup platform.
 
@@ -1558,9 +1395,12 @@ shared cross-project proxy as an incidental part of these migrations.
 - Official Node.js 24 distribution index: <https://nodejs.org/download/release/latest-v24.x/>.
 - Docker Compose production overrides: <https://docs.docker.com/compose/how-tos/production/>.
 - Docker Engine on Debian: <https://docs.docker.com/engine/install/debian/>.
+- Debian release lifecycle: <https://www.debian.org/releases/>.
 - Docker Desktop on macOS: <https://docs.docker.com/desktop/setup/install/mac-install/>.
 - DigitalOcean powered-off Droplet snapshots: <https://docs.digitalocean.com/products/snapshots/how-to/snapshot-droplets/>.
+- DigitalOcean same-Droplet rebuilds: <https://docs.digitalocean.com/products/droplets/how-to/rebuild/>.
 - DigitalOcean restore from a snapshot: <https://docs.digitalocean.com/products/snapshots/how-to/create-and-restore-droplets/>.
+- DigitalOcean metrics agent installation: <https://docs.digitalocean.com/products/monitoring/how-to/install-metrics-agent/>.
 - mkcert: <https://github.com/FiloSottile/mkcert>.
 - Certbot renewal hooks: <https://eff-certbot.readthedocs.io/en/stable/using.html>.
 - PostgreSQL `pg_dump`: <https://www.postgresql.org/docs/current/app-pgdump.html>.

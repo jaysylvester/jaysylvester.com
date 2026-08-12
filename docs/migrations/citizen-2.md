@@ -132,6 +132,9 @@ application CORS input.
 - A focused production-target startup used the explicit nonsecret environment allowlist and empty dummy secret-file paths, reported no project `.env`, loaded the config module, and started in production mode. Phase 2 will repeat the test with separate nonempty dummy Compose secrets. The temporary container and review image were removed afterward.
 - After entrypoint consolidation, the rebuilt development container inherited `node app/start.js`; ESLint, the route/static/CORS smoke test, and a development contact-log submission passed. The production target built and the same command started successfully in production mode through the secret-file branches. Temporary review resources were removed.
 - The completed CORS cleanup removed the global policy and `CORS_ALLOW_ORIGIN`, separated BrowserSync onto `BROWSERSYNC_ORIGIN`, and rebuilt all affected services. Ordinary routes, ESLint, BrowserSync client/polling access, and cross-origin GET/preflight assertions passed; both cross-origin cases returned `403` with no `Access-Control-Allow-*` headers. The production target built and started without a CORS input, and its temporary review resources were removed.
+- Phase 2 repeated the production startup with separate nonempty dummy Compose secrets. The app read both files, neither dummy value appeared in its container environment, Citizen loaded the committed config module in production mode, and Node ran as UID 10001 with writable persistent logs.
+- The protected PostgreSQL 11 production dump restored transactionally into a disposable PostgreSQL 17 volume. UTF-8, `en_US.UTF-8`, UTC, `plpgsql`, all three tables, row counts, maximum IDs, and sequence states matched. The production app and Nginx then passed database-backed routes, the inventoried redirects, 30-day static caching, static 404, security headers, TLS, ACME webroot, fail-closed CORS, and a deliberate Node-child crash/restart drill. All disposable resources and the temporary certificate extraction were removed; development was restarted.
+- Production Nginx preserves the effective HTTP/2, TLS, gzip, 16 MB request, security-header, redirect, proxy, and cache behavior. The retired host emitted an OCSP-stapling warning because the certificate had no responder URL, so the ineffective stapling directive and its resolver list were not copied into the container.
 - Earlier PostgreSQL restore/data comparison, trusted HTTPS, watchers, BrowserSync, contact logging, lifecycle persistence, and isolated backup/restore results remain evidence for unchanged portions of the stack.
 
 ## Phase 2 requirements
@@ -142,7 +145,7 @@ application CORS input.
 - Use `.env` for Compose interpolation and secret sources only. Define each top-level secret with the literal source-variable name (`environment: DB_PASSWORD` and `environment: MAIL_AUTH_PASS`), not an interpolated password. Explicitly inject `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`; set `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`; grant only the matching secrets.
 - Give `db` only its explicit `POSTGRES_*` inputs and `POSTGRES_PASSWORD_FILE`. Do not give application values or secrets to `assets` or `proxy`.
 - Do not mount or inject the production `.env` wholesale.
-- Perform one focused production-target startup with dummy secret files before deployment, then repeat it with the final Compose definition during Phase 2 review.
+- Repeat the same secret isolation, direct file reads, startup log, and application behavior checks with the final Compose definition on the rebuilt Debian 13 Droplet.
 
 ## Reusable lessons
 

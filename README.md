@@ -140,13 +140,50 @@ dc restart app
 npm run dev:test
 ```
 
-## Production during Phase 1
+## Production migration and operation
 
-Production remains on its pre-migration host application, Nginx, PostgreSQL, and Certbot until Phase 2. Do not deploy this branch's container-oriented `citizen.config.js` revision through the existing host process; it intentionally binds Citizen for the private Docker network and expects Docker deployment inputs.
+Until the coordinated Phase 2 cutover, production remains on its Debian 10 host application, PM2, Nginx, PostgreSQL, and Certbot. Do not pull this branch or the eventual migration commit into that checkout: the container-oriented Citizen configuration must reach production only after the same DigitalOcean Droplet is rebuilt with Debian 13.
 
-Phase 2 will add the Debian production Compose overlay, service-scoped database/mail password secrets, production Nginx configuration, Certbot reload hook, ordered app/proxy deployment, and Docker-era Postico notes after the effective production host configuration has been inventoried. The production `.env` will provide Compose interpolation and secret source values but will not be injected or mounted wholesale into `app`.
+The cutover uses the powered-off DigitalOcean snapshot for whole-disk rollback and verified protected exports under `REPLACE_ME_PROTECTED_PRODUCTION_EXPORT_DIRECTORY/` as rebuild inputs. Rebuilding retains the Droplet and public IP while replacing its disk. The clean host restores only the `jay` account and authorized key, current `main` checkout, protected `.env`, final PostgreSQL dump, Let's Encrypt state, and required Docker/Certbot host directories. DigitalOcean's metrics agent is reinstalled from its current official source and verified after reboot rather than copied from the old disk. The rebuild does not restore host Node, PM2, Nginx, PostgreSQL, the legacy Citizen JSON, old APT sources, or the old SSH daemon configuration.
 
-The Citizen dependency is pinned to the reviewed `2.0` branch commit in `package-lock.json`. At any future dependency refresh, first run Citizen's complete suite under Node.js 22 and 24, deliberately refresh the lockfile without allowing npm to normalize the HTTPS source to SSH, and update the migration record.
+The production `.env` is mode `0600` and contains `NODE_ENV=production`, database name/user/password, mail password, `POSTGRES_IMAGE=postgres:17-bookworm`, UTF-8/en_US.UTF-8 initialization arguments, `POSTGRES_TIMEZONE=Etc/UTC`, and the loopback Postico port. Compose uses it for interpolation and to materialize the database/mail password secrets. It is never injected or mounted wholesale into `app`; the app receives only `NODE_ENV`, `DB_DATABASE`, `DB_USER`, and the two secret-file paths.
+
+Define the production Compose command after SSH login:
+
+```sh
+cd /var/www/jaysylvester.com
+pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
+```
+
+Routine deployment pulls the already reviewed lockfile, builds without refreshing Citizen, recreates the app, and then recreates Nginx so it resolves the new app-container address. It does not recreate PostgreSQL:
+
+```sh
+git status --short
+git pull --ff-only origin main
+pdc config --quiet
+pdc build app proxy
+pdc up -d --no-deps --force-recreate app
+pdc ps app
+pdc logs --tail=100 app
+pdc up -d --no-deps --force-recreate proxy
+pdc ps
+SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
+```
+
+Docker replaces PM2. Production `db`, `app`, and `proxy` use `restart: unless-stopped`; the image runs `node app/start.js` directly. Use:
+
+```sh
+pdc ps app
+pdc logs --tail=100 --follow app
+sudo docker inspect --format '{{.RestartCount}}' "$(pdc ps -q app)"
+sudo docker stats --no-stream "$(pdc ps -q app)"
+```
+
+Postico retains the existing SSH connection and connects to remote `127.0.0.1:5432`; PostgreSQL is never publicly published. Host Certbot retains `/etc/letsencrypt`, uses `/var/www/certbot` for HTTP-01, and installs `scripts/reload-production-proxy` as its deploy hook so a successful renewal reloads container Nginx. The certificate material is mounted read-only into `proxy` and is absent from Git and images.
+
+The rebuilt Droplet also retains its existing DigitalOcean host monitoring behavior. Install the current official metrics agent during bootstrap, then verify `do-agent.service` is enabled and running after both initial provisioning and the reboot rehearsal.
+
+The Citizen dependency is pinned to the reviewed `2.0` branch commit in `package-lock.json`. Ordinary deployments consume that lock. To refresh Citizen, first run its complete suite under Node.js 22 and 24, deliberately update the HTTPS lock without SSH normalization, update the migration record, and pass development review before production deployment.
 
 ## Future Linux development hosts (untested)
 

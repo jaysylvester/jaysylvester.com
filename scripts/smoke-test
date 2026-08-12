@@ -5,6 +5,7 @@ set -eu
 base_url=${1:-https://dev.jaysylvester.com}
 base_url=${base_url%/}
 cors_origin=${SMOKE_CORS_ORIGIN:-https://cross-origin.invalid}
+production=${SMOKE_PRODUCTION:-false}
 
 if ! command -v curl >/dev/null 2>&1; then
   echo 'curl is required to run the smoke test.' >&2
@@ -69,5 +70,64 @@ preflight_status=$(curl \
   --write-out '%{http_code}' \
   "$base_url/")
 assert_cors_rejected "$preflight_status" "$preflight_headers_file" 'Cross-origin preflight'
+
+if [ "$production" = true ]; then
+  assert_redirect() {
+    redirect_status=$(curl \
+      --silent \
+      --show-error \
+      --output /dev/null \
+      --write-out '%{http_code}' \
+      "$base_url$1")
+    redirect_target=$(curl \
+      --silent \
+      --show-error \
+      --output /dev/null \
+      --write-out '%{redirect_url}' \
+      "$base_url$1")
+
+    if [ "$redirect_status" != 301 ] || [ "$redirect_target" != "$base_url$2" ]; then
+      echo "$1 redirected with HTTP $redirect_status to $redirect_target; expected HTTP 301 to $base_url$2." >&2
+      exit 1
+    fi
+  }
+
+  echo 'Checking production redirects and static policy'
+  assert_redirect /work-history /resume
+  assert_redirect /portfolio /work-samples
+  assert_redirect /documents/portfolio/example /documents/work/example
+  assert_redirect /case-study/client/example /case-study/example
+  assert_redirect /case-study/company/example /case-study/example
+  assert_redirect /case-study/client/Znode /case-study/Znode
+  assert_redirect /app/patterns/resume/resources/example /documents/resume/example
+
+  cache_headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke-cache.XXXXXX")
+  trap 'rm -f "$request_headers_file" "$preflight_headers_file" "$cache_headers_file"' EXIT HUP INT TERM
+
+  curl \
+    --fail \
+    --silent \
+    --show-error \
+    --dump-header "$cache_headers_file" \
+    --output /dev/null \
+    "$base_url/min/site.css"
+
+  if ! grep -i '^Cache-Control:.*max-age=2592000' "$cache_headers_file" >/dev/null; then
+    echo 'Production static response did not preserve the inventoried 30-day cache policy.' >&2
+    exit 1
+  fi
+
+  missing_static_status=$(curl \
+    --silent \
+    --show-error \
+    --output /dev/null \
+    --write-out '%{http_code}' \
+    "$base_url/does-not-exist.css")
+
+  if [ "$missing_static_status" != 404 ]; then
+    echo "Missing production static file returned HTTP $missing_static_status; expected 404." >&2
+    exit 1
+  fi
+fi
 
 echo 'Smoke test passed.'

@@ -1,0 +1,39 @@
+services:
+  db:
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+    ports:
+      - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
+    restart: unless-stopped
+    secrets:
+      - db-password
+
+  app:
+    environment:
+      NODE_ENV: production
+      DB_DATABASE: ${DB_DATABASE:?Set DB_DATABASE in .env}
+      DB_USER: ${DB_USER:?Set DB_USER in .env}
+      DB_PASSWORD_FILE: /run/secrets/db-password
+      MAIL_AUTH_PASS_FILE: /run/secrets/mail-auth-pass
+    restart: unless-stopped
+    secrets:
+      - db-password
+      - mail-auth-pass
+
+  proxy:
+    build:
+      args:
+        NGINX_CONFIG: production.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/certbot:/var/www/certbot:ro
+
+secrets:
+  db-password:
+    environment: DB_PASSWORD
+  mail-auth-pass:
+    environment: MAIL_AUTH_PASS
