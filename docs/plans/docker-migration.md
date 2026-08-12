@@ -955,9 +955,13 @@ cd "$FINAL_DIR"
 sha256sum jaysylvester-production.dump jaysylvester-production.dump.list > SHA256SUMS
 chmod 0600 SHA256SUMS
 sha256sum -c SHA256SUMS
-sudo systemctl stop postgresql
+sudo systemctl stop postgresql@11-main
 sudo ss -lntp | grep -E ':(80|443|5432)[[:space:]]' || true
 ```
+
+Stop the inventoried PostgreSQL 11 cluster unit explicitly. On this Debian 10 host,
+stopping the aggregate `postgresql.service` leaves `postgresql@11-main` and port 5432
+running.
 
 Copy the entire final directory into the protected workstation directory, enforce 0700/0600 again, verify its checksums and archive, and repeat the source aggregate counts. If any production state changed after the recorded snapshot, power off and replace the snapshot now. Do not rebuild until the final off-host checks pass.
 
