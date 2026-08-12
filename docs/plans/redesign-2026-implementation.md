@@ -46,10 +46,11 @@ the framework's conventions already used by this project:
 - The configured `_layout` controller remains the final controller in every
   route chain. It should continue to own page-level chrome and Citizen includes
   for the head, header, and footer.
-- Use a Handlebars partial for shared markup that needs to render caller-provided
-  data. Use a Citizen include only when the component needs its own controller
-  behavior or should be independently requestable. The rail is best implemented
-  as a registered Handlebars partial, with its ordered data loaded by `_layout`.
+- Use a Handlebars partial for shared markup that renders caller-provided data.
+  Use a Citizen include when a component owns controller/model behavior or
+  should be independently requestable. Because the rail loads ordered case-study
+  data, implement it as a `_rail` Citizen include with its own controller and
+  view rather than a registered partial.
 - Access models through `app.models` so Citizen hot module replacement continues
   to work. Keep SQL parameterized, use named prepared queries, obtain clients
   from the shared pool, and release them in `finally`.
@@ -250,8 +251,8 @@ None of these decisions requires a database schema change.
   ordered previous/next navigation, reusing one `sort` contract.
 - Extend the résumé/work-history presentation data only in controllers (formatted
   years, current-role label, link availability); do not alter stored records.
-- Load the shared rail data in `_layout` and register one rail Handlebars partial
-  in `app/start.js`.
+- Load the shared rail through a `_rail` include owned by `_layout`; keep its
+  model call in `app/controllers/routes/_rail.js`.
 
 ### 2. Build the global design system and shell
 
@@ -263,7 +264,7 @@ None of these decisions requires a database schema change.
 - Rebuild `_header.hbs` and `_footer.hbs`, including active-route treatment and
   `aria-current="page"`, the accepted inline brand glyphs, and the X destination
   at `https://x.com/JayIsAngry`.
-- Add `_rail.scss` and a registered `_rail.hbs` partial. Keep its case-study list
+- Add `_rail.scss` and the `_rail` include view. Keep its case-study list
   database-driven and in current sort order.
 - Add the mobile overlay markup once in the header and implement its behavior in
   the existing `JAY` namespace. Do not create viewport-specific duplicate page
@@ -332,9 +333,10 @@ None of these decisions requires a database schema change.
 
 ### 5. Retire routes and update discovery files
 
-- Implement the approved `/work-samples` redirect and update the production
-  `/portfolio` rewrite so both resolve directly to `/gallery` without a redirect
-  chain.
+- Move the Work Samples controller, view, and stylesheet to Gallery with
+  `git mv`, then implement `/work-samples` and `/portfolio` as permanent Nginx
+  redirects to `/gallery` in both development and production. The application
+  owns only the canonical Gallery route.
 - Update `web/sitemap.xml` to canonical current routes: home, case studies, all
   database-backed case-study details, gallery, résumé, contact, and citizen.
   Remove legacy paths that redirect.
@@ -377,17 +379,17 @@ Likely modifications:
 
 - `app/start.js`
 - `app/controllers/routes/_layout.js`, `index.js`, `case-studies.js`,
-  `case-study.js`, `resume.js`, `contact.js`, `work-samples.js`, and new
-  `gallery.js` and `citizen.js`
+  `case-study.js`, `resume.js`, and `contact.js`; rename `work-samples.js` to
+  `gallery.js`; and add `citizen.js`
 - `app/models/_head.js`, `case-studies.js`, `resume.js`, and `screens.js`
-- shared and page views under `app/views/`, including a new rail partial,
-  Gallery view, and citizen view
+- shared and page views under `app/views/`, including a new rail include,
+  the Work Samples-to-Gallery rename, and a citizen view
 - shared and page SCSS under `web/source/scss/`, including new rail, Gallery,
   citizen, and zoom-overlay styles
 - `web/source/js/global.js` and removal or simplification of `index.js`
 - `web/documents/resume/Jay-Sylvester-resume.pdf`
-- `web/sitemap.xml`, `scripts/smoke-test`, and the relevant production redirect
-  in `docker/nginx/production.conf`
+- `web/sitemap.xml`, `scripts/smoke-test`, and redirects in
+  `docker/nginx/dev.conf` and `docker/nginx/production.conf`
 
 Not expected:
 

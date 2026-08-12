@@ -3,30 +3,28 @@
 
 // default action
 export const handler = async (params) => {
-  let currentCompany = params.url.company || params.url['case-study']
-  let caseStudy = await app.models['case-studies'].caseStudy(currentCompany)
+  const currentCompany = params.url.company || params.url['case-study'],
+        caseStudy = await app.models['case-studies'].caseStudy(currentCompany)
 
   if ( caseStudy ) {
-    // Get all case studies to find the next one for the callout
-    const allCaseStudies = await app.models['case-studies'].caseStudies()
-    const caseStudiesArray = Object.values(allCaseStudies)
-
-    // Find current index and calculate next with wraparound
-    const currentIndex = caseStudiesArray.findIndex(cs => cs.company_url === currentCompany)
-    const nextIndex = (currentIndex + 1) % caseStudiesArray.length
+    const allCaseStudies = await app.models['case-studies'].caseStudies(),
+          currentIndex = allCaseStudies.findIndex((item) => item.company_url === currentCompany),
+          previousIndex = (currentIndex - 1 + allCaseStudies.length) % allCaseStudies.length,
+          nextIndex = (currentIndex + 1) % allCaseStudies.length,
+          screenSections = await app.models.screens.companyScreens(currentCompany),
+          featuredScreens = await app.models.screens.featuredScreens(currentCompany)
 
     return {
       local: {
         ...caseStudy,
-        callout: caseStudiesArray[nextIndex]
-      },
-      include: {
-        featuredScreens: '/_screens/featured/true',
-        screens: '/_screens'
+        previous: allCaseStudies[previousIndex],
+        next: allCaseStudies[nextIndex],
+        featuredScreens: featuredScreens,
+        screenSections: screenSections
       }
     }
   } else {
-    let err = new Error('The case study you requested doesn\'t exist.<br><br>Feel free to browse <a href="/case-studies">my complete list of case studies</a>.')
+    const err = new Error('The case study you requested doesn\'t exist.<br><br>Feel free to browse <a href="/case-studies">my complete list of case studies</a>.')
     err.statusCode = 404
     throw err
   }

@@ -1,81 +1,143 @@
 // Case studies
 
-article.case-study {
-  margin-bottom: 10rem;
+body[data-controller="case-studies"] {
+  main {
+    > section:first-child {
+      border-bottom: 1px solid var(--navy);
 
-  h3 {
-    visibility: hidden;
-    width: 0;
-    height: 0;
-  }
-
-  section.screens {
-    figure[role="group"] {
-      margin-bottom: 0;
-    }
-  }
-
-  p {
-    margin: 1.4rem 0 2.6rem;
-  }
-
-  nav {
-    flex-direction: column;
-    margin-top: 0;
-
-    a:not(:first-child) {
-      margin-top: 2rem;
-    }
-  }
-}
-
-article.case-study.callout {
-  margin-top: 6rem;
-  
-  h3 {
-    visibility: visible;
-    width: auto;
-    height: auto;
-    margin-top: 1.2rem;
-    padding-bottom: 1.2rem;
-    border-bottom: 1px solid #efefef;
-  }
-}
-
-@media only screen and (min-width: 768px) {
-  article.case-study {
-    margin-bottom: 16rem;
-
-    p {
-      margin: 2.4rem 0;
-    }
-
-    nav {
-      flex-direction: row;
-      justify-content: flex-start;
-      margin-bottom: 2rem;
-
-      a:not(:first-child) {
-        margin-top: 0;
-        margin-left: 2rem;
+      h1 {
+        max-width: 840px;
+        font-weight: 300;
+        letter-spacing: -0.01em;
+        line-height: 1.4;
       }
 
-      a {
-        width: auto;
+      p {
+        margin-top: 16px;
+        color: var(--ink-3);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+    }
+
+    > section:last-child > a {
+      display: grid;
+      align-items: start;
+      gap: 16px;
+      padding: 24px var(--page-gutter);
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink-2);
+      text-decoration: none;
+      transition: background 160ms ease;
+
+      &:hover {
+        background: var(--wash);
+
+        img {
+          transform: translateY(-3px);
+          box-shadow: 0 18px 40px -24px rgba(26, 29, 34, 0.5);
+        }
+      }
+
+      &:last-child {
+        border-bottom: 0;
+      }
+
+      h2 {
+        color: var(--ink);
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        line-height: 1.2;
+      }
+
+      p:first-of-type {
+        margin-top: 8px;
+        color: var(--ink-5);
+        font-size: 15px;
+        font-style: italic;
+        line-height: 1.5;
+      }
+
+      p:last-of-type {
+        max-width: 620px;
+        margin-top: 12px;
+        color: var(--ink-3);
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      dl {
+        display: none;
+      }
+
+      .read-link {
+        display: block;
+        margin-top: 14px;
+        font-size: 11.5px;
+      }
+
+      img {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        border: 1px solid var(--rule);
+        object-fit: cover;
+        object-position: top;
+        transition: transform 180ms ease, box-shadow 180ms ease;
       }
     }
   }
 
-  article.case-study.callout {
-    margin-top: 10rem;
-  }
-}
+  @media (min-width: 768px) {
+    main {
+      > section:last-child > a {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 36px;
+        padding-block: 36px;
 
-@media only screen and (min-width: 1024px) {
-  article.case-study.callout {
-    padding: 1.2rem 2.8rem;
-    background: hsl(0 0% 99% / 1);
-    border: 1px solid hsl(0 0% 95% / 1);
-    border-radius: 1.6rem;
+        h2 {
+          font-size: 22px;
+        }
+
+        p:last-of-type {
+          margin-top: 14px;
+          font-size: 14.5px;
+        }
+
+        dl {
+          display: grid;
+          grid-template-columns: auto minmax(0, 1fr);
+          gap: 6px 18px;
+          margin-top: 18px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          letter-spacing: 0.04em;
+          line-height: 1.45;
+
+          dt {
+            color: var(--mono);
+          }
+
+          dd {
+            color: var(--ink-2);
+          }
+        }
+
+        .read-link {
+          margin-top: 18px;
+          font-size: 12px;
+        }
+      }
+    }
   }
+
+  @media (min-width: 1440px) {
+    main {
+      > section:last-child > a {
+        gap: 40px;
+        padding-block: 36px;
+      }
+    }
+  }
+
 }

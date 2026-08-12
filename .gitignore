@@ -17,3 +17,6 @@ docker/dev-certs/*
 # VS Code
 .vscode
 settings.json
+
+# Playwright
+.playwright-mcp

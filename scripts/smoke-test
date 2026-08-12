@@ -12,7 +12,7 @@ if ! command -v curl >/dev/null 2>&1; then
   exit 1
 fi
 
-for route in / /case-studies /contact /resume /work-samples /shoplc/web/category.html; do
+for route in / /case-studies /gallery /contact /resume /citizen /shoplc/web/category.html; do
   echo "GET $base_url$route"
   curl \
     --fail \
@@ -24,6 +24,30 @@ for route in / /case-studies /contact /resume /work-samples /shoplc/web/category
     --output /dev/null \
     "$base_url$route"
 done
+
+assert_redirect() {
+  redirect_status=$(curl \
+    --silent \
+    --show-error \
+    --output /dev/null \
+    --write-out '%{http_code}' \
+    "$base_url$1")
+  redirect_target=$(curl \
+    --silent \
+    --show-error \
+    --output /dev/null \
+    --write-out '%{redirect_url}' \
+    "$base_url$1")
+
+  if [ "$redirect_status" != 301 ] || [ "$redirect_target" != "$base_url$2" ]; then
+    echo "$1 redirected with HTTP $redirect_status to $redirect_target; expected HTTP 301 to $base_url$2." >&2
+    exit 1
+  fi
+}
+
+echo 'Checking route redirects'
+assert_redirect /work-samples /gallery
+assert_redirect /portfolio /gallery
 
 request_headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke-request.XXXXXX")
 preflight_headers_file=$(mktemp "${TMPDIR:-/tmp}/jaysylvester-smoke-preflight.XXXXXX")
@@ -72,29 +96,8 @@ preflight_status=$(curl \
 assert_cors_rejected "$preflight_status" "$preflight_headers_file" 'Cross-origin preflight'
 
 if [ "$production" = true ]; then
-  assert_redirect() {
-    redirect_status=$(curl \
-      --silent \
-      --show-error \
-      --output /dev/null \
-      --write-out '%{http_code}' \
-      "$base_url$1")
-    redirect_target=$(curl \
-      --silent \
-      --show-error \
-      --output /dev/null \
-      --write-out '%{redirect_url}' \
-      "$base_url$1")
-
-    if [ "$redirect_status" != 301 ] || [ "$redirect_target" != "$base_url$2" ]; then
-      echo "$1 redirected with HTTP $redirect_status to $redirect_target; expected HTTP 301 to $base_url$2." >&2
-      exit 1
-    fi
-  }
-
   echo 'Checking production redirects and static policy'
   assert_redirect /work-history /resume
-  assert_redirect /portfolio /work-samples
   assert_redirect /documents/portfolio/example /documents/work/example
   assert_redirect /case-study/client/example /case-study/example
   assert_redirect /case-study/company/example /case-study/example

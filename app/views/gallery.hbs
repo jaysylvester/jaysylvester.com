@@ -1,0 +1,39 @@
+<section>
+  <h1>Deliverables from twenty years of work: audits, specifications, wireframes, process artifacts, and the mockups they produced.</h1>
+  <p><a href="/contact">Please ask</a> if you have questions about any of them.</p>
+</section>
+<section>
+  <div class="section-heading"><span>Artifacts</span><span class="heading-rule"></span><span>Audits &amp; recommendations, process artifacts, etc.</span></div>
+  <div>
+    <a href="/documents/work/Shop-LC-UX-Evaluation.pdf"><span>Shop LC UX Evaluation</span><small>PDF</small></a>
+    <a href="https://github.com/jaysylvester/jaysylvester.com/tree/main/web/shoplc" target="_blank" rel="noopener"><span>Shop LC Front End Code Demo</span><small>GitHub</small></a>
+    <a href="/documents/work/Fitly-IA-UX-Specification-MVP.pdf"><span>Fitly IA/UX Specification</span><small>PDF</small></a>
+    <a href="/documents/work/Libbey-L-Sitemap-v6.pdf"><span>Libbey Glass Intranet Sitemap</span><small>PDF</small></a>
+    <a href="/documents/work/Libbey-L-Wireframes.pdf"><span>Libbey Glass Intranet Wireframes</span><small>PDF</small></a>
+    <a href="/documents/work/Columbus-Dispatch-Responsive-Design-Strategy.pdf"><span>Columbus Dispatch Redesign Strategy</span><small>PDF</small></a>
+    <a href="/documents/work/hibu-Marketplace-Whiteboard-Sketch.pdf"><span>hibu Marketplace Whiteboard Sketch</span><small>PDF</small></a>
+    <a href="/documents/work/UX-Process-Definition-v1-5.pdf"><span>Vidyo UX Process Flowchart</span><small>PDF</small></a>
+    <a href="/documents/work/Vidyo-Neo-Usability-Studies.mp4"><span>Vidyo Neo Usability Study Recordings</span><small>MP4</small></a>
+    <a href="/documents/work/VidyoConnect-Affinity-Map.pdf"><span>VidyoConnect Affinity Map Exercise</span><small>PDF</small></a>
+    <a href="/documents/work/Fiserv-Client-Config-Wireframes.pdf"><span>Fiserv FirstPoynt Client Wireframes</span><small>PDF</small></a>
+    <a href="/documents/work/Senior-UX-Designer.pdf"><span>Senior UX Designer Job Description</span><small>PDF</small></a>
+  </div>
+</section>
+<section>
+  <div class="section-heading"><span>Gallery</span><span class="heading-rule"></span><span>High-fidelity mockups and prototypes</span></div>
+  <p>Some of these are entirely my work, some were a collaborative effort, and some were produced under my supervision and review. <a href="/case-studies">Read my case studies</a> for details on my contributions.</p>
+  {{#each local.screenGroups}}
+    <section>
+      <header><h2>{{{category}}}</h2>{{#if case_study}}<a href="/case-study/{{case_study}}">Read my case study →</a>{{/if}}</header>
+      <div data-zoom-group>
+        {{#each screens}}
+          <figure>
+            <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener">
+              <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+            </a>
+          </figure>
+        {{/each}}
+      </div>
+    </section>
+  {{/each}}
+</section>

@@ -1,209 +1,265 @@
-// Screenshots
+// Screens and image zoom
 
-section.screens {
-  width: 100vw;
-  margin-left: -2.6rem;
-
-  // Override default height caused by alt attributes in unloaded images
-  // Coincides with JAY.global.imageLoad() in global.js
-  img[data-src]:not(.loaded) {
-    height: 0;
-  }
-
-  figure[role="group"] {
-    margin: 2rem auto 6rem;
-    
-    section {
-      display: flex;
-      overflow-x: scroll;
-      -webkit-overflow-scrolling: touch;
-      padding: 0 2.6rem 2rem; // Maintain bottom padding for scrollbar visibility
-    }
-
-    figure {
-      flex: 0 0 84%;
-      margin-right: 8%;
-      border-radius: 0.6rem;
-      box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
-      overflow: hidden;
-      position: relative;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      img {
-        width: 100%;
-      }
-    }
-
-    figcaption {
-      margin-bottom: 1.6rem;
-      margin-left: 2.6rem;
-    }
-  }
-
-  @media only screen and (min-width: 768px) {
-    figure[role="group"] {
-      padding: 0;
-
-      figure {
-        flex-basis: 28rem;
-        margin-right: 4rem;
-      }
-
-      figcaption {
-        margin-left: 4.8rem;
-        text-align: left;
-      }
-
-      section {
-        padding-right: 4.8rem;
-        padding-left: 4.8rem;
-
-        &::after {
-          flex-basis: 4.8rem;
-        }
-      }
-    }
-  }
-
-  // Get rid of figure scroll at 1024px and above
-  @media only screen and (min-width: 1024px) {
-    figure[role="group"] {
-      figcaption {
-        margin-left: 0;
-      }
-
-      section {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        padding-bottom: 0;
-        overflow: visible;
-        padding: 0;
-
-        &::after {
-          display: none;
-        }
-      }
-
-      figure {
-        flex-basis: 23.5%;
-        margin: 0 0 2%;
-      }
-    }
-  }
+img[data-src] {
+  background: var(--panel);
 }
 
-// Figures
-figure.callout {
-  display: flex;
-  flex-direction: column;
-  margin: 4.8rem auto;
+.new-tab {
+  display: block;
+  position: relative;
 
   img {
-    max-width: 100%;
-    border-radius: 0.4rem;
-    box-shadow: 0px 2px 4px hsla(0,0%,60%,0.5);
-  }
-}
-
-figcaption {
-  margin-top: 1.2rem;
-  font-size: 1.4rem;
-  font-style: italic;
-  line-height: 1.4;
-}
-
-figure.device img {
-  border-radius: none;
-  box-shadow: none;
-}
-
-@media only screen and (min-width: 768px) {
-  section.screens {
-    margin-left: -4.8rem;
+    width: 100%;
+    transition: transform 200ms ease, filter 200ms ease, box-shadow 200ms ease;
   }
 
-  figure.callout {
-    img {
-      max-height: 44.8rem;
+  @media (hover: hover) {
+    &:hover img {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -18px rgba(26, 29, 34, 0.55);
     }
+  }
+}
+
+figure.callout {
+  margin: 36px 0;
+
+  img {
+    width: 100%;
+    height: auto;
   }
 
   figcaption {
-    max-width: 56rem;
-    margin-right: auto;
-    margin-left: auto;
-    text-align: center;
+    margin-top: 12px;
+    color: var(--ink-5);
+    font-size: 14px;
+    line-height: 1.55;
   }
 }
 
-@media only screen and (min-width: 1024px) {
-  section.screens {
-    width: 99.6%;
-    padding: 0 0.2%; // Keep drop shadows on screens visible
-    margin: 0;
+body[data-controller="case-study"] main > section > article {
+  img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
   }
 
-  figure.callout {
-    margin: 6.4rem 0.6rem; // Side margins for drop shadow visibility
+  figcaption {
+    margin-top: 12px;
+    color: var(--ink-5);
+    font-size: 14px;
+    line-height: 1.55;
   }
 }
 
-@media only screen and (min-width: 1280px) {
-  figure.callout {
-    &:not([role="group"]) {
-      img {
-        width: auto;
-      }
+.zoom-dialog {
+  display: grid;
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  background: var(--ink);
+  color: rgba(252, 251, 248, 0.62);
+
+  &[hidden] {
+    display: none;
+  }
+
+  &.is-direct-scroll {
+    .zoom-track {
+      scroll-snap-type: none;
+    }
+
+    .zoom-slide {
+      scroll-snap-align: none;
+    }
+  }
+
+  &.is-single {
+    .zoom-counter,
+    .zoom-progress,
+    .zoom-hint {
+      display: none;
+    }
+
+    .zoom-track {
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .zoom-slide {
+      flex-basis: auto;
     }
   }
 }
 
-// Zoom nav
-#screen-nav {
-  margin: 1rem 0 4rem;
-  color: #efefef;
+.zoom-bar {
+  display: flex;
+  min-height: 64px;
+  padding: 0 12px 0 20px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(252, 251, 248, 0.16);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.zoom-actions {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoom-open,
+.zoom-close {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  color: rgba(252, 251, 248, 0.62);
+  text-decoration: none;
+  transition: color 160ms ease;
+
+  &:hover {
+    color: var(--paper);
+  }
+}
+
+.zoom-close {
+  width: 48px;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.zoom-content {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  padding: 24px 0 30px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.zoom-track {
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  padding-inline: 20px;
+  gap: 24px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.zoom-slide {
+  display: flex;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: calc(100vw - 80px);
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: center;
+
+  img {
+    width: auto;
+    height: auto;
+    max-width: calc(100vw - 80px);
+    max-height: calc(100vh - 220px);
+    object-fit: contain;
   }
 
-  li {
-    margin: 1rem;
+  figcaption {
+    margin-top: 14px;
+    color: rgba(252, 251, 248, 0.62);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+  }
+}
+
+.zoom-progress {
+  position: relative;
+  height: 44px;
+  margin: 0 20px;
+  cursor: grab;
+  touch-action: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 21px;
+    right: 0;
+    left: 0;
+    height: 2px;
+    background: rgba(252, 251, 248, 0.16);
   }
 
-  a {
+  &:focus-visible {
+    outline: 1px solid rgba(252, 251, 248, 0.62);
+    outline-offset: -4px;
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+  }
+
+  span {
     display: block;
-    position: relative;
-    width: 3rem;
-    height: 3rem;
-    padding-left: 3rem;
-    overflow: hidden;
+    position: absolute;
+    top: 21px;
+    width: var(--zoom-progress-width, 100%);
+    height: 2px;
+    transform: translateX(var(--zoom-progress-offset, 0));
+    background: var(--paper);
+    pointer-events: none;
+  }
+}
 
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      width: 2rem;
-      height: 2rem;
-      border: 0.2rem solid #efefef;
-      border-radius: 50%;
-    }
-    
-    &:hover:before {
-      background: #de2121;
-    }
+.zoom-hint {
+  margin: 0 20px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 767px) {
+  .zoom-bar {
+    min-height: 50px;
+    padding-left: 16px;
   }
 
-  li.selected a {
-    &:before {
-      background: #efefef;
+  .zoom-open span {
+    display: none;
+  }
+
+  .zoom-content {
+    padding-block: 16px 24px;
+  }
+
+  .zoom-track {
+    padding-inline: 20px;
+    gap: 24px;
+  }
+
+  .zoom-slide {
+    flex-basis: calc(100vw - 70px);
+    max-width: calc(100vw - 70px);
+
+    img {
+      width: 100%;
+      max-width: none;
+      max-height: calc(100vh - 250px);
     }
   }
 }

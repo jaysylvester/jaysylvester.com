@@ -1,132 +1,240 @@
 // Home / About
 
 body[data-controller="index"] {
-  section.quotes {
-    display: grid;
-    gap: 3.6rem;
-    margin-top: 4.8rem;
+  main {
+    > section:first-child {
+      border-bottom: 1px solid var(--rule);
 
-    // Prevent FOUC: hide inactive quotes when JS is enabled but before carousel initializes
-    html.js &:not(.carousel) blockquote:not(:first-child) {
-      opacity: 0;
-    }
-
-    &.carousel {
-      gap: 0;
-      grid-template-columns: 1fr;
-
-      blockquote {
-        grid-row: 1;
-        grid-column: 1;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
-
-        &.active {
-          opacity: 1;
-          pointer-events: auto;
-        }
-      }
-    }
-  }
-
-  nav.carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 2.4rem;
-    margin: 2.4rem 0 0;
-
-    button {
-      width: 1rem;
-      height: 1rem;
-      padding: 0;
-      border: 0.1rem solid hsl(176, 60%, 70%);
-      border-radius: 50%;
-      background: transparent;
-      cursor: pointer;
-      transition: background 0.3s ease;
-
-      &.active {
-        background: hsl(176, 60%, 70%);
+      h1 {
+        max-width: 900px;
+        font-weight: 300;
+        letter-spacing: -0.015em;
+        line-height: 1.35;
       }
 
-      @media (hover: hover) {
-        &:hover {
-          background: hsl(176, 60%, 70%);
-        }
-      }
-    }
-
-    @media (pointer: coarse) {
-      gap: 2.4rem;
-
-      button {
-        width: 1.6rem;
-        height: 1.6rem;
-      }
-    }
-  }
-
-  blockquote {
-    position: relative;
-    padding: 2.8rem;
-    border: 0.1rem solid hsl(176, 60%, 80%);
-    border-radius: 1.6rem;
-
-    &:before,
-    &:after {
-      display: block;
-      position: absolute;
-      z-index: 2;
-      width: 4rem;
-      height: 4rem;
-      font-family: serif;
-      font-weight: 800;
-      font-size: 6.4rem;
-      text-align: center;
-      color: hsl(176, 60%, 70%);
-      background: hsl(0, 0%, 100%);
-    }
-
-    &:before {
-      content: '“';
-      top: 2rem;
-      left: -2.2rem;
-    }
-
-    &:after {
-      content: '”';
-      bottom: 2rem;
-      right: -2rem;
-    }
-  
-    p {
-      position: relative;
-      z-index: 1;
-      margin: 0;
-      font-size: 1.4rem;
-      font-style: italic;
-      color: hsl(0,0%,20%);
-    }
-  }
-
-  @media only screen and (min-width: 1024px) {
-    section.quotes {
-      gap: 5.6rem;
-      max-width: 64rem;
-      margin: auto !important;
-    }
-
-    blockquote {
-      padding: 3rem 3.6rem;
-      border-radius: 2.4rem;
-    }
-  }
-
-  @media only screen and (min-width: 1440px) {
-    blockquote {
       p {
-        font-size: 1.6rem;
+        max-width: 760px;
+        margin-top: 20px;
+        color: var(--ink-3);
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      .button-row {
+        margin-top: 30px;
+      }
+    }
+
+    > section[aria-label="Featured case studies"] {
+      display: grid;
+      border-top: 1px solid var(--navy);
+      border-bottom: 1px solid var(--rule);
+
+      > a {
+        display: block;
+        padding: 24px var(--page-gutter);
+        color: var(--ink-2);
+        text-decoration: none;
+        transition: background 160ms ease;
+
+        + a {
+          border-top: 1px solid var(--rule);
+        }
+
+        &:hover {
+          background: var(--wash);
+
+          img {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px -24px rgba(26, 29, 34, 0.5);
+          }
+        }
+
+        img {
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          border: 1px solid var(--rule);
+          object-fit: cover;
+          object-position: top;
+          transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+
+        h2 {
+          margin-top: 20px;
+          color: var(--ink);
+          font-size: 21px;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          line-height: 1.25;
+        }
+
+        p {
+          margin-top: 8px;
+          color: var(--ink-3);
+          font-size: 14.5px;
+          line-height: 1.55;
+        }
+
+        .expertise {
+          display: block;
+          margin-top: 14px;
+        }
+      }
+    }
+
+    > section[aria-label="Engagement index"] > a {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px 16px;
+      padding: 20px var(--page-gutter);
+      border-bottom: 1px solid var(--rule);
+      color: inherit;
+      text-decoration: none;
+      transition: background 160ms ease;
+
+      &:hover {
+        background: var(--wash);
+      }
+
+      strong {
+        color: var(--ink);
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      span {
+        color: var(--ink-3);
+        font-size: 13.5px;
+
+        &:nth-of-type(2) {
+          grid-column: 1;
+        }
+
+        &:last-of-type {
+          grid-row: 1;
+          grid-column: 2;
+          color: var(--mono);
+          font-family: var(--font-mono);
+          font-size: 11px;
+          text-align: right;
+        }
+      }
+    }
+
+    > section:last-child {
+      padding: 38px var(--page-gutter);
+      border-top: 1px solid var(--navy);
+
+      > div:last-child {
+        display: grid;
+        margin-top: 26px;
+        gap: 0;
+
+        blockquote {
+          padding: 26px 0;
+          border-top: 1px solid var(--rule);
+          color: var(--ink-2);
+          font-size: 15px;
+          line-height: 1.6;
+
+          &:first-child {
+            padding-top: 0;
+            border-top: 0;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    main {
+      > section[aria-label="Featured case studies"] {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        > a + a {
+          border-top: 0;
+          border-left: 1px solid var(--rule);
+        }
+      }
+
+      > section[aria-label="Engagement index"] > a,
+      > section:last-child {
+        padding-inline: var(--page-gutter);
+      }
+
+      > section:last-child > div:last-child {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        column-gap: 48px;
+
+        blockquote:nth-child(2) {
+          padding-top: 0;
+          border-top: 0;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1024px) {
+    main {
+      > section[aria-label="Featured case studies"] > a {
+        padding-block: 28px;
+      }
+
+      > section[aria-label="Engagement index"] > a {
+        grid-template-columns: 150px minmax(0, 1fr) 185px 45px;
+        column-gap: 24px;
+        padding-block: 22px;
+
+        span {
+          &,
+          &:nth-of-type(2),
+          &:last-of-type {
+            grid-row: auto;
+            grid-column: auto;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1440px) {
+    main {
+      > section[aria-label="Featured case studies"] > a {
+        padding-block: 32px;
+      }
+
+      > section[aria-label="Engagement index"] > a {
+        grid-template-columns: 220px minmax(0, 1fr) 210px 120px;
+        padding-block: 24px;
+      }
+
+      > section:last-child {
+        padding-block: 44px 38px;
+      }
+    }
+  }
+
+  @media (min-width: 1920px) {
+    main {
+      > section[aria-label="Featured case studies"] > a {
+        padding-block: 40px;
+      }
+
+      > section[aria-label="Engagement index"] > a {
+        grid-template-columns: 300px minmax(0, 1fr) 280px 140px;
+      }
+
+      > section:last-child {
+        padding-inline: var(--page-gutter);
+
+        > div:last-child {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+
+          blockquote:nth-child(3) {
+            padding-top: 0;
+            border-top: 0;
+          }
+        }
       }
     }
   }

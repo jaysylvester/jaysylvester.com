@@ -1,100 +1,78 @@
-// Baseline styles
-
 *,
 *::before,
 *::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+header,
+footer,
+main,
+nav,
+aside,
+section,
+article,
+h1,
+h2,
+h3,
+h4,
+p,
+blockquote,
+figure,
+figcaption,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+form,
+label,
+input,
+textarea,
+button,
+pre {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  line-height: 1;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
+  min-width: 320px;
   word-wrap: break-word;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  line-height: 1.4;
-}
-
-h1 { font-weight: 800 }
-h2, h3 { font-weight: 600 }
-h4, h5, h6 { font-weight: 400 }
-
-h1 { font-size: 140%; }
-h2 { font-size: 120%; }
-h3 { font-size: 105%; }
-h4, h5, h6 { font-size: 100%; }
-
 ul,
 ol {
-  margin: 2.4rem 0;
-}
-
-li {
-  margin-bottom: 0.8rem;
-  line-height: 1.5;
-}
-
-dl {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 1.2rem 1.8rem;
-  line-height: 1.5;
-}
-dt {
-  flex: 0 0 30%;
-
-  &::after {
-    content: ':';
-  }
-}
-dd {
-  flex: 0 0 70%;
-  word-break: break-word;
-}
-
-nav {
-	ul {
-		margin: 0;
-		list-style: none;
-	}
-}
-
-p {
-  margin: 0 0 1rem;
-  line-height: 1.6;
-  @media only screen and (min-width: 768px) {
-    margin-bottom: 2rem;
-  }
-}
-
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+  list-style: none;
 }
 
 img {
   display: block;
-  -ms-interpolation-mode: bicubic;
+  max-width: 100%;
 }
 
-q::before,
-q::after {
-  content: '';
-}
-
+button,
 input,
-select,
 textarea {
-  appearance: none;
-  border: none;
+  border: 0;
   border-radius: 0;
   background: none;
+  color: inherit;
+  font: inherit;
 }
 
-input:not([type="checkbox"]),
-input:not([type="radio"]) {
-  line-height: 1;
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
 }

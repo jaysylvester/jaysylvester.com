@@ -34,6 +34,24 @@ export const contact = () => {
 }
 
 
+export const citizen = () => {
+  return {
+    title:       'citizen — A Node.js MVC Web Application Framework',
+    description: 'Learn about citizen, the open source Node.js MVC web application framework that powers this site.',
+    keywords:    'citizen, Node.js, MVC, web application framework, open source'
+  }
+}
+
+
+export const gallery = () => {
+  return {
+    title:       'Jay Sylvester — Gallery',
+    description: 'Browse audits, specifications, wireframes, process artifacts, mockups, and prototypes from twenty years of product work.',
+    keywords:    'UI, UX, product design gallery, wireframes, prototypes, process artifacts'
+  }
+}
+
+
 export const error = () => {
   return {
     title:        'Oops...',
@@ -48,15 +66,6 @@ export const index = () => {
     title:       'Jay Sylvester — UX Manager/Director, Product Designer, and Engineer',
     description: 'I\'m a design director/lead with over 20 years of experience spanning user research, user experience design, and full stack development.',
     keywords:    'UX, UI, user experience, ux manager, ux lead, ux director, ux researcher, ux consultant'
-  }
-}
-
-
-export const workSamples = () => {
-  return {
-    title:       'Jay Sylvester\'s Portfolio — UX Manager/Director, Product Designer, and Engineer',
-    description: 'Enjoy my dry process documentation, research data, ugly sketches, plain-looking wireframes, and half-baked prototypes. And a few pretty screens for those of you who are into that.',
-    keywords:    'UI, UX, ux designer portfolio, product designer portfolio'
   }
 }
 

@@ -1,0 +1,30 @@
+<aside aria-label="Profile and case studies">
+  <a class="wordmark" href="/">Jay Sylvester</a>
+  <section>
+    <h2>Currently</h2>
+    <p>Co-Founder &amp; Chief Product Officer at <a href="https://www.flisk.ai" target="_blank" rel="noopener"><strong>Flisk</strong></a>, an AI-native startup.</p>
+  </section>
+  <section>
+    <h2>Competencies</h2>
+    <ul>
+      <li>Product management</li>
+      <li>Team leadership</li>
+      <li>User research</li>
+      <li>Product design</li>
+      <li>Full-stack development</li>
+      <li>AI-native product development</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Case studies</h2>
+    <ul>
+      {{#each local.caseStudies}}
+        <li><a href="/case-study/{{company_url}}">{{company_name}}</a></li>
+      {{/each}}
+    </ul>
+  </section>
+  <section>
+    <h2>Open source</h2>
+    <p><a href="/citizen"><strong>citizen</strong></a> — a Node.js MVC web application framework. Sole author since 2013.</p>
+  </section>
+</aside>

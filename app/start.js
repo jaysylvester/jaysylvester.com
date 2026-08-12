@@ -18,9 +18,6 @@ const development = app.config.citizen.mode === 'development'
 // Register Handlebars partials
 consolidate.requires.handlebars = handlebars
 consolidate.requires.handlebars.registerHelper('eq', (a, b) => a == b)
-consolidate.requires.handlebars.registerPartial('caseStudyCallout', fs.readFileSync(app.views['case-study']._callout.path).toString())
-consolidate.requires.handlebars.registerPartial('screenGroup', fs.readFileSync(app.views._screens._group.path).toString())
-
 // Get static file last modified times to populate cache buster variables
 const cacheBuster = {
   css: fs.statSync(path.resolve(app.config.citizen.directories.app, '../web/min/site.css')).mtime.toString().replace(/[ :\-()]/g, ''),

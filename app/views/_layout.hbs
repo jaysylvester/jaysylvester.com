@@ -2,8 +2,10 @@
 <html lang="en">
   {{{include.head}}}
   <body id="top" data-controller="{{route.controller}}" data-action="{{route.action}}">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     {{{include.header}}}
-    <main>
+    {{{include.rail}}}
+    <main id="main-content" tabindex="-1">
       {{#each route.chain}}
         {{{output}}}
       {{/each}}
@@ -14,15 +16,9 @@
         (function() {
           try {
             var script = document.createElement('script');
-            if ('async') {
-              script.async = true;
-            }
+            script.async = true;
             script.src = '/browser-sync/browser-sync-client.js?v=3.0.3';
-            if (document.body) {
-              document.body.appendChild(script);
-            } else if (document.head) {
-              document.head.appendChild(script);
-            }
+            document.body.appendChild(script);
           } catch (e) {
             console.error("Browsersync: could not append script tag", e);
           }

@@ -1,0 +1,111 @@
+<header>
+  <small>Open source · MIT · Sole author since 2013</small>
+  <h1>citizen</h1>
+  <p>An MVC-based web application framework designed for people interested in quickly building fast, scalable web sites instead of digging around Node&apos;s guts or cobbling together a wobbly Jenga tower made out of 50 different packages.</p>
+  <p>Use citizen as the foundation for a traditional server-side web application, a modular single-page application, or a RESTful API.</p>
+  <nav class="button-row" aria-label="Citizen packages">
+    <a class="primary-action" href="https://github.com/jaysylvester/citizen" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true">
+        <path d="M5.5 1.5 1.5 8l4 6.5"></path>
+        <path d="M10.5 1.5 14.5 8l-4 6.5"></path>
+      </svg>
+      View on GitHub
+    </a>
+    <a class="secondary-action" href="https://www.npmjs.com/package/citizen" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true">
+        <path d="M2.5 4.5 8 1.5l5.5 3v7L8 14.5l-5.5-3z"></path>
+        <path d="M8 7.5v7"></path>
+        <path d="m2.5 4.5 5.5 3 5.5-3"></path>
+      </svg>
+      npm install citizen
+    </a>
+  </nav>
+</header>
+
+<section>
+  <article>
+    <h2 class="section-heading"><span>Philosophy</span><span class="heading-rule" aria-hidden="true"></span></h2>
+    <p>Convention over configuration, but still flexible. A citizen app is a directory of controllers, models, and views that follow a naming convention; the framework infers the routes. There is no build step, no router to register, and no assembly of a dependency graph before the first page renders.</p>
+    <p>The framework has few direct dependencies, which is the point. Routing, static serving, session management, caching, compression, form parsing, and logging are all part of the framework rather than a package each.</p>
+    <p>Code reuse happens through includes and chaining. An include is a complete MVC pattern with its own controller, model, and views, delivered to the caller as fully rendered output, so logic stays in the controller rather than the template.</p>
+  </article>
+  <aside>
+    <h2>Quick start</h2>
+    <pre>$ mkdir myapp &amp;&amp; cd myapp
+$ npm install citizen
+$ node node_modules/citizen/util/scaffold skeleton
+$ node app/start.js</pre>
+    <p>The scaffolding utility generates a working app skeleton with an index pattern and error templates.</p>
+  </aside>
+</section>
+
+<section>
+  <h2 class="section-heading"><span>Capabilities</span><span class="heading-rule" aria-hidden="true"></span></h2>
+  <div>
+    <article>
+      <h3>Zero-configuration routing</h3>
+      <p>SEO-friendly URLs with name/value parameters instead of query strings.</p>
+    </article>
+    <article>
+      <h3>Content negotiation</h3>
+      <p>HTML, JSON, JSONP, and plain text served from the same pattern.</p>
+    </article>
+    <article>
+      <h3>Includes as components</h3>
+      <p>Full MVC patterns used as addressable components.</p>
+    </article>
+    <article>
+      <h3>Controller chaining</h3>
+      <p>Chain any number of controllers in a single request.</p>
+    </article>
+    <article>
+      <h3>Key/value cache</h3>
+      <p>An in-memory store for requests, actions, objects, and static files.</p>
+    </article>
+    <article>
+      <h3>Session management</h3>
+      <p>Server-side sessions with configurable lifespan and HTTP helpers.</p>
+    </article>
+    <article>
+      <h3>Hot module replacement</h3>
+      <p>Development changes re-import in real time without a restart.</p>
+    </article>
+    <article>
+      <h3>Application event hooks</h3>
+      <p>Act on application, request, response, and session events.</p>
+    </article>
+    <article>
+      <h3>Graceful error handling</h3>
+      <p>Errors return in the requested format without exiting the process.</p>
+    </article>
+    <article>
+      <h3>ES and CommonJS modules</h3>
+      <p>Both module systems are supported.</p>
+    </article>
+  </div>
+</section>
+
+<section>
+  <article>
+    <h2>In production</h2>
+    <p>Runs this site and originaltrilogy.com, which handles a few hundred thousand views a month.</p>
+  </article>
+  <article>
+    <h2>Stability</h2>
+    <p>A single instance, with the process running for months at a time without crashing.</p>
+  </article>
+  <article>
+    <h2>Maintenance</h2>
+    <p>Sole author and maintainer since 2013, across 300+ commits and two major versions.</p>
+  </article>
+</section>
+
+<section>
+  <h2 class="section-heading"><span>Documentation</span><span class="heading-rule" aria-hidden="true"></span></h2>
+  <nav aria-label="Citizen documentation">
+    <a href="https://github.com/jaysylvester/citizen#readme" target="_blank" rel="noopener">Full documentation and API reference <small>GitHub</small></a>
+    <a href="https://github.com/jaysylvester/citizen/blob/main/CHANGELOG.md" target="_blank" rel="noopener">Changelog <small>GitHub</small></a>
+    <a href="https://www.npmjs.com/package/citizen" target="_blank" rel="noopener">Package on npm <small>npm</small></a>
+    <a href="https://github.com/jaysylvester/jaysylvester.com" target="_blank" rel="noopener">Source for this site <small>GitHub</small></a>
+  </nav>
+</section>

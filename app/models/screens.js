@@ -1,61 +1,62 @@
-// _screens model
+// screens model
 
 
-export const companyScreens = async (company, featured) => {
+const groupScreens = (rows) => {
+  const groups = []
+  const byCategory = new Map()
+
+  rows.forEach((screen) => {
+    if ( !byCategory.has(screen.category) ) {
+      const group = {
+        company:    screen.company,
+        category:   screen.category,
+        case_study: screen.company_url,
+        screens:    []
+      }
+
+      byCategory.set(screen.category, group)
+      groups.push(group)
+    }
+
+    byCategory.get(screen.category).screens.push({
+      id:       screen.id,
+      company:  screen.company,
+      url:      screen.url,
+      alt:      screen.alt,
+      sort:     screen.sort,
+      category: screen.category
+    })
+  })
+
+  return groups
+}
+
+
+export const companyScreens = async (company, featured = false) => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
-    let result
-    if ( featured ) {
-      result = await client.query({
-        name: 'case_study_screens_featured',
-        text: 'select id, company, url, alt, category, sort from screens where company = $1 and featured = true order by sort asc;',
-        values: [ company ]
-      })
-    } else {
-      result = await client.query({
-        name: 'case_study_screens',
-        text: 'select id, company, url, alt, category, sort from screens where company = $1 order by sort asc;',
-        values: [ company ]
-      })
-    }
-    // Transform the data to make it usable by the view
-    let screens = {}
-    result.rows.forEach( function (screen) {
-      if ( !screens[screen.category] ) {
-        screens[screen.category] = {
-          company: screen.company,
-          category: screen.category,
-          screens: {}
-        }
-      }
-      screens[screen.category].screens[screen.sort] = {
-        company:  screen.company,
-        url:      screen.url,
-        alt:      screen.alt,
-        sort:     screen.sort,
-        category: screen.category
-      }
+    const result = await client.query({
+      name: featured ? 'case_study_screens_featured_v2' : 'case_study_screens_v2',
+      text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url ' +
+            'from screens s ' +
+            'left join case_studies cs on s.company = cs.company_url ' +
+            'where s.company = $1' + ( featured ? ' and s.featured = true' : '' ) + ' ' +
+            'order by s.sort asc;',
+      values: [ company ]
     })
-    return screens
+
+    return groupScreens(result.rows)
   } finally {
     client.release()
   }
 }
 
 
-export const featuredScreens = async () => {
-  const client = await app.toolbox.dbPool.connect()
+export const featuredScreens = async (company) => {
+  const groups = await companyScreens(company, true)
 
-  try {
-    const result = await client.query({
-      name: 'featured_screens',
-      text: 'select id, company, url, alt, category, sort from screens where featured = true order by sort asc;'
-    })
-    return result.rows
-  } finally {
-    client.release()
-  }
+  return groups.flatMap((group) => group.screens).slice(0, 2)
 }
 
 
@@ -64,29 +65,14 @@ export const screens = async () => {
 
   try {
     const result = await client.query({
-      name: 'work_samples_screens',
-      text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url from screens s left join case_studies cs on s.company = cs.company_url order by sort asc;'
+      name: 'gallery_screens_v2',
+      text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url ' +
+            'from screens s ' +
+            'left join case_studies cs on s.company = cs.company_url ' +
+            'order by s.sort asc;'
     })
-    // Transform the data to make it usable by the view
-    let screens = {}
-    result.rows.forEach( function (screen) {
-      if ( !screens[screen.category] ) {
-        screens[screen.category] = {
-          company: screen.company,
-          category: screen.category,
-          case_study: screen.company_url,
-          screens: {}
-        }
-      }
-      screens[screen.category].screens[screen.sort] = {
-        company:  screen.company,
-        url:      screen.url,
-        alt:      screen.alt,
-        sort:     screen.sort,
-        category: screen.category
-      }
-    })
-    return screens
+
+    return groupScreens(result.rows)
   } finally {
     client.release()
   }

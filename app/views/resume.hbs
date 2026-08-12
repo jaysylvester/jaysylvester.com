@@ -1,92 +1,35 @@
-<h1>Résumé</h1>
-<section class="content resume">
-  <h3><a href="/documents/resume/Jay-Sylvester-resume.pdf">Download my résumé (PDF)</a></h3>
+<header>
+  <div>
+    <h1>Product, design, and engineering leader with 20+ years spanning UX, product, and full-stack development, including 8+ years managing teams.</h1>
+    <p>As the first design hire at multiple B2B SaaS startups, I&apos;ve taken complex technical products from 0 to 1 by anchoring decisions in customer research and building the design and research practice where none existed.</p>
+  </div>
+  <a class="primary-action" href="/documents/resume/Jay-Sylvester-resume.pdf" download><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M8 1.5v9"></path><path d="M4.5 7.5 8 11l3.5-3.5"></path><path d="M2.5 13.5h11"></path></svg> Download PDF</a>
+</header>
+
+<section>
+  <div class="section-heading"><span>Skills overview</span><span class="heading-rule"></span></div>
+  <dl>
+    <div><dt>Team Management &amp; Development</dt><dd>Manages, mentors, and scales cross-functional product teams</dd></div>
+    <div><dt>User-Centered Product Design</dt><dd>Anchors product design decisions to user needs in alignment with business concerns</dd></div>
+    <div><dt>Data-Driven Decision Making</dt><dd>Drives product decisions via competitive analysis, user research, and usability testing</dd></div>
+    <div><dt>Stakeholder Management</dt><dd>Guides and influences stakeholders at all levels, from engineers to executive leadership</dd></div>
+    <div><dt>Full-Stack Engineering</dt><dd>Broad and deep understanding of the complete software stack, from backend to frontend</dd></div>
+  </dl>
 </section>
-<section class="content competencies">
-  <h3>Skills Overview</h3>
-  <ul>
-    <li><strong>Team Management & Development:</strong> Manages, mentors, and scales cross-functional product teams</li>
-    <li><strong>User-Centered Product Design:</strong> Anchors product design decisions to user needs in alignment with business concerns</li>
-    <li><strong>Data-Driven Decision Making:</strong> Drives product decisions via competitive analysis, user research, and usability testing</li>
-    <li><strong>Stakeholder Management:</strong> Guides and influences stakeholders at all levels, from engineers to executive leadership</li>
-    <li><strong>Full-Stack Engineering:</strong> Broad and deep understanding of the complete software stack, from backend to frontend</li>
-  </ul>
-</section>
-<section class="content work-history">
-  <h3>Work History</h3>
+
+<section>
+  <div class="section-heading"><span>Work history</span><span class="heading-rule"></span></div>
   {{#each local.employers}}
-    <section class="employer">
-      <h4>{{job_title}}</h4>
-      <h5>{{employer_name}}</h5>
-      {{#if employed_to_formatted}}
-        <p class="dates">{{employed_from_formatted}} to {{employed_to_formatted}}</p>
-      {{else}}
-        <p class="dates">{{employed_from_formatted}} to Present</p>
-      {{/if}}
-      <p class="description">{{job_description}}</p>
-      {{#if company_url}}
-        <nav>
-          <a class="primary-action" href="/case-study/{{company_url}}">Read my {{employer_name}} case study</a>
-        </nav>
-      {{/if}}
-    </section>
+    <article>
+      <span>{{date_range}}</span>
+      <div><h2>{{job_title}}</h2><h3>{{employer_name}}</h3><p>{{job_description}}</p>{{#if company_url}}<a class="read-link" href="/case-study/{{company_url}}">Read my {{employer_name}} case study →</a>{{/if}}</div>
+    </article>
   {{/each}}
 </section>
-<section class="content skills-inventory">
-  <h3>Skills Inventory</h3>
+
+<section>
+  <div class="section-heading"><span>Skills inventory</span><span class="heading-rule"></span></div>
   <ul>
-    <li>Team Management</li>
-    <li>Design Thinking</li>
-    <li>Product Management</li>
-    <li>Product Strategy</li>
-    <li>Discovery</li>
-    <li>Requirements Gathering</li>
-    <li>Data Analysis</li>
-    <li>Customer Experience</li>
-    <li>B2B</li>
-    <li>B2C</li>
-    <li>SaaS</li>
-    <li>User Research</li>
-    <li>User Experience</li>
-    <li>Product Design</li>
-    <li>Information Architecture</li>
-    <li>Accessibility</li>
-    <li>Heuristic Evaluation</li>
-    <li>Contextual Inquiry</li>
-    <li>Usability Studies</li>
-    <li>User Testing</li>
-    <li>Wireframes</li>
-    <li>Prototypes</li>
-    <li>High-Fidelity Mockups</li>
-    <li>Design Systems</li>
-    <li>Data Visualization</li>
-    <li>UX</li>
-    <li>UI</li>
-    <li>UI Copy</li>
-    <li>Microcopy</li>
-    <li>Copywriting</li>
-    <li>Prompt Engineering</li>
-    <li>Frontend Development</li>
-    <li>Backend Development</li>
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>JavaScript</li>
-    <li>Node.js</li>
-    <li>PostgreSQL</li>
-    <li>SQL</li>
-    <li>Cloud Computing</li>
-    <li>Developer Tools</li>
-    <li>Git</li>
-    <li>Linux</li>
-    <li>SSH</li>
-    <li>Terminal</li>
-    <li>Figma</li>
-    <li>Sketch</li>
-    <li>Jira</li>
-    <li>Confluence</li>
-    <li>Agile</li>
-    <li>Slack</li>
-    <li>Notion</li>
-    <li>Cursor</li>
+    <li>Team Management</li><li>Design Thinking</li><li>Product Management</li><li>Product Strategy</li><li>Discovery</li><li>Requirements Gathering</li><li>Data Analysis</li><li>Customer Experience</li><li>B2B</li><li>B2C</li><li>SaaS</li><li>User Research</li><li>User Experience</li><li>Product Design</li><li>Information Architecture</li><li>Accessibility</li><li>Heuristic Evaluation</li><li>Contextual Inquiry</li><li>Usability Studies</li><li>User Testing</li><li>Wireframes</li><li>Prototypes</li><li>High-Fidelity Mockups</li><li>Design Systems</li><li>Data Visualization</li><li>UX</li><li>UI</li><li>UI Copy</li><li>Microcopy</li><li>Copywriting</li><li>Prompt Engineering</li><li>Frontend Development</li><li>Backend Development</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Node.js</li><li>PostgreSQL</li><li>SQL</li><li>Cloud Computing</li><li>Developer Tools</li><li>Git</li><li>Linux</li><li>SSH</li><li>Terminal</li><li>Figma</li><li>Sketch</li><li>Jira</li><li>Confluence</li><li>Agile</li><li>Slack</li><li>Notion</li><li>Cursor</li>
   </ul>
 </section>

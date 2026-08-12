@@ -1,15 +1,13 @@
-// Global styles
-@use '_mixins';
 @use 'baseline';
 @use 'global';
-@use '_footer';
-@use '_header';
-@use '_screens';
-
-// Pattern styles
+@use 'header';
+@use 'rail';
+@use 'footer';
+@use 'screens';
+@use 'index';
 @use 'case-studies';
 @use 'case-study';
-@use 'contact';
-@use 'index';
+@use 'gallery';
 @use 'resume';
-@use 'work-samples';
+@use 'contact';
+@use 'citizen';

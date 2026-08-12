@@ -1,10 +1,56 @@
-<h1>Case Study: <span>{{{local.title}}}</span></h1>
-<section class="about">
-  {{{include.featuredScreens}}}
-  <p class="summary">{{{local.summary}}}</p>
-  <section class="content case-study {{local.company_url}}">
-    {{{local.content}}}
-  </section>
-  {{{include.screens}}}
+<header>
+  <nav aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/case-studies">Case Studies</a></li>
+      <li aria-current="page">{{local.company_name}}</li>
+    </ol>
+  </nav>
+  <h1>{{{local.title}}}</h1>
+  <p>{{{local.tagline}}}</p>
+</header>
+
+<section data-zoom-group aria-label="Featured screens">
+  {{#if local.featuredScreens}}
+    {{#each local.featuredScreens}}
+      <figure>
+        <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener">
+          <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+        </a>
+      </figure>
+    {{/each}}
+  {{else}}
+    <span class="image-placeholder">Images forthcoming</span>
+  {{/if}}
 </section>
-{{> caseStudyCallout local.callout}}
+
+<dl>
+  <div><dt>Vertical</dt><dd>{{{local.vertical}}}</dd></div>
+  <div><dt>Platform</dt><dd>{{{local.platform}}}</dd></div>
+  <div><dt>Expertise</dt><dd>{{{local.expertise}}}</dd></div>
+</dl>
+
+<section>
+  <article>
+    <p>{{{local.summary}}}</p>
+    <nav aria-label="In this study"><h2>In this study</h2><ol></ol></nav>
+    {{{local.content}}}
+  </article>
+  <aside>
+    <section><h2>All screens</h2>
+      {{#each local.screenSections}}
+        <section><div data-zoom-group>
+          {{#each screens}}
+            <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener"><img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}"></a>
+          {{/each}}
+        </div></section>
+      {{/each}}
+      <a href="/gallery">Browse the full gallery →</a>
+    </section>
+    <p>Questions about this work? <a href="/contact">Get in touch.</a></p>
+  </aside>
+</section>
+
+<nav aria-label="Case study pagination">
+  <a href="/case-study/{{local.previous.company_url}}"><small>← Previous</small><strong>{{{local.previous.title}}}</strong><em>{{{local.previous.tagline}}}</em></a>
+  <a href="/case-study/{{local.next.company_url}}"><small>Next →</small><strong>{{{local.next.title}}}</strong><em>{{{local.next.tagline}}}</em></a>
+</nav>

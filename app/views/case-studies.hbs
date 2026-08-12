@@ -1,11 +1,26 @@
-<h1>Case Studies</h1>
-{{#each local.caseStudies}}
-  <article class="case-study {{company_url}}">
-    <h3>{{{title}}}</h3>
-    {{> screenGroup this}}
-    <p class="summary">{{{summary}}}</p>
-    <nav>
-      <a class="primary-action" href="/case-study/{{company_url}}" title="Read the full {{company_name}} case study.">Read my {{company_name}} case study</a>
-    </nav>
-  </article>
-{{/each}}
+<section>
+  <h1>Seven products, each with its own constraints. The write-ups cover the research, the decisions, and what shipped.</h1>
+  <p><a href="/contact">Please ask</a> if you have questions. I&apos;m happy to go into detail on any project.</p>
+</section>
+<section>
+  {{#each local.caseStudies}}
+    <a data-hover-card href="/case-study/{{company_url}}">
+      {{#if hero}}
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80,w_900/jaysylvester.com/screens/{{hero.url}}" alt="{{hero.alt}}">
+      {{else}}
+        <span class="image-placeholder">Image forthcoming</span>
+      {{/if}}
+      <div>
+        <h2>{{{title}}}</h2>
+        <p>{{{tagline}}}</p>
+        <p>{{{summary}}}</p>
+        <dl>
+          <dt>Vertical</dt><dd>{{{vertical}}}</dd>
+          <dt>Platform</dt><dd>{{{platform}}}</dd>
+          <dt>Expertise</dt><dd>{{{expertise}}}</dd>
+        </dl>
+        <span class="read-link">Read the case study →</span>
+      </div>
+    </a>
+  {{/each}}
+</section>

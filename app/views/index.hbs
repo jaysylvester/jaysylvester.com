@@ -1,59 +1,49 @@
-<h1>About Me</h1>
-<section class="content">
-  <p>
-    I make complex products easy to use through careful research, inspired design, cross-functional collaboration, and supportive leadership.
-  </p>
-  <p>
-    First design hire at multiple SaaS startups, built upon a foundation of agency and corporate leadership. Adept at guiding people and products from concept to launch / 0 to 1. Passionate about mentoring creative talent and leading cross-functional teams through the full product lifecycle: ideation, planning, execution, and launch.
-  </p>
-  <p>
-    Strategic thinker, collaborative leader, creative maker, and tactical doer.
-  </p>
+<section>
+  <h1>I make complex products easy to use through careful research, inspired design, cross-functional collaboration, and supportive leadership.</h1>
+  <p>First design hire at multiple SaaS startups, built upon a foundation of agency and corporate leadership. Adept at guiding people and products from concept to launch / 0 to 1. Passionate about mentoring creative talent and leading cross-functional teams through the full product lifecycle: ideation, planning, execution, and launch.</p>
+  <p>Strategic thinker, collaborative leader, creative maker, and tactical doer.</p>
+  <div class="button-row">
+    <a class="primary-action" href="/resume"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M3.5 1.5h6l3 3v10h-9z"></path><path d="M9.5 1.5v3h3"></path><path d="M5.5 8h5M5.5 11h5"></path></svg> Résumé</a>
+    <a class="secondary-action" href="/contact"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M1.5 3.5h13v9h-13z"></path><path d="M1.5 3.5 8 9l6.5-5.5"></path></svg> Get in touch</a>
+  </div>
 </section>
-<section class="endorsements">
-  <section class="quotes">
-    <blockquote>
-      <p>
-        Not only were his personal designs fantastic, Jay built an amazing team and introduced new ways of working which impressed me with their flexibility, speed and quality of output. He established himself as a leader in design, technology and development ops and made a huge contribution to every project he was involved in as well as the overall culture.
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        Jay is one of the best managers I&apos;ve worked with in my career. Jay is an exceptional leader, inclusive and involved in the process, without micromanaging. He trusts in his team, and is receptive to feedback. Working on Jay&apos;s team, I felt energized with what we were creating, and that I was delivering my best. 
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        I've been working on the web for a long time, and to be able to work with someone that pushed me to learn more for all the right reasons was a breath of fresh air. Jay would be an asset to any frontend team and I can only hope our paths cross again.
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        Many of the best ideas we've had for improving our sites started during conversations with Jay. He is not satisfied with just getting by and pushes for genuine quality and improvement. He has also been very astute when observing what will and won't work during our project planning (and his predictions have been surprisingly accurate).
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        Jay takes great ownership of any product and feature that he works on, and works well under fire. He also has a great sense of humor and a desire to focus on what matters to get the job done over corporate politics. He really understands how to motivate a team, and is a true asset to any company or person that is lucky enough to work with him.
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        Jay&apos;s style of management is very focused and inclusive. He determines the best course of action for the task at hand by involving everyone on his team. He then aims all his talents at creating the best solution for the company. The cool thing is everyone gets to be involved. It would be a pleasure to work with Jay on any project.
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        Jay is the ideal person to lead a team. He has the technical knowledge to push a team in the right direction, but the leadership skills to know how to let that team work independently. Ever pragmatic and eager to hear good ideas, I was always confident that Jay would steer us in the right direction.
-      </p>
-    </blockquote>
-    <blockquote>
-      <p>
-        His professionalism and acuity for user-oriented design and development, combined with his sense of humor, helped us deliver projects on time that exceeded the expectations of management and client alike.  I would not hesitate to recommend Jay for any position where his knowledge, experience, and expertise are called for.
-      </p>
-    </blockquote>
-  </section>
+
+<section aria-label="Featured case studies">
+  {{#each local.featuredEngagements}}
+    <a href="/case-study/{{company_url}}">
+      {{#if hero}}
+        <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80,w_900/jaysylvester.com/screens/{{hero.url}}" alt="{{hero.alt}}">
+      {{else}}
+        <span class="image-placeholder">Image forthcoming</span>
+      {{/if}}
+      <h2>{{{title}}}</h2>
+      <p>{{{summary}}}</p>
+      <span class="expertise">{{{expertise}}}</span>
+    </a>
+  {{/each}}
 </section>
-<section class="featured-case-study">
-  {{> caseStudyCallout local.callout}}
+
+<section aria-label="Engagement index">
+  {{#each local.remainingEngagements}}
+    <a href="/case-study/{{company_url}}">
+      <strong>{{employer_name}}</strong>
+      <span>{{job_title}}</span>
+      <span>{{{domain}}}</span>
+      <span>Read →</span>
+    </a>
+  {{/each}}
+</section>
+
+<section>
+  <div class="section-heading"><span>Endorsements</span><span class="heading-rule"></span><span>From colleagues and reports</span></div>
+  <div>
+    <blockquote>Not only were his personal designs fantastic, Jay built an amazing team and introduced new ways of working which impressed me with their flexibility, speed and quality of output. He established himself as a leader in design, technology and development ops and made a huge contribution to every project he was involved in as well as the overall culture.</blockquote>
+    <blockquote>Jay is one of the best managers I&apos;ve worked with in my career. Jay is an exceptional leader, inclusive and involved in the process, without micromanaging. He trusts in his team, and is receptive to feedback. Working on Jay&apos;s team, I felt energized with what we were creating, and that I was delivering my best.</blockquote>
+    <blockquote>I've been working on the web for a long time, and to be able to work with someone that pushed me to learn more for all the right reasons was a breath of fresh air. Jay would be an asset to any frontend team and I can only hope our paths cross again.</blockquote>
+    <blockquote>Many of the best ideas we've had for improving our sites started during conversations with Jay. He is not satisfied with just getting by and pushes for genuine quality and improvement. He has also been very astute when observing what will and won't work during our project planning (and his predictions have been surprisingly accurate).</blockquote>
+    <blockquote>Jay takes great ownership of any product and feature that he works on, and works well under fire. He also has a great sense of humor and a desire to focus on what matters to get the job done over corporate politics. He really understands how to motivate a team, and is a true asset to any company or person that is lucky enough to work with him.</blockquote>
+    <blockquote>Jay&apos;s style of management is very focused and inclusive. He determines the best course of action for the task at hand by involving everyone on his team. He then aims all his talents at creating the best solution for the company. The cool thing is everyone gets to be involved. It would be a pleasure to work with Jay on any project.</blockquote>
+    <blockquote>Jay is the ideal person to lead a team. He has the technical knowledge to push a team in the right direction, but the leadership skills to know how to let that team work independently. Ever pragmatic and eager to hear good ideas, I was always confident that Jay would steer us in the right direction.</blockquote>
+    <blockquote>His professionalism and acuity for user-oriented design and development, combined with his sense of humor, helped us deliver projects on time that exceeded the expectations of management and client alike. I would not hesitate to recommend Jay for any position where his knowledge, experience, and expertise are called for.</blockquote>
+  </div>
 </section>

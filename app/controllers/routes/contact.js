@@ -33,7 +33,7 @@ export const form = async (params, request) => {
       return {
         local: {
           date: Date.now(),
-          error: 'Your e-mail address doesn\'t look right'
+          error: 'Your e-mail address doesn\'t look right.'
         },
         cache: {
           request: false

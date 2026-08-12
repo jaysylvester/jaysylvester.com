@@ -1,45 +1,23 @@
-<h1>Contact Me</h1>
-<section class="content">
-  <ul class="social">
-    <li class="linkedin"><a href="https://www.linkedin.com/in/jaysylvester" target="_blank" rel="noopener">LinkedIn</a></li>
-    <li class="github"><a href="https://github.com/jaysylvester" target="_blank" rel="noopener">GitHub</a></li>
-    <li class="twitter"><a href="https://twitter.com/JayIsAngry" target="_blank" rel="noopener">Twitter</a></li>
-  </ul>
-  {{#if local.error}}
-    <p class="error">{{local.error}}</p>
-  {{/if}}
-  <form id="contact-form" action="/contact/action/form" method="post" novalidate>
-    <input type="hidden" name="date" value="{{local.date}}">
-    <ul class="data">
-      <li class="name text required">
-        <label for="name">
-          Name
-        </label>
-        <input id="name" name="name" value="{{form.name}}" required />
-      </li>
-      <li class="email text required">
-        <label for="email">
-          E-mail
-        </label>
-        <input id="email" name="email" type="email" value="{{form.email}}" required />
-      </li>
-      <li class="subject text required">
-        <label for="subject">
-          Subject
-        </label>
-        <input id="subject" name="subject" value="{{form.subject}}" required />
-      </li>
-      <li class="message textarea required">
-        <label for="message">
-          Message
-        </label>
-        <textarea id="message" name="message" rows="5" required>{{form.message}}</textarea>
-      </li>
-    </ul>
-    <ul class="actions">
-      <li class="submit primary-action">
-        <input id="submit" name="submit" type="submit" value="Send your message" />
-      </li>
-    </ul>
-  </form>
+<header>
+  <h1>Open to senior product and design roles, full-time or consulting.</h1>
+</header>
+<section>
+  <div>
+    {{#if local.error}}<p class="form-error" id="form-error" role="alert">{{local.error}}</p>{{/if}}
+    <form id="contact-form" action="/contact/action/form" method="post" novalidate {{#if local.error}}aria-describedby="form-error"{{/if}}>
+      <input type="hidden" name="date" value="{{local.date}}">
+      <div class="form-row">
+        <label>Name<input name="name" value="{{form.name}}" autocomplete="name" required></label>
+        <label>E-mail<input name="email" type="email" value="{{form.email}}" autocomplete="email" required></label>
+      </div>
+      <label>Subject<input name="subject" value="{{form.subject}}" autocomplete="off" required></label>
+      <label>Message<textarea name="message" rows="7" required>{{form.message}}</textarea></label>
+      <button class="primary-action" name="submit" type="submit"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M1.5 3.5h13v9h-13z"></path><path d="M1.5 3.5 8 9l6.5-5.5"></path></svg> Send your message</button>
+    </form>
+  </div>
+  <aside aria-label="Contact channels">
+    <a href="https://www.linkedin.com/in/jaysylvester" target="_blank" rel="noopener"><small>LinkedIn</small><span>linkedin.com/in/jaysylvester</span></a>
+    <a href="https://github.com/jaysylvester" target="_blank" rel="noopener"><small>GitHub</small><span>github.com/jaysylvester</span></a>
+    <a href="https://x.com/JayIsAngry" target="_blank" rel="noopener"><small>X</small><span>@JayIsAngry</span></a>
+  </aside>
 </section>
