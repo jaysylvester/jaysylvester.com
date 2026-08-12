@@ -148,7 +148,7 @@ Run the image directly as a fixed non-root user such as UID/GID `10001:10001`; n
 
 Do not install PM2 in the application image. The container runs `node app/start.js` directly, and production sets `restart: unless-stopped` so Docker restarts the container when Node exits unexpectedly and restores it after Docker starts at boot. Use Compose logs/status plus Docker restart counts and resource statistics in place of `pm2 logs`, `pm2 status`, and `pm2 monit`. This replaces PM2's supervision only; if inventory finds cluster mode, memory thresholds, scheduled restarts, alerts, or another PM2-specific policy, preserve or deliberately retire that concrete behavior separately rather than assuming the restart policy covers it.
 
-Development startup must report `Loaded project environment: /site/.env` followed by `Loaded Citizen configuration: /site/citizen.config.js`, then start in development mode. Production will report that no project `.env` was loaded because it receives an explicit allowlist and secret files. Existing database and mail behavior must work without logging secrets. Citizen settings must appear under `app.config.citizen`; typed database, mail, and runtime application settings must appear beside that namespace.
+Development startup reports `Loaded project environment: /site/.env` followed by `Loaded Citizen configuration: /site/citizen.config.js`, then starts in development mode. Production reports that no project `.env` was loaded because it receives an explicit allowlist and secret files. Existing database and mail behavior works without logging secrets. Citizen settings appear under `app.config.citizen`; typed database, mail, and runtime application settings appear beside that namespace.
 
 A development `citizen.config.js` or ordinary `.env` change needs only an app restart because both files are bind-mounted and Citizen reloads them at process start. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password and recreating the database container's environment; editing `.env` alone does not update an existing data volume.
 
@@ -222,6 +222,7 @@ If another development project already owns ports 80, 443, or 5432, stop that pr
 - Store data in the named volume.
 - Use `pg_isready` for health.
 - Initialize the database name, role, and reused password from the ignored environment file only when the volume is empty. Pass only the explicit `POSTGRES_*` values required by the database service; do not mount the whole file there.
+- Inventory database roles and external login habits before initialization, including whether Postico or operational scripts use a role named `postgres`. In the official image, a non-default `POSTGRES_USER` becomes the bootstrap superuser. That can leave no login role named `postgres` and can also give the application role cluster-wide superuser power. Decide deliberately whether to accept that simple model or preserve separate administrator and least-privilege application roles with reviewed initialization SQL; do not discover the role change after cutover.
 - PostgreSQL fixes encoding, `lc_collate`, `lc_ctype`, and its default server timezone when `initdb` first creates the volume. Before the first `db` start, put the inventoried locale values into each environment's `POSTGRES_INITDB_ARGS` and its timezone into `POSTGRES_TIMEZONE`, confirm the target image provides both, and test them with the selected PostgreSQL image. If a source locale or timezone is unavailable, choose and rehearse the compatible target before creating either final volume; discovering this during cutover is too late.
 - Do not use `resources/data.sql`; it is an untrusted historical initialization file.
 
@@ -235,7 +236,7 @@ If another development project already owns ports 80, 443, or 5432, stop that pr
 - Pass the application-owned cache buster through the shared `app.start({ cacheBuster })` call. Do not pass a `citizen` override there.
 - Use `app.config.citizen.*` and view `config.citizen.*` for framework settings.
 - Construct the PostgreSQL pools from `app.config.db` and the environment-appropriate password. Construct mail/contact behavior from `app.config.mail` and the environment-appropriate password. Do not add a generic environment helper or validation layer.
-- Move application utility modules that predate Citizen's helper convention into `app/helpers/<module>.js` when they are semantically helpers, and consume them through `app.helpers.<module>`. Mount and watch that directory in development so Citizen supplies native discovery and hot module replacement. Do not confuse Citizen's top-level `app.log()` API with auto-discovered `app.helpers` modules.
+- Move application utility modules that predate Citizen's helper convention into `app/helpers/<module>.js` only when they are semantically Citizen helpers, and consume those through `app.helpers.<module>`. Do not create or retain a helper solely to satisfy the convention; `No helpers found` is valid when none exist. Do not confuse Citizen's top-level `app.log()` API with auto-discovered `app.helpers` modules.
 - Leave `citizen.cors` unset so Citizen's fail-closed default rejects cross-origin requests. Add CORS later only for an inventoried browser client on another origin, scoped to the required origins, methods, and routes.
 - Do not arbitrarily change pool sizes, mail settings, or other application behavior. Removing the unused legacy CORS allowance is an explicitly reviewed migration correction.
 - Connect to PostgreSQL at `db:5432`.
@@ -331,6 +332,7 @@ sudo -u postgres psql -Atqc "SELECT version();"
 sudo -u postgres psql -Atqc "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database WHERE datistemplate = false ORDER BY datname;"
 sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_collate; SHOW lc_ctype; SHOW timezone;"
 sudo -u postgres psql -d jaysylvester -Atqc "SELECT extname FROM pg_extension ORDER BY extname;"
+sudo -u postgres psql -Atqc "SELECT rolname, rolsuper, rolcreatedb, rolcreaterole, rolcanlogin FROM pg_roles ORDER BY rolname;"
 ```
 
 Record the exact application start/stop command and the path of the working Citizen JSON.
@@ -372,9 +374,10 @@ sudo -u REPLACE_ME_PM2_OWNER env PM2_HOME=REPLACE_ME_PM2_HOME pm2 status
 sudo systemctl cat REPLACE_ME_APP_SERVICE
 sudo nginx -T 2>/dev/null | grep -nE 'proxy_pass|proxy_set_header[[:space:]]+(Forwarded|X-Forwarded)'
 sudo -u postgres psql -d jaysylvester -Atqc "SHOW server_encoding; SHOW lc_collate; SHOW lc_ctype; SHOW timezone;"
+sudo -u postgres psql -Atqc "SELECT rolname, rolsuper, rolcreatedb, rolcreaterole, rolcanlogin FROM pg_roles ORDER BY rolname;"
 ```
 
-Record the exact production branch, PM2 owner and home, application name, application service/startup unit, `ExecStart`, working directory, Citizen JSON path, Nginx upstream hostname/port, PostgreSQL connection values, and existing deployment/restart commands. Inspect the applicable PM2 ecosystem/startup configuration without copying its environment into the inventory. Determine whether PM2 provides only crash recovery/status/logs or also cluster mode, multiple instances, memory limits, scheduled restarts, file watching, log rotation, alerts, or another behavior that must be mapped explicitly. Do not print the JSON, PM2 environment, or credentials into the inventory record.
+Record the exact production branch, PM2 owner and home, application name, application service/startup unit, `ExecStart`, working directory, Citizen JSON path, Nginx upstream hostname/port, PostgreSQL connection values and roles, external database login usernames, and existing deployment/restart commands. Inspect the applicable PM2 ecosystem/startup configuration without copying its environment into the inventory. Determine whether PM2 provides only crash recovery/status/logs or also cluster mode, multiple instances, memory limits, scheduled restarts, file watching, log rotation, alerts, or another behavior that must be mapped explicitly. Do not print the JSON, PM2 environment, or credentials into the inventory record.
 
 ### Migrate Citizen and implement Docker in development
 
@@ -975,7 +978,9 @@ Copy the entire final directory into the protected workstation directory, enforc
 4. Start the rebuild and wait for completion. Do not create a replacement Droplet.
 5. Use the DigitalOcean console to obtain the new SSH host-key fingerprints and initial root access.
 
-On the workstation, compare the console fingerprints before removing the exact old `jaysylvester.com` and IP entries from `known_hosts`. Do not accept a changed key based only on the SSH prompt.
+The normal Web Console requires `droplet-agent` and may be unavailable immediately after a rebuild. Use the Recovery Console for initial access. It requires a password even when normal SSH uses keys; if no root password exists, use the control panel's **Reset Root Password** action, receive the temporary password through the account email, and change it at first login. Do not place that password in chat, scripts, shell arguments, or logs.
+
+On the workstation, compare the Recovery Console's ED25519 fingerprint with a fingerprint computed from `ssh-keyscan` before removing the exact old `jaysylvester.com` and IP entries from `known_hosts`. Do not accept a changed key based only on the SSH prompt. Retain the automatic `known_hosts.old` backup until access is proven.
 
 #### Bootstrap Debian 13
 
@@ -1012,7 +1017,9 @@ The old host had DigitalOcean's `do-agent.service` enabled and running. Reinstal
 wget -qO /tmp/install-droplet-agent.sh https://repos-droplet.digitalocean.com/install.sh
 sudo bash /tmp/install-droplet-agent.sh
 rm /tmp/install-droplet-agent.sh
-curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
+curl -fsSL https://repos.insights.digitalocean.com/install.sh -o /tmp/install-do-agent.sh
+sudo bash /tmp/install-do-agent.sh
+rm /tmp/install-do-agent.sh
 sudo systemctl is-enabled droplet-agent do-agent
 sudo systemctl is-active droplet-agent do-agent
 ```
@@ -1023,10 +1030,12 @@ Recreate only the required host directories and checkout:
 
 ```sh
 sudo install -d -m 0755 -o jay -g jay /var/www/jaysylvester.com
-git clone --branch main https://github.com/jaysylvester/jaysylvester.com.git /var/www/jaysylvester.com
+sudo -u jay git clone --branch main https://github.com/jaysylvester/jaysylvester.com.git /var/www/jaysylvester.com
 sudo install -d -m 0700 -o jay -g jay REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY
 sudo install -d -m 0755 /var/www/certbot/.well-known/acme-challenge
 ```
+
+Run Git status/revision checks as `jay`, the checkout owner. Root Git correctly rejects a `jay`-owned repository as dubious ownership; do not add a global `safe.directory` exception merely to bypass that protection.
 
 Restore the protected Certbot archive at `/` as root and verify `jaysylvester.com` covers both apex and `www`. Restore the protected `production.env` as `/var/www/jaysylvester.com/.env` owned by `jay`, mode `0600`; restore the final dump beneath `REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/`, mode `0600`. Do not restore host Node, PM2, Nginx, PostgreSQL, their units, the legacy JSON, old APT sources, or the old SSH daemon configuration.
 
@@ -1048,6 +1057,7 @@ pdc run --rm --no-deps --entrypoint node app -p "require('./node_modules/citizen
 pdc run --rm --no-deps --entrypoint sh app -c "test -r /site/citizen.config.js && test -r /run/secrets/db-password && test -r /run/secrets/mail-auth-pass && ! find /site/app/config -maxdepth 1 -type f -name '*.json' -print 2>/dev/null | grep ."
 pdc up -d db
 pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
+pdc exec -T db psql -U jaysylvester -d jaysylvester -Atqc "SELECT count(*) FROM pg_tables WHERE schemaname = 'public';" | grep -Fx 0
 pdc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/REPLACE_ME_FINAL_EXPORT_DIRECTORY/jaysylvester-production.dump
 pdc exec -T db psql -U jaysylvester -d jaysylvester -v ON_ERROR_STOP=1 -c 'ANALYZE;'
 pdc up -d app proxy
@@ -1055,11 +1065,15 @@ pdc ps
 pdc logs --tail=200 db app proxy
 ```
 
+Compose one-off `run` checks may create declared project networks and named volumes even when their service does not use the database volume. Therefore, absence of the PostgreSQL volume is a collision check before the one-offs, not proof that the later volume is still absent. Before restoring, start PostgreSQL and require the initialized target database's public schema to contain zero tables as shown above.
+
 Repeat the schema, row-count, maximum-ID, sequence, extension, locale, timezone, and representative-query comparisons. Validate routes, legacy and canonical redirects, 30-day static caching, `web/shoplc/`, static 404s, security headers, TLS, the contact and confirmation emails, fail-closed CORS, secret isolation, non-root Node, writable logs, and Postico through SSH. Run production smoke cases with:
 
 ```sh
 SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
 ```
+
+For PostgreSQL 17, read database collation and character type from `pg_database.datcollate` and `pg_database.datctype`; `SHOW lc_collate` and `SHOW lc_ctype` are not available there. Also compare `pg_roles` with the source and test every external login name. This project deliberately accepted one login-enabled bootstrap superuser named `jaysylvester` in both environments and no role named `postgres`; that is an accepted project choice, not a template default for later migrations.
 
 After the app remains stable for at least ten seconds, repeat the reviewed Node-child crash drill and require the Docker restart count to increase before the smoke test passes again. This proves the PM2 keepalive replacement; it does not claim alerting or hang detection.
 
@@ -1076,6 +1090,8 @@ sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
 
 If the installed Certbot uses a different documented reconfiguration command, use that supported command and update the README. Confirm the public ACME test path before reconfiguration and remove only the test file afterward.
 
+Nginx writes its successful reload notice to stderr, so Certbot may label the deploy hook's notice as “error output” even when the hook exits successfully. Judge the result by Certbot's final renewal status, the hook exit status, and a subsequent public HTTPS check—not by the stderr label alone.
+
 #### Rehearse reboot recovery
 
 ```sh
@@ -1084,7 +1100,7 @@ sudo reboot
 
 Reconnect and prove Docker restored `db`, `app`, and `proxy` without `compose up`; repeat database readiness, smoke, certificate, email, Postico, ports, Docker service, Certbot timer, `droplet-agent.service`, and `do-agent.service` checks. Confirm host commands `node`, `npm`, `pm2`, `nginx`, `postgres`, and `psql` are absent. The clean rebuild itself removed the retired runtimes, so no production package purge or legacy-data deletion follows.
 
-The live rehearsal booted kernel `6.12.101+deb13-amd64`; all three existing containers returned through `restart: unless-stopped`, PostgreSQL was healthy with the restored counts, and the complete public smoke test passed without running `compose up`. Docker restart counts reset when the daemon restarted, so the pre-reboot `0` to `1` Node crash-drill evidence and the independent post-reboot service-state evidence are recorded separately.
+The accepted host ran Debian 13.5, Docker Engine 29.7.2, Compose 5.4.0, Certbot 4.0.0, Nginx 1.28, Node 24.19.0, Citizen 2.0.0, and PostgreSQL 17.10 at cutover. The live rehearsal booted kernel `6.12.101+deb13-amd64`; all three existing containers returned through `restart: unless-stopped`, PostgreSQL was healthy with the restored counts, and the complete public smoke test passed without running `compose up`. Docker restart counts reset when the daemon restarted, so the pre-reboot `0` to `1` Node crash-drill evidence and the independent post-reboot service-state evidence are recorded separately. Treat these as tested evidence, not permanent version pins; recheck current supported releases and official install instructions for each later project.
 
 ### Production rollback
 
@@ -1346,7 +1362,7 @@ Create a non-secret inventory with at least:
 | Protected configuration | Active Citizen 1.x JSON path and every framework-owned versus application-owned key |
 | Development source host | VM product, SSH alias/command, application root, other workloads, and retirement gate |
 | Development hostname and ports | HTTPS hostname, Nginx ports, Postico port, internal BrowserSync route, and conflicts with other migrated projects |
-| Database | Database/role names, source PostgreSQL major, size, encoding, collation, character type, timezone, extensions, schemas, tables, sequences, and representative queries |
+| Database | Database/role names and attributes, external login usernames, source PostgreSQL major, size, encoding, collation, character type, timezone, extensions, schemas, tables, sequences, and representative queries |
 | Nginx | Effective server blocks, redirects, `try_files`, named locations, proxy headers, gzip, static expiry, access logging, TLS names, and special static trees |
 | Application behavior | Focused routes, any real cross-origin browser consumers, contact/email behavior, secure-cookie behavior, log filenames/message count, and watcher-triggered outputs |
 | Docker identity | Unique Compose project name, image names, named volumes, and protected backup directory |
@@ -1364,10 +1380,17 @@ counts, or Nginx file without re-inventorying the target project.
 4. Classify every legacy JSON value. Move stable typed framework settings under `citizen` in committed `citizen.config.js`; move typed nonsecret application settings beside that namespace; keep deployment inputs and secrets in ignored `.env`; and limit production secret-file handling to the production branch of the shared entrypoint. Do not preserve a legacy CORS allowance by default: inventory actual cross-origin browser clients, otherwise leave CORS unset and verify fail-closed behavior.
 5. Run Citizen's full suite at the exact locked commit under its minimum supported Node major and the deployed Node major. Record any upstream change separately before refreshing the application lockfile.
 6. Build and inspect the images, confirm `.env`, secret values, and legacy JSON are absent from image layers, prove the fixed non-root user can read required development leaf certificates and write logs, and confirm the app-only source mount does not hide image dependencies.
-7. Rehearse the source dump on the selected PostgreSQL image and locale before creating the final volume. Restore once, compare project-specific schema/data/sequence queries, and remember that later starts read the named volume rather than replaying the dump.
+7. Rehearse the source dump on the selected PostgreSQL image and locale before creating the final volume. Restore once, compare project-specific schema/data/sequence/role queries, and remember that later starts read the named volume rather than replaying the dump. Decide whether `POSTGRES_USER` may be the application superuser or whether separate administrator/application roles must be initialized and preserved.
 8. Reproduce the effective Nginx behavior, create and trust a fresh project-specific mkcert leaf certificate, move the hostname to loopback, and test HTTP redirect, trusted HTTPS, proxy metadata, static caching/compression, routes, expected cross-origin rejection or the specifically inventoried CORS policy, watchers, BrowserSync, and development email logs.
 9. Add the friendly lifecycle and guarded logical backup/restore commands. Create a real backup, validate its modes/checksum, restore it into an isolated project/volume, compare the data, and delete only the labeled test resources.
 10. Record development acceptance before beginning that project's production Citizen cutover. Keep production Docker as its own later phase unless the project explicitly chooses a different boundary.
+11. Inventory production independently from development: effective Nginx, host/process supervision, PostgreSQL roles and metadata, Certbot authenticator/timer, firewall/listeners, SSH access, monitoring/console agents, application logs, and every host path required for recovery.
+12. Take a powered-off whole-Droplet snapshot when the provider supports rebuilding the same host. Create a protected preliminary export off-host, verify every checksum, validate the database archive with the target PostgreSQL client or image, and generate the production `.env` without printing values.
+13. Build the production overlay and Nginx configuration from the production capture, not from the development proxy. Rehearse scoped secrets, a disposable target-major restore, public behavior, ACME webroot, and Docker crash recovery locally before merging the migration branch.
+14. Fast-forward the reviewed migration into the production branch before the maintenance window, but do not pull it into an incompatible legacy host process. Freeze writes, stop the exact source PostgreSQL cluster unit rather than assuming the aggregate unit stops it, create a fresh final dump, copy it off-host, and verify it before any destructive rebuild.
+15. Rebuild/bootstrap the host through a separately approved gate. Verify the new SSH host fingerprint out of band, restore only reviewed keys/certificates/environment/dump inputs, run Git as the checkout owner, install Docker/Certbot/provider agents from current official sources, and keep temporary transfer staging root-only until installed destinations are verified.
+16. Before the final restore, prove the target database is empty even if Compose one-off checks already created its named volume. Restore transactionally; compare encoding, locale, timezone, extensions, roles, schema, data, sequences, and external database logins; then start app/proxy and run both automated and operator acceptance.
+17. Reconfigure Certbot for the container-served webroot, test its deploy hook without the random renewal sleep, perform the focused Node crash/restart drill, reboot the host, and prove Docker restored the existing services without `compose up`. Retain the snapshot and protected exports through an explicitly chosen rollback window.
 
 ### What may be copied after parameterization
 
@@ -1388,6 +1411,7 @@ shared cross-project proxy as an incidental part of these migrations.
 
 - Exact Citizen branch commit and framework test matrix.
 - Source/target PostgreSQL versions and initialization metadata.
+- Source/target PostgreSQL roles, superuser/login attributes, external usernames tested, and any deliberately accepted role-name or privilege change.
 - Protected configuration/dump paths, checksums, and modes without secret values.
 - Schema, row-count, maximum-ID, sequence, extension, and representative-query comparisons appropriate to that project.
 - Effective Nginx behaviors carried forward and focused HTTP/browser results.
@@ -1416,3 +1440,4 @@ shared cross-project proxy as an incidental part of these migrations.
 - PostgreSQL `pg_dump`: <https://www.postgresql.org/docs/current/app-pgdump.html>.
 - PostgreSQL `pg_restore`: <https://www.postgresql.org/docs/current/app-pgrestore.html>.
 - Docker volumes, including backup/restore behavior: <https://docs.docker.com/engine/storage/volumes/>.
+- Docker Official Image for PostgreSQL, including `POSTGRES_USER` bootstrap behavior: <https://hub.docker.com/_/postgres/>.

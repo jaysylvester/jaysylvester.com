@@ -58,7 +58,7 @@ methods, and route scope; do not restore the legacy global allowance by default.
 6. Moved the application-owned cache buster out of the helper toolbox and into `app.start({ cacheBuster })`; the revised Citizen API accepts application configuration there and rejects a `citizen` override.
 7. Bind-mounted the protected project-root `.env` read-only at `/site/.env` in development. Citizen now loads it natively before importing `citizen.config.js`; Compose still maps only the database inputs required by PostgreSQL.
 8. Removed stable DB/mail settings from `.env` and `.env.example`. The remaining file contains secrets and deployment-specific inputs.
-9. Kept production's narrower model: Compose will inject only the remaining nonsecret allowlist and give the app/database their service-scoped password secrets. Production will not mount or inject the whole `.env`.
+9. Kept production's narrower model: Compose injects only the remaining nonsecret allowlist and gives the app/database their service-scoped password secrets. Production does not mount or inject the whole `.env`.
 10. Consolidated the development and production entrypoints into `app/start.js`. Citizen's resolved mode selects only the differing mail and password-delivery behavior; both Docker targets now use the same command.
 
 The implemented module shape after the CORS cleanup is:
@@ -129,7 +129,7 @@ application CORS input.
 - ESLint passed for `app/`, `citizen.config.js`, and `gulpfile.js` inside the development image.
 - Before the CORS cleanup, the route/static/CORS smoke test passed against the preserved legacy allowance after the full rebuild and again after a restart of only `app`, confirming that bind-mounted `.env` and config-module changes do not require image or container recreation.
 - A development contact submission redirected to confirmation and wrote both the owner and confirmation messages through the local mail logger, exercising `app.config.mail`.
-- A focused production-target startup used the explicit nonsecret environment allowlist and empty dummy secret-file paths, reported no project `.env`, loaded the config module, and started in production mode. Phase 2 will repeat the test with separate nonempty dummy Compose secrets. The temporary container and review image were removed afterward.
+- A preliminary production-target startup used the explicit nonsecret environment allowlist and dummy secret-file paths, reported no project `.env`, loaded the config module, and started in production mode. Phase 2 repeated the check with the final Compose definition and nonempty scoped secrets. The temporary review resources were removed afterward.
 - After entrypoint consolidation, the rebuilt development container inherited `node app/start.js`; ESLint, the route/static/CORS smoke test, and a development contact-log submission passed. The production target built and the same command started successfully in production mode through the secret-file branches. Temporary review resources were removed.
 - The completed CORS cleanup removed the global policy and `CORS_ALLOW_ORIGIN`, separated BrowserSync onto `BROWSERSYNC_ORIGIN`, and rebuilt all affected services. Ordinary routes, ESLint, BrowserSync client/polling access, and cross-origin GET/preflight assertions passed; both cross-origin cases returned `403` with no `Access-Control-Allow-*` headers. The production target built and started without a CORS input, and its temporary review resources were removed.
 - Phase 2 repeated the production startup with separate nonempty dummy Compose secrets. The app read both files, neither dummy value appeared in its container environment, Citizen loaded the committed config module in production mode, and Node ran as UID 10001 with writable persistent logs.
@@ -139,7 +139,7 @@ application CORS input.
 - Operator browsing, both contact emails, Postico over SSH, HTTPS, the full production smoke suite, ACME webroot, staged Certbot renewal plus Nginx reload, and the deliberate Node crash/restart drill passed. After a Debian kernel reboot, Docker restored `db`, `app`, and `proxy` without `compose up`; database checks and the full public smoke suite passed again.
 - Earlier PostgreSQL restore/data comparison, trusted HTTPS, watchers, BrowserSync, contact logging, lifecycle persistence, and isolated backup/restore results remain evidence for unchanged portions of the stack.
 
-## Phase 2 requirements
+## Production deployment pattern verified
 
 - Select the revised locked Citizen commit; do not refresh the branch during deployment.
 - Build the production image with the same committed `citizen.config.js`.
@@ -165,3 +165,4 @@ application CORS input.
 - Treat development and production caching as separate policies. Development uses `no-store`; derive production caching from the effective production Nginx capture, never from `dev.conf`.
 - Recreate Nginx after recreating the app—or development assets—because workers may retain a removed container's IP. A simple app restart preserves its container IP and does not require proxy recreation.
 - Do not add continuous app/proxy probes without a concrete alerting or recovery consumer.
+- Do not create a helper merely to satisfy Citizen's helper convention. If an application has no `app/helpers` modules, Citizen's `No helpers found` startup message is expected. Move a legacy utility into that namespace only when its semantics and consumers actually make it a Citizen helper; `app.log()` remains a top-level Citizen API.
