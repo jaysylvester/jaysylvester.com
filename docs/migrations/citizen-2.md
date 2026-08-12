@@ -1,10 +1,10 @@
 # Citizen 1.x to 2.0 migration record
 
 Status: the revised project-configuration-module contract was reviewed and implemented
-in development on 2026-08-10. Production remains on its pre-migration host revision
-until the coordinated Phase 2 Docker cutover. A subsequent review determined that the
-legacy global CORS allowance was preserved without a known cross-origin consumer; the
-post-acceptance Phase 1 follow-up removed it and verified Citizen's fail-closed default.
+in development on 2026-08-10. The production Docker cutover completed on 2026-08-12.
+A review determined that the legacy global CORS allowance had no known cross-origin
+consumer; the post-acceptance follow-up removed it and verified Citizen's fail-closed
+default in both development and production.
 
 ## Framework source
 
@@ -135,6 +135,8 @@ application CORS input.
 - Phase 2 repeated the production startup with separate nonempty dummy Compose secrets. The app read both files, neither dummy value appeared in its container environment, Citizen loaded the committed config module in production mode, and Node ran as UID 10001 with writable persistent logs.
 - The protected PostgreSQL 11 production dump restored transactionally into a disposable PostgreSQL 17 volume. UTF-8, `en_US.UTF-8`, UTC, `plpgsql`, all three tables, row counts, maximum IDs, and sequence states matched. The production app and Nginx then passed database-backed routes, the inventoried redirects, 30-day static caching, static 404, security headers, TLS, ACME webroot, fail-closed CORS, and a deliberate Node-child crash/restart drill. All disposable resources and the temporary certificate extraction were removed; development was restarted.
 - Production Nginx preserves the effective HTTP/2, TLS, gzip, 16 MB request, security-header, redirect, proxy, and cache behavior. The retired host emitted an OCSP-stapling warning because the certificate had no responder URL, so the ineffective stapling directive and its resolver list were not copied into the container.
+- Live production runs the same image command on Debian 13 with Node 24.19.0 and Citizen 2.0.0. The final PostgreSQL 11 archive restored transactionally into PostgreSQL 17.10 with encoding, locale, timezone, extension, counts, maximum IDs, and sequence states matching. The app read service-scoped secrets without exposing password values in its environment and ran as UID 10001 with writable persistent logs.
+- Operator browsing, both contact emails, Postico over SSH, HTTPS, the full production smoke suite, ACME webroot, staged Certbot renewal plus Nginx reload, and the deliberate Node crash/restart drill passed. After a Debian kernel reboot, Docker restored `db`, `app`, and `proxy` without `compose up`; database checks and the full public smoke suite passed again.
 - Earlier PostgreSQL restore/data comparison, trusted HTTPS, watchers, BrowserSync, contact logging, lifecycle persistence, and isolated backup/restore results remain evidence for unchanged portions of the stack.
 
 ## Phase 2 requirements

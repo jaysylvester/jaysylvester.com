@@ -1,16 +1,14 @@
 # Docker and Citizen 2.0 Migration Plan
 
-Status: Phase 1 development Docker acceptance completed on 2026-08-09. The further
-revised Citizen project-configuration-module contract was implemented and revalidated
-on 2026-08-10. A post-acceptance review determined that the migrated global CORS
-allowance had no known consumer; it was removed and Citizen's fail-closed default was
-validated on 2026-08-10. The temporary
-host-based production Citizen cutover is canceled; production will adopt the accepted
-Citizen revision as part of its Docker cutover. The shared development VM cannot be
-retired until its other projects are migrated. Phase 2 inventory, protected preliminary
-export, production implementation, and local production rehearsal were completed on
-2026-08-12. Production remains live on the unchanged Debian 10 stack pending the
-review/merge and maintenance-window gates.
+Status: Phase 1 development Docker acceptance completed on 2026-08-09. The revised
+Citizen configuration contract and fail-closed CORS default were accepted on
+2026-08-10. Phase 2 completed on 2026-08-12: the existing Droplet was rebuilt with
+Debian 13, the verified PostgreSQL 11 dump was restored into PostgreSQL 17, and the
+Citizen 2.0 app and Nginx entered production through Docker Compose. Automated and
+operator acceptance, the Node crash/restart drill, Certbot renewal dry run, and reboot
+recovery all passed. Snapshot `REPLACE_ME_ROLLBACK_SNAPSHOT` and the protected exports
+remain available for the rollback window. The shared development VM cannot be retired
+until its other projects are migrated.
 
 Target: migrate this application to Citizen 2.0 from its Git branch and run the same Docker Compose architecture on a macOS development workstation and a clean Debian 13 rebuild of the existing DigitalOcean production Droplet.
 
@@ -983,12 +981,12 @@ On the workstation, compare the console fingerprints before removing the exact o
 
 Log in through the verified root access, create `jay`, set its password for `sudo`, install the exported `authorized_keys` with directory mode `0700` and file mode `0600`, add the account to `sudo`, and prove a second SSH session works before closing root access. Apply only reviewed SSH settings; do not restore the Debian 10 `sshd_config` wholesale.
 
-Update Debian, install Git, Certbot, CA certificates, and curl, then install Docker Engine from Docker's current official Debian repository instructions. Verify the official instructions immediately before execution.
+Update Debian, install Git, Certbot, CA certificates, curl, and wget, then install Docker Engine from Docker's current official Debian repository instructions. Verify the official instructions immediately before execution.
 
 ```sh
 sudo apt update
 sudo apt full-upgrade
-sudo apt install ca-certificates curl git certbot
+sudo apt install ca-certificates curl wget git certbot
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -1008,15 +1006,18 @@ sudo docker compose version
 sudo docker run --rm hello-world
 ```
 
-The old host had DigitalOcean's `do-agent.service` enabled and running. Reinstall the current metrics agent using DigitalOcean's official instructions rather than restoring its Debian 10 files, then verify it before continuing:
+The old host had DigitalOcean's `do-agent.service` enabled and running. Reinstall the current metrics agent using DigitalOcean's official instructions rather than restoring its Debian 10 files. Also install the separate Droplet agent so the normal browser console is available without the password-only Recovery Console:
 
 ```sh
+wget -qO /tmp/install-droplet-agent.sh https://repos-droplet.digitalocean.com/install.sh
+sudo bash /tmp/install-droplet-agent.sh
+rm /tmp/install-droplet-agent.sh
 curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
-sudo systemctl is-enabled do-agent
-sudo systemctl is-active do-agent
+sudo systemctl is-enabled droplet-agent do-agent
+sudo systemctl is-active droplet-agent do-agent
 ```
 
-Recheck the official installation URL immediately before running this command. This preserves existing Droplet metrics; it does not add a new application-health check or replace external alert configuration.
+Recheck both official installation URLs immediately before running these commands. The metrics agent preserves existing Droplet metrics; it does not add a new application-health check or replace external alert configuration. The Droplet agent provides console access and is not the metrics agent.
 
 Recreate only the required host directories and checkout:
 
@@ -1069,7 +1070,7 @@ The restored renewal configuration uses the old Nginx authenticator. With contai
 ```sh
 sudo certbot reconfigure --cert-name jaysylvester.com --webroot --webroot-path /var/www/certbot
 sudo install -m 0755 scripts/reload-production-proxy /etc/letsencrypt/renewal-hooks/deploy/reload-jaysylvester-proxy
-sudo certbot renew --dry-run --run-deploy-hooks
+sudo certbot renew --dry-run --run-deploy-hooks --no-random-sleep-on-renew
 sudo systemctl list-timers --all | grep -Ei 'certbot|letsencrypt'
 ```
 
@@ -1081,7 +1082,9 @@ If the installed Certbot uses a different documented reconfiguration command, us
 sudo reboot
 ```
 
-Reconnect and prove Docker restored `db`, `app`, and `proxy` without `compose up`; repeat database readiness, smoke, certificate, email, Postico, ports, Docker service, Certbot timer, and `do-agent.service` checks. Confirm host commands `node`, `npm`, `pm2`, `nginx`, `postgres`, and `psql` are absent. The clean rebuild itself removed the retired runtimes, so no production package purge or legacy-data deletion follows.
+Reconnect and prove Docker restored `db`, `app`, and `proxy` without `compose up`; repeat database readiness, smoke, certificate, email, Postico, ports, Docker service, Certbot timer, `droplet-agent.service`, and `do-agent.service` checks. Confirm host commands `node`, `npm`, `pm2`, `nginx`, `postgres`, and `psql` are absent. The clean rebuild itself removed the retired runtimes, so no production package purge or legacy-data deletion follows.
+
+The live rehearsal booted kernel `6.12.101+deb13-amd64`; all three existing containers returned through `restart: unless-stopped`, PostgreSQL was healthy with the restored counts, and the complete public smoke test passed without running `compose up`. Docker restart counts reset when the daemon restarted, so the pre-reboot `0` to `1` Node crash-drill evidence and the independent post-reboot service-state evidence are recorded separately.
 
 ### Production rollback
 
@@ -1179,7 +1182,7 @@ Preserve:
 
 - `/var/lib/docker` and the production PostgreSQL and Citizen-log volumes.
 - `/etc/letsencrypt`, `/var/www/certbot`, Certbot, its timer, and the container reload hook.
-- DigitalOcean's installed `do-agent.service` and its enabled/running state.
+- DigitalOcean's installed `droplet-agent.service` and `do-agent.service`, and their enabled/running states.
 - `/var/www/jaysylvester.com`, its mode-`0600` `.env`, and the tracked Citizen lockfile and migration record.
 - The final verified production dump on the rebuilt host and workstation through the acceptance and rollback window.
 - The protected preliminary export on the workstation until the same window ends.
@@ -1272,7 +1275,7 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - The final maintenance-window database dump was copied off-host and verified before rebuild; the production Docker database was restored from it with UTF-8, `en_US.UTF-8`, UTC, schema, row counts, maximum IDs, sequence states, extensions, and representative queries matching.
 - Existing public routes, static content, `web/shoplc/`, redirects, 404 behavior, email, proxy headers, and HTTPS work as before; CORS remains unset and fail-closed unless a real production cross-origin consumer was inventoried during Phase 2.
 - Production Let's Encrypt renewal succeeds and reloads container Nginx.
-- DigitalOcean's metrics agent is reinstalled from its current official source and remains enabled and active after reboot.
+- DigitalOcean's console and metrics agents are installed from their current official sources and remain enabled and active after reboot.
 - Production PostgreSQL is reachable by Postico only through the existing SSH tunnel and survives container recreation.
 - Routine production app deployment recreates proxy afterward and does not recreate the database.
 - The powered-off pre-migration DigitalOcean snapshot remains available through the rollback window and restores the existing Droplet in place.
@@ -1407,6 +1410,7 @@ shared cross-project proxy as an incidental part of these migrations.
 - DigitalOcean same-Droplet rebuilds: <https://docs.digitalocean.com/products/droplets/how-to/rebuild/>.
 - DigitalOcean restore from a snapshot: <https://docs.digitalocean.com/products/snapshots/how-to/create-and-restore-droplets/>.
 - DigitalOcean metrics agent installation: <https://docs.digitalocean.com/products/monitoring/how-to/install-metrics-agent/>.
+- DigitalOcean Droplet agent installation: <https://docs.digitalocean.com/products/droplets/how-to/manage-agent/>.
 - mkcert: <https://github.com/FiloSottile/mkcert>.
 - Certbot renewal hooks: <https://eff-certbot.readthedocs.io/en/stable/using.html>.
 - PostgreSQL `pg_dump`: <https://www.postgresql.org/docs/current/app-pgdump.html>.
