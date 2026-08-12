@@ -908,6 +908,8 @@ Copy it to `REPLACE_ME_PROTECTED_PRODUCTION_EXPORT_DIRECTORY/`, verify every che
 
 The 2026-08-12 preliminary export `REPLACE_ME_PRELIMINARY_EXPORT_DIRECTORY` passed all checksums and PostgreSQL archive validation. Its PostgreSQL 11 source contained 6 case studies (maximum ID and sequence 17), 59 screens (maximum ID and sequence 137), and 12 work-history rows (maximum ID and sequence 28). The disposable PostgreSQL 17 restore matched all values plus UTF-8, `en_US.UTF-8`, `Etc/UTC`, and `plpgsql`.
 
+The maintenance-window freeze produced `REPLACE_ME_FINAL_EXPORT_DIRECTORY`. Its protected off-host copy passed every SHA-256 check, PostgreSQL 17 listed the archive successfully, and its encoding, locale, timezone, extension, row counts, maximum IDs, and sequence states matched the preliminary export. PM2, Nginx, the PostgreSQL 11 cluster, and ports 80/443/5432 were confirmed stopped afterward. An earlier attempt showed that Debian's aggregate `postgresql.service` did not stop the cluster; its rollback trap restored the public site, the attempt was marked `-failed`, and the successful retry used `postgresql@11-main` explicitly.
+
 #### Merge the reviewed migration into `main`
 
 After the production overlay, dummy-secret startup, disposable production restore, production Nginx/HTTPS tests, PM2-replacement crash drill, and development regression checks pass, review the complete migration diff and fast-forward `main` to `maintenance/docker-migration`:
@@ -1045,7 +1047,7 @@ pdc run --rm --no-deps --entrypoint node app -p "require('./node_modules/citizen
 pdc run --rm --no-deps --entrypoint sh app -c "test -r /site/citizen.config.js && test -r /run/secrets/db-password && test -r /run/secrets/mail-auth-pass && ! find /site/app/config -maxdepth 1 -type f -name '*.json' -print 2>/dev/null | grep ."
 pdc up -d db
 pdc exec -T db pg_isready -U jaysylvester -d jaysylvester
-pdc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/REPLACE_ME_FINAL_DUMP.dump
+pdc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < REPLACE_ME_PROTECTED_PRODUCTION_STAGING_DIRECTORY/REPLACE_ME_FINAL_EXPORT_DIRECTORY/jaysylvester-production.dump
 pdc exec -T db psql -U jaysylvester -d jaysylvester -v ON_ERROR_STOP=1 -c 'ANALYZE;'
 pdc up -d app proxy
 pdc ps
