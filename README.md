@@ -157,14 +157,28 @@ The cutover used the powered-off DigitalOcean snapshot for whole-disk rollback a
 
 The production `.env` is mode `0600` and contains `NODE_ENV=production`, database name/user/password, mail password, `POSTGRES_IMAGE=postgres:17-bookworm`, UTF-8/en_US.UTF-8 initialization arguments, `POSTGRES_TIMEZONE=Etc/UTC`, and the loopback Postico port. Compose uses it for interpolation and to materialize the database/mail password secrets. It is never injected or mounted wholesale into `app`; the app receives only `NODE_ENV`, `DB_DATABASE`, `DB_USER`, and the two secret-file paths.
 
-Define the production Compose command after SSH login:
+Routine application deployment is one command after SSH login:
+
+```sh
+cd /var/www/jaysylvester.com
+./scripts/deploy-production
+```
+
+The script requires a clean production checkout on `main`, pulls with
+`--ff-only`, restarts itself from the pulled revision, validates and builds the
+production images, recreates `app` and then `proxy`, and runs the production
+smoke suite. It does not recreate `db` or its volume. The first deployment that
+introduces this script requires one manual `git pull --ff-only origin main`
+before invoking it; subsequent deployments use only the command above.
+
+For direct Compose administration, define the production Compose command after SSH login:
 
 ```sh
 cd /var/www/jaysylvester.com
 pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
 ```
 
-Routine deployment pulls the already reviewed lockfile, builds without refreshing Citizen, recreates the app, and then recreates Nginx so it resolves the new app-container address. It does not recreate PostgreSQL:
+The deployment script wraps the following underlying sequence. It pulls the already reviewed lockfile, builds without refreshing Citizen, recreates the app, and then recreates Nginx so it resolves the new app-container address. It does not recreate PostgreSQL:
 
 ```sh
 git status --short

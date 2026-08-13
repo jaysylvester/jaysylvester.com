@@ -191,6 +191,7 @@ Add and commit these production-specific artifacts on `maintenance/docker-migrat
 - The production Nginx configuration, preserving the inventoried redirects and other application-relevant behavior.
 - Production cases in `scripts/smoke-test` that exercise the inventoried public behavior.
 - `scripts/reload-production-proxy` as the Certbot deploy hook.
+- `scripts/deploy-production` as the guarded one-command production deployment path.
 - The production deployment, Postico, Certbot, and retired-runtime notes required in the README.
 
 Do not add generalized HTTP-manifest, `/proc` inspection, or permanent database-comparison harnesses unless implementation reveals a concrete problem that cannot be handled by focused commands. The developer-invoked backup/restore scripts are justified by accidental named-volume deletion; their restore path must be tested against a disposable project and volume without adding a permanent test framework.
@@ -1179,6 +1180,19 @@ npm run dev:test
 In production, an `.env` change requires recreating each service whose explicit environment or secret source changed. Recreate app followed by proxy for application/mail changes; rotate the PostgreSQL role before recreating `db` for a database-password change. A config-module change is an image change in production and follows the normal build plus app/proxy recreation. Do not refresh the Citizen branch implicitly during deployment: test the new Citizen commit upstream, update this project's lockfile and migration record in a reviewed development commit, and deploy that commit through the normal sequence.
 
 #### Production deployment
+
+Normal deployment is:
+
+```sh
+cd /var/www/jaysylvester.com
+./scripts/deploy-production
+```
+
+The tracked script requires a clean `main` checkout, uses a fast-forward-only
+pull, restarts itself from the pulled revision, validates/builds the production
+definition, recreates app before proxy, and runs the production smoke test. It
+must not recreate the database. The expanded commands below remain the
+troubleshooting/reference path.
 
 ```sh
 cd /var/www/jaysylvester.com

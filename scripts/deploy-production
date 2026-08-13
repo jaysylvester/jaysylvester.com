@@ -1,0 +1,67 @@
+#!/bin/sh
+
+set -eu
+
+site=/var/www/jaysylvester.com
+
+if test "$(id -u)" -eq 0; then
+  echo 'Run this deployment as the jay user, not root.' >&2
+  exit 1
+fi
+
+cd "$site"
+
+if test "$(git branch --show-current)" != main; then
+  echo 'The production checkout must be on main.' >&2
+  exit 1
+fi
+
+if test -n "$(git status --porcelain)"; then
+  echo 'The production checkout has uncommitted changes; deployment stopped.' >&2
+  git status --short >&2
+  exit 1
+fi
+
+# Pull once, then restart this script from the newly checked-out version so an
+# update to the deployment procedure itself takes effect safely.
+if test "${PRODUCTION_DEPLOY_AFTER_PULL:-false}" != true; then
+  git pull --ff-only origin main
+  PRODUCTION_DEPLOY_AFTER_PULL=true exec ./scripts/deploy-production
+fi
+
+pdc() {
+  sudo docker compose \
+    --env-file .env \
+    -p jaysylvester-production \
+    -f compose.yaml \
+    -f compose.production.yaml \
+    "$@"
+}
+
+report_failure() {
+  status=$?
+  trap - EXIT HUP INT TERM
+
+  if test "$status" -ne 0; then
+    echo 'Production deployment failed. Current service state and recent logs:' >&2
+    pdc ps >&2 || true
+    pdc logs --tail=100 app proxy >&2 || true
+  fi
+
+  exit "$status"
+}
+
+trap report_failure EXIT
+
+sudo -v
+pdc config --quiet
+pdc build app proxy
+pdc up -d --no-deps --force-recreate app
+sleep 5
+pdc ps app
+pdc up -d --no-deps --force-recreate proxy
+pdc ps
+SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
+
+trap - EXIT
+echo 'Production deployment passed.'
