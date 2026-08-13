@@ -3,16 +3,18 @@
 
 // default action
 export const handler = async (params) => {
-  const currentCompany = params.url.company || params.url['case-study'],
-        caseStudy = await app.models['case-studies'].caseStudy(currentCompany)
+  const company = params.url.company || params.url['case-study'],
+        caseStudy = await app.models['case-studies'].caseStudy(company)
 
   if ( caseStudy ) {
-    const allCaseStudies = await app.models['case-studies'].caseStudies(),
-          currentIndex = allCaseStudies.findIndex((item) => item.company_url === currentCompany),
+    const [ allCaseStudies, screenSections ] = await Promise.all([
+            app.models['case-studies'].caseStudies(),
+            app.models.screens.companyScreens(company)
+          ]),
+          currentIndex = allCaseStudies.findIndex((item) => item.company_url === company),
           previousIndex = (currentIndex - 1 + allCaseStudies.length) % allCaseStudies.length,
           nextIndex = (currentIndex + 1) % allCaseStudies.length,
-          screenSections = await app.models.screens.companyScreens(currentCompany),
-          featuredScreens = await app.models.screens.featuredScreens(currentCompany)
+          featuredScreens = allCaseStudies[currentIndex].screens
 
     return {
       local: {

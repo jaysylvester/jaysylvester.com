@@ -31,6 +31,40 @@ body > header {
     display: none;
   }
 
+  > noscript {
+    margin-left: auto;
+    padding: 8px 20px;
+
+    nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    a {
+      display: block;
+      position: relative;
+      padding: 8px 0;
+      color: var(--ink-4);
+      text-decoration: none;
+
+      &[aria-current="page"]::after {
+        content: '';
+        position: absolute;
+        top: 6px;
+        right: -20px;
+        bottom: 6px;
+        width: 5px;
+        background: var(--navy);
+      }
+    }
+  }
+
   .menu-toggle {
     display: flex;
     min-width: 58px;
@@ -199,6 +233,10 @@ body > header {
       display: none;
     }
 
+    > noscript {
+      display: none;
+    }
+
     .header-links {
       display: flex;
       min-width: 0;
@@ -308,6 +346,10 @@ body > header {
       padding-inline: 26px;
     }
   }
+}
+
+html:not(.js) body > header .menu-toggle {
+  display: none;
 }
 
 html.js body > header {

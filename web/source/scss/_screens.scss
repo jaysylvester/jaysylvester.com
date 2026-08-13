@@ -4,6 +4,10 @@ img[data-src] {
   background: var(--panel);
 }
 
+html:not(.js) img[data-src] {
+  display: none;
+}
+
 .new-tab {
   display: block;
   position: relative;

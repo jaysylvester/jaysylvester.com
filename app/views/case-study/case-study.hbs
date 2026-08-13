@@ -14,6 +14,9 @@
     {{#each local.featuredScreens}}
       <figure>
         <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener">
+          <noscript>
+            <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+          </noscript>
           <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
         </a>
       </figure>
@@ -40,7 +43,12 @@
       {{#each local.screenSections}}
         <section><div data-zoom-group>
           {{#each screens}}
-            <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener"><img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}"></a>
+            <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener">
+              <noscript>
+                <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+              </noscript>
+              <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+            </a>
           {{/each}}
         </div></section>
       {{/each}}

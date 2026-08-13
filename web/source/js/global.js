@@ -157,10 +157,23 @@ JAY.global = ( function () {
       let inerted = []
       let draggingProgress = false
 
+      const loadSlide = function (index) {
+        const image = slides[index]?.querySelector('img')
+
+        if ( image && !image.src ) image.src = image.dataset.src
+      }
+
+      const loadNearbySlides = function (index) {
+        loadSlide(index)
+        loadSlide(index - 1)
+        loadSlide(index + 1)
+      }
+
       const update = function (index) {
         activeIndex = Math.max(0, Math.min(index, slides.length - 1))
+        loadNearbySlides(activeIndex)
         counter.textContent = 'Image ' + ( activeIndex + 1 ) + ' of ' + slides.length
-        openTab.href = slides[activeIndex].querySelector('img').src
+        openTab.href = slides[activeIndex].querySelector('img').dataset.original
         dialog.style.setProperty('--zoom-progress-width', ( 100 / slides.length ) + '%')
         progress.setAttribute('aria-valuemax', slides.length)
         progress.setAttribute('aria-valuenow', activeIndex + 1)
@@ -241,6 +254,7 @@ JAY.global = ( function () {
           const figure = document.createElement('figure')
           const image = document.createElement('img')
           const caption = document.createElement('figcaption')
+          const width = Math.min(Math.max(Math.ceil(window.innerWidth * window.devicePixelRatio), 1200), 2400)
           figure.className = 'zoom-slide'
           image.addEventListener('load', function () {
             requestAnimationFrame(() => {
@@ -250,7 +264,8 @@ JAY.global = ( function () {
               updateProgress()
             })
           })
-          image.src = item.href
+          image.dataset.src = sourceImage?.dataset.src ? sourceImage.dataset.src.replace('[parameters]', 'f_auto,q_80,w_' + width) : item.href
+          image.dataset.original = item.href
           image.alt = sourceImage ? sourceImage.alt : ''
           caption.textContent = item.closest('figure')?.querySelector('figcaption')?.textContent || image.alt
           figure.append(image, caption)

@@ -1,52 +1,13 @@
 // case-study model
 
 
-const groupCaseStudies = (rows) => {
-  const caseStudies = []
-  const byId = new Map()
-
-  rows.forEach((row) => {
-    if ( !byId.has(row.id) ) {
-      const caseStudy = {
-        id:               row.id,
-        company_name:     row.company_name,
-        company_url:      row.company_url,
-        title:            row.title,
-        tagline:          row.tagline,
-        vertical:         row.vertical,
-        platform:         row.platform,
-        expertise:        row.expertise,
-        expertise_items:  row.expertise ? row.expertise.split(' / ') : [],
-        summary:          row.summary,
-        sort:             row.sort,
-        featured:         row.featured,
-        screens:          []
-      }
-
-      byId.set(row.id, caseStudy)
-      caseStudies.push(caseStudy)
-    }
-
-    if ( row.screen_id ) {
-      byId.get(row.id).screens.push({
-        id:   row.screen_id,
-        url:  row.url,
-        alt:  row.alt,
-        sort: row.screen_sort
-      })
-    }
-  })
-
-  caseStudies.forEach((caseStudy) => {
-    caseStudy.hero = caseStudy.screens[0]
-    caseStudy.featured_screens = caseStudy.screens.slice(0, 2)
-  })
-
-  return caseStudies
-}
-
-
 export const caseStudies = async () => {
+  const cacheKey = 'case-studies',
+        cacheScope = 'models',
+        cached = app.cache.get({ scope: cacheScope, key: cacheKey })
+
+  if ( cached ) return cached
+
   const client = await app.toolbox.dbPool.connect()
 
   try {
@@ -59,7 +20,55 @@ export const caseStudies = async () => {
             'order by cs.sort asc, s.sort asc;'
     })
 
-    return groupCaseStudies(result.rows)
+    const caseStudies = [],
+          byId = new Map()
+
+    result.rows.forEach((row) => {
+      if ( !byId.has(row.id) ) {
+        const caseStudy = {
+          id:               row.id,
+          company_name:     row.company_name,
+          company_url:      row.company_url,
+          title:            row.title,
+          tagline:          row.tagline,
+          vertical:         row.vertical,
+          platform:         row.platform,
+          expertise:        row.expertise,
+          expertise_items:  row.expertise ? row.expertise.split(' / ') : [],
+          summary:          row.summary,
+          sort:             row.sort,
+          featured:         row.featured,
+          screens:          []
+        }
+
+        byId.set(row.id, caseStudy)
+        caseStudies.push(caseStudy)
+      }
+
+      if ( row.screen_id ) {
+        byId.get(row.id).screens.push({
+          id:   row.screen_id,
+          url:  row.url,
+          alt:  row.alt,
+          sort: row.screen_sort
+        })
+      }
+    })
+
+    caseStudies.forEach((caseStudy) => {
+      caseStudy.hero = caseStudy.screens[0]
+    })
+
+    if ( !app.cache.exists({ scope: cacheScope, key: cacheKey }) ) {
+      app.cache.set({
+        key: cacheKey,
+        scope: cacheScope,
+        value: caseStudies,
+        lifespan: 'application'
+      })
+    }
+
+    return caseStudies
   } finally {
     client.release()
   }
@@ -67,6 +76,12 @@ export const caseStudies = async () => {
 
 
 export const caseStudy = async (company) => {
+  const cacheKey = 'case-study-' + company,
+        cacheScope = 'models',
+        cached = app.cache.get({ scope: cacheScope, key: cacheKey })
+
+  if ( cached ) return cached
+
   const client = await app.toolbox.dbPool.connect()
 
   try {
@@ -83,6 +98,15 @@ export const caseStudy = async (company) => {
 
     if ( caseStudy ) {
       caseStudy.expertise_items = caseStudy.expertise ? caseStudy.expertise.split(' / ') : []
+
+      if ( !app.cache.exists({ scope: cacheScope, key: cacheKey }) ) {
+        app.cache.set({
+          key: cacheKey,
+          scope: cacheScope,
+          value: caseStudy,
+          lifespan: 'application'
+        })
+      }
     }
 
     return caseStudy

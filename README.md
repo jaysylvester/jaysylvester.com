@@ -74,6 +74,11 @@ the ignored `mkcert` leaf certificate and manage the development stack:
 
 ```sh
 npm run dev:build
+```
+
+Leave that command attached to the development logs. In a second terminal, run:
+
+```sh
 npm run dev:test
 ```
 
@@ -97,8 +102,12 @@ npm run dev:logs
 npm run dev:test
 ```
 
-`dev:stop` keeps the containers for a fast next start. `dev:destroy` removes the
-containers and project network but preserves the PostgreSQL data and logs.
+`dev:start` and `dev:build` stay attached after starting the containers, showing
+Citizen's startup output and live logs from the development stack. Press Ctrl+C
+to stop the stack. `dev:logs` attaches to the retained full log history when the
+stack was started elsewhere. `dev:stop` keeps the containers for a fast next
+start. `dev:destroy` removes the containers and project network but preserves
+the PostgreSQL data and logs.
 
 `dev:db:backup` requires the development database to be running. It creates a
 timestamped, custom-format PostgreSQL archive and SHA-256 checksum under the

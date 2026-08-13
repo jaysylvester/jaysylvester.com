@@ -3,7 +3,7 @@
   <p><a href="/contact">Please ask</a> if you have questions about any of them.</p>
 </section>
 <section>
-  <div class="section-heading"><span>Artifacts</span><span class="heading-rule"></span><span>Audits &amp; recommendations, process artifacts, etc.</span></div>
+  <h2 class="section-heading"><span>Artifacts</span><span class="heading-rule" aria-hidden="true"></span><span>Audits &amp; recommendations, process artifacts, etc.</span></h2>
   <div>
     <a href="/documents/work/Shop-LC-UX-Evaluation.pdf"><span>Shop LC UX Evaluation</span><small>PDF</small></a>
     <a href="https://github.com/jaysylvester/jaysylvester.com/tree/main/web/shoplc" target="_blank" rel="noopener"><span>Shop LC Front End Code Demo</span><small>GitHub</small></a>
@@ -20,15 +20,18 @@
   </div>
 </section>
 <section>
-  <div class="section-heading"><span>Gallery</span><span class="heading-rule"></span><span>High-fidelity mockups and prototypes</span></div>
+  <h2 class="section-heading"><span>Gallery</span><span class="heading-rule" aria-hidden="true"></span><span>High-fidelity mockups and prototypes</span></h2>
   <p>Some of these are entirely my work, some were a collaborative effort, and some were produced under my supervision and review. <a href="/case-studies">Read my case studies</a> for details on my contributions.</p>
   {{#each local.screenGroups}}
     <section>
-      <header><h2>{{{category}}}</h2>{{#if case_study}}<a href="/case-study/{{case_study}}">Read my case study →</a>{{/if}}</header>
+      <header><h3>{{{category}}}</h3>{{#if case_study}}<a href="/case-study/{{case_study}}">Read my case study →</a>{{/if}}</header>
       <div data-zoom-group>
         {{#each screens}}
           <figure>
             <a class="new-tab" data-zoom href="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_80/jaysylvester.com/screens/{{url}}" target="_blank" rel="noopener">
+              <noscript>
+                <img src="https://res.cloudinary.com/tehinnernets/image/upload/f_auto,q_50,w_500/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
+              </noscript>
               <img src="/images/placeholder-screen.svg" data-src="https://res.cloudinary.com/tehinnernets/image/upload/[parameters]/jaysylvester.com/screens/{{url}}" alt="{{alt}}">
             </a>
           </figure>

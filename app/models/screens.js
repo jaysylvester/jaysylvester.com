@@ -32,16 +32,16 @@ const groupScreens = (rows) => {
 }
 
 
-export const companyScreens = async (company, featured = false) => {
+export const companyScreens = async (company) => {
   const client = await app.toolbox.dbPool.connect()
 
   try {
     const result = await client.query({
-      name: featured ? 'case_study_screens_featured_v2' : 'case_study_screens_v2',
+      name: 'case_study_screens_v2',
       text: 'select s.id, s.company, s.url, s.alt, s.category, s.sort, cs.company_url ' +
             'from screens s ' +
             'left join case_studies cs on s.company = cs.company_url ' +
-            'where s.company = $1' + ( featured ? ' and s.featured = true' : '' ) + ' ' +
+            'where s.company = $1 ' +
             'order by s.sort asc;',
       values: [ company ]
     })
@@ -50,13 +50,6 @@ export const companyScreens = async (company, featured = false) => {
   } finally {
     client.release()
   }
-}
-
-
-export const featuredScreens = async (company) => {
-  const groups = await companyScreens(company, true)
-
-  return groups.flatMap((group) => group.screens).slice(0, 2)
 }
 
 
