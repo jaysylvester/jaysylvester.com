@@ -60,6 +60,7 @@
   --fixed-rule: rgba(252, 251, 248, 0.16);
   --font-sans: 'Public Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --main-section-padding-block: 36px;
   --page-gutter: 24px;
   --rail-width: 0px;
   --site-margin: max(0px, calc(50vw - 960px));
@@ -82,6 +83,9 @@ html {
 }
 
 body {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
   background: var(--paper);
   color: var(--ink-2);
   font-family: var(--font-sans);
@@ -112,6 +116,7 @@ body > footer {
 }
 
 main {
+  flex: 1;
   min-width: 0;
 }
 
@@ -212,11 +217,24 @@ body[data-controller="gallery"] main > section:first-child,
 body[data-controller="resume"] main > header,
 body[data-controller="contact"] main > header,
 body[data-controller="citizen"] main > header,
-body[data-controller="case-study"] main > header {
+body[data-controller="case-study"] main > header,
+body[data-controller="error"] main > header {
   padding: 40px var(--page-gutter);
 
   h1 {
+    max-width: 768px;
     font-size: 26px;
+    font-weight: 300;
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+  }
+
+  p {
+    max-width: 768px;
+    margin-top: 20px;
+    color: var(--ink-3);
+    font-size: 16px;
+    line-height: 1.65;
   }
 }
 
@@ -260,6 +278,7 @@ body[data-controller="case-study"] main > header {
 
 @media (min-width: 768px) {
   :root {
+    --main-section-padding-block: 56px;
     --page-gutter: 32px;
   }
 
@@ -269,7 +288,8 @@ body[data-controller="case-study"] main > header {
   body[data-controller="resume"] main > header,
   body[data-controller="contact"] main > header,
   body[data-controller="citizen"] main > header,
-  body[data-controller="case-study"] main > header {
+  body[data-controller="case-study"] main > header,
+  body[data-controller="error"] main > header {
     padding: 48px var(--page-gutter);
   }
 }
@@ -283,6 +303,7 @@ body[data-controller="case-study"] main > header {
   body {
     display: grid;
     grid-template-columns: var(--rail-width) minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto;
   }
 
   body > footer {
@@ -311,7 +332,8 @@ body[data-controller="case-study"] main > header {
   body[data-controller="resume"] main > header,
   body[data-controller="contact"] main > header,
   body[data-controller="citizen"] main > header,
-  body[data-controller="case-study"] main > header {
+  body[data-controller="case-study"] main > header,
+  body[data-controller="error"] main > header {
     padding: 56px var(--page-gutter) 48px;
 
     h1 {
@@ -336,7 +358,8 @@ body[data-controller="case-study"] main > header {
   body[data-controller="resume"] main > header,
   body[data-controller="contact"] main > header,
   body[data-controller="citizen"] main > header,
-  body[data-controller="case-study"] main > header {
+  body[data-controller="case-study"] main > header,
+  body[data-controller="error"] main > header {
     padding: 64px var(--page-gutter) 56px;
 
     h1 {
@@ -372,12 +395,9 @@ body[data-controller="case-study"] main > header {
   body[data-controller="resume"] main > header,
   body[data-controller="contact"] main > header,
   body[data-controller="citizen"] main > header,
-  body[data-controller="case-study"] main > header {
+  body[data-controller="case-study"] main > header,
+  body[data-controller="error"] main > header {
     padding-inline: var(--page-gutter);
-
-    h1 {
-      font-size: 32px;
-    }
   }
 }
 

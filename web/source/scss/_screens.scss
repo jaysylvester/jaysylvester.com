@@ -142,6 +142,12 @@ body[data-controller="case-study"] main > section > article {
 
 .zoom-open {
   gap: 8px;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
 }
 
 .zoom-content {

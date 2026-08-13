@@ -1,0 +1,82 @@
+// Errors
+
+body[data-controller="error"] {
+  main {
+    > header {
+      > small {
+        color: var(--mono);
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 900px;
+        margin-top: 16px;
+        color: var(--ink);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+      }
+
+      > p {
+        max-width: 720px;
+        margin-top: 18px;
+        color: var(--ink-3);
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      .button-row {
+        margin-top: 28px;
+      }
+    }
+
+    > section {
+      padding: 36px var(--page-gutter);
+
+      details {
+        max-width: 960px;
+        border: 1px solid var(--rule);
+        background: var(--panel);
+      }
+
+      summary {
+        padding: 14px 18px;
+        color: var(--mono);
+        cursor: pointer;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      pre {
+        max-height: 480px;
+        padding: 18px;
+        border-top: 1px solid var(--rule);
+        overflow: auto;
+        background: var(--paper);
+        color: var(--ink-2);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        line-height: 1.65;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    main > section {
+      padding-block: 40px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    main > section {
+      padding-block: 48px;
+    }
+  }
+}

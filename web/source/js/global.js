@@ -153,7 +153,7 @@ JAY.global = ( function () {
       dialog.setAttribute('role', 'dialog')
       dialog.setAttribute('aria-modal', 'true')
       dialog.setAttribute('aria-label', 'Image viewer')
-      dialog.innerHTML = '<div class="zoom-bar"><span class="zoom-counter"></span><div class="zoom-actions"><a class="zoom-open" target="_blank" rel="noopener"><span>Open in new tab</span><span aria-hidden="true">↗</span></a><button class="zoom-close" type="button" aria-label="Close image viewer">×</button></div></div><div class="zoom-content"><div class="zoom-track"></div><div class="zoom-progress" role="slider" tabindex="0" aria-label="Image position" aria-orientation="horizontal" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1"><span></span></div><p class="zoom-hint">Drag, swipe, scroll, or use ← →</p></div>'
+      dialog.innerHTML = '<div class="zoom-bar"><span class="zoom-counter"></span><div class="zoom-actions"><a class="zoom-open" target="_blank" rel="noopener"><span>Open in new tab</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M5 11 11 5"></path><path d="M6 5h5v5"></path></svg></a><button class="zoom-close" type="button" aria-label="Close image viewer">×</button></div></div><div class="zoom-content"><div class="zoom-track"></div><div class="zoom-progress" role="slider" tabindex="0" aria-label="Image position" aria-orientation="horizontal" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1"><span></span></div><p class="zoom-hint">Drag, swipe, scroll, or use ← →</p></div>'
       document.body.appendChild(dialog)
 
       const track = dialog.querySelector('.zoom-track'),

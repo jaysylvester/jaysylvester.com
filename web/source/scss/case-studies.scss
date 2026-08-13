@@ -4,20 +4,6 @@ body[data-controller="case-studies"] {
   main {
     > section:first-child {
       border-bottom: 1px solid var(--section-rule);
-
-      h1 {
-        max-width: 840px;
-        font-weight: 300;
-        letter-spacing: -0.01em;
-        line-height: 1.4;
-      }
-
-      p {
-        margin-top: 16px;
-        color: var(--ink-3);
-        font-size: 15px;
-        line-height: 1.6;
-      }
     }
 
     > section:last-child > a {
@@ -135,7 +121,7 @@ body[data-controller="case-studies"] {
     main {
       > section:last-child > a {
         gap: 40px;
-        padding-block: 36px;
+        padding-block: var(--main-section-padding-block);
       }
     }
   }

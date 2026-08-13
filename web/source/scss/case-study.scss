@@ -108,9 +108,10 @@ body[data-controller="case-study"] {
         font-size: 16px;
         line-height: 1.7;
 
-        > p:first-child {
-          margin-bottom: 32px;
+        p.summary {
+          margin-bottom: 56px;
           font-size: 18px;
+          font-weight: 300;
           line-height: 1.55;
         }
 
@@ -438,6 +439,20 @@ body[data-controller="case-study"] {
           > section > section > div {
             grid-template-columns: minmax(0, 1fr);
             gap: 24px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1440px) {
+    main {
+      > dl + section {
+        > article {
+          p.summary {
+            padding-bottom: 48px;
+            font-size: 22px;
+            border-bottom: 1px solid var(--rule);
           }
         }
       }

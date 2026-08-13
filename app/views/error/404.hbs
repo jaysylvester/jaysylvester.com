@@ -1,8 +1,12 @@
-<section class="content error">
-  <h1>{{local.error.label}}</h1>
+<header>
+  <small>¯\\_(ツ)_/¯</small>
+  <h1>Not Found</h1>
   {{#if local.error.message}}
     <p>{{{local.error.message}}}</p>
   {{else}}
     <p>The document you requested doesn't exist.</p>
   {{/if}}
-</section>
+  <div class="button-row">
+    <a class="primary-action" href="/"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="square" aria-hidden="true"><path d="M2 7.5 8 2l6 5.5"></path><path d="M3.5 6.5v7h9v-7"></path></svg> Return home</a>
+  </div>
+</header>

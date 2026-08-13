@@ -5,21 +5,6 @@ body[data-controller="index"] {
     > section:first-child {
       border-bottom: 1px solid var(--rule);
 
-      h1 {
-        max-width: 900px;
-        font-weight: 300;
-        letter-spacing: -0.015em;
-        line-height: 1.35;
-      }
-
-      p {
-        max-width: 760px;
-        margin-top: 20px;
-        color: var(--ink-3);
-        font-size: 16px;
-        line-height: 1.65;
-      }
-
       .button-row {
         margin-top: 30px;
       }
@@ -200,7 +185,7 @@ body[data-controller="index"] {
   @media (min-width: 1440px) {
     main {
       > section[aria-label="Featured case studies"] > a {
-        padding-block: 32px;
+        padding-block: var(--main-section-padding-block);
       }
 
       > section[aria-label="Engagement index"] > a {
@@ -209,17 +194,13 @@ body[data-controller="index"] {
       }
 
       > section:last-child {
-        padding-block: 44px 38px;
+        padding-block: var(--main-section-padding-block) 38px;
       }
     }
   }
 
   @media (min-width: 1920px) {
     main {
-      > section[aria-label="Featured case studies"] > a {
-        padding-block: 40px;
-      }
-
       > section[aria-label="Engagement index"] > a {
         grid-template-columns: 300px minmax(0, 1fr) 280px 140px;
       }

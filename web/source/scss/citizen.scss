@@ -26,7 +26,7 @@ body[data-controller="citizen"] {
         margin-top: 16px;
 
         &:first-of-type {
-          max-width: 940px;
+          max-width: 768px;
           color: var(--ink-2);
           font-size: 21px;
           font-weight: 300;
@@ -34,7 +34,7 @@ body[data-controller="citizen"] {
         }
 
         &:last-of-type {
-          max-width: 860px;
+          max-width: 768px;
           color: var(--ink-3);
           font-size: 15px;
           line-height: 1.6;
@@ -49,7 +49,7 @@ body[data-controller="citizen"] {
     > section:first-of-type,
     > section:nth-of-type(2),
     > section:last-of-type {
-      padding: 38px var(--page-gutter);
+      padding: var(--main-section-padding-block) var(--page-gutter);
     }
 
     > section:first-of-type {
@@ -104,6 +104,10 @@ body[data-controller="citizen"] {
       article {
         padding: 18px 0;
         border-top: 1px solid var(--rule);
+
+        &:nth-child(-n + 2) {
+          border-top: 0;
+        }
       }
 
       h3 {
@@ -181,17 +185,6 @@ body[data-controller="citizen"] {
         padding-inline: var(--page-gutter);
       }
 
-      > section:first-of-type {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 36%;
-        gap: 40px;
-
-        aside {
-          margin-top: 0;
-          align-self: start;
-        }
-      }
-
       > section:nth-of-type(2) > div,
       > section:last-of-type > nav {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -216,22 +209,22 @@ body[data-controller="citizen"] {
   @media (min-width: 1440px) {
     main {
       > section:first-of-type {
-        grid-template-columns: minmax(0, 1fr) 420px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 440px;
         gap: 56px;
-        padding-block: 48px;
+
+        aside {
+          margin-top: 0;
+          align-self: start;
+        }
 
         article > p {
           font-size: 17px;
         }
       }
 
-      > section:nth-of-type(2),
-      > section:last-of-type {
-        padding-block: 44px;
-      }
-
       > section:nth-of-type(3) article {
-        padding-block: 32px;
+        padding-block: var(--main-section-padding-block);
       }
     }
   }
