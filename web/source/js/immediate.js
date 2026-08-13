@@ -4,6 +4,8 @@ JAY.immediate = ( function () {
   'use strict'
 
   const methods = {
+
+    // Mark the document as JavaScript-enabled before the page renders so CSS can progressively enhance the interface.
     init: function () {
       document.querySelector('html').classList.add('js')
     }

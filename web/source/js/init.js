@@ -1,3 +1,4 @@
+// Initialize global behavior, then run any controller, action, and view methods associated with the current route.
 JAY.init = function () {
   'use strict'
 
@@ -21,6 +22,7 @@ JAY.init = function () {
   }
 }
 
+// Wait until the document is parsed before initializing behavior that depends on page markup.
 document.onreadystatechange = function () {
   'use strict'
 
