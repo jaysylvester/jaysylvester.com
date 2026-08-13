@@ -13,6 +13,15 @@ export default [
   },
   pluginJs.configs.recommended,
   {
+    files: ['web/source/js/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        JAY: 'writable'
+      }
+    }
+  },
+  {
     ignores: ['util/templates/']
   },
   {
