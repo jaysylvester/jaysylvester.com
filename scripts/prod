@@ -1,0 +1,79 @@
+#!/bin/sh
+
+set -eu
+
+usage() {
+  cat <<'EOF'
+Usage: ./scripts/prod COMMAND [ARGUMENTS]
+
+Commands:
+  deploy                  Pull, build, recreate app/proxy, and smoke-test
+  start [arguments]       Start the production stack detached
+  stop [services]         Stop services without removing containers
+  restart [services]      Restart services without rebuilding images
+  status                  Show all service states
+  logs                    Follow app, proxy, and database logs
+  test                    Run the production smoke test
+  compose [arguments]     Run Docker Compose against the production project
+
+There is intentionally no production destroy command.
+EOF
+}
+
+compose() {
+  sudo docker compose \
+    --env-file .env \
+    -p jaysylvester-production \
+    -f compose.yaml \
+    -f compose.production.yaml \
+    "$@"
+}
+
+command=${1:-}
+
+if test -z "$command"; then
+  usage >&2
+  exit 1
+fi
+
+shift
+
+case "$command" in
+  deploy)
+    if test "$#" -ne 0; then
+      echo 'The production deploy command does not accept arguments.' >&2
+      exit 1
+    fi
+    exec ./scripts/deploy-production
+    ;;
+  start)
+    compose up -d "$@"
+    ;;
+  stop)
+    compose stop "$@"
+    ;;
+  restart)
+    compose restart "$@"
+    ;;
+  status)
+    compose ps --all "$@"
+    ;;
+  logs)
+    compose logs -f app proxy db "$@"
+    ;;
+  test)
+    export SMOKE_PRODUCTION=true
+    exec ./scripts/smoke-test https://jaysylvester.com "$@"
+    ;;
+  compose)
+    compose "$@"
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    echo "Unknown production command: $command" >&2
+    usage >&2
+    exit 1
+    ;;
+esac

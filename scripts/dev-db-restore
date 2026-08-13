@@ -3,7 +3,7 @@
 set -eu
 
 usage() {
-  echo 'Usage: npm run dev:db:restore -- /absolute/path/to/backup.dump'
+  echo 'Usage: ./scripts/dev db-restore /absolute/path/to/backup.dump'
 }
 
 case ${1:-} in
@@ -34,13 +34,13 @@ service_is_running() {
 restore_service_state() {
   for service in $stopped_services; do
     if ! dc start "$service" >/dev/null; then
-      echo "Could not restart $service; run npm run dev:start." >&2
+      echo "Could not restart $service; run ./scripts/dev start." >&2
     fi
   done
 
   if test "$started_database" = true; then
     if ! dc stop db >/dev/null; then
-      echo 'Could not return db to its stopped state; run npm run dev:stop.' >&2
+      echo 'Could not return db to its stopped state; run ./scripts/dev stop.' >&2
     fi
   fi
 }
@@ -130,5 +130,5 @@ trap - EXIT HUP INT TERM
 echo 'Database restore completed.'
 
 if test "$database_was_running" = false; then
-  echo 'PostgreSQL was returned to its previous stopped state. Run npm run dev:start when ready.'
+  echo 'PostgreSQL was returned to its previous stopped state. Run ./scripts/dev start when ready.'
 fi

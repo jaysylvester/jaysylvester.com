@@ -16,16 +16,16 @@
   "scripts": {
     "assets:build": "gulp all",
     "assets:watch": "gulp",
-    "dev:build": "./scripts/dev-up --build",
-    "dev:db:backup": "./scripts/dev-db-backup",
-    "dev:db:restore": "./scripts/dev-db-restore",
-    "dev:destroy": "./scripts/dev-compose down",
-    "dev:logs": "./scripts/dev-compose logs -f app proxy assets db",
-    "dev:restart": "npm run dev:stop && npm run dev:start",
-    "dev:start": "./scripts/dev-up",
-    "dev:status": "./scripts/dev-compose ps --all",
-    "dev:stop": "./scripts/dev-compose stop",
-    "dev:test": "./scripts/smoke-test https://dev.jaysylvester.com"
+    "dev:build": "./scripts/dev start --build",
+    "dev:db:backup": "./scripts/dev db-backup",
+    "dev:db:restore": "./scripts/dev db-restore",
+    "dev:destroy": "./scripts/dev destroy",
+    "dev:logs": "./scripts/dev logs",
+    "dev:restart": "./scripts/dev restart",
+    "dev:start": "./scripts/dev start",
+    "dev:status": "./scripts/dev status",
+    "dev:stop": "./scripts/dev stop",
+    "dev:test": "./scripts/dev test"
   },
   "dependencies": {
     "@ladjs/consolidate": "^1.0.x",

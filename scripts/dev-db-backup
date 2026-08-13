@@ -34,7 +34,7 @@ fi
 dc config --quiet
 
 if ! dc ps --status running --services db | grep -qx db; then
-  echo 'The development database is not running. Run npm run dev:start, then try again.' >&2
+  echo 'The development database is not running. Run ./scripts/dev start, then try again.' >&2
   exit 1
 fi
 

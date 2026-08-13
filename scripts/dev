@@ -1,0 +1,72 @@
+#!/bin/sh
+
+set -eu
+
+usage() {
+  cat <<'EOF'
+Usage: ./scripts/dev COMMAND [ARGUMENTS]
+
+Commands:
+  start [arguments]       Start the stack attached (use --build to rebuild)
+  stop [services]         Stop services without removing containers
+  restart [arguments]     Stop, then start the stack attached
+  status                  Show all service states
+  logs                    Follow app, proxy, assets, and database logs
+  test                    Run the development smoke test
+  destroy                 Remove containers and the network, preserving volumes
+  db-backup               Create and verify a development database backup
+  db-restore ARCHIVE      Restore one verified development database backup
+  compose [arguments]     Run Docker Compose against the development project
+EOF
+}
+
+command=${1:-}
+
+if test -z "$command"; then
+  usage >&2
+  exit 1
+fi
+
+shift
+
+case "$command" in
+  start)
+    exec ./scripts/dev-up "$@"
+    ;;
+  stop)
+    exec ./scripts/dev-compose stop "$@"
+    ;;
+  restart)
+    ./scripts/dev-compose stop
+    exec ./scripts/dev-up "$@"
+    ;;
+  status)
+    exec ./scripts/dev-compose ps --all "$@"
+    ;;
+  logs)
+    exec ./scripts/dev-compose logs -f app proxy assets db "$@"
+    ;;
+  test)
+    exec ./scripts/smoke-test https://dev.jaysylvester.com "$@"
+    ;;
+  destroy)
+    exec ./scripts/dev-compose down "$@"
+    ;;
+  db-backup)
+    exec ./scripts/dev-db-backup "$@"
+    ;;
+  db-restore)
+    exec ./scripts/dev-db-restore "$@"
+    ;;
+  compose)
+    exec ./scripts/dev-compose "$@"
+    ;;
+  -h|--help|help)
+    usage
+    ;;
+  *)
+    echo "Unknown development command: $command" >&2
+    usage >&2
+    exit 1
+    ;;
+esac

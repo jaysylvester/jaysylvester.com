@@ -26,16 +26,11 @@ fi
 # update to the deployment procedure itself takes effect safely.
 if test "${PRODUCTION_DEPLOY_AFTER_PULL:-false}" != true; then
   git pull --ff-only origin main
-  PRODUCTION_DEPLOY_AFTER_PULL=true exec ./scripts/deploy-production
+  PRODUCTION_DEPLOY_AFTER_PULL=true exec ./scripts/prod deploy
 fi
 
 pdc() {
-  sudo docker compose \
-    --env-file .env \
-    -p jaysylvester-production \
-    -f compose.yaml \
-    -f compose.production.yaml \
-    "$@"
+  ./scripts/prod compose "$@"
 }
 
 report_failure() {

@@ -175,11 +175,15 @@ Phase 1 implemented and committed these artifacts on `maintenance/docker-migrati
 - Project-root `.env.example`, sanitized and containing application/deployment and Docker/PostgreSQL initialization placeholders.
 - Project-root `citizen.config.js`, committed and copied into both runtime images, with a development bind mount so configuration edits require only a restart.
 - `scripts/dev-cert` to create/check the development `mkcert` certificate.
+- `scripts/dev` as the canonical development command interface, with shared
+  start, stop, restart, status, logs, test, and raw Compose verbs plus
+  development-only destroy and database backup/restore verbs.
 - `scripts/dev-up` to run the certificate check and start development Compose in the foreground, displaying startup and live logs until Ctrl+C stops the stack.
 - `scripts/dev-db-backup` to create and verify protected logical backups outside Docker.
 - `scripts/dev-db-restore` to validate, confirm, and atomically restore one explicit archive while preserving prior service state.
 - `scripts/smoke-test` for the small set of existing development routes and Citizen's expected default rejection of a cross-origin preflight.
-- Friendly `package.json` scripts for build, start, stop, restart, destroy, status, logs, smoke testing, database backup, and database restore.
+- Compatibility `package.json` aliases routed through `scripts/dev`; host npm is
+  not required for normal development lifecycle commands.
 - `package.json` updated for Node.js 24 and the direct Citizen branch dependency.
 - A tracked `package-lock.json`, with its existing `.gitignore` entry removed, resolving the reviewed Citizen branch commit so container installs can use `npm ci`.
 - `docs/migrations/citizen-2.md` recording the source-to-target config mapping, exact Citizen commit, test results, issues found, upstream fixes, and reusable lessons.
@@ -191,6 +195,9 @@ Add and commit these production-specific artifacts on `maintenance/docker-migrat
 - The production Nginx configuration, preserving the inventoried redirects and other application-relevant behavior.
 - Production cases in `scripts/smoke-test` that exercise the inventoried public behavior.
 - `scripts/reload-production-proxy` as the Certbot deploy hook.
+- `scripts/prod` as the canonical production command interface, sharing the
+  development lifecycle vocabulary while keeping production startup detached,
+  log following explicit, deployment guarded, and project destruction absent.
 - `scripts/deploy-production` as the guarded one-command production deployment path.
 - The production deployment, Postico, Certbot, and retired-runtime notes required in the README.
 
@@ -678,35 +685,39 @@ Confirm:
 
 #### Establish development lifecycle and recovery
 
-Expose the raw Compose workflow through consistent, project-development npm commands:
+Expose the raw Compose workflow through the environment command interface:
 
 ```sh
-npm run dev:build
-npm run dev:start
-npm run dev:stop
-npm run dev:restart
-npm run dev:destroy
-npm run dev:status
-npm run dev:logs
-npm run dev:test
+./scripts/dev start --build
+./scripts/dev start
+./scripts/dev stop
+./scripts/dev restart
+./scripts/dev destroy
+./scripts/dev status
+./scripts/dev logs
+./scripts/dev test
+./scripts/dev compose config --quiet
 ```
 
-Route every development caller through a single `scripts/dev-compose` wrapper containing the `.env`, project-name, and Compose-file arguments. The npm lifecycle commands, startup helper, and both database scripts must call that wrapper rather than copying the Compose prefix.
+Route every development caller through `scripts/dev`, with the existing
+`scripts/dev-compose` wrapper retaining the `.env`, project-name, and
+Compose-file arguments internally. Compatibility npm aliases, startup helper,
+and both database scripts must not copy the Compose prefix.
 
-`scripts/dev-up`, `dev:start`, and `dev:build` must invoke `docker compose up`
+`scripts/dev-up` and `scripts/dev start` must invoke `docker compose up`
 without `-d`/`--detach`. They remain attached after the containers start, show
 Citizen's startup output and all subsequent stack logs for that session, and
 stop the stack when the developer presses Ctrl+C. Run smoke tests, status,
-backup, and other concurrent commands from a second terminal. Keep `dev:logs`
+backup, and other concurrent commands from a second terminal. Keep `dev logs`
 as an explicit `docker compose logs --follow` command with no `--since` or
 `--tail` filter, so it replays the complete retained log history before
 following new output when the stack was started elsewhere or earlier output is
 needed.
 
-`dev:stop` must use `docker compose stop`, retaining the containers for a fast
-next `dev:start`. `dev:destroy` must use `docker compose down` without
+`dev stop` must use `docker compose stop`, retaining the containers for a fast
+next `dev start`. `dev destroy` must use `docker compose down` without
 `--volumes`, removing containers and the project network while preserving the
-PostgreSQL volume and development logs. `dev:status` should include stopped containers.
+PostgreSQL volume and development logs. `dev status` should include stopped containers.
 Reserve volume deletion for an explicit, separately reviewed recovery or test
 operation; neither friendly command removes it.
 
@@ -714,13 +725,13 @@ Add a logical backup path independent of the Docker volume:
 
 ```sh
 # First terminal
-npm run dev:start
+./scripts/dev start
 ```
 
 ```sh
 # Second terminal
-npm run dev:db:backup
-npm run dev:db:restore -- /absolute/path/to/verified-backup.dump
+./scripts/dev db-backup
+./scripts/dev db-restore /absolute/path/to/verified-backup.dump
 ```
 
 The backup command must:
@@ -1150,31 +1161,30 @@ Start the stack in the first terminal and leave it attached to the live logs:
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-npm run dev:start
+./scripts/dev start
 ```
 
 Use a second terminal for concurrent commands:
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-npm run dev:status
-npm run dev:test
+./scripts/dev status
+./scripts/dev test
 ```
 
-Press Ctrl+C in the first terminal to stop the stack. Use `npm run dev:logs` to
+Press Ctrl+C in the first terminal to stop the stack. Use `./scripts/dev logs` to
 replay the complete retained history and follow new output when the stack was
-started elsewhere. Use `npm run dev:stop` when no attached start command is
-available. Use `npm run dev:destroy` only when the containers and project
+started elsewhere. Use `./scripts/dev stop` when no attached start command is
+available. Use `./scripts/dev destroy` only when the containers and project
 network should be removed. Both preserve the PostgreSQL named volume. Use
-`npm run dev:db:backup` while the database is running, and restore one explicit
-archive with `npm run dev:db:restore -- /absolute/path/to/backup.dump`.
+`./scripts/dev db-backup` while the database is running, and restore one explicit
+archive with `./scripts/dev db-restore /absolute/path/to/backup.dump`.
 
 After editing development `.env` or `citizen.config.js`, restart app. Both files are bind-mounted, Citizen reads them at process start, and a restart preserves the container IP, so proxy does not need recreation. A database-password rotation must also update the PostgreSQL role and recreate the database container's environment; editing `.env` alone is not sufficient:
 
 ```sh
-dc() { ./scripts/dev-compose "$@"; }
-dc restart app
-npm run dev:test
+./scripts/dev compose restart app
+./scripts/dev test
 ```
 
 In production, an `.env` change requires recreating each service whose explicit environment or secret source changed. Recreate app followed by proxy for application/mail changes; rotate the PostgreSQL role before recreating `db` for a database-password change. A config-module change is an image change in production and follows the normal build plus app/proxy recreation. Do not refresh the Citizen branch implicitly during deployment: test the new Citizen commit upstream, update this project's lockfile and migration record in a reviewed development commit, and deploy that commit through the normal sequence.
@@ -1185,7 +1195,7 @@ Normal deployment is:
 
 ```sh
 cd /var/www/jaysylvester.com
-./scripts/deploy-production
+./scripts/prod deploy
 ```
 
 The tracked script requires a clean `main` checkout, uses a fast-forward-only
@@ -1198,18 +1208,25 @@ troubleshooting/reference path.
 cd /var/www/jaysylvester.com
 git status --short
 git pull --ff-only
-pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
-pdc config --quiet
-pdc build app proxy
-pdc up -d --no-deps --force-recreate app
-pdc ps app
-pdc logs --tail=100 app
-pdc up -d --no-deps --force-recreate proxy
-pdc ps
-SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
+./scripts/prod compose config --quiet
+./scripts/prod compose build app proxy
+./scripts/prod compose up -d --no-deps --force-recreate app
+./scripts/prod compose ps app
+./scripts/prod compose logs --tail=100 app
+./scripts/prod compose up -d --no-deps --force-recreate proxy
+./scripts/prod status
+./scripts/prod test
 ```
 
 This ordered app-then-proxy recreation prevents Nginx from retaining the deleted app container's IP. `--no-deps` ensures routine deployments do not recreate PostgreSQL.
+
+`./scripts/prod start` is deliberately detached: it returns to the shell and
+the restart-policy-managed containers continue after logout. Use
+`./scripts/prod logs` only when an attached log stream is wanted. The shared
+development/production verbs are `start`, `stop`, `restart`, `status`, `logs`,
+`test`, and `compose`; `deploy` is production-only, while `destroy`,
+`db-backup`, and `db-restore` are development-only. Production intentionally
+has no destroy shortcut.
 
 Use these Docker equivalents for the former PM2 operational views:
 
@@ -1265,9 +1282,9 @@ Replace the current placeholder README during implementation. It must contain:
 - Clone the repository.
 - Copy the sanitized project-root `.env.example` to ignored project-root `.env`, supply the environment's protected values, and obtain an authoritative database dump; Git does not supply credentials or data.
 - Add the development hostname to `/etc/hosts`.
-- Run `scripts/dev-up` in the foreground and restore the database from a second terminal on a first clone.
+- Run `scripts/dev start` in the foreground and restore the database from a second terminal on a first clone.
 - Use Postico at `127.0.0.1:5432`.
-- Explain Citizen 2.0's native development `.env` plus committed `citizen.config.js` model, the expected loaded-environment and loaded-config startup messages, development HTTPS, Gulp/BrowserSync, editor-visible logs, attached build/start and Ctrl+C behavior, second-terminal testing, full-history `dev:logs`, normal stop versus destroy semantics, logical database backup/restore, and restart-only `.env`/config-module changes.
+- Explain Citizen 2.0's native development `.env` plus committed `citizen.config.js` model, the expected loaded-environment and loaded-config startup messages, development HTTPS, Gulp/BrowserSync, editor-visible logs, attached build/start and Ctrl+C behavior, second-terminal testing, full-history `dev logs`, normal stop versus destroy semantics, logical database backup/restore, and restart-only `.env`/config-module changes.
 
 ### Future Linux host differences
 

@@ -53,7 +53,7 @@ pg_restore --list jaysylvester.dump >/dev/null
 The development Compose project is `jaysylvester-dev`; its database volume is `jaysylvester-dev-postgres`. Do not create that final volume until the PostgreSQL image and locale have been rehearsed.
 
 ```sh
-dc() { ./scripts/dev-compose "$@"; }
+dc() { ./scripts/dev compose "$@"; }
 
 dc config --quiet
 dc up -d db
@@ -69,22 +69,22 @@ The commands read the database name and user already mapped into the `db` contai
 
 ### Start, verify, and stop
 
-When host npm is available, the friendly development commands check or create
-the ignored `mkcert` leaf certificate and manage the development stack:
+The environment command checks or creates the ignored `mkcert` leaf certificate
+and manages the development stack:
 
 ```sh
-npm run dev:build
+./scripts/dev start --build
 ```
 
 Leave that command attached to the development logs. In a second terminal, run:
 
 ```sh
-npm run dev:test
+./scripts/dev test
 ```
 
-Host Node is optional. The equivalent Node-free startup command is
-`./scripts/dev-up --build`, and the smoke test is available directly as
-`./scripts/smoke-test https://dev.jaysylvester.com`.
+The command interface requires Docker but not host Node or npm. The npm
+`dev:*` commands remain compatibility aliases for the corresponding
+`./scripts/dev` commands.
 
 Open <https://dev.jaysylvester.com>. The certificate covers `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. Its private key is development-only and is never the mkcert CA key.
 
@@ -102,32 +102,34 @@ The override is not persisted and resets when the page reloads or navigates.
 Useful commands:
 
 ```sh
-npm run dev:start
-npm run dev:stop
-npm run dev:restart
-npm run dev:destroy
-npm run dev:db:backup
-npm run dev:db:restore -- /absolute/path/to/backup.dump
-npm run dev:status
-npm run dev:logs
-npm run dev:test
+./scripts/dev start
+./scripts/dev start --build
+./scripts/dev stop
+./scripts/dev restart
+./scripts/dev status
+./scripts/dev logs
+./scripts/dev test
+./scripts/dev destroy
+./scripts/dev db-backup
+./scripts/dev db-restore /absolute/path/to/backup.dump
+./scripts/dev compose config --quiet
 ```
 
-`dev:start` and `dev:build` stay attached after starting the containers, showing
-Citizen's startup output and live logs from the development stack. Press Ctrl+C
-to stop the stack. `dev:logs` attaches to the retained full log history when the
-stack was started elsewhere. `dev:stop` keeps the containers for a fast next
-start. `dev:destroy` removes the containers and project network but preserves
-the PostgreSQL data and logs.
+`dev start` stays attached after starting the containers, showing Citizen's
+startup output and live logs from the development stack. Add `--build` when an
+image rebuild is needed. Press Ctrl+C to stop the stack. `dev logs` attaches to
+the retained full log history when the stack was started elsewhere. `dev stop`
+keeps the containers for a fast next start. `dev destroy` removes the containers
+and project network but preserves the PostgreSQL data and logs.
 
-`dev:db:backup` requires the development database to be running. It creates a
+`dev db-backup` requires the development database to be running. It creates a
 timestamped, custom-format PostgreSQL archive and SHA-256 checksum under the
 protected `REPLACE_ME_PROTECTED_DEVELOPMENT_BACKUP_DIRECTORY/` directory.
 The command writes through a mode `0600` temporary file, verifies the archive,
 and publishes it only after verification succeeds. The backup directory remains
 mode `0700`.
 
-`dev:db:restore` accepts one explicit archive path, validates it before changing
+`dev db-restore` accepts one explicit archive path, validates it before changing
 the database, and requires `RESTORE` confirmation in an interactive terminal.
 The restore uses a single transaction, temporarily stops running app and proxy
 services, and returns those services and PostgreSQL to their previous running
@@ -135,7 +137,7 @@ state. Archives must remain outside Docker so deleting the named volume cannot
 delete its backups. The original VM dump is only the migration baseline; use
 fresh backups to preserve later development changes.
 
-Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing development database credentials. PostgreSQL and the development HTTP/HTTPS proxy are published only on loopback, and database data survives both `npm run dev:stop` and `npm run dev:destroy`.
+Postico connects to `127.0.0.1:${POSTICO_PORT:-5432}` with the existing development database credentials. PostgreSQL and the development HTTP/HTTPS proxy are published only on loopback, and database data survives both `./scripts/dev stop` and `./scripts/dev destroy`.
 
 ### Configuration and file watching
 
@@ -156,8 +158,8 @@ the editor. Production continues to use its persistent Docker log volume.
 After changing application values in `.env`, restart `app`; the bind-mounted file is reread without recreating the container or changing its IP. Rotating `DB_PASSWORD` also requires changing the PostgreSQL role password and recreating `db`; editing `.env` alone does not change an existing database volume. A `citizen.config.js` edit likewise needs only an app restart because the file is bind-mounted read-only in development.
 
 ```sh
-dc restart app
-npm run dev:test
+./scripts/dev compose restart app
+./scripts/dev test
 ```
 
 ## Production migration and operation
@@ -172,45 +174,54 @@ Routine application deployment is one command after SSH login:
 
 ```sh
 cd /var/www/jaysylvester.com
-./scripts/deploy-production
+./scripts/prod deploy
 ```
 
 The script requires a clean production checkout on `main`, pulls with
 `--ff-only`, restarts itself from the pulled revision, validates and builds the
 production images, recreates `app` and then `proxy`, and runs the production
-smoke suite. It does not recreate `db` or its volume. The first deployment that
-introduces this script requires one manual `git pull --ff-only origin main`
-before invoking it; subsequent deployments use only the command above.
+smoke suite. It does not recreate `db` or its volume.
 
-For direct Compose administration, define the production Compose command after SSH login:
+Development and production use the same operational vocabulary. Production
+startup is deliberately detached so it survives logout; logs are followed only
+when explicitly requested:
 
 ```sh
-cd /var/www/jaysylvester.com
-pdc() { sudo docker compose --env-file .env -p jaysylvester-production -f compose.yaml -f compose.production.yaml "$@"; }
+./scripts/prod start
+./scripts/prod stop
+./scripts/prod restart
+./scripts/prod status
+./scripts/prod logs
+./scripts/prod test
+./scripts/prod compose config --quiet
 ```
+
+Production commands run Compose through `sudo` and require no host Node or npm.
+There is intentionally no `prod destroy`; removing the production project or
+its volumes remains an explicit raw Compose administration task.
 
 The deployment script wraps the following underlying sequence. It pulls the already reviewed lockfile, builds without refreshing Citizen, recreates the app, and then recreates Nginx so it resolves the new app-container address. It does not recreate PostgreSQL:
 
 ```sh
 git status --short
 git pull --ff-only origin main
-pdc config --quiet
-pdc build app proxy
-pdc up -d --no-deps --force-recreate app
-pdc ps app
-pdc logs --tail=100 app
-pdc up -d --no-deps --force-recreate proxy
-pdc ps
-SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
+./scripts/prod compose config --quiet
+./scripts/prod compose build app proxy
+./scripts/prod compose up -d --no-deps --force-recreate app
+./scripts/prod compose ps app
+./scripts/prod compose logs --tail=100 app
+./scripts/prod compose up -d --no-deps --force-recreate proxy
+./scripts/prod status
+./scripts/prod test
 ```
 
 Docker replaces PM2. Production `db`, `app`, and `proxy` use `restart: unless-stopped`; the image runs `node app/start.js` directly. Use:
 
 ```sh
-pdc ps app
-pdc logs --tail=100 --follow app
-sudo docker inspect --format '{{.RestartCount}}' "$(pdc ps -q app)"
-sudo docker stats --no-stream "$(pdc ps -q app)"
+./scripts/prod compose ps app
+./scripts/prod compose logs --tail=100 --follow app
+sudo docker inspect --format '{{.RestartCount}}' "$(./scripts/prod compose ps -q app)"
+sudo docker stats --no-stream "$(./scripts/prod compose ps -q app)"
 ```
 
 Postico retains the existing SSH connection and connects to remote `127.0.0.1:5432`; PostgreSQL is never publicly published. Host Certbot retains `/etc/letsencrypt`, uses `/var/www/certbot` for HTTP-01, and installs `scripts/reload-production-proxy` as its deploy hook so a successful renewal reloads container Nginx. The certificate material is mounted read-only into `proxy` and is absent from Git and images. To repeat the staged renewal immediately rather than waiting through Certbot's timer-oriented random delay, use `sudo certbot renew --dry-run --run-deploy-hooks --no-random-sleep-on-renew`.
