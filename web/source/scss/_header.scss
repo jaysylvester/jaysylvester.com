@@ -6,7 +6,7 @@ body > header {
   min-height: 58px;
   align-items: stretch;
   justify-content: space-between;
-  border-bottom: 1px solid var(--navy);
+  border-bottom: 1px solid var(--section-rule);
   background: var(--paper);
 
   .wordmark {
@@ -23,7 +23,7 @@ body > header {
     transition: color 160ms ease;
 
     &:hover {
-      color: var(--navy);
+      color: var(--link);
     }
   }
 
@@ -60,7 +60,7 @@ body > header {
         right: -20px;
         bottom: 6px;
         width: 5px;
-        background: var(--navy);
+        background: var(--action);
       }
     }
   }
@@ -72,7 +72,7 @@ body > header {
     align-items: center;
     justify-content: center;
     gap: 9px;
-    color: var(--navy);
+    color: var(--link);
     font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 500;
@@ -116,8 +116,8 @@ body > header {
     flex-direction: column;
     overflow-y: auto;
     transform: translateX(100%);
-    background: #24466f;
-    color: var(--paper);
+    background: var(--mobile-menu-background);
+    color: var(--fixed-light);
     visibility: hidden;
     transition: transform 360ms ease, visibility 0s linear 360ms;
 
@@ -132,7 +132,7 @@ body > header {
       min-height: 66px;
       padding: 20px 22px;
       border-bottom: 1px solid rgba(252, 251, 248, 0.18);
-      color: var(--paper);
+      color: var(--fixed-light);
       font-size: 24px;
       font-weight: 500;
       line-height: 1.1;
@@ -160,7 +160,7 @@ body > header {
       }
 
       a {
-        color: var(--paper);
+        color: var(--fixed-light);
       }
     }
   }
@@ -223,7 +223,7 @@ body > header {
       bottom: -1px;
       left: 100%;
       width: var(--site-margin);
-      border-bottom: 1px solid var(--navy);
+      border-bottom: 1px solid var(--section-rule);
       pointer-events: none;
     }
 
@@ -268,17 +268,17 @@ body > header {
 
           &:hover {
             background: var(--wash-alt);
-            color: var(--navy);
+            color: var(--link);
           }
 
           &[aria-current="page"] {
-            background: var(--navy);
-            color: var(--paper);
+            background: var(--action);
+            color: var(--action-text);
             transition: none;
 
             &:hover {
-              background: var(--navy);
-              color: var(--paper);
+              background: var(--action);
+              color: var(--action-text);
             }
           }
         }
@@ -299,6 +299,11 @@ body > header {
         justify-content: center;
         color: var(--ink-4);
         text-decoration: none;
+        transition: color 160ms ease;
+
+        &:hover {
+          color: var(--link);
+        }
       }
 
       svg {

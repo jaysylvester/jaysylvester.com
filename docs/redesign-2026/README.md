@@ -1,6 +1,6 @@
 # Redesign 2026 — Implementation Handoff
 
-Status: design accepted 2026-08-12. This directory is the design record for the
+Status: design accepted 2026-08-12. Dark mode added 2026-08-13. This directory is the design record for the
 visual refresh and information-architecture change to jaysylvester.com. It does
 not authorize schema changes, content rewrites, or infrastructure work beyond
 what is required to render these pages.
@@ -340,6 +340,48 @@ scroller — the current bullet nav has none of them.
 column reports its content height inside the fixed-height overlay and the last
 row shears off.
 
+### Dark mode (`7a`–`7d`)
+
+Mocked up on two desktop pages (home, case study) and two mobile pages (home,
+contact) — between them every element class appears. **Dark mode is a token swap
+only**: no layout, spacing, type, or copy changes, so it should be implemented as
+a second set of custom-property values under `prefers-color-scheme: dark` (plus a
+manual override if you want a toggle), not as a parallel stylesheet.
+
+| Role | Light | Dark |
+| --- | --- | --- |
+| Page | `#FCFBF8` | `#14181F` |
+| Raised surface (sidebar boxes, form fields, image mats) | `#F7F5F0` | `#1A1F27` |
+| Row / card hover | `#F4F1EA` | `#1E242D` |
+| Secondary button hover | `#EEF1F6` | `#233044` |
+| Hairline rule | `#E2DDD2` | `#2E343E` |
+| Soft hairline (document rows) | `#EDE9E0` | `#262C35` |
+| Card border | `#D8D2C6` | `#343B45` |
+| Placeholder border | `#C9C3B6` | `#3A414B` |
+| Heading / high-emphasis text | `#14181F` | `#F2F1EE` |
+| Body text | `#3D4148` | `#B4B9C1` |
+| Body text, higher emphasis | `#2A2E35` | `#C9CDD4` |
+| Nav idle | `#4A4F58` | `#A8AEB7` |
+| Muted / caption | `#57534A` | `#9BA0A8` |
+| Mono section label | `#6B6558` | `#8B9098` |
+| Text on filled navy | `#FCFBF8` | `#F2F1EE` |
+
+**Navy splits three ways.** `#1F3C63` cannot survive the swap as a single value —
+as a link on a dark page it lands at 2.1:1. It becomes:
+
+| Use | Dark value | Contrast |
+| --- | --- | --- |
+| Link and active-state text | `#8FB6EC` | 7.4:1 on `#14181F` |
+| Section rule (the heavier `1px` divider) | `#3E5C86` | reads as a divider, not a link |
+| Filled button / active nav background | `#2C4E7E` | holds `#F2F1EE` at 8.1:1 |
+
+Shadows deepen from `rgba(26,29,34,·)` to `rgba(0,0,0,·)` at slightly higher
+alpha, since the light-mode values disappear against a dark page.
+
+**Product screenshots are not filtered.** They are captures of light-mode product
+UI; inverting or dimming them would misrepresent the work. They sit on the dark
+page as-is, with their borders following the card-border token.
+
 ## 6. Design tokens
 
 ### Color
@@ -530,7 +572,10 @@ Both edges match the 1440 reference — do not reintroduce a 40px gutter here.
 4. **1024px header density.** Five nav items plus three icon-only contact links
    is the tightest the header gets. Check it at implementation and drop the
    labels earlier if needed.
-5. **Résumé cohesion.** The PDF is included for reference. The web résumé now
+5. **Dark mode entry point.** The mockups assume `prefers-color-scheme`. Decide
+   whether a manual toggle is also wanted; if so it needs a home in the header
+   or rail, which is not currently designed.
+6. **Résumé cohesion.** The PDF is included for reference. The web résumé now
    follows the PDF's structure and summary; if the PDF is revised, keep the two
    in step.
 
@@ -538,7 +583,7 @@ Both edges match the 1440 reference — do not reintroduce a 40px gutter here.
 
 | File | Contents |
 | --- | --- |
-| `Site Pages 1b.dc.html` | All mockups, self-contained. Turn 6 (top) is the image zoom; Turn 5 is the home page at 768 / 1024 / 1920 / 2560; Turn 3 is mobile at 390px; Turn 2 is the seven desktop pages at 1440px. |
+| `Site Pages 1b.dc.html` | All mockups, self-contained. Turn 7 (top) is dark mode; Turn 6 is the image zoom; Turn 5 is the home page at 768 / 1024 / 1920 / 2560; Turn 3 is mobile at 390px; Turn 2 is the seven desktop pages at 1440px. |
 | `support.js` | Runtime required to open the file in a browser. Not part of the design. |
 | `screenshots/` | Flat PNG of every screen, listed below. |
 | `Jay-Sylvester-resume.pdf` | Source of the résumé page's content and the type/color direction. |
@@ -570,6 +615,10 @@ a single shared partial, not seven copies.
 | `20-zoom-single.png` | Image zoom, single image |
 | `21-zoom-multiple.png` | Image zoom, multiple images |
 | `22-zoom-mobile.png` | Image zoom, mobile |
+| `23-dark-home.png` | Home, dark |
+| `24-dark-case-study.png` | Case study detail, dark |
+| `25-dark-mobile-home.png` | Mobile home, dark |
+| `26-dark-mobile-contact.png` | Mobile contact, dark |
 
 Screen ids inside `Site Pages 1b.dc.html`:
 
@@ -596,3 +645,7 @@ Screen ids inside `Site Pages 1b.dc.html`:
 | `6a` | Image zoom, single image |
 | `6b` | Image zoom, multiple images |
 | `6c` | Image zoom, mobile |
+| `7a` | Home, dark |
+| `7b` | Case study detail, dark |
+| `7c` | Mobile home, dark |
+| `7d` | Mobile contact, dark |

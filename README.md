@@ -88,6 +88,17 @@ Host Node is optional. The equivalent Node-free startup command is
 
 Open <https://dev.jaysylvester.com>. The certificate covers `dev.jaysylvester.com`, `localhost`, `127.0.0.1`, and `::1`. Its private key is development-only and is never the mkcert CA key.
 
+The site follows the operating system's light or dark appearance. For temporary
+testing on the current page, use the browser console:
+
+```js
+document.documentElement.dataset.theme = 'dark'
+document.documentElement.dataset.theme = 'light'
+delete document.documentElement.dataset.theme // Return to the OS preference
+```
+
+The override is not persisted and resets when the page reloads or navigates.
+
 Useful commands:
 
 ```sh

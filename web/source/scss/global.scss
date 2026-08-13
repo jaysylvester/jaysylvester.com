@@ -1,6 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
+@mixin dark-theme {
+  color-scheme: dark;
+  --paper: #14181f;
+  --panel: #1a1f27;
+  --wash: #1e242d;
+  --wash-alt: #1e242d;
+  --tint: #233044;
+  --ink: #f2f1ee;
+  --ink-2: #c9cdd4;
+  --ink-3: #b4b9c1;
+  --ink-4: #a8aeb7;
+  --ink-5: #9ba0a8;
+  --mono: #8b9098;
+  --link: #8fb6ec;
+  --section-rule: #3e5c86;
+  --action: #2c4e7e;
+  --action-text: #f2f1ee;
+  --rule: #2e343e;
+  --rule-light: #262c35;
+  --card-border: #343b45;
+  --placeholder-border: #3a414b;
+  --input-background: #1a1f27;
+  --input-border: #3a414b;
+  --mobile-menu-background: #182b46;
+  --card-shadow: 0 18px 44px -26px rgba(0, 0, 0, 0.65);
+  --thumbnail-shadow: 0 12px 32px -18px rgba(0, 0, 0, 0.7);
+}
+
 :root {
+  color-scheme: light;
   --paper: #fcfbf8;
   --panel: #f7f5f0;
   --wash: #f4f1ea;
@@ -12,14 +41,38 @@
   --ink-4: #4a4f58;
   --ink-5: #57534a;
   --mono: #6b6558;
-  --navy: #1f3c63;
+  --link: #1f3c63;
+  --section-rule: #1f3c63;
+  --action: #1f3c63;
+  --action-text: #fcfbf8;
   --rule: #e2ddd2;
   --rule-light: #ede9e0;
+  --card-border: #d8d2c6;
+  --placeholder-border: #c9c3b6;
+  --input-background: #fff;
+  --input-border: #cfc8bb;
+  --mobile-menu-background: #24466f;
+  --card-shadow: 0 18px 40px -24px rgba(26, 29, 34, 0.5);
+  --thumbnail-shadow: 0 12px 28px -18px rgba(26, 29, 34, 0.55);
+  --fixed-dark: #14181f;
+  --fixed-light: #fcfbf8;
+  --fixed-muted: rgba(252, 251, 248, 0.62);
+  --fixed-rule: rgba(252, 251, 248, 0.16);
   --font-sans: 'Public Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   --page-gutter: 24px;
   --rail-width: 0px;
   --site-margin: max(0px, calc(50vw - 960px));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-theme;
+  }
+}
+
+:root[data-theme="dark"] {
+  @include dark-theme;
 }
 
 html {
@@ -45,7 +98,7 @@ p {
 }
 
 a {
-  color: var(--navy);
+  color: var(--link);
   text-underline-offset: 0.18em;
 
   &:hover {
@@ -69,8 +122,8 @@ main {
   z-index: 3000;
   padding: 10px 14px;
   transform: translateY(-160%);
-  background: var(--navy);
-  color: var(--paper);
+  background: var(--action);
+  color: var(--action-text);
   font-family: var(--font-mono);
   font-size: 12px;
   text-decoration: none;
@@ -81,7 +134,7 @@ main {
 }
 
 :focus-visible {
-  outline: 2px solid var(--navy);
+  outline: 2px solid var(--link);
   outline-offset: 3px;
 }
 
@@ -99,7 +152,7 @@ main {
   gap: 10px;
   min-height: 44px;
   padding: 11px 21px;
-  border: 1px solid var(--navy);
+  border: 1px solid var(--section-rule);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
@@ -117,8 +170,9 @@ main {
 }
 
 .primary-action {
-  background: var(--navy);
-  color: var(--paper);
+  border-color: var(--action);
+  background: var(--action);
+  color: var(--action-text);
 
   &:hover {
     opacity: 0.85;
@@ -126,7 +180,7 @@ main {
 }
 
 .secondary-action {
-  color: var(--navy);
+  color: var(--link);
 
   &:hover {
     background: var(--tint);
@@ -178,7 +232,7 @@ body[data-controller="case-study"] main > header {
 }
 
 .read-link {
-  color: var(--navy);
+  color: var(--link);
   font-size: 11px;
   text-decoration: none;
   text-transform: uppercase;
@@ -189,7 +243,7 @@ body[data-controller="case-study"] main > header {
   width: 100%;
   aspect-ratio: 16 / 10;
   place-items: center;
-  border: 1px solid var(--rule);
+  border: 1px solid var(--placeholder-border);
   background: repeating-linear-gradient(135deg, var(--panel), var(--panel) 8px, var(--rule-light) 8px, var(--rule-light) 10px);
   color: var(--mono);
   font-family: var(--font-mono);
@@ -199,7 +253,7 @@ body[data-controller="case-study"] main > header {
 .form-error {
   margin-bottom: 24px;
   padding: 14px 16px;
-  border-left: 3px solid var(--navy);
+  border-left: 3px solid var(--section-rule);
   background: var(--wash);
   color: var(--ink-2);
 }

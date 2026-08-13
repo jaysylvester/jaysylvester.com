@@ -3,7 +3,7 @@
 body[data-controller="citizen"] {
   main {
     > header {
-      border-bottom: 1px solid var(--navy);
+      border-bottom: 1px solid var(--section-rule);
 
       > small {
         display: block;
@@ -62,7 +62,7 @@ body[data-controller="citizen"] {
       aside {
         margin-top: 30px;
         padding: 24px;
-        background: var(--wash);
+        background: var(--panel);
 
         h2 {
           color: var(--mono);

@@ -8,7 +8,7 @@ body > aside[aria-label="Profile and case studies"] {
     min-height: 58px;
     padding: 16px 20px;
     align-items: center;
-    border-bottom: 1px solid var(--navy);
+    border-bottom: 1px solid var(--section-rule);
     color: var(--ink);
     font-family: var(--font-mono);
     font-size: 13px;
@@ -19,7 +19,7 @@ body > aside[aria-label="Profile and case studies"] {
     transition: color 160ms ease;
 
     &:hover {
-      color: var(--navy);
+      color: var(--link);
     }
   }
 
@@ -50,7 +50,7 @@ body > aside[aria-label="Profile and case studies"] {
         right: 100%;
         bottom: -1px;
         width: var(--site-margin);
-        border-bottom: 1px solid var(--navy);
+        border-bottom: 1px solid var(--section-rule);
         pointer-events: none;
       }
     }
@@ -84,7 +84,7 @@ body > aside[aria-label="Profile and case studies"] {
     }
 
     section a {
-      color: var(--navy);
+      color: var(--link);
       text-decoration: none;
       transition: opacity 160ms ease;
 

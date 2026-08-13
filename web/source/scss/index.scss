@@ -27,7 +27,7 @@ body[data-controller="index"] {
 
     > section[aria-label="Featured case studies"] {
       display: grid;
-      border-top: 1px solid var(--navy);
+      border-top: 1px solid var(--section-rule);
       border-bottom: 1px solid var(--rule);
 
       > a {
@@ -46,14 +46,14 @@ body[data-controller="index"] {
 
           img {
             transform: translateY(-3px);
-            box-shadow: 0 18px 40px -24px rgba(26, 29, 34, 0.5);
+            box-shadow: var(--card-shadow);
           }
         }
 
         img {
           width: 100%;
           aspect-ratio: 16 / 10;
-          border: 1px solid var(--rule);
+          border: 1px solid var(--card-border);
           object-fit: cover;
           object-position: top;
           transition: transform 180ms ease, box-shadow 180ms ease;
@@ -123,7 +123,7 @@ body[data-controller="index"] {
 
     > section:last-child {
       padding: 38px var(--page-gutter);
-      border-top: 1px solid var(--navy);
+      border-top: 1px solid var(--section-rule);
 
       > div:last-child {
         display: grid;

@@ -3,7 +3,7 @@
 body[data-controller="contact"] {
   main {
     > header {
-      border-bottom: 1px solid var(--navy);
+      border-bottom: 1px solid var(--section-rule);
 
       h1 {
         max-width: 900px;
@@ -31,7 +31,7 @@ body[data-controller="contact"] {
 
       > aside {
         order: 1;
-        border-bottom: 1px solid var(--navy);
+        border-bottom: 1px solid var(--section-rule);
 
         a {
           display: flex;
@@ -58,7 +58,7 @@ body[data-controller="contact"] {
         }
 
         span {
-          color: var(--navy);
+          color: var(--link);
           font-size: 16px;
         }
       }
@@ -86,8 +86,8 @@ body[data-controller="contact"] {
       width: 100%;
       margin-top: 7px;
       padding: 12px;
-      border: 1px solid #cfc8bb;
-      background: #fff;
+      border: 1px solid var(--input-border);
+      background: var(--input-background);
       color: var(--ink);
       font-family: var(--font-sans);
       font-size: 16px;
@@ -96,8 +96,8 @@ body[data-controller="contact"] {
       text-transform: none;
 
       &:focus {
-        border-color: var(--navy);
-        outline: 1px solid var(--navy);
+        border-color: var(--link);
+        outline: 1px solid var(--link);
         outline-offset: 0;
       }
     }

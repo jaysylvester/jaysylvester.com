@@ -3,7 +3,7 @@
 body[data-controller="gallery"] {
   main {
     > section:first-child {
-      border-bottom: 1px solid var(--navy);
+      border-bottom: 1px solid var(--section-rule);
 
       h1 {
         max-width: 840px;
@@ -38,7 +38,7 @@ body[data-controller="gallery"] {
           justify-content: space-between;
           gap: 16px;
           border-top: 1px solid var(--rule);
-          color: var(--navy);
+          color: var(--link);
           font-size: 14.5px;
           text-decoration: none;
           transition: opacity 160ms ease;
@@ -61,7 +61,7 @@ body[data-controller="gallery"] {
     }
 
     > section:last-child {
-      border-top: 1px solid var(--navy);
+      border-top: 1px solid var(--section-rule);
 
       > p {
         max-width: 720px;
@@ -109,7 +109,7 @@ body[data-controller="gallery"] {
           img {
             width: 100%;
             aspect-ratio: 16 / 10;
-            border: 1px solid var(--rule);
+            border: 1px solid var(--card-border);
             object-fit: cover;
             object-position: top;
           }

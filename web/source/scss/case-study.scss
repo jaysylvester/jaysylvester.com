@@ -55,7 +55,7 @@ body[data-controller="case-study"] {
       img {
         width: 100%;
         aspect-ratio: 16 / 10;
-        border: 1px solid var(--rule);
+        border: 1px solid var(--card-border);
         object-fit: cover;
         object-position: top;
       }
@@ -64,7 +64,7 @@ body[data-controller="case-study"] {
     > dl {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      border-block: 1px solid var(--navy);
+      border-block: 1px solid var(--section-rule);
 
       > div {
         padding: 18px 20px;
@@ -123,8 +123,8 @@ body[data-controller="case-study"] {
         h3 {
           margin: 42px 0 22px;
           padding-bottom: 11px;
-          border-bottom: 1px solid var(--navy);
-          color: var(--navy);
+          border-bottom: 1px solid var(--section-rule);
+          color: var(--link);
           font-family: var(--font-mono);
           font-size: 13px;
           font-weight: 500;
@@ -220,7 +220,7 @@ body[data-controller="case-study"] {
           img {
             width: 100%;
             aspect-ratio: 4 / 3;
-            border: 1px solid var(--rule);
+            border: 1px solid var(--card-border);
             object-fit: cover;
             object-position: top;
           }
@@ -289,7 +289,7 @@ body[data-controller="case-study"] {
 
     > nav[aria-label="Case study pagination"] {
       display: grid;
-      border-top: 1px solid var(--navy);
+      border-top: 1px solid var(--section-rule);
 
       a {
         display: flex;
@@ -320,7 +320,7 @@ body[data-controller="case-study"] {
 
       strong {
         margin-top: 6px;
-        color: var(--navy);
+        color: var(--link);
         font-size: 19px;
         font-weight: 600;
         line-height: 1.3;

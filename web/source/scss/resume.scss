@@ -6,7 +6,7 @@ body[data-controller="resume"] {
       display: flex;
       flex-direction: column;
       gap: 24px;
-      border-bottom: 1px solid var(--navy);
+      border-bottom: 1px solid var(--section-rule);
 
       h1 {
         max-width: 820px;
@@ -32,7 +32,7 @@ body[data-controller="resume"] {
       padding: 36px var(--page-gutter);
 
       &:first-of-type {
-        border-bottom: 1px solid var(--navy);
+        border-bottom: 1px solid var(--section-rule);
 
         dl {
           margin-top: 20px;
@@ -61,7 +61,7 @@ body[data-controller="resume"] {
       }
 
       &:nth-of-type(2) {
-        border-bottom: 1px solid var(--navy);
+        border-bottom: 1px solid var(--section-rule);
 
         > article {
           padding: 28px 0;
