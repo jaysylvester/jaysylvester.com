@@ -19,17 +19,8 @@ body[data-controller="resume"] {
       &:first-of-type {
         border-bottom: 1px solid var(--section-rule);
 
-        dl {
-          margin-top: 20px;
-
-          > div {
-            padding: 13px 0;
-            border-top: 1px solid var(--rule);
-
-            &:first-child {
-              border-top: 0;
-            }
-          }
+        .item-list > div {
+          padding: 13px 0;
         }
 
         dt {
@@ -48,14 +39,8 @@ body[data-controller="resume"] {
       &:nth-of-type(2) {
         border-bottom: 1px solid var(--section-rule);
 
-        > article {
+        .item-list > li {
           padding: 28px 0;
-          border-top: 1px solid var(--rule);
-
-          &:first-of-type {
-            margin-top: 20px;
-            border-top: 0;
-          }
 
           > span {
             display: block;
@@ -127,7 +112,7 @@ body[data-controller="resume"] {
 
       > section {
         &:first-of-type {
-          dl > div {
+          .item-list > div {
             display: grid;
             grid-template-columns: 200px minmax(0, 1fr);
             gap: 24px;
@@ -139,7 +124,7 @@ body[data-controller="resume"] {
         }
 
         &:nth-of-type(2) {
-          > article {
+          .item-list > li {
             display: grid;
             grid-template-columns: 120px minmax(0, 1fr);
             gap: 30px;
@@ -157,13 +142,13 @@ body[data-controller="resume"] {
     main {
       > section {
         &:first-of-type {
-          dl > div {
+          .item-list > div {
             grid-template-columns: 260px minmax(0, 1fr);
           }
         }
 
         &:nth-of-type(2) {
-          > article {
+          .item-list > li {
             grid-template-columns: 150px minmax(0, 1fr);
             gap: 40px;
           }

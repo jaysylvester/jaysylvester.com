@@ -96,18 +96,8 @@ body[data-controller="citizen"] {
     > section:nth-of-type(2) {
       border-top: 1px solid var(--rule);
 
-      > div:last-child {
-        display: grid;
-        margin-top: 22px;
-      }
-
-      article {
+      .item-list > li {
         padding: 18px 0;
-        border-top: 1px solid var(--rule);
-
-        &:nth-child(-n + 2) {
-          border-top: 0;
-        }
       }
 
       h3 {
@@ -155,26 +145,6 @@ body[data-controller="citizen"] {
       }
     }
 
-    > section:last-of-type {
-      > nav {
-        display: grid;
-        margin-top: 22px;
-      }
-
-      a {
-        display: flex;
-        padding: 13px 0;
-        justify-content: space-between;
-        border-top: 1px solid var(--rule);
-        text-decoration: none;
-      }
-
-      small {
-        color: var(--mono);
-        font-family: var(--font-mono);
-        font-size: 10px;
-      }
-    }
   }
 
   @media (min-width: 768px) {
@@ -183,12 +153,6 @@ body[data-controller="citizen"] {
       > section:nth-of-type(2),
       > section:last-of-type {
         padding-inline: var(--page-gutter);
-      }
-
-      > section:nth-of-type(2) > div,
-      > section:last-of-type > nav {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 40px;
       }
 
       > section:nth-of-type(3) {

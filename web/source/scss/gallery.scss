@@ -11,51 +11,6 @@ body[data-controller="gallery"] {
       padding: var(--main-section-padding-block) var(--page-gutter);
     }
 
-    > section:nth-of-type(2) {
-      > div:last-child {
-        display: grid;
-        margin-top: 22px;
-
-        a {
-          display: flex;
-          min-height: 48px;
-          padding: 12px 0;
-          align-items: baseline;
-          justify-content: space-between;
-          gap: 16px;
-          border-top: 1px solid var(--rule);
-          color: var(--link);
-          font-size: 14.5px;
-          text-decoration: none;
-          transition: opacity 160ms ease;
-
-          &:hover {
-            opacity: 0.6;
-          }
-
-          &:last-child {
-            border-bottom: 1px solid var(--rule);
-          }
-        }
-
-        small {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          color: var(--mono);
-          font-family: var(--font-mono);
-          font-size: 10.5px;
-          white-space: nowrap;
-
-          svg {
-            width: 14px;
-            height: 14px;
-            flex: 0 0 auto;
-          }
-        }
-      }
-    }
-
     > section:last-child {
       border-top: 1px solid var(--section-rule);
 
@@ -116,15 +71,6 @@ body[data-controller="gallery"] {
 
   @media (min-width: 768px) {
     main {
-      > section:nth-of-type(2) > div:last-child {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 48px;
-
-        a:nth-last-child(2) {
-          border-bottom: 1px solid var(--rule);
-        }
-      }
-
       > section:last-child > section > div {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
