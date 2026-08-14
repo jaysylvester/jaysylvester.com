@@ -3,12 +3,14 @@
 body > footer {
   display: flex;
   position: relative;
+  z-index: 1;
   max-width: 1920px;
-  min-height: 68px;
+  min-height: var(--footer-height);
   margin-inline: auto;
   padding: 22px 20px calc(22px + env(safe-area-inset-bottom));
   flex-direction: column;
   gap: 14px;
+  background: var(--paper);
   color: var(--mono);
   font-family: var(--font-mono);
   font-size: 11px;
