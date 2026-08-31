@@ -7,8 +7,7 @@ export const handler = ({ route }) => {
     include: {
       head: '/_head/controller/' + route.controller,
       header: '/_header/controller/' + route.controller,
-      rail: '/_rail',
-      footer: '/_footer'
+      rail: '/_rail'
     }
   }
 }

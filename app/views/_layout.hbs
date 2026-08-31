@@ -3,14 +3,16 @@
   {{{include.head}}}
   <body id="top" data-controller="{{route.controller}}" data-action="{{route.action}}">
     <a class="skip-link" href="#main-content">Skip to content</a>
-    {{{include.header}}}
-    {{{include.rail}}}
+    <div class="site-navigation" id="site-menu" aria-label="Navigation">
+      <a class="wordmark" href="/">Jay Sylvester</a>
+      {{{include.header}}}
+      {{{include.rail}}}
+    </div>
     <main id="main-content" tabindex="-1">
       {{#each route.chain}}
         {{{output}}}
       {{/each}}
     </main>
-    {{{include.footer}}}
     {{#if (eq config.citizen.mode "development")}}
       <script id="__bs_script__">//<![CDATA[
         (function() {

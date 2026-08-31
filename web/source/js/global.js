@@ -1,6 +1,8 @@
 JAY.global = ( function () {
   'use strict'
 
+  const desktopLayout = window.matchMedia('(min-width: 1024px)')
+
   const methods = {
 
     // Initialize behavior shared by every page, with each method exiting early when its required markup is absent.
@@ -14,103 +16,168 @@ JAY.global = ( function () {
 
     // Hide the sticky header while scrolling down and reveal it when the user scrolls back up.
     fixedHeader: function () {
-      const body   = document.querySelector('body'),
-            header = document.querySelector('body > header')
+      const body       = document.querySelector('body'),
+            navigation = document.querySelector('body > .site-navigation'),
+            header     = navigation?.querySelector(':scope > header')
 
-      if ( !body || !header ) return
+      if ( !body || !navigation || !header ) return
 
-      let bodyOffset = 0
+      let previousScroll = Math.max(window.scrollY, 0),
+          mastheadHeight,
+          scrollFrame
 
-      window.addEventListener('scroll', function () {
-        const currentOffset = body.getBoundingClientRect().top
+      // The visible masthead changes at the layout breakpoint but its height is otherwise stable.
+      const measureMasthead = function () {
+        const masthead = desktopLayout.matches ? header : navigation.querySelector('.wordmark') || navigation
+        mastheadHeight = masthead.getBoundingClientRect().height
+      }
 
-        // The second half of each of the following IF statements deals with Safari's bounceback when
-        // you scroll past the top of the page
+      const update = function () {
+        // Clamp Safari's negative rubber-band offset so overscrolling the top always reveals the masthead.
+        const currentScroll = Math.max(window.scrollY, 0)
 
-        // scroll down
-        if ( !body.classList.contains('hidden-header') && bodyOffset > currentOffset && Math.abs(currentOffset) > header.getBoundingClientRect().height ) {
+        if ( !body.classList.contains('hidden-header') && currentScroll > previousScroll && currentScroll > mastheadHeight ) {
           body.classList.add('hidden-header')
-          body.classList.remove('fixed-header')
-        // scroll up
-        // The minus 10 pixels keeps the header from appearing after slight movements, which happens
-        // frequently with touchscreens and other touch input devices.
-        } else if ( ( !body.classList.contains('fixed-header') && currentOffset - 10 >= bodyOffset ) || Math.abs(currentOffset) <= header.getBoundingClientRect().height ) {
+        } else if ( currentScroll <= mastheadHeight || currentScroll <= previousScroll - 10 ) {
           body.classList.remove('hidden-header')
-          if ( bodyOffset < -110 ) body.classList.add('fixed-header')
         }
 
-        bodyOffset = currentOffset
+        previousScroll = currentScroll
+        scrollFrame = null
+      }
 
-        if ( bodyOffset === 0 ) body.classList.remove('fixed-header')
+      measureMasthead()
+      desktopLayout.addEventListener('change', measureMasthead)
+      window.addEventListener('resize', measureMasthead, { passive: true })
+      window.addEventListener('scroll', function () {
+        if ( scrollFrame ) return
+        scrollFrame = requestAnimationFrame(update)
       }, { passive: true })
     },
 
     // Control the mobile navigation overlay, including focus containment and background inertness.
     mobileMenu: function () {
       const toggle = document.querySelector('.menu-toggle'),
-            menu = document.querySelector('.mobile-menu'),
-            closeButton = document.querySelector('.menu-close')
+            menu = document.querySelector('#site-menu'),
+            closeButton = menu?.querySelector('.menu-close'),
+            headerLinks = menu?.querySelector('.header-links'),
+            wordmark = menu?.querySelector('.wordmark')
 
-      if ( !toggle || !menu || !closeButton ) return
+      if ( !toggle || !menu || !closeButton || !headerLinks || !wordmark ) return
 
       let previousFocus
       let inerted = []
+      let closeAnimationEnd
+      let closeFallback
 
-      // Close the menu, restore the surrounding page, and return focus to the element that opened it.
-      const close = function () {
-        menu.classList.remove('is-open')
-        menu.setAttribute('aria-hidden', 'true')
-        toggle.setAttribute('aria-expanded', 'false')
+      // Expose the rail as ordinary complementary content on desktop and as a modal dialog on mobile.
+      const syncAccessibility = function (open) {
+        if ( desktopLayout.matches || !open ) {
+          menu.removeAttribute('aria-modal')
+          menu.removeAttribute('role')
+        } else {
+          menu.setAttribute('aria-modal', 'true')
+          menu.setAttribute('role', 'dialog')
+        }
+      }
+
+      // Restore the closed navigation state after its fade-out completes or a breakpoint requires immediate cleanup.
+      const finishClose = function (restoreFocus) {
+        if ( closeAnimationEnd ) headerLinks.removeEventListener('animationend', closeAnimationEnd)
+        window.clearTimeout(closeFallback)
+        closeAnimationEnd = null
+        closeFallback = null
+        menu.classList.remove('is-open', 'is-closing')
+        menu.style.removeProperty('--mobile-menu-fade-start')
+        menu.style.removeProperty('--mobile-menu-bar-start')
+        menu.style.removeProperty('--mobile-menu-wordmark-start')
+        menu.style.removeProperty('--mobile-menu-toggle-background-start')
+        menu.style.removeProperty('--mobile-menu-toggle-start')
+        menu.style.removeProperty('--mobile-menu-close-start')
+        toggle.inert = false
         inerted.forEach((element) => { element.inert = false })
         inerted = []
         document.documentElement.classList.remove('menu-open')
-        document.removeEventListener('keydown', keydown)
-        if ( previousFocus ) previousFocus.focus()
+        syncAccessibility(false)
+        if ( restoreFocus !== false && previousFocus && !desktopLayout.matches ) previousFocus.focus()
       }
 
-      // Close on Escape and loop Tab focus between the first and last interactive menu elements.
+      // Close the menu, preserving its fullscreen layout until the fade-out animation finishes.
+      const close = function (restoreFocus, immediate) {
+        if ( !menu.classList.contains('is-open') && !menu.classList.contains('is-closing') ) return
+
+        toggle.setAttribute('aria-expanded', 'false')
+        document.removeEventListener('keydown', keydown)
+
+        if ( immediate || window.matchMedia('(prefers-reduced-motion: reduce)').matches ) {
+          finishClose(restoreFocus)
+          return
+        }
+
+        if ( menu.classList.contains('is-closing') ) return
+
+        const wordmarkStyle = window.getComputedStyle(wordmark),
+              toggleStyle = window.getComputedStyle(toggle),
+              closeStyle = window.getComputedStyle(closeButton)
+
+        menu.style.setProperty('--mobile-menu-fade-start', window.getComputedStyle(headerLinks).opacity)
+        menu.style.setProperty('--mobile-menu-bar-start', wordmarkStyle.backgroundColor)
+        menu.style.setProperty('--mobile-menu-wordmark-start', wordmarkStyle.color)
+        menu.style.setProperty('--mobile-menu-toggle-background-start', toggleStyle.backgroundColor)
+        menu.style.setProperty('--mobile-menu-toggle-start', toggleStyle.color)
+        menu.style.setProperty('--mobile-menu-close-start', closeStyle.color)
+        menu.classList.remove('is-open')
+        menu.classList.add('is-closing')
+        closeAnimationEnd = function (event) {
+          if ( event.target === headerLinks && event.animationName === 'mobile-menu-fade-out' ) finishClose(restoreFocus)
+        }
+        headerLinks.addEventListener('animationend', closeAnimationEnd)
+        closeFallback = window.setTimeout(() => finishClose(restoreFocus), 250)
+      }
+
+      // Close on Escape and move Tab focus through the menu in visual order.
       const keydown = function (event) {
         if ( event.key === 'Escape' ) close()
         if ( event.key !== 'Tab' ) return
 
-        const focusable = [...menu.querySelectorAll('a, button')]
-        const first = focusable[0]
-        const last = focusable[focusable.length - 1]
+        const focusable = [...menu.querySelectorAll('a, button')].filter((element) => !element.inert && element.getClientRects().length),
+              current = focusable.indexOf(document.activeElement),
+              direction = event.shiftKey ? -1 : 1,
+              next = current < 0 ? 0 : ( current + direction + focusable.length ) % focusable.length
 
-        if ( event.shiftKey && document.activeElement === first ) {
-          event.preventDefault()
-          last.focus()
-        } else if ( !event.shiftKey && document.activeElement === last ) {
-          event.preventDefault()
-          first.focus()
-        }
+        event.preventDefault()
+        focusable[next].focus()
       }
 
       toggle.addEventListener('click', function () {
+        if ( desktopLayout.matches ) return
+
         previousFocus = document.activeElement
 
         // Disable interaction with every element outside the overlay while the modal menu is open.
-        inerted = [
-          ...[...document.body.children].filter((element) => !element.contains(menu) && !element.inert),
-          ...[...menu.parentElement.children].filter((element) => element !== menu && !element.inert)
-        ]
+        inerted = [...document.body.children].filter((element) => element !== menu && !element.inert)
         inerted.forEach((element) => { element.inert = true })
+        toggle.inert = true
         menu.classList.add('is-open')
-        menu.setAttribute('aria-hidden', 'false')
         toggle.setAttribute('aria-expanded', 'true')
         document.documentElement.classList.add('menu-open')
         document.addEventListener('keydown', keydown)
+        syncAccessibility(true)
         requestAnimationFrame(() => closeButton.focus())
       })
 
-      closeButton.addEventListener('click', close)
-      menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', close))
+      closeButton.addEventListener('click', function () { close() })
+      menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', function () {
+        close(link.target === '_blank')
+      }))
 
       // Close an open mobile menu if the viewport crosses into the desktop navigation layout.
-      const desktopLayout = window.matchMedia('(min-width: 1024px)')
       desktopLayout.addEventListener('change', function (event) {
-        if ( event.matches && menu.classList.contains('is-open') ) close()
+        if ( event.matches && ( menu.classList.contains('is-open') || inerted.length ) ) close(false, true)
+        syncAccessibility(false)
       })
+
+      syncAccessibility(false)
     },
 
     // Lazily request responsive Cloudinary images shortly before they enter the viewport.
