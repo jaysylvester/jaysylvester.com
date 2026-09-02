@@ -9,7 +9,7 @@
 
 ## Terminal commands
 
-- You may run any command that involves simple file reads (grep, git diff, etc.).
+- You may run any command that involves simple file reads (grep, git diff, etc.) or returning content for your review (echo).
 - You may run any command related to tests or code quality (npx eslint, etc.) provided they are non-destructive.
 
 
