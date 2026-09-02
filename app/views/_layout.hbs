@@ -3,10 +3,13 @@
   {{{include.head}}}
   <body id="top" data-controller="{{route.controller}}" data-action="{{route.action}}">
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <div class="site-navigation" id="site-menu" aria-label="Navigation">
+    <div class="site-navigation" aria-label="Navigation">
       <a class="wordmark" href="/">Jay Sylvester</a>
       {{{include.header}}}
       {{{include.rail}}}
+    </div>
+    <div class="mobile-menu-overlay" id="site-menu" aria-label="Navigation menu" hidden>
+      <a class="mobile-menu-wordmark" href="/">Jay Sylvester</a>
     </div>
     <main id="main-content" tabindex="-1">
       {{#each route.chain}}

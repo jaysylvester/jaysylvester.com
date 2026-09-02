@@ -24,7 +24,8 @@ body > div.site-navigation > a.wordmark {
   }
 }
 
-body > div.site-navigation > aside[aria-label='Profile and case studies'] {
+body > div.site-navigation > aside.site-rail,
+body > div.mobile-menu-overlay > aside.site-rail {
   --rail-copy-size: 13.5px;
   --rail-heading-color: var(--mono);
   --rail-heading-rule: var(--rule);
@@ -90,24 +91,7 @@ body > div.site-navigation > aside[aria-label='Profile and case studies'] {
   }
 }
 
-body > div.site-navigation:is(.is-open, .is-closing) > a.wordmark {
-  position: sticky;
-  top: 0;
-  z-index: 3;
-  background: var(--mobile-menu-background);
-  box-shadow: 0 1px 0 var(--fixed-rule);
-}
-
-body > div.site-navigation.is-open > a.wordmark {
-  animation: mobile-menu-wordmark-in 160ms ease both;
-}
-
-body > div.site-navigation.is-closing > a.wordmark {
-  animation: mobile-menu-wordmark-out 160ms ease both;
-  box-shadow: 0 1px 0 var(--section-rule);
-}
-
-body > div.site-navigation:is(.is-open, .is-closing) > aside[aria-label='Profile and case studies'] {
+body > div.mobile-menu-overlay > aside.site-rail {
   --rail-copy-size: 14px;
   --rail-heading-color: var(--fixed-muted);
   --rail-heading-rule: var(--fixed-rule);
@@ -142,22 +126,8 @@ body > div.site-navigation:is(.is-open, .is-closing) > aside[aria-label='Profile
   }
 }
 
-body > div.site-navigation.is-open > aside[aria-label='Profile and case studies'] {
-  div.rail-content,
-  div.rail-meta {
-    animation: mobile-menu-fade-in 160ms ease both;
-  }
-}
-
-body > div.site-navigation.is-closing > aside[aria-label='Profile and case studies'] {
-  div.rail-content,
-  div.rail-meta {
-    animation: mobile-menu-fade-out 160ms ease both;
-  }
-}
-
 @media (max-width: 1023px) {
-  html:not(.js) body > div.site-navigation > aside[aria-label='Profile and case studies'] {
+  html:not(.js) body > div.site-navigation > aside.site-rail {
     div.rail-content {
       display: flex;
       padding: 24px calc(20px + var(--safe-right)) 24px calc(20px + var(--safe-left));
@@ -209,7 +179,7 @@ body > div.site-navigation.is-closing > aside[aria-label='Profile and case studi
     }
   }
 
-  body > div.site-navigation > aside[aria-label='Profile and case studies'] {
+  body > div.site-navigation > aside.site-rail {
     display: flex;
     position: sticky;
     top: var(--masthead-height);
@@ -271,7 +241,7 @@ body > div.site-navigation.is-closing > aside[aria-label='Profile and case studi
     padding-inline: 32px;
   }
 
-  body > div.site-navigation > aside[aria-label='Profile and case studies'] {
+  body > div.site-navigation > aside.site-rail {
     div.rail-content {
       gap: 36px;
       padding: 48px 32px;
@@ -284,7 +254,7 @@ body > div.site-navigation.is-closing > aside[aria-label='Profile and case studi
 }
 
 @media (min-width: 1920px) {
-  body > div.site-navigation > aside[aria-label='Profile and case studies'] div.rail-content {
+  body > div.site-navigation > aside.site-rail div.rail-content {
     padding-block: 56px;
   }
 }

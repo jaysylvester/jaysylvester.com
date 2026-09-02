@@ -1,6 +1,6 @@
 // Header and mobile navigation shell
 
-@keyframes mobile-menu-fade-in {
+@keyframes mobile-menu-overlay-in {
   from {
     opacity: 0;
   }
@@ -10,81 +10,13 @@
   }
 }
 
-@keyframes mobile-menu-fade-out {
+@keyframes mobile-menu-overlay-out {
   from {
-    opacity: var(--mobile-menu-fade-start, 1);
+    opacity: var(--mobile-menu-overlay-start, 1);
   }
 
   to {
     opacity: 0;
-  }
-}
-
-@keyframes mobile-menu-wordmark-in {
-  from {
-    background-color: var(--paper);
-    color: var(--ink);
-  }
-
-  to {
-    background-color: var(--mobile-menu-background);
-    color: var(--fixed-light);
-  }
-}
-
-@keyframes mobile-menu-wordmark-out {
-  from {
-    background-color: var(--mobile-menu-bar-start, var(--mobile-menu-background));
-    color: var(--mobile-menu-wordmark-start, var(--fixed-light));
-  }
-
-  to {
-    background-color: var(--paper);
-    color: var(--ink);
-  }
-}
-
-@keyframes mobile-menu-toggle-in {
-  from {
-    background-color: var(--paper);
-    color: var(--link);
-  }
-
-  to {
-    background-color: var(--mobile-menu-background);
-    color: transparent;
-  }
-}
-
-@keyframes mobile-menu-toggle-out {
-  from {
-    background-color: var(--mobile-menu-toggle-background-start, var(--mobile-menu-background));
-    color: var(--mobile-menu-toggle-start, transparent);
-  }
-
-  to {
-    background-color: var(--paper);
-    color: var(--link);
-  }
-}
-
-@keyframes mobile-menu-close-in {
-  from {
-    color: transparent;
-  }
-
-  to {
-    color: var(--fixed-light);
-  }
-}
-
-@keyframes mobile-menu-close-out {
-  from {
-    color: var(--mobile-menu-close-start, var(--fixed-light));
-  }
-
-  to {
-    color: transparent;
   }
 }
 
@@ -132,6 +64,13 @@ body > div.site-navigation {
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: transparent;
+    }
   }
 
   span.menu-icon {
@@ -162,181 +101,168 @@ body > div.site-navigation {
     }
   }
 
+}
+
+body > div.mobile-menu-overlay {
+  --safe-top: env(safe-area-inset-top);
+  --safe-right: env(safe-area-inset-right);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --mobile-control-width: calc(104px + var(--safe-right));
+
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  height: 100svh;
+  grid-template-columns: minmax(0, 1fr) var(--mobile-control-width);
+  grid-auto-rows: auto;
+  align-content: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--mobile-menu-background);
+  color: var(--fixed-light);
+
   &.is-open,
   &.is-closing {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-    height: 100svh;
-    max-height: none;
-    align-content: start;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    border-bottom: 0;
-    background: transparent;
-    color: var(--fixed-light);
-    isolation: isolate;
-    transform: none;
-
-    &::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background: var(--mobile-menu-background);
-      pointer-events: none;
-    }
-
-    button.menu-toggle {
-      position: sticky;
-      top: 0;
-      z-index: 3;
-      background: var(--mobile-menu-background);
-      box-shadow: 0 1px 0 var(--fixed-rule);
-      pointer-events: none;
-    }
-
-    button.menu-close {
-      display: flex;
-      position: sticky;
-      top: 0;
-      z-index: 4;
-      min-height: calc(var(--masthead-height) + var(--safe-top));
-      padding: calc(12px + var(--safe-top)) calc(20px + var(--safe-right)) 12px 20px;
-      grid-row: 1;
-      grid-column: 2;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      background: transparent;
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      transition: color 160ms ease;
-
-      span {
-        position: relative;
-        width: 18px;
-        height: 18px;
-        flex: 0 0 auto;
-
-        &::before,
-        &::after {
-          content: '';
-          position: absolute;
-          top: 8px;
-          left: 0;
-          width: 18px;
-          height: 1px;
-          background: currentColor;
-        }
-
-        &::before {
-          transform: rotate(45deg);
-        }
-
-        &::after {
-          transform: rotate(-45deg);
-        }
-      }
-    }
-
-    div.header-links {
-      display: flex;
-      grid-column: 1 / -1;
-      flex-direction: column;
-
-      > nav.primary-links a {
-        display: block;
-        min-height: 62px;
-        padding: 18px calc(22px + var(--safe-right)) 18px calc(22px + var(--safe-left));
-        border-bottom: 1px solid rgba(252, 251, 248, 0.18);
-        color: var(--fixed-light);
-        font-size: 21px;
-        font-weight: 500;
-        line-height: 1.2;
-        text-decoration: none;
-
-        &[aria-current='page'] {
-          background: rgba(252, 251, 248, 0.1);
-        }
-      }
-    }
-
-    nav.social-links {
-      display: flex;
-      padding: 28px calc(22px + var(--safe-right)) 20px calc(22px + var(--safe-left));
-      flex-direction: column;
-      gap: 12px;
-      font-family: var(--font-mono);
-      letter-spacing: 0.08em;
-
-      a {
-        display: flex;
-        min-height: 32px;
-        align-items: center;
-        gap: 11px;
-        color: rgba(252, 251, 248, 0.75);
-        text-decoration: none;
-      }
-
-      svg {
-        width: 16px;
-        height: 16px;
-        flex: 0 0 auto;
-        fill: currentColor;
-      }
-    }
+    display: grid;
   }
 
   &.is-open {
-    &::before {
-      animation: mobile-menu-fade-in 160ms ease both;
-    }
-
-    button.menu-close {
-      animation: mobile-menu-close-in 160ms ease both;
-    }
-
-    button.menu-toggle {
-      animation: mobile-menu-toggle-in 160ms ease both;
-    }
-
-    div.header-links {
-      animation: mobile-menu-fade-in 160ms ease both;
-    }
+    animation: mobile-menu-overlay-in 160ms ease both;
   }
 
   &.is-closing {
+    animation: mobile-menu-overlay-out 160ms ease both;
     pointer-events: none;
+  }
 
-    &::before {
-      animation: mobile-menu-fade-out 160ms ease both;
+  > a.mobile-menu-wordmark,
+  > button.menu-close {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    min-height: calc(var(--masthead-height) + var(--safe-top));
+    align-items: center;
+    background: var(--mobile-menu-background);
+    box-shadow: 0 1px 0 var(--fixed-rule);
+    color: var(--fixed-light);
+  }
+
+  > a.mobile-menu-wordmark {
+    padding: calc(16px + var(--safe-top)) 20px 16px calc(20px + var(--safe-left));
+    grid-row: 1;
+    grid-column: 1;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  > button.menu-close {
+    padding: calc(12px + var(--safe-top)) calc(20px + var(--safe-right)) 12px 20px;
+    grid-row: 1;
+    grid-column: 2;
+    justify-content: center;
+    gap: 9px;
+    border: 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background: var(--mobile-menu-background);
     }
 
-    button.menu-close {
-      animation: mobile-menu-close-out 160ms ease both;
+    span {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 18px;
+        height: 1px;
+        background: currentColor;
+      }
+
+      &::before {
+        transform: rotate(45deg);
+      }
+
+      &::after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
+  > div.header-links {
+    display: flex;
+    grid-column: 1 / -1;
+    flex-direction: column;
+
+    > nav.primary-links a {
+      display: block;
+      min-height: 62px;
+      padding: 18px calc(22px + var(--safe-right)) 18px calc(22px + var(--safe-left));
+      border-bottom: 1px solid rgba(252, 251, 248, 0.18);
+      color: var(--fixed-light);
+      font-size: 21px;
+      font-weight: 500;
+      line-height: 1.2;
+      text-decoration: none;
+
+      &[aria-current='page'] {
+        background: rgba(252, 251, 248, 0.1);
+      }
+    }
+  }
+
+  nav.social-links {
+    display: flex;
+    padding: 28px calc(22px + var(--safe-right)) 20px calc(22px + var(--safe-left));
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+
+    a {
+      display: flex;
+      min-height: 32px;
+      align-items: center;
+      gap: 11px;
+      color: rgba(252, 251, 248, 0.75);
+      text-decoration: none;
     }
 
-    button.menu-toggle {
-      animation: mobile-menu-toggle-out 160ms ease both;
-      box-shadow: 0 1px 0 var(--section-rule);
-    }
-
-    div.header-links {
-      animation: mobile-menu-fade-out 160ms ease both;
+    svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      fill: currentColor;
     }
   }
 }
 
-html.js body > div.site-navigation:not(.is-open):not(.is-closing) {
+html.js body > div.site-navigation {
   position: sticky;
   top: 0;
 }
 
-html.js body.hidden-header > div.site-navigation:not(.is-open):not(.is-closing) {
+html.js body.hidden-header > div.site-navigation {
   transform: translateY(-100%);
 }
 
@@ -346,10 +272,6 @@ html.zoom-active {
 }
 
 @media (max-width: 1023px) {
-  html.menu-open body > main {
-    margin-top: calc(var(--masthead-height) + 1px + env(safe-area-inset-top));
-  }
-
   html:not(.js) body > div.site-navigation {
     position: static;
     z-index: auto;
@@ -511,7 +433,7 @@ html.zoom-active {
     transition: transform 180ms ease;
   }
 
-  html.js body.hidden-header > div.site-navigation:not(.is-open):not(.is-closing) {
+  html.js body.hidden-header > div.site-navigation {
     transform: none;
   }
 

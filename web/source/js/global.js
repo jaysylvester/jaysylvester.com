@@ -57,20 +57,37 @@ JAY.global = ( function () {
 
     // Control the mobile navigation overlay, including focus containment and background inertness.
     mobileMenu: function () {
-      const toggle = document.querySelector('.menu-toggle'),
+      const navigation = document.querySelector('body > .site-navigation'),
+            header = navigation?.querySelector(':scope > header'),
+            toggle = header?.querySelector('.menu-toggle'),
             menu = document.querySelector('#site-menu'),
-            closeButton = menu?.querySelector('.menu-close'),
-            headerLinks = menu?.querySelector('.header-links'),
-            wordmark = menu?.querySelector('.wordmark')
+            closeButton = header?.querySelector('.menu-close'),
+            headerLinks = header?.querySelector('.header-links'),
+            rail = navigation?.querySelector(':scope > aside.site-rail')
 
-      if ( !toggle || !menu || !closeButton || !headerLinks || !wordmark ) return
+      if ( !navigation || !header || !toggle || !menu || !closeButton || !headerLinks || !rail ) return
 
       let previousFocus
       let inerted = []
       let closeAnimationEnd
       let closeFallback
+      let pageScrollX = 0
+      let pageScrollY = 0
 
-      // Expose the rail as ordinary complementary content on desktop and as a modal dialog on mobile.
+      // The overlay owns the mobile menu content, while desktop keeps the same nodes in their normal layout.
+      const placeMenuContent = function () {
+        if ( closeButton.parentElement !== menu ) menu.appendChild(closeButton)
+
+        if ( desktopLayout.matches ) {
+          if ( headerLinks.parentElement !== header ) header.appendChild(headerLinks)
+          if ( rail.parentElement !== navigation ) navigation.appendChild(rail)
+        } else {
+          if ( headerLinks.parentElement !== menu ) menu.appendChild(headerLinks)
+          if ( rail.parentElement !== menu ) menu.appendChild(rail)
+        }
+      }
+
+      // Expose the mobile overlay as a modal dialog only while it is open.
       const syncAccessibility = function (open) {
         if ( desktopLayout.matches || !open ) {
           menu.removeAttribute('aria-modal')
@@ -83,23 +100,21 @@ JAY.global = ( function () {
 
       // Restore the closed navigation state after its fade-out completes or a breakpoint requires immediate cleanup.
       const finishClose = function (restoreFocus) {
-        if ( closeAnimationEnd ) headerLinks.removeEventListener('animationend', closeAnimationEnd)
+        if ( closeAnimationEnd ) menu.removeEventListener('animationend', closeAnimationEnd)
         window.clearTimeout(closeFallback)
         closeAnimationEnd = null
         closeFallback = null
         menu.classList.remove('is-open', 'is-closing')
-        menu.style.removeProperty('--mobile-menu-fade-start')
-        menu.style.removeProperty('--mobile-menu-bar-start')
-        menu.style.removeProperty('--mobile-menu-wordmark-start')
-        menu.style.removeProperty('--mobile-menu-toggle-background-start')
-        menu.style.removeProperty('--mobile-menu-toggle-start')
-        menu.style.removeProperty('--mobile-menu-close-start')
-        toggle.inert = false
+        menu.style.removeProperty('--mobile-menu-overlay-start')
+        menu.hidden = true
         inerted.forEach((element) => { element.inert = false })
         inerted = []
         document.documentElement.classList.remove('menu-open')
         syncAccessibility(false)
-        if ( restoreFocus !== false && previousFocus && !desktopLayout.matches ) previousFocus.focus()
+        if ( !desktopLayout.matches ) {
+          if ( restoreFocus !== false && previousFocus ) previousFocus.focus({ preventScroll: true })
+          window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' })
+        }
       }
 
       // Close the menu, preserving its fullscreen layout until the fade-out animation finishes.
@@ -116,23 +131,14 @@ JAY.global = ( function () {
 
         if ( menu.classList.contains('is-closing') ) return
 
-        const wordmarkStyle = window.getComputedStyle(wordmark),
-              toggleStyle = window.getComputedStyle(toggle),
-              closeStyle = window.getComputedStyle(closeButton)
-
-        menu.style.setProperty('--mobile-menu-fade-start', window.getComputedStyle(headerLinks).opacity)
-        menu.style.setProperty('--mobile-menu-bar-start', wordmarkStyle.backgroundColor)
-        menu.style.setProperty('--mobile-menu-wordmark-start', wordmarkStyle.color)
-        menu.style.setProperty('--mobile-menu-toggle-background-start', toggleStyle.backgroundColor)
-        menu.style.setProperty('--mobile-menu-toggle-start', toggleStyle.color)
-        menu.style.setProperty('--mobile-menu-close-start', closeStyle.color)
+        menu.style.setProperty('--mobile-menu-overlay-start', window.getComputedStyle(menu).opacity)
+        closeAnimationEnd = function (event) {
+          if ( event.target === menu && event.animationName === 'mobile-menu-overlay-out' ) finishClose(restoreFocus)
+        }
+        menu.addEventListener('animationend', closeAnimationEnd)
         menu.classList.remove('is-open')
         menu.classList.add('is-closing')
-        closeAnimationEnd = function (event) {
-          if ( event.target === headerLinks && event.animationName === 'mobile-menu-fade-out' ) finishClose(restoreFocus)
-        }
-        headerLinks.addEventListener('animationend', closeAnimationEnd)
-        closeFallback = window.setTimeout(() => finishClose(restoreFocus), 250)
+        closeFallback = window.setTimeout(() => finishClose(restoreFocus), 200)
       }
 
       // Close on Escape and move Tab focus through the menu in visual order.
@@ -153,11 +159,13 @@ JAY.global = ( function () {
         if ( desktopLayout.matches ) return
 
         previousFocus = document.activeElement
+        pageScrollX = window.scrollX
+        pageScrollY = window.scrollY
 
         // Disable interaction with every element outside the overlay while the modal menu is open.
         inerted = [...document.body.children].filter((element) => element !== menu && !element.inert)
         inerted.forEach((element) => { element.inert = true })
-        toggle.inert = true
+        menu.hidden = false
         menu.classList.add('is-open')
         toggle.setAttribute('aria-expanded', 'true')
         document.documentElement.classList.add('menu-open')
@@ -167,16 +175,19 @@ JAY.global = ( function () {
       })
 
       closeButton.addEventListener('click', function () { close() })
-      menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', function () {
-        close(link.target === '_blank')
-      }))
+      menu.addEventListener('click', function (event) {
+        const link = event.target.closest('a')
+        if ( link ) close(link.target === '_blank')
+      })
 
       // Close an open mobile menu if the viewport crosses into the desktop navigation layout.
       desktopLayout.addEventListener('change', function (event) {
         if ( event.matches && ( menu.classList.contains('is-open') || inerted.length ) ) close(false, true)
+        placeMenuContent()
         syncAccessibility(false)
       })
 
+      placeMenuContent()
       syncAccessibility(false)
     },
 
@@ -239,6 +250,8 @@ JAY.global = ( function () {
           draggingProgress = false,
           positioningTrack = false,
           openRequest = 0,
+          pageScrollX = 0,
+          pageScrollY = 0,
           resizeFrame
 
       // Return an image's decoded source ratio, excluding the placeholder used by lazy-loaded thumbnails.
@@ -348,7 +361,10 @@ JAY.global = ( function () {
         inerted = []
         document.documentElement.classList.remove('zoom-active')
         document.removeEventListener('keydown', keydown)
-        if ( activeTrigger ) activeTrigger.focus()
+        if ( activeTrigger ) activeTrigger.focus({ preventScroll: true })
+
+        // Removing the document scroll lock can otherwise retain scroll anchoring changes made behind the viewer.
+        window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' })
       }
 
       // Handle viewer dismissal, slide navigation, progress shortcuts, and modal focus containment.
@@ -475,6 +491,8 @@ JAY.global = ( function () {
         // Treat the viewer as a modal by making every other top-level page element temporarily inert.
         inerted = [...document.body.children].filter((element) => element !== dialog && !element.inert)
         inerted.forEach((element) => { element.inert = true })
+        pageScrollX = window.scrollX
+        pageScrollY = window.scrollY
         dialog.classList.toggle('is-single', slides.length === 1)
         dialog.hidden = false
         document.documentElement.classList.add('zoom-active')
