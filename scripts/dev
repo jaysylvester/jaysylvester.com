@@ -2,55 +2,87 @@
 
 set -eu
 
+cd "$(dirname "$0")/.."
+
+compose() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo 'Docker is required. Start Docker Desktop and try again.' >&2
+    exit 1
+  fi
+
+  if test ! -f .env; then
+    echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
+    exit 1
+  fi
+
+  project=${COMPOSE_PROJECT_NAME:-jaysylvester}
+
+  docker compose \
+    --env-file .env \
+    -p "$project" \
+    -f compose.yaml \
+    -f compose.dev.yaml \
+    "$@"
+}
+
+start() {
+  compose config --quiet
+  mkdir -p logs
+  ./scripts/dev-cert
+  ./scripts/dev-db-initialize
+  compose up "$@"
+}
+
 usage() {
   cat <<'EOF'
 Usage: ./scripts/dev COMMAND [ARGUMENTS]
 
 Commands:
-  start [arguments]       Start the stack attached (use --build to rebuild)
-  stop [services]         Stop services without removing containers
-  restart [arguments]     Stop, then start the stack attached
-  status                  Show all service states
-  logs                    Follow app, proxy, assets, and database logs
-  test                    Run the development smoke test
-  destroy                 Remove containers and the network, preserving volumes
-  db-backup               Create and verify a development database backup
-  db-restore ARCHIVE      Restore one verified development database backup
-  compose [arguments]     Run Docker Compose against the development project
+  start [arguments]        Start attached (use --build to rebuild)
+  stop [services]          Stop without removing containers
+  restart [arguments]      Stop, then start attached
+  status                   Show all service states
+  logs                     Follow app, proxy, assets, and database logs
+  test                     Run the development smoke test
+  destroy                  Remove containers/network; preserve volumes
+  db-backup                Create and verify a logical database backup
+  db-restore ARCHIVE       Restore one verified development database backup
+  postgres-password       Change the postgres password through a hidden prompt
+  compose [arguments]      Run development Docker Compose directly
 EOF
 }
 
-command=${1:-}
+subcommand=${1:-}
 
-if test -z "$command"; then
+if test -z "$subcommand"; then
   usage >&2
   exit 1
 fi
 
 shift
 
-case "$command" in
+case "$subcommand" in
   start)
-    exec ./scripts/dev-up "$@"
+    start "$@"
     ;;
   stop)
-    exec ./scripts/dev-compose stop "$@"
+    compose stop "$@"
     ;;
   restart)
-    ./scripts/dev-compose stop
-    exec ./scripts/dev-up "$@"
+    compose stop
+    start "$@"
     ;;
   status)
-    exec ./scripts/dev-compose ps --all "$@"
+    compose ps --all "$@"
     ;;
   logs)
-    exec ./scripts/dev-compose logs -f app proxy assets db "$@"
+    compose logs -f app proxy assets db "$@"
     ;;
   test)
     exec ./scripts/smoke-test https://dev.jaysylvester.com "$@"
     ;;
   destroy)
-    exec ./scripts/dev-compose down "$@"
+    compose down "$@"
     ;;
   db-backup)
     exec ./scripts/dev-db-backup "$@"
@@ -58,14 +90,18 @@ case "$command" in
   db-restore)
     exec ./scripts/dev-db-restore "$@"
     ;;
+  postgres-password)
+    compose exec db \
+      psql --username postgres --dbname postgres --command '\password postgres'
+    ;;
   compose)
-    exec ./scripts/dev-compose "$@"
+    compose "$@"
     ;;
   -h|--help|help)
     usage
     ;;
   *)
-    echo "Unknown development command: $command" >&2
+    echo "Unknown development command: $subcommand" >&2
     usage >&2
     exit 1
     ;;

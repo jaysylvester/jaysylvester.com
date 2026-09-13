@@ -1,5 +1,13 @@
 # Citizen 1.x to 2.0 migration record
 
+Database-role correction (development accepted 2026-09-13; production pending): `DB_USER` / `DB_PASSWORD`
+retain the existing jaysylvester login/password with CRUD-only privileges.
+PostgreSQL administration and object ownership move to postgres. Admin credentials stay in Postico or
+the password manager, not project configuration; supply them separately only
+when initializing a fresh database volume. Follow the
+[database role migration](database-app-role.md); it supersedes historical
+references here to sharing the database and application password secret.
+
 Status: the revised project-configuration-module contract was reviewed and implemented
 in development on 2026-08-10. The production Docker cutover completed on 2026-08-12.
 A review determined that the legacy global CORS allowance had no known cross-origin

@@ -1,0 +1,109 @@
+#!/bin/sh
+
+set -eu
+
+volume=$(./scripts/dev compose config | awk '
+  $0 == "volumes:" { in_volumes = 1; next }
+  in_volumes && $0 == "  postgres-data:" { in_postgres_data = 1; next }
+  in_postgres_data && $1 == "name:" { print $2; exit }
+')
+initializer=
+echo_disabled=false
+created_volume=false
+
+if test -z "$volume"; then
+  echo 'Could not resolve the development PostgreSQL volume name from Compose.' >&2
+  exit 1
+fi
+
+cleanup() {
+  if test "$echo_disabled" = true; then
+    stty echo
+  fi
+
+  if test -n "$initializer"; then
+    docker rm --force "$initializer" >/dev/null 2>&1 || true
+  fi
+
+  if test "$created_volume" = true; then
+    docker volume rm "$volume" >/dev/null 2>&1 || true
+  fi
+}
+
+trap cleanup EXIT HUP INT TERM
+
+if docker volume inspect "$volume" >/dev/null 2>&1; then
+  exit 0
+fi
+
+if test ! -t 0; then
+  echo 'Initial database creation requires an interactive terminal.' >&2
+  exit 1
+fi
+
+printf 'Choose the postgres administrator password for Postico: '
+stty -echo
+echo_disabled=true
+IFS= read -r password
+printf '\nEnter it again: '
+IFS= read -r confirmation
+stty echo
+echo_disabled=false
+printf '\n'
+
+if test -z "$password"; then
+  echo 'The administrator password cannot be empty.' >&2
+  exit 1
+fi
+
+if test "$password" != "$confirmation"; then
+  echo 'The administrator passwords did not match.' >&2
+  exit 1
+fi
+
+echo 'Initializing PostgreSQL with the password supplied for Postico...'
+initializer="jaysylvester-db-initializer-$$"
+docker volume create "$volume" >/dev/null
+created_volume=true
+POSTGRES_PASSWORD=$password
+export POSTGRES_PASSWORD
+
+./scripts/dev compose run \
+  --detach \
+  --no-deps \
+  --name "$initializer" \
+  --env POSTGRES_PASSWORD \
+  db \
+  >/dev/null
+
+unset POSTGRES_PASSWORD password confirmation
+
+attempt=0
+while test "$(docker inspect --format '{{.State.Health.Status}}' "$initializer" 2>/dev/null || true)" != healthy; do
+  attempt=$((attempt + 1))
+
+  if test "$attempt" -ge 60; then
+    echo 'PostgreSQL initialization did not become healthy.' >&2
+    docker logs "$initializer" >&2 || true
+    exit 1
+  fi
+
+  sleep 1
+done
+
+docker stop "$initializer" >/dev/null
+docker rm "$initializer" >/dev/null
+initializer=
+
+./scripts/dev compose up -d --wait db
+
+database_container=$(./scripts/dev compose ps --quiet db)
+if docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' "$database_container" \
+  | grep -q '^POSTGRES_PASSWORD='; then
+  echo 'The normal database container retained a PostgreSQL administrator password input.' >&2
+  exit 1
+fi
+
+trap - EXIT HUP INT TERM
+created_volume=false
+echo 'PostgreSQL initialized; the one-off initializer was removed and no administrator password remains in Compose or a project file.'

@@ -21,6 +21,7 @@
     "dev:db:restore": "./scripts/dev db-restore",
     "dev:destroy": "./scripts/dev destroy",
     "dev:logs": "./scripts/dev logs",
+    "dev:postgres:password": "./scripts/dev postgres-password",
     "dev:restart": "./scripts/dev restart",
     "dev:start": "./scripts/dev start",
     "dev:status": "./scripts/dev status",

@@ -10,7 +10,7 @@ checksum_file=$backup_file.sha256
 temporary_backup=
 
 dc() {
-  ./scripts/dev-compose "$@"
+  ./scripts/dev compose "$@"
 }
 
 cleanup() {
@@ -52,7 +52,11 @@ chmod 0600 "$temporary_backup"
 
 echo 'Creating PostgreSQL backup...'
 dc exec -T db sh -c \
-  'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" --format=custom --no-owner --no-privileges' \
+  'dump_user=$POSTGRES_USER
+   if ! psql -X -U "$dump_user" -d "$POSTGRES_DB" -Atqc "SELECT 1" >/dev/null 2>&1; then
+     dump_user=${DB_USER:-jaysylvester}
+   fi
+   pg_dump -U "$dump_user" -d "$POSTGRES_DB" --format=custom --no-owner --no-privileges' \
   > "$temporary_backup"
 
 if test ! -s "$temporary_backup"; then

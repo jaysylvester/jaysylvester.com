@@ -1,9 +1,13 @@
 services:
   db:
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      DB_USER: ${DB_USER:?Set DB_USER in .env}
+      POSTGRES_TIMEZONE: ${POSTGRES_TIMEZONE:?Set POSTGRES_TIMEZONE in .env}
     ports:
       - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
+    volumes:
+      - ./docker/postgres/init-app-role.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
 
   app:
     build:
@@ -45,3 +49,8 @@ services:
     volumes:
       - ./app:/site/app
       - ./web:/site/web
+
+volumes:
+  postgres-data:
+    external: true
+    name: ${POSTGRES_VOLUME:-jaysylvester-postgres}

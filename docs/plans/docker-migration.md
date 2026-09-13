@@ -1,5 +1,13 @@
 # Docker and Citizen 2.0 Migration Plan
 
+Database-role correction (development accepted 2026-09-13; production pending
+explicit approval): the application must use a separate CRUD-only login in each
+environment. The bootstrap superuser is for administration only.
+[Database role migration](../migrations/database-app-role.md)
+supersedes all shared DB_USER/POSTGRES_USER/password guidance below, including
+the historical shared-secret snippets. Do not execute those old snippets for a
+new installation or this corrective migration.
+
 Status: Phase 1 development Docker acceptance completed on 2026-08-09. The revised
 Citizen configuration contract and fail-closed CORS default were accepted on
 2026-08-10. Phase 2 completed on 2026-08-12: the existing Droplet was rebuilt with
@@ -122,13 +130,25 @@ The implementation must follow Citizen 2.0's actual configuration behavior:
 Use one ignored project-root `.env` in each deployment checkout. The development and production files share a name but live on different hosts and contain their own values:
 
 - `NODE_ENV`.
-- Database/role names and the database and mail passwords. Stable database connection and mail identity/transport values live in `citizen.config.js`.
+- Application database/role names and the application database and mail
+  passwords. The postgres administrator password never belongs in `.env`.
+  Stable database connection and mail identity/transport values live in
+  `citizen.config.js`.
 - `POSTGRES_INITDB_ARGS` and `POSTGRES_TIMEZONE` for first-time database initialization with source-compatible locale and time behavior.
 - Development only: `BROWSERSYNC_ORIGIN`, the external same-origin HTTPS URL used by the BrowserSync client. This is an assets input, not an application CORS policy.
 
 Pass the file to `docker compose --env-file .env ...` for interpolation in both deployments. Keep `compose.yaml` neutral about application password delivery. Development bind-mounts `.env` read-only at `/site/.env`; production explicitly injects only `NODE_ENV`, `DB_DATABASE`, and `DB_USER` and grants its two password secrets. Production never mounts or injects `.env` wholesale.
 
-The `db` service must not receive the entire file. Keep its common database/user/init/timezone mappings in `compose.yaml`. Development adds `POSTGRES_PASSWORD` from `.env`; production adds `POSTGRES_PASSWORD_FILE=/run/secrets/db-password` and grants only that secret. Development's password is visible to operators with Docker inspection access; production passwords remain outside container environments.
+The `db` service must not receive the entire file. Keep its common
+database/init/timezone mappings in `compose.yaml`, with `POSTGRES_USER` fixed to
+the postgres administrator. Development gives db only `DB_USER`, `DB_PASSWORD`,
+and `POSTGRES_TIMEZONE` so its first-volume hook can create the application role.
+The guarded one-off initializer supplies an interactively chosen
+`POSTGRES_PASSWORD`; the normal db container never retains it. The development
+app password remains visible to operators with Docker inspection access.
+Production's existing db receives neither application nor administrator
+passwords; only app receives the application passwords through Compose secrets.
+Fresh production recovery supplies its initialization secrets separately.
 
 Define production's two top-level secrets by environment-variable name, not by interpolating their values:
 
@@ -175,12 +195,17 @@ Phase 1 implemented and committed these artifacts on `maintenance/docker-migrati
 - Project-root `.env.example`, sanitized and containing application/deployment and Docker/PostgreSQL initialization placeholders.
 - Project-root `citizen.config.js`, committed and copied into both runtime images, with a development bind mount so configuration edits require only a restart.
 - `scripts/dev-cert` to create/check the development `mkcert` certificate.
-- `scripts/dev` as the canonical development command interface, with shared
-  start, stop, restart, status, logs, test, and raw Compose verbs plus
-  development-only destroy and database backup/restore verbs.
-- `scripts/dev-up` to run the certificate check and start development Compose in the foreground, displaying startup and live logs until Ctrl+C stops the stack.
+- `scripts/dev` as the canonical development command interface, containing the
+  shared Compose prefix and start workflow plus stop, restart, status, logs,
+  test, raw Compose, development-only destroy, database backup/restore, and
+  postgres-password verbs. It finds the repository root before resolving files.
+- `scripts/dev-db-initialize` and `docker/postgres/init-app-role.sh` for guarded,
+  interactive first-volume creation with separate postgres and CRUD-only app
+  credentials. The one-off initializer is removed before normal startup.
 - `scripts/dev-db-backup` to create and verify protected logical backups outside Docker.
-- `scripts/dev-db-restore` to validate, confirm, and atomically restore one explicit archive while preserving prior service state.
+- `scripts/dev-db-restore` to validate, confirm, and atomically restore one
+  explicit archive into a new empty PostgreSQL volume while preserving the old
+  populated volume as rollback.
 - `scripts/smoke-test` for the small set of existing development routes and Citizen's expected default rejection of a cross-origin preflight.
 - Compatibility `package.json` aliases routed through `scripts/dev`; host npm is
   not required for normal development lifecycle commands.
@@ -213,7 +238,7 @@ Use distinct Compose project names and database volumes:
 
 | Environment | Compose project | PostgreSQL volume |
 | --- | --- | --- |
-| Development | `jaysylvester-dev` | `jaysylvester-dev-postgres` |
+| Development | `jaysylvester` | `jaysylvester-postgres` |
 | Production | `jaysylvester-production` | `jaysylvester-production-postgres` |
 
 Both environment overrides may publish PostgreSQL as `127.0.0.1:5432:5432` for Postico. Never publish it on `0.0.0.0`.
@@ -229,8 +254,19 @@ If another development project already owns ports 80, 443, or 5432, stop that pr
 - If the source major is unsupported, the cross-major logical restore is a required compatibility step, not permission to alter schema, data, encoding, or locale unnecessarily.
 - Store data in the named volume.
 - Use `pg_isready` for health.
-- Initialize the database name, role, and reused password from the ignored environment file only when the volume is empty. Pass only the explicit `POSTGRES_*` values required by the database service; do not mount the whole file there.
-- Inventory database roles and external login habits before initialization, including whether Postico or operational scripts use a role named `postgres`. In the official image, a non-default `POSTGRES_USER` becomes the bootstrap superuser. That can leave no login role named `postgres` and can also give the application role cluster-wide superuser power. Decide deliberately whether to accept that simple model or preserve separate administrator and least-privilege application roles with reviewed initialization SQL; do not discover the role change after cutover.
+- Initialize the database name and CRUD-only application role with its reused
+  password from the ignored environment file only when the volume is empty.
+  Collect the separate postgres administrator password through the guarded
+  hidden prompt; never put it in that file. Pass only the explicit values
+  required by the database service; do not mount the whole file there.
+- Inventory database roles and external login habits before initialization,
+  including whether Postico or operational scripts use a role named `postgres`.
+  `POSTGRES_USER` names the administrator (`postgres`), never application
+  `DB_USER`. Keep admin passwords outside project configuration; supply one
+  separately only for fresh-volume initialization. If the existing app login is
+  the OID 10 bootstrap role, it cannot be demoted: follow the linked correction
+  to rename that role to postgres and recreate the app login with its existing
+  encrypted password. Do not substitute a blanket `REASSIGN OWNED` workflow.
 - PostgreSQL fixes encoding, `lc_collate`, `lc_ctype`, and its default server timezone when `initdb` first creates the volume. Before the first `db` start, put the inventoried locale values into each environment's `POSTGRES_INITDB_ARGS` and its timezone into `POSTGRES_TIMEZONE`, confirm the target image provides both, and test them with the selected PostgreSQL image. If a source locale or timezone is unavailable, choose and rehearse the compatible target before creating either final volume; discovering this during cutover is too late.
 - Do not use `resources/data.sql`; it is an untrusted historical initialization file.
 
@@ -514,14 +550,17 @@ The `find` command must produce no files before starting the development app or 
 Implement the Phase 1 artifacts listed in section 4, then run:
 
 ```sh
-./scripts/dev-compose config --quiet
-./scripts/dev-compose build --pull app proxy assets
+./scripts/dev compose config --quiet
+./scripts/dev compose build --pull app proxy assets
 ```
 
 Confirm from the rendered Compose configuration and images that:
 
 - Only loopback-bound proxy ports 80/443 and the loopback Postico port are published in development; BrowserSync port 3000 remains internal to Compose and its UI is disabled.
-- `app` receives development `.env` only through the read-only `/site/.env` bind; `db` receives only its explicitly mapped PostgreSQL settings including `POSTGRES_PASSWORD`; `assets` and `proxy` receive neither the application environment nor its secrets.
+- `app` receives development `.env` only through the read-only `/site/.env`
+  bind; normal `db` receives only its explicit initialization settings and the
+  application-role inputs, never the postgres password; `assets` and `proxy`
+  receive neither the application environment nor its secrets.
 - No environment file, legacy JSON, private key, dump, or host `node_modules` is in an image layer. The development runtime `.env` bind does not change that image-layer requirement.
 - The app image contains Node.js 24, Citizen 2.0 at the recorded Git commit, `web/min/site.css`, `web/min/site.js`, and Linux `node_modules`.
 - No `app/config/*.json` exists in the app image.
@@ -612,17 +651,19 @@ shasum -a 256 -c jaysylvester.dump.sha256
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-dc() { ./scripts/dev-compose "$@"; }
-dc config --quiet
-if docker volume inspect jaysylvester-dev-postgres >/dev/null 2>&1; then
-  echo 'Target volume already exists; identify and back it up before continuing.' >&2
-else
-  dc up -d db
-  dc exec -T db pg_isready -U jaysylvester -d jaysylvester
-  dc exec -T db pg_restore -U jaysylvester -d jaysylvester --exit-on-error --single-transaction --no-owner --no-privileges < /absolute/private/path/docker-migration-dev/jaysylvester.dump
-  dc exec -T db psql -U jaysylvester -d jaysylvester -v ON_ERROR_STOP=1 -c 'ANALYZE;'
-fi
+./scripts/dev stop
+export POSTGRES_VOLUME=jaysylvester-postgres-migration
+./scripts/dev db-restore /absolute/private/path/docker-migration-dev/jaysylvester.dump
 ```
+
+The restore command asks for a postgres administrator password when it creates a
+new volume, creates the CRUD-only app role with its unchanged `.env` password,
+restores as postgres, reapplies app grants/default privileges, and returns the
+database service to its prior stopped state. It refuses a target containing any
+user relations; select another previously unused `POSTGRES_VOLUME` instead of
+replacing a populated database. Keep the old volume as rollback until the
+restored database passes acceptance. Persist the accepted volume name in the
+deployment environment before later lifecycle commands.
 
 Compare the source and target using concise SQL checks:
 
@@ -634,7 +675,7 @@ Compare the source and target using concise SQL checks:
 Do not validate against `resources/data.sql`.
 
 The archive is a one-time migration input. It is not mounted into Compose and is
-not replayed by `dev-up` or `docker compose up`. After the one-time restore,
+not replayed by `scripts/dev start` or `docker compose up`. After the one-time restore,
 PostgreSQL reads and writes `/var/lib/postgresql/data` in the named volume. A
 normal `down` preserves that volume; `down --volumes` or an explicit volume
 removal deletes the active database.
@@ -652,15 +693,15 @@ Citizen startup sequence and subsequent development logs remain visible:
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-./scripts/dev-up --build
+./scripts/dev start --build
 ```
 
 In a second terminal, run status and acceptance commands:
 
 ```sh
 cd /absolute/path/to/jaysylvester.com
-./scripts/dev-compose ps
-./scripts/dev-compose logs --tail=200 db app proxy assets
+./scripts/dev status
+./scripts/dev compose logs --tail=200 db app proxy assets
 ```
 
 Confirm:
@@ -680,8 +721,8 @@ Confirm:
 - The ignored root-level `logs/email.log` and `logs/error.log` are visible directly in the editor. No named-volume extraction or root shell should be required to read development logs.
 - With browsers idle, the app and proxy logs remain idle; PostgreSQL readiness checks do not create Citizen requests.
 - A cross-origin request and preflight receive `403` with no `Access-Control-Allow-*` response headers; ordinary and same-origin requests continue to work.
-- Postico connects to `127.0.0.1:5432` with the existing development credentials.
-- Data survives `./scripts/dev-compose down` followed by `./scripts/dev-up`.
+- Postico connects to `127.0.0.1:5432` as postgres after the corrective role migration.
+- Data survives `./scripts/dev destroy` followed by `./scripts/dev start`.
 
 #### Establish development lifecycle and recovery
 
@@ -699,15 +740,15 @@ Expose the raw Compose workflow through the environment command interface:
 ./scripts/dev compose config --quiet
 ```
 
-Route every development caller through `scripts/dev`, with the existing
-`scripts/dev-compose` wrapper retaining the `.env`, project-name, and
-Compose-file arguments internally. Compatibility npm aliases, startup helper,
-and both database scripts must not copy the Compose prefix.
+Route every development caller through `scripts/dev`; its internal `compose`
+function retains the `.env`, overridable project name, and Compose-file
+arguments. Compatibility npm aliases and database helpers must not copy the
+Compose prefix.
 
-`scripts/dev-up` and `scripts/dev start` must invoke `docker compose up`
-without `-d`/`--detach`. They remain attached after the containers start, show
+`scripts/dev start` must invoke `docker compose up`
+without `-d`/`--detach`. It remains attached after the containers start, shows
 Citizen's startup output and all subsequent stack logs for that session, and
-stop the stack when the developer presses Ctrl+C. Run smoke tests, status,
+stops the stack when the developer presses Ctrl+C. Run smoke tests, status,
 backup, and other concurrent commands from a second terminal. Keep `dev logs`
 as an explicit `docker compose logs --follow` command with no `--since` or
 `--tail` filter, so it replays the complete retained log history before
@@ -744,18 +785,20 @@ The backup command must:
 
 The restore command must accept exactly one readable archive, start only the
 database temporarily when necessary, validate the archive before changing data,
-require the user to type `RESTORE` in an interactive terminal, and use these
-restore flags:
+refuse to run while app or proxy is active, refuse any target containing user
+relations, require the user to type `RESTORE` in an interactive terminal, and
+use these restore flags:
 
 ```text
---clean --if-exists --exit-on-error --single-transaction --no-owner --no-privileges
+--exit-on-error --single-transaction --no-owner --no-privileges
 ```
 
-Stop running app/proxy connections for the restore, run
-`ANALYZE`, and return app, proxy, and database services to their prior running
-state even when validation or restore fails or the script receives `HUP`, `INT`,
-or `TERM`. If the restore script started a previously stopped database, it must
-stop it again regardless of whether app or proxy had been running.
+Require the operator to stop app/proxy before the restore. Run `ANALYZE`, and
+return the database service to its prior running state even when validation or
+restore fails or the script receives `HUP`, `INT`, or `TERM`. If the restore
+script started a previously stopped database, it must stop it again. Never
+replace a populated database in place; restore into a newly named volume so the
+old volume remains an immediately available rollback copy.
 
 Before accepting these commands, create one real protected backup and restore it
 into a separately named temporary Compose project/volume. Compare the same
@@ -912,7 +955,7 @@ git merge-base --is-ancestor origin/main HEAD
 git status --short
 ```
 
-Implement `compose.production.yaml`, a new production Nginx configuration derived from the effective production capture—not from `docker/nginx/dev.conf`—the Certbot reload hook, the focused production smoke-test cases, and the production README sections. Confirm the production overlay injects only `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`, sets `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`, grants the matching secrets, and gives `db` only its explicit `POSTGRES_*` inputs plus `POSTGRES_PASSWORD_FILE`. It must not use `env_file`, mount `.env`, override the config module's container binding, or give application secrets to `assets` or `proxy`. Use the effective configuration to preserve redirects, locations, headers, static behavior including the inventoried cache policy, and ACME handling; do not copy unrelated host-wide Nginx content.
+Implement `compose.production.yaml`, a new production Nginx configuration derived from the effective production capture—not from `docker/nginx/dev.conf`—the Certbot reload hook, the focused production smoke-test cases, and the production README sections. Confirm the production overlay injects only `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`, sets `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`, grants the matching secrets, and gives the existing `db` only its explicit non-secret `POSTGRES_*` inputs. It must not use `env_file`, mount `.env`, override the config module's container binding, or give application secrets to `db`, `assets`, or `proxy`. Fresh-volume production recovery is a separate guarded procedure. Use the effective configuration to preserve redirects, locations, headers, static behavior including the inventoried cache policy, and ACME handling; do not copy unrelated host-wide Nginx content.
 
 Set `restart: unless-stopped` for production `db`, `app`, and `proxy` in the production overlay. Development keeps its existing explicit lifecycle. Enabling Docker at boot is not sufficient by itself; the production containers must have restart policies so the accepted stack returns after a Droplet reboot. Do not add PM2 to the image: the direct Node process must determine container health by exiting, allowing Docker to perform the restart.
 
@@ -1110,7 +1153,7 @@ Repeat the schema, row-count, maximum-ID, sequence, extension, locale, timezone,
 SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
 ```
 
-For PostgreSQL 17, read database collation and character type from `pg_database.datcollate` and `pg_database.datctype`; `SHOW lc_collate` and `SHOW lc_ctype` are not available there. Also compare `pg_roles` with the source and test every external login name. This project deliberately accepted one login-enabled bootstrap superuser named `jaysylvester` in both environments and no role named `postgres`; that is an accepted project choice, not a template default for later migrations.
+For PostgreSQL 17, read database collation and character type from `pg_database.datcollate` and `pg_database.datctype`; `SHOW lc_collate` and `SHOW lc_ctype` are not available there. Also compare `pg_roles` with the source and test every external login name. The initial migration used one OID 10 bootstrap superuser named `jaysylvester` in both environments. Recording that as approval for app superuser access was incorrect. Because PostgreSQL forbids demoting the bootstrap superuser, rename it to postgres so its ownership follows the unchanged OID, then recreate jaysylvester as CRUD-only with its existing encrypted password, as described in the database-role correction. Inventory production independently before assuming it has the same topology.
 
 After the app remains stable for at least ten seconds, repeat the reviewed Node-child crash drill and require the Docker restart count to increase before the smoke test passes again. This proves the PM2 keepalive replacement; it does not claim alerting or hang detection.
 
@@ -1177,8 +1220,10 @@ replay the complete retained history and follow new output when the stack was
 started elsewhere. Use `./scripts/dev stop` when no attached start command is
 available. Use `./scripts/dev destroy` only when the containers and project
 network should be removed. Both preserve the PostgreSQL named volume. Use
-`./scripts/dev db-backup` while the database is running, and restore one explicit
-archive with `./scripts/dev db-restore /absolute/path/to/backup.dump`.
+`./scripts/dev db-backup` while the database is running. For a restore, stop the
+stack, select a new `POSTGRES_VOLUME`, and restore one explicit archive with
+`./scripts/dev db-restore /absolute/path/to/backup.dump`; populated target
+volumes are refused and preserved.
 
 After editing development `.env` or `citizen.config.js`, restart app. Both files are bind-mounted, Citizen reads them at process start, and a restart preserves the container IP, so proxy does not need recreation. A database-password rotation must also update the PostgreSQL role and recreate the database container's environment; editing `.env` alone is not sufficient:
 

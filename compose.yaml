@@ -3,7 +3,9 @@ services:
     image: ${POSTGRES_IMAGE:?Set the inventoried and tested POSTGRES_IMAGE in .env}
     environment:
       POSTGRES_DB: ${DB_DATABASE:?Set DB_DATABASE in .env}
-      POSTGRES_USER: ${DB_USER:?Set DB_USER in .env}
+      # Administrator, used by local-socket administration and readiness checks.
+      # No admin password is needed to start an initialized database volume.
+      POSTGRES_USER: postgres
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:?Set POSTGRES_INITDB_ARGS in .env}
       TZ: ${POSTGRES_TIMEZONE:?Set the inventoried POSTGRES_TIMEZONE in .env}
     healthcheck:

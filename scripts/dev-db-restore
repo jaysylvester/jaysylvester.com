@@ -21,10 +21,9 @@ fi
 backup_file=$1
 database_was_running=false
 started_database=false
-stopped_services=
 
 dc() {
-  ./scripts/dev-compose "$@"
+  ./scripts/dev compose "$@"
 }
 
 service_is_running() {
@@ -32,12 +31,6 @@ service_is_running() {
 }
 
 restore_service_state() {
-  for service in $stopped_services; do
-    if ! dc start "$service" >/dev/null; then
-      echo "Could not restart $service; run ./scripts/dev start." >&2
-    fi
-  done
-
   if test "$started_database" = true; then
     if ! dc stop db >/dev/null; then
       echo 'Could not return db to its stopped state; run ./scripts/dev stop.' >&2
@@ -69,11 +62,24 @@ fi
 
 dc config --quiet
 
+for service in app proxy; do
+  if service_is_running "$service"; then
+    echo "Restore refused while $service is running. Run ./scripts/dev stop first." >&2
+    exit 1
+  fi
+done
+
 if service_is_running db; then
   database_was_running=true
-else
-  echo 'Starting PostgreSQL for archive validation...'
-  dc up -d --wait db
+fi
+
+./scripts/dev-db-initialize
+
+if test "$database_was_running" = false; then
+  if ! service_is_running db; then
+    echo 'Starting PostgreSQL for archive validation...'
+    dc up -d --wait db
+  fi
   started_database=true
 fi
 
@@ -88,12 +94,29 @@ if ! dc exec -T db pg_restore --list < "$backup_file" >/dev/null; then
   exit 1
 fi
 
+object_count=$(dc exec -T db sh -c \
+  'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" --tuples-only --no-align -c "
+    SELECT count(*)
+    FROM pg_catalog.pg_class AS relation
+    JOIN pg_catalog.pg_namespace AS namespace
+      ON namespace.oid = relation.relnamespace
+    WHERE namespace.nspname <> '\''information_schema'\''
+      AND namespace.nspname !~ '\''^pg_'\''
+      AND relation.relkind IN ('\''r'\'', '\''p'\'', '\''v'\'', '\''m'\'', '\''S'\'', '\''f'\'');
+  "')
+
+if test "$object_count" -ne 0; then
+  echo "Restore refused: target database already contains $object_count user relations." >&2
+  echo 'Select a new POSTGRES_VOLUME and retry; populated volumes are never replaced.' >&2
+  exit 1
+fi
+
 if test ! -t 0; then
   echo 'Restore requires an interactive terminal.' >&2
   exit 1
 fi
 
-echo "This will replace the development PostgreSQL database using:"
+echo "This will restore into the empty development PostgreSQL database using:"
 echo "  $backup_file"
 printf 'Type RESTORE to continue: '
 IFS= read -r confirmation
@@ -103,27 +126,21 @@ if test "$confirmation" != RESTORE; then
   exit 1
 fi
 
-for service in app proxy; do
-  if service_is_running "$service"; then
-    stopped_services="$stopped_services $service"
-  fi
-done
-
-if test -n "$stopped_services"; then
-  dc stop $stopped_services
-fi
-
-echo 'Restoring PostgreSQL backup...'
+echo 'Restoring PostgreSQL backup with postgres ownership...'
 dc exec -T db sh -c \
-  'pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --exit-on-error --single-transaction --no-owner --no-privileges' \
+  'pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --exit-on-error --single-transaction --no-owner --no-privileges' \
   < "$backup_file"
+
+dc exec -T db sh -c \
+  'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 --set=app_user="$DB_USER"' \
+  < scripts/sql/grant-app-role.sql \
+  >/dev/null
 
 dc exec -T db sh -c \
   'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -c "ANALYZE;"' \
   >/dev/null
 
 restore_service_state
-stopped_services=
 started_database=false
 trap - EXIT HUP INT TERM
 

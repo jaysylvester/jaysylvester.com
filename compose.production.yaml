@@ -1,12 +1,8 @@
 services:
   db:
-    environment:
-      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
     ports:
       - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
     restart: unless-stopped
-    secrets:
-      - db-password
 
   app:
     environment:

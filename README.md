@@ -7,6 +7,10 @@ PostgreSQL, and Nginx through Docker Compose.
 
 Open <https://dev.jaysylvester.com>. The local hostname must resolve to
 `127.0.0.1`; `scripts/dev` creates or refreshes its ignored `mkcert` certificate.
+On the first start with no database volume, it also asks for a `postgres`
+administrator password at a hidden prompt. The one-off initializer creates the
+existing `jaysylvester` application role with the password already in `.env`,
+then removes the administrator password from the normal container configuration.
 
 ```sh
 ./scripts/dev start             # Start attached to live logs
@@ -17,6 +21,7 @@ Open <https://dev.jaysylvester.com>. The local hostname must resolve to
 ./scripts/dev logs              # Follow retained and new logs
 ./scripts/dev test
 ./scripts/dev destroy           # Remove containers/network; keep volumes
+./scripts/dev postgres-password # Change the postgres password at hidden prompts
 ./scripts/dev compose ARGS      # Raw development Compose command
 ```
 
@@ -42,7 +47,12 @@ by the running watchers do not require this.
 ```
 
 citizen file logs are available under `logs/`. Postico connects to
-`127.0.0.1:${POSTICO_PORT:-5432}` using the development credentials in `.env`.
+`127.0.0.1:${POSTICO_PORT:-5432}`.
+
+Use `postgres` for administration; keep its password in Postico/password manager.
+The existing `jaysylvester` app login and password remain, with CRUD-only privileges.
+Existing environments need the [role migration](docs/migrations/database-app-role.md)
+before using the separated Compose configuration.
 
 ### Database backup and restore
 
@@ -51,12 +61,16 @@ Backups are stored in a protected directory outside the repository. Set
 
 ```sh
 ./scripts/dev db-backup
+./scripts/dev stop
+export POSTGRES_VOLUME=jaysylvester-postgres-restore-YYYYMMDD
 ./scripts/dev db-restore /absolute/path/to/backup.dump
 ```
 
 Restore validates the archive, requires interactive `RESTORE` confirmation,
-and returns the affected services to their prior state. The PostgreSQL volume
-survives both `stop` and `destroy`.
+and only writes to an empty database. Stop app/proxy first and select a new
+`POSTGRES_VOLUME`; the populated volume remains intact as the rollback copy.
+After accepting the restored database, put its volume name in `.env`. The
+PostgreSQL volume survives both `stop` and `destroy`.
 
 ### Theme testing
 
