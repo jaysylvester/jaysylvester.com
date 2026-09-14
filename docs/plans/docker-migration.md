@@ -1,8 +1,8 @@
 # Docker and Citizen 2.0 Migration Plan
 
-Database-role correction (development accepted 2026-09-13; production pending
-explicit approval): the application must use a separate CRUD-only login in each
-environment. The bootstrap superuser is for administration only.
+Database-role correction (development accepted 2026-09-13; production accepted
+2026-09-14): the application uses a separate CRUD-only login in each environment.
+The bootstrap superuser is for administration only.
 [Database role migration](../migrations/database-app-role.md)
 supersedes all shared DB_USER/POSTGRES_USER/password guidance below, including
 the historical shared-secret snippets. Do not execute those old snippets for a
@@ -1237,7 +1237,7 @@ After editing development `.env` or `citizen.config.js`, restart app. Both files
 ./scripts/dev test
 ```
 
-In production, an `.env` change requires recreating each service whose explicit environment or secret source changed. Recreate app followed by proxy for application/mail changes; rotate the PostgreSQL role before recreating `db` for a database-password change. A config-module change is an image change in production and follows the normal build plus app/proxy recreation. Do not refresh the Citizen branch implicitly during deployment: test the new Citizen commit upstream, update this project's lockfile and migration record in a reviewed development commit, and deploy that commit through the normal sequence.
+In production, an `.env` change requires recreating each service whose explicit environment or secret source changed. Recreate app followed by proxy for application/mail changes. For an application database-password change, rotate the `jaysylvester` role first, then recreate app followed by proxy; the initialized db container receives neither application nor administrator passwords and does not need recreation for that rotation. A config-module change is an image change in production and follows the normal build plus app/proxy recreation. Do not refresh the Citizen branch implicitly during deployment: test the new Citizen commit upstream, update this project's lockfile and migration record in a reviewed development commit, and deploy that commit through the normal sequence.
 
 #### Production deployment
 
@@ -1409,6 +1409,7 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - Production Let's Encrypt renewal succeeds and reloads container Nginx.
 - DigitalOcean's console and metrics agents are installed from their current official sources and remain enabled and active after reboot.
 - Production PostgreSQL is reachable by Postico only through the existing SSH tunnel and survives container recreation.
+- Production retains OID 10 as the password-manager-only `postgres` administrator and object owner; the unchanged `jaysylvester` application login has only CONNECT, schema USAGE, table CRUD, and sequence USAGE/SELECT. Protected pre/post archives, real Postico authentication, transactional CRUD/default-grant and denial probes, container recreation, and row-count/smoke checks pass.
 - Routine production app deployment recreates proxy afterward and does not recreate the database.
 - The powered-off pre-migration DigitalOcean snapshot remains available through the rollback window and restores the existing Droplet in place.
 - The README documents the Debian 13 rebuild, final production deployment, Docker equivalents for PM2 operations, Postico, Certbot, retention, and rollback procedures.

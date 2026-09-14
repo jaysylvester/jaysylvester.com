@@ -1,9 +1,8 @@
 # Separate application and administrator database roles
 
-Status: applied and accepted in development on 2026-09-13; production remains
-pending explicit approval. This supersedes the original shared-superuser setup
-and the earlier assumption that the existing application role could be demoted
-in place.
+Status: applied and accepted in development on 2026-09-13 and production on
+2026-09-14. This supersedes the original shared-superuser setup and the earlier
+assumption that the existing application role could be demoted in place.
 
 ## Target
 
@@ -129,6 +128,21 @@ and the same 7/75/12 row counts passed before that test volume was removed. The
 operator then restarted the development stack, confirmed the site worked, and
 verified Postico TCP connections with both the `postgres` administrator and
 `jaysylvester` application accounts.
+
+Production independently matched the guarded OID 10 topology before execution.
+A protected pre-change logical archive and provider snapshot were retained. The
+transaction renamed OID 10 to `postgres`, created CRUD-only `jaysylvester` at a
+new OID with its unchanged password verifier, and removed the temporary
+migration role. The administrator received a distinct password through psql's
+hidden prompt, and Postico authenticated it over the SSH tunnel. All public
+tables, indexes, and sequences remained owned by `postgres`; table grants were
+exactly SELECT/INSERT/UPDATE/DELETE, sequence grants allowed generated IDs, and
+database/schema CREATE, TRUNCATE, ALTER TABLE, and CREATE TABLE were denied.
+Transactional CRUD and default-privilege probes passed, then rolled back. The
+database container exposed no password input, while the app retained only its
+file-mounted application secret. Row counts remained 7/75/12, the full public
+smoke suite passed, and a protected post-migration archive passed format,
+permission, and checksum validation.
 
 ## Fresh volumes and restores
 

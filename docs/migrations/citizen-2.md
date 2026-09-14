@@ -1,6 +1,6 @@
 # Citizen 1.x to 2.0 migration record
 
-Database-role correction (development accepted 2026-09-13; production pending): `DB_USER` / `DB_PASSWORD`
+Database-role correction (development accepted 2026-09-13; production accepted 2026-09-14): `DB_USER` / `DB_PASSWORD`
 retain the existing jaysylvester login/password with CRUD-only privileges.
 PostgreSQL administration and object ownership move to postgres. Admin credentials stay in Postico or
 the password manager, not project configuration; supply them separately only
@@ -66,7 +66,7 @@ methods, and route scope; do not restore the legacy global allowance by default.
 6. Moved the application-owned cache buster out of the helper toolbox and into `app.start({ cacheBuster })`; the revised Citizen API accepts application configuration there and rejects a `citizen` override.
 7. Bind-mounted the protected project-root `.env` read-only at `/site/.env` in development. Citizen now loads it natively before importing `citizen.config.js`; Compose still maps only the database inputs required by PostgreSQL.
 8. Removed stable DB/mail settings from `.env` and `.env.example`. The remaining file contains secrets and deployment-specific inputs.
-9. Kept production's narrower model: Compose injects only the remaining nonsecret allowlist and gives the app/database their service-scoped password secrets. Production does not mount or inject the whole `.env`.
+9. Kept production's narrower model: Compose injects only the remaining nonsecret allowlist and gives the app its database and mail password secrets. The initialized database container receives no password. Production does not mount or inject the whole `.env`.
 10. Consolidated the development and production entrypoints into `app/start.js`. Citizen's resolved mode selects only the differing mail and password-delivery behavior; both Docker targets now use the same command.
 
 The implemented module shape after the CORS cleanup is:
@@ -145,15 +145,16 @@ application CORS input.
 - Production Nginx preserves the effective HTTP/2, TLS, gzip, 16 MB request, security-header, redirect, proxy, and cache behavior. The retired host emitted an OCSP-stapling warning because the certificate had no responder URL, so the ineffective stapling directive and its resolver list were not copied into the container.
 - Live production runs the same image command on Debian 13 with Node 24.19.0 and Citizen 2.0.0. The final PostgreSQL 11 archive restored transactionally into PostgreSQL 17.10 with encoding, locale, timezone, extension, counts, maximum IDs, and sequence states matching. The app read service-scoped secrets without exposing password values in its environment and ran as UID 10001 with writable persistent logs.
 - Operator browsing, both contact emails, Postico over SSH, HTTPS, the full production smoke suite, ACME webroot, staged Certbot renewal plus Nginx reload, and the deliberate Node crash/restart drill passed. After a Debian kernel reboot, Docker restored `db`, `app`, and `proxy` without `compose up`; database checks and the full public smoke suite passed again.
+- The accepted database-role correction retained `postgres` as the OID 10 owner and recreated `jaysylvester` as a CRUD-only login with its existing password. Production Postico authentication, transactional CRUD/default-grant and denial probes, row counts 7/75/12, secret isolation, protected pre/post archives, renamed Compose containers, and the full smoke suite passed.
 - Earlier PostgreSQL restore/data comparison, trusted HTTPS, watchers, BrowserSync, contact logging, lifecycle persistence, and isolated backup/restore results remain evidence for unchanged portions of the stack.
 
 ## Production deployment pattern verified
 
 - Select the revised locked Citizen commit; do not refresh the branch during deployment.
 - Build the production image with the same committed `citizen.config.js`.
-- Create the protected production `.env` with `NODE_ENV=production`, database/role names, passwords, and PostgreSQL initialization inputs. Do not add the development-only BrowserSync origin or the retired CORS origin. Stable typed DB/mail values do not belong in it.
+- Create the protected production `.env` with `NODE_ENV=production`, database/role names, application/mail passwords, and PostgreSQL initialization inputs. The `postgres` administrator password stays in the operator's password manager, not `.env`. Do not add the development-only BrowserSync origin or the retired CORS origin. Stable typed DB/mail values do not belong in it.
 - Use `.env` for Compose interpolation and secret sources only. Define each top-level secret with the literal source-variable name (`environment: DB_PASSWORD` and `environment: MAIL_AUTH_PASS`), not an interpolated password. Explicitly inject `NODE_ENV`, `DB_DATABASE`, and `DB_USER` into `app`; set `DB_PASSWORD_FILE` and `MAIL_AUTH_PASS_FILE`; grant only the matching secrets.
-- Give `db` only its explicit `POSTGRES_*` inputs and `POSTGRES_PASSWORD_FILE`. Do not give application values or secrets to `assets` or `proxy`.
+- Give an initialized `db` only its explicit nonsecret `POSTGRES_*` inputs. Supply a separate administrator secret only during guarded fresh-volume initialization or recovery; do not retain it in the normal container. Do not give application values or secrets to `assets` or `proxy`.
 - Do not mount or inject the production `.env` wholesale.
 - Repeat the same secret isolation, direct file reads, startup log, and application behavior checks with the final Compose definition on the rebuilt Debian 13 Droplet.
 
