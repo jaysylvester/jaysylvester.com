@@ -238,7 +238,8 @@ Keep ignored and untracked:
 Use the same concise Compose project name on the separate development and
 production hosts. Keep the accepted production volume name explicit when
 changing an existing deployment's project name so Compose does not initialize a
-new empty database:
+new empty database, and mark the retained cross-project volumes external so the
+renamed project never treats them as disposable:
 
 | Environment | Compose project | PostgreSQL volume |
 | --- | --- | --- |

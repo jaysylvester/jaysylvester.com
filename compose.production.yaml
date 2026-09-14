@@ -40,5 +40,7 @@ secrets:
 volumes:
   app-logs:
     name: jaysylvester-production-logs
+    external: true
   postgres-data:
     name: jaysylvester-production-postgres
+    external: true
