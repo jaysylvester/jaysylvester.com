@@ -111,6 +111,7 @@ Operational commands:
 ./scripts/prod status
 ./scripts/prod logs
 ./scripts/prod test
+./scripts/prod postgres-password # Change the postgres password at hidden prompts
 ./scripts/prod compose ARGS      # Raw production Compose command
 ```
 

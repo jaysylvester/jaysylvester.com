@@ -88,6 +88,7 @@ Normal deploy does not perform this migration or recreate db.
    ./scripts/dev postgres-password
    ```
 
+   Use `./scripts/prod postgres-password` for the approved production migration.
    Use a password different from the unchanged app password. The administrator
    password remains absent from `.env`, Compose, project files, and images.
 6. Validate Compose with config --quiet, then recreate db on its existing volume

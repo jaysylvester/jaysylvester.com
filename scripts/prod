@@ -14,6 +14,7 @@ Commands:
   status                  Show all service states
   logs                    Follow app, proxy, and database logs
   test                    Run the production smoke test
+  postgres-password       Change the postgres password through a hidden prompt
   compose [arguments]     Run Docker Compose against the production project
 
 There is intentionally no production destroy command.
@@ -64,6 +65,10 @@ case "$command" in
   test)
     export SMOKE_PRODUCTION=true
     exec ./scripts/smoke-test https://jaysylvester.com "$@"
+    ;;
+  postgres-password)
+    compose exec db \
+      psql --username postgres --dbname postgres --command '\password postgres'
     ;;
   compose)
     compose "$@"

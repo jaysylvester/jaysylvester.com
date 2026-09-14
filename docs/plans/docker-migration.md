@@ -222,7 +222,8 @@ Add and commit these production-specific artifacts on `maintenance/docker-migrat
 - `scripts/reload-production-proxy` as the Certbot deploy hook.
 - `scripts/prod` as the canonical production command interface, sharing the
   development lifecycle vocabulary while keeping production startup detached,
-  log following explicit, deployment guarded, and project destruction absent.
+  log following explicit, database administrator password changes interactive,
+  deployment guarded, and project destruction absent.
 - `scripts/deploy-production` as the guarded one-command production deployment path.
 - The production deployment, Postico, Certbot, and retired-runtime notes required in the README.
 
@@ -1269,7 +1270,7 @@ This ordered app-then-proxy recreation prevents Nginx from retaining the deleted
 the restart-policy-managed containers continue after logout. Use
 `./scripts/prod logs` only when an attached log stream is wanted. The shared
 development/production verbs are `start`, `stop`, `restart`, `status`, `logs`,
-`test`, and `compose`; `deploy` is production-only, while `destroy`,
+`test`, `postgres-password`, and `compose`; `deploy` is production-only, while `destroy`,
 `db-backup`, and `db-restore` are development-only. Production intentionally
 has no destroy shortcut.
 
