@@ -6,7 +6,7 @@ cd /var/www/jaysylvester.com
 
 exec /usr/bin/docker compose \
   --env-file .env \
-  -p jaysylvester-production \
+  -p jaysylvester \
   -f compose.yaml \
   -f compose.production.yaml \
   exec -T proxy nginx -s reload

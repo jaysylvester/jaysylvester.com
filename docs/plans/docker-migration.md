@@ -235,12 +235,15 @@ Keep ignored and untracked:
 - `docker/dev-certs/*`.
 - Database dumps, runtime log contents, and Let's Encrypt material.
 
-Use distinct Compose project names and database volumes:
+Use the same concise Compose project name on the separate development and
+production hosts. Keep the accepted production volume name explicit when
+changing an existing deployment's project name so Compose does not initialize a
+new empty database:
 
 | Environment | Compose project | PostgreSQL volume |
 | --- | --- | --- |
 | Development | `jaysylvester` | `jaysylvester-postgres` |
-| Production | `jaysylvester-production` | `jaysylvester-production-postgres` |
+| Production | `jaysylvester` | `jaysylvester-production-postgres` (explicitly retained) |
 
 Both environment overrides may publish PostgreSQL as `127.0.0.1:5432:5432` for Postico. Never publish it on `0.0.0.0`.
 

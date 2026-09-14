@@ -33,3 +33,12 @@ secrets:
     environment: DB_PASSWORD
   mail-auth-pass:
     environment: MAIL_AUTH_PASS
+
+# Retain the accepted production data while the Compose project name matches
+# development. The environments run on separate hosts, so their container and
+# network names cannot collide.
+volumes:
+  app-logs:
+    name: jaysylvester-production-logs
+  postgres-data:
+    name: jaysylvester-production-postgres
