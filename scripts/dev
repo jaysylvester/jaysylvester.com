@@ -17,16 +17,42 @@ compose() {
 
   project=${COMPOSE_PROJECT_NAME:-jaysylvester}
 
+  # DEV_EDGE=true in .env joins the shared workstation edge proxy so several
+  # stacks can run at once; see compose.dev.edge.yaml. Unset = standalone.
+  edge_file=
+  if grep -qx 'DEV_EDGE=true' .env; then
+    docker network inspect dev-edge >/dev/null 2>&1 \
+      || docker network create dev-edge >/dev/null
+    edge_file=compose.dev.edge.yaml
+  fi
+
   docker compose \
     --env-file .env \
     -p "$project" \
     -f compose.yaml \
     -f compose.dev.yaml \
+    ${edge_file:+-f "$edge_file"} \
     "$@"
+}
+
+start_edge() {
+  grep -qx 'DEV_EDGE=true' .env || return 0
+
+  edge=$HOME/Projects/dev-edge/edge
+  if test ! -x "$edge"; then
+    echo "DEV_EDGE=true but $edge was not found. Unset DEV_EDGE to run standalone." >&2
+    exit 1
+  fi
+
+  if ! "$edge" start >/dev/null 2>&1; then
+    echo "The dev-edge proxy failed to start; run $edge start to see why." >&2
+    exit 1
+  fi
 }
 
 start() {
   compose config --quiet
+  start_edge
   mkdir -p logs
   ./scripts/dev-cert
   ./scripts/dev-db-initialize

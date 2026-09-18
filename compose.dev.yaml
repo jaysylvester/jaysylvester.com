@@ -5,7 +5,7 @@ services:
       DB_USER: ${DB_USER:?Set DB_USER in .env}
       POSTGRES_TIMEZONE: ${POSTGRES_TIMEZONE:?Set POSTGRES_TIMEZONE in .env}
     ports:
-      - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
+      - "127.0.0.1:${DB_CLIENT_PORT:-5432}:5432"
     volumes:
       - ./docker/postgres/init-app-role.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
 

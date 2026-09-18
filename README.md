@@ -47,12 +47,27 @@ by the running watchers do not require this.
 ```
 
 citizen file logs are available under `logs/`. Postico connects to
-`127.0.0.1:${POSTICO_PORT:-5432}`.
+`127.0.0.1:${DB_CLIENT_PORT:-5432}`.
 
 Use `postgres` for administration; keep its password in Postico/password manager.
 The existing `jaysylvester` app login and password remain, with CRUD-only privileges.
 Existing environments need the [role migration](docs/migrations/database-app-role.md)
 before using the separated Compose configuration.
+
+### Running alongside other projects
+
+Only one stack can own loopback 80/443, so two projects cannot both publish them.
+To run several dev stacks at once, set `DEV_EDGE=true` in `.env`. `scripts/dev` then
+adds `compose.dev.edge.yaml`, which drops the proxy's published ports and joins the
+shared `dev-edge` network as `jaysylvester-proxy`; a single edge proxy in
+`~/Projects/dev-edge` (outside every repository) owns 80/443 and forwards each
+`dev.*` hostname to its project by TLS server name. `scripts/dev start` starts the
+edge for you if it isn't running, and Docker restarts it after a reboot; see
+`~/Projects/dev-edge/README.md` for the manual commands and how to add a project.
+
+Leave `DEV_EDGE` unset to run this project standalone with its own published ports;
+a fresh clone needs nothing from the edge. Each project's `DB_CLIENT_PORT` must
+differ (5432 here) so the databases can be published at the same time.
 
 ### Database backup and restore
 

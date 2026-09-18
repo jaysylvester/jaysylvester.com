@@ -2,6 +2,11 @@
 
 set -eu
 
+if ! docker info >/dev/null 2>&1; then
+  echo 'Docker Desktop is not running or not ready. Start Docker Desktop and try again.' >&2
+  exit 1
+fi
+
 volume=$(./scripts/dev compose config | awk '
   $0 == "volumes:" { in_volumes = 1; next }
   in_volumes && $0 == "  postgres-data:" { in_postgres_data = 1; next }
@@ -41,7 +46,7 @@ if test ! -t 0; then
   exit 1
 fi
 
-printf 'Choose the postgres administrator password for Postico: '
+printf 'Choose the postgres administrator password: '
 stty -echo
 echo_disabled=true
 IFS= read -r password
@@ -61,7 +66,7 @@ if test "$password" != "$confirmation"; then
   exit 1
 fi
 
-echo 'Initializing PostgreSQL with the password supplied for Postico...'
+echo 'Initializing PostgreSQL with the supplied administrator password...'
 initializer="jaysylvester-db-initializer-$$"
 docker volume create "$volume" >/dev/null
 created_volume=true

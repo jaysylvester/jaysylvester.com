@@ -201,7 +201,9 @@ Phase 1 implemented and committed these artifacts on `maintenance/docker-migrati
   postgres-password verbs. It finds the repository root before resolving files.
 - `scripts/dev-db-initialize` and `docker/postgres/init-app-role.sh` for guarded,
   interactive first-volume creation with separate postgres and CRUD-only app
-  credentials. The one-off initializer is removed before normal startup.
+  credentials. Verify that the Docker daemon is available before interpreting a
+  failed volume lookup as an absent volume and prompting for credentials. The
+  one-off initializer is removed before normal startup.
 - `scripts/dev-db-backup` to create and verify protected logical backups outside Docker.
 - `scripts/dev-db-restore` to validate, confirm, and atomically restore one
   explicit archive into a new empty PostgreSQL volume while preserving the old

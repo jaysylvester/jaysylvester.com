@@ -1,0 +1,17 @@
+# Opt-in overlay for workstations running several dev stacks behind dev-edge.
+# Selected by scripts/dev when .env contains DEV_EDGE=true. The edge proxy owns
+# loopback 80/443 and forwards TLS to this proxy by server name, so the proxy
+# publishes nothing itself. Leave DEV_EDGE unset to run this project standalone.
+services:
+  proxy:
+    ports: !reset []
+    networks:
+      default:
+      edge:
+        aliases:
+          - jaysylvester-proxy
+
+networks:
+  edge:
+    external: true
+    name: dev-edge

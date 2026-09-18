@@ -1,7 +1,9 @@
 services:
   db:
     ports:
-      - "127.0.0.1:${POSTICO_PORT:-5432}:5432"
+      # Fixed loopback port for administrator clients over SSH. One stack per host,
+      # so the per-project DB_CLIENT_PORT variable is a development-only concern.
+      - "127.0.0.1:5432:5432"
     restart: unless-stopped
 
   app:
