@@ -16,6 +16,7 @@
   "scripts": {
     "assets:build": "gulp all",
     "assets:watch": "gulp",
+    "test:compose": "./scripts/check-compose-boundaries.mjs",
     "dev:build": "./scripts/dev start --build",
     "dev:db:backup": "./scripts/dev db-backup",
     "dev:db:restore": "./scripts/dev db-restore",

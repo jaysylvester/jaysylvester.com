@@ -81,7 +81,8 @@ Execute the migration in two separately accepted phases. Phase 1 moves developme
 - Credential rotation.
 - Application features, schema changes, or dependency upgrades other than Citizen 2.0 and changes strictly required by Citizen 2.0 or Node.js 24.
 - Custom health routes.
-- A shared proxy or port registry for other projects.
+- A repository-owned shared proxy or port registry. The optional workstation-owned
+  `dev-edge` proxy remains outside this repository and does not affect production.
 - Containerized Certbot in this migration.
 - Sequential in-place Debian 10-to-11-to-12-to-13 upgrades. The approved path is a clean Debian 13 rebuild of the existing Droplet.
 - Creation of a replacement Droplet or DNS/IP migration. DigitalOcean rebuilds the existing Droplet and retains its IP.
@@ -563,7 +564,10 @@ Implement the Phase 1 artifacts listed in section 4, then run:
 
 Confirm from the rendered Compose configuration and images that:
 
-- Only loopback-bound proxy ports 80/443 and the loopback Postico port are published in development; BrowserSync port 3000 remains internal to Compose and its UI is disabled.
+- Standalone development publishes only loopback-bound proxy ports 80/443 and the
+  loopback database-client port. Shared-edge development removes the project proxy's
+  host ports, joins only that proxy to external `dev-edge` as `jaysylvester-proxy`,
+  and leaves BrowserSync port 3000 internal to Compose with its UI disabled.
 - `app` receives development `.env` only through the read-only `/site/.env`
   bind; normal `db` receives only its explicit initialization settings and the
   application-role inputs, never the postgres password; `assets` and `proxy`
@@ -1386,7 +1390,10 @@ Keep the README task-focused. Do not turn the future-host notes into separately 
 - Existing development routes, static content, `web/shoplc/`, email logging, `Forwarded` behavior, and HTTPS work as before; Citizen's unset CORS default rejects cross-origin requests and preflights with `403` and no allow headers.
 - Contact-form owner delivery is awaited before success; the visitor confirmation follows sequentially, and a confirmation-only failure is logged without producing an error page that encourages a duplicate owner submission.
 - No continuous app/proxy health check generates synthetic Citizen requests; the explicit smoke test proves the end-to-end path, while `pg_isready` gates app startup on PostgreSQL readiness.
-- Development HTTPS is trusted without certificate copying, proxy ports 80/443 are bound to loopback, and source watching plus BrowserSync work through Docker Desktop.
+- Development HTTPS is trusted without certificate copying. Standalone proxy ports
+  80/443 bind to loopback; shared-edge mode removes those bindings and routes the
+  hostname through the unique `jaysylvester-proxy` alias while another project runs.
+  Source watching and BrowserSync work through Docker Desktop in both modes.
 - Containerized asset builds use the tracked browser targets and match host-build targeting.
 - Development PostgreSQL is reachable by Postico only through loopback and its data survives container recreation.
 - Development artifacts and Docker resources use `dev` identifiers; environment prose uses “development,” reserving `local` for Citizen's response namespace, `localhost`, and genuine workstation or loopback semantics.
@@ -1522,9 +1529,12 @@ counts, or Nginx file without re-inventorying the target project.
 Parameterize scripts before reuse; none should retain `jaysylvester-dev`, the
 `jaysylvester` database, `dev.jaysylvester.com`, this project's protected path,
 or this project's table checks. Give every project unique Compose and volume
-names. Because the projects may compete for development ports 80/443, either run one
-site stack at a time or deliberately assign different host ports; do not build a
-shared cross-project proxy as an incidental part of these migrations.
+names and database client ports. Standalone mode remains the fresh-clone default and
+publishes loopback 80/443. For simultaneous stacks, `DEV_EDGE=true` may add a
+project-specific overlay that removes those ports and joins only the project proxy to
+the workstation-owned external `dev-edge` network under a unique alias. The central
+SNI proxy remains outside every project repository. Render and validate both modes
+without creating the network; create or start it only for runtime commands.
 
 ### Evidence to retain for each project
 

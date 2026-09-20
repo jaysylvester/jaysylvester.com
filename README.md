@@ -65,9 +65,19 @@ shared `dev-edge` network as `jaysylvester-proxy`; a single edge proxy in
 edge for you if it isn't running, and Docker restarts it after a reboot; see
 `~/Projects/dev-edge/README.md` for the manual commands and how to add a project.
 
-Leave `DEV_EDGE` unset to run this project standalone with its own published ports;
-a fresh clone needs nothing from the edge. Each project's `DB_CLIENT_PORT` must
-differ (5432 here) so the databases can be published at the same time.
+Leave `DEV_EDGE` unset to run this project standalone with its own published ports.
+A fresh clone needs nothing from the edge, but a running edge already owns 80/443;
+`scripts/dev` will tell you to enable the edge or stop it instead of failing with a
+generic port error. Each project's `DB_CLIENT_PORT` must differ (5432 here) so the
+databases can be published at the same time. The edge overlay requires a Docker
+Compose release that supports `!reset`; `npm run test:compose` checks that syntax.
+
+Validate the standalone, shared-edge, and production Compose boundaries without
+creating Docker resources or depending on the current `.env`:
+
+```sh
+npm run test:compose
+```
 
 ### Database backup and restore
 

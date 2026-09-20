@@ -4,6 +4,10 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
+edge_enabled() {
+  test -f .env && grep -qx 'DEV_EDGE=true' .env
+}
+
 compose() {
   if ! command -v docker >/dev/null 2>&1; then
     echo 'Docker is required. Start Docker Desktop and try again.' >&2
@@ -20,9 +24,7 @@ compose() {
   # DEV_EDGE=true in .env joins the shared workstation edge proxy so several
   # stacks can run at once; see compose.dev.edge.yaml. Unset = standalone.
   edge_file=
-  if grep -qx 'DEV_EDGE=true' .env; then
-    docker network inspect dev-edge >/dev/null 2>&1 \
-      || docker network create dev-edge >/dev/null
+  if edge_enabled; then
     edge_file=compose.dev.edge.yaml
   fi
 
@@ -35,8 +37,20 @@ compose() {
     "$@"
 }
 
+require_docker() {
+  if ! command -v docker >/dev/null 2>&1; then
+    echo 'Docker is required. Start Docker Desktop and try again.' >&2
+    exit 1
+  fi
+
+  if ! docker info >/dev/null 2>&1; then
+    echo 'Docker Desktop is not running or not ready. Start Docker Desktop and try again.' >&2
+    exit 1
+  fi
+}
+
 start_edge() {
-  grep -qx 'DEV_EDGE=true' .env || return 0
+  edge_enabled || return 0
 
   edge=$HOME/Projects/dev-edge/edge
   if test ! -x "$edge"; then
@@ -50,9 +64,26 @@ start_edge() {
   fi
 }
 
+prepare_routing() {
+  if edge_enabled; then
+    start_edge
+    return
+  fi
+
+  if docker ps \
+    --filter label=com.docker.compose.project=dev-edge \
+    --filter label=com.docker.compose.service=edge \
+    --format '{{.ID}}' | grep -q .; then
+    echo 'The shared dev-edge proxy is already using localhost ports 80/443.' >&2
+    echo 'Set DEV_EDGE=true in .env, or stop it with ~/Projects/dev-edge/edge stop.' >&2
+    exit 1
+  fi
+}
+
 start() {
+  require_docker
   compose config --quiet
-  start_edge
+  prepare_routing
   mkdir -p logs
   ./scripts/dev-cert
   ./scripts/dev-db-initialize
@@ -121,6 +152,13 @@ case "$subcommand" in
       psql --username postgres --dbname postgres --command '\password postgres'
     ;;
   compose)
+    case "${1:-}" in
+      up|start)
+        require_docker
+        compose config --quiet
+        prepare_routing
+        ;;
+    esac
     compose "$@"
     ;;
   -h|--help|help)
