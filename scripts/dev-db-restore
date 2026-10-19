@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eu
+cd "$(dirname "$0")/.."
 
 usage() {
   echo 'Usage: ./scripts/dev db-restore /absolute/path/to/backup.dump'
@@ -19,6 +20,10 @@ if test "$#" -ne 1; then
 fi
 
 backup_file=$1
+case "$backup_file" in
+  /*) ;;
+  *) echo 'Database restore requires an absolute archive path.' >&2; exit 1 ;;
+esac
 database_was_running=false
 started_database=false
 
@@ -64,7 +69,7 @@ dc config --quiet
 
 for service in app proxy; do
   if service_is_running "$service"; then
-    echo "Restore refused while $service is running. Run ./scripts/dev stop first." >&2
+    echo "Restore refused: $service is running. Stop app and proxy before restoring." >&2
     exit 1
   fi
 done
@@ -73,20 +78,17 @@ if service_is_running db; then
   database_was_running=true
 fi
 
-./scripts/dev-db-initialize
-
-if test "$database_was_running" = false; then
-  if ! service_is_running db; then
-    echo 'Starting PostgreSQL for archive validation...'
-    dc up -d --wait db
-  fi
-  started_database=true
-fi
-
+if test "$database_was_running" = false; then started_database=true; fi
 trap 'restore_and_exit $?' EXIT
 trap 'restore_and_exit 129' HUP
 trap 'restore_and_exit 130' INT
 trap 'restore_and_exit 143' TERM
+
+./scripts/dev-db-initialize
+if ! service_is_running db; then
+  echo 'Starting PostgreSQL for archive validation...'
+  dc up -d --wait db
+fi
 
 echo 'Verifying backup archive...'
 if ! dc exec -T db pg_restore --list < "$backup_file" >/dev/null; then

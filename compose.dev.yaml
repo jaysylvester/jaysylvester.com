@@ -1,17 +1,10 @@
 services:
   db:
-    environment:
-      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
-      DB_USER: ${DB_USER:?Set DB_USER in .env}
-      POSTGRES_TIMEZONE: ${POSTGRES_TIMEZONE:?Set POSTGRES_TIMEZONE in .env}
     ports:
       - "127.0.0.1:${DB_CLIENT_PORT:-5432}:5432"
-    volumes:
-      - ./docker/postgres/init-app-role.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
 
   app:
-    build:
-      target: development
+    image: jaysylvester-app:development
     volumes:
       - ./.env:/site/.env:ro
       - ./app:/site/app
@@ -20,9 +13,7 @@ services:
       - ./web:/site/web
 
   proxy:
-    build:
-      args:
-        NGINX_CONFIG: dev.conf
+    image: jaysylvester-proxy:development
     depends_on:
       assets:
         condition: service_started
@@ -34,9 +25,8 @@ services:
       - ./web:/usr/share/nginx/html:ro
 
   assets:
-    build:
-      context: .
-      target: development
+    image: jaysylvester-app:development
+    pull_policy: never
     command: ["npm", "run", "assets:watch"]
     environment:
       BROWSERSYNC_ORIGIN: ${BROWSERSYNC_ORIGIN:?Set BROWSERSYNC_ORIGIN in .env}
@@ -47,7 +37,7 @@ services:
     init: true
     user: "10001:10001"
     volumes:
-      - ./app:/site/app
+      - ./app:/site/app:ro
       - ./web:/site/web
 
 volumes:

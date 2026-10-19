@@ -1,62 +1,86 @@
 #!/bin/sh
 
 set -eu
-
+cd "$(dirname "$0")/.."
 site=/var/www/jaysylvester.com
+project=jaysylvester
 
 if test "$(id -u)" -eq 0; then
-  echo 'Run this deployment as the jay user, not root.' >&2
+  echo 'Run deployment as the application owner, not root.' >&2
   exit 1
 fi
-
-cd "$site"
-
+if test "$PWD" != "$site"; then
+  echo "Deploy must run from the configured production checkout: $site" >&2
+  exit 1
+fi
 if test "$(git branch --show-current)" != main; then
   echo 'The production checkout must be on main.' >&2
   exit 1
 fi
-
 if test -n "$(git status --porcelain)"; then
   echo 'The production checkout has uncommitted changes; deployment stopped.' >&2
   git status --short >&2
   exit 1
 fi
 
-# Pull once, then restart this script from the newly checked-out version so an
-# update to the deployment procedure itself takes effect safely.
 if test "${PRODUCTION_DEPLOY_AFTER_PULL:-false}" != true; then
   git pull --ff-only origin main
   PRODUCTION_DEPLOY_AFTER_PULL=true exec ./scripts/prod deploy
 fi
 
-pdc() {
-  ./scripts/prod compose "$@"
-}
-
+pdc() { ./scripts/prod compose "$@"; }
 report_failure() {
   status=$?
   trap - EXIT HUP INT TERM
-
   if test "$status" -ne 0; then
     echo 'Production deployment failed. Current service state and recent logs:' >&2
     pdc ps >&2 || true
     pdc logs --tail=100 app proxy >&2 || true
   fi
-
   exit "$status"
 }
-
 trap report_failure EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 sudo -v
 pdc config --quiet
-pdc build app proxy
-pdc up -d --no-deps --force-recreate app
-sleep 5
-pdc ps app
-pdc up -d --no-deps --force-recreate proxy
-pdc ps
-SMOKE_PRODUCTION=true ./scripts/smoke-test https://jaysylvester.com
+volume_names=$(pdc config | awk '/^[^[:space:]]/ { volumes = ($0 == "volumes:"); next } volumes && $1 == "name:" { print $2 }')
+for volume in $volume_names; do
+  sudo docker volume inspect "$volume" >/dev/null
+done
+if ! pdc config --environment | awk '
+  /^DB_PASSWORD=./ { database = 1 }
+  /^MAIL_AUTH_PASS=./ { mail = 1 }
+  END { exit !(database && mail) }
+'; then
+  echo 'Production DB_PASSWORD and MAIL_AUTH_PASS must be nonempty.' >&2
+  exit 1
+fi
 
-trap - EXIT
+revision=$(git rev-parse HEAD)
+retention="rollback-$(date -u '+%Y%m%dT%H%M%SZ')-$$"
+echo "Deploying revision $revision; retention identifier: $retention"
+for service in app proxy; do
+  container=$(pdc ps --all --quiet "$service")
+  if test "$(printf '%s\n' "$container" | wc -w)" -gt 1; then
+    echo "Expected at most one $service container; found multiple. Deployment stopped before building." >&2
+    exit 1
+  fi
+  if test -n "$container"; then
+    image=$(sudo docker inspect --format '{{.Image}}' "$container")
+    retained="$project-$service:$retention"
+    sudo docker image tag "$image" "$retained"
+    echo "Retained $service image $image as $retained"
+  fi
+done
+
+./scripts/build production --locked --sudo
+pdc up -d --no-build --pull never --no-deps --force-recreate app
+pdc up -d --no-build --pull never --no-deps --force-recreate proxy
+pdc ps
+./scripts/prod test
+
+trap - EXIT HUP INT TERM
 echo 'Production deployment passed.'

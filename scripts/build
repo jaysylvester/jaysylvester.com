@@ -1,0 +1,68 @@
+#!/bin/sh
+
+set -eu
+cd "$(dirname "$0")/.."
+
+project=jaysylvester
+target=development
+locked=false
+use_sudo=false
+expect_update=false
+refresh=false
+
+for argument do
+  shift
+  if test "$expect_update" = true; then
+    case "$argument" in
+      ''|-*) echo '--update requires a dependency name.' >&2; exit 1 ;;
+    esac
+    set -- "$@" --update "$argument"
+    expect_update=false
+    refresh=true
+    continue
+  fi
+  case "$argument" in
+    development|production) target=$argument ;;
+    --locked) locked=true ;;
+    --update) expect_update=true ;;
+    --sudo) use_sudo=true ;;
+    -h|--help)
+      echo 'Usage: ./scripts/build [development|production] [--locked] [--sudo] [--update PACKAGE]'
+      exit 0
+      ;;
+    *) echo "Unknown build argument: $argument" >&2; exit 1 ;;
+  esac
+done
+
+if test "$expect_update" = true; then
+  echo '--update requires a dependency name.' >&2
+  exit 1
+fi
+if test "$locked" = true && test "$refresh" = true; then
+  echo '--locked cannot be combined with --update. Refresh dependencies locally before deployment.' >&2
+  exit 1
+fi
+
+docker_command() {
+  if test "$use_sudo" = true; then
+    sudo docker "$@"
+  else
+    docker "$@"
+  fi
+}
+
+if ! command -v docker >/dev/null 2>&1 || ! docker_command info >/dev/null 2>&1; then
+  echo 'Docker is not running or not accessible. Start Docker and try again.' >&2
+  exit 1
+fi
+
+if test "$locked" = true; then set -- "$@" --check; fi
+if test "$use_sudo" = true; then set -- "$@" --sudo; fi
+./scripts/dev-dependencies "$@"
+
+nginx_config=dev.conf
+if test "$target" = production; then nginx_config=production.conf; fi
+
+docker_command build --target "$target" --tag "$project-app:$target" .
+docker_command build --file docker/nginx/Dockerfile \
+  --build-arg "NGINX_CONFIG=$nginx_config" --tag "$project-proxy:$target" .

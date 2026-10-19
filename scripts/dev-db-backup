@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eu
+cd "$(dirname "$0")/.."
 
 backup_parent=${DEV_DB_BACKUP_PARENT:-"${HOME:?HOME must be set}/Documents/jaysylvester-docker-migration-dev"}
 backup_directory=$backup_parent/backups
@@ -8,28 +9,28 @@ timestamp=$(date '+%Y%m%d-%H%M%S')
 backup_file=$backup_directory/jaysylvester-$timestamp.dump
 checksum_file=$backup_file.sha256
 temporary_backup=
+temporary_checksum=
+published_backup=false
 
 dc() {
   ./scripts/dev compose "$@"
 }
 
 cleanup() {
-  if test -n "$temporary_backup" && test -f "$temporary_backup"; then
-    rm -f "$temporary_backup"
+  status=$?
+  trap - EXIT HUP INT TERM
+  if test -n "$temporary_backup"; then rm -f "$temporary_backup"; fi
+  if test -n "$temporary_checksum"; then rm -f "$temporary_checksum"; fi
+  if test "$status" -ne 0 && test "$published_backup" = true; then
+    rm -f "$backup_file" "$checksum_file"
   fi
+  exit "$status"
 }
 
-trap cleanup EXIT HUP INT TERM
-
-if ! command -v docker >/dev/null 2>&1; then
-  echo 'Docker is required. Start Docker Desktop and try again.' >&2
-  exit 1
-fi
-
-if test ! -f .env; then
-  echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
-  exit 1
-fi
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 dc config --quiet
 
@@ -52,11 +53,7 @@ chmod 0600 "$temporary_backup"
 
 echo 'Creating PostgreSQL backup...'
 dc exec -T db sh -c \
-  'dump_user=$POSTGRES_USER
-   if ! psql -X -U "$dump_user" -d "$POSTGRES_DB" -Atqc "SELECT 1" >/dev/null 2>&1; then
-     dump_user=${DB_USER:-jaysylvester}
-   fi
-   pg_dump -U "$dump_user" -d "$POSTGRES_DB" --format=custom --no-owner --no-privileges' \
+  'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" --format=custom --no-owner --no-privileges --serializable-deferrable' \
   > "$temporary_backup"
 
 if test ! -s "$temporary_backup"; then
@@ -67,10 +64,15 @@ fi
 echo 'Verifying backup archive...'
 dc exec -T db pg_restore --list < "$temporary_backup" >/dev/null
 
+temporary_checksum=$(mktemp "$backup_directory/.checksum.XXXXXX")
+checksum=$(shasum -a 256 "$temporary_backup")
+printf '%s  %s\n' "${checksum%% *}" "$backup_file" > "$temporary_checksum"
+chmod 0600 "$temporary_backup" "$temporary_checksum"
 mv "$temporary_backup" "$backup_file"
 temporary_backup=
-shasum -a 256 "$backup_file" > "$checksum_file"
-chmod 0600 "$backup_file" "$checksum_file"
+published_backup=true
+mv "$temporary_checksum" "$checksum_file"
+temporary_checksum=
 
 echo "Backup: $backup_file"
 echo "Checksum: $checksum_file"

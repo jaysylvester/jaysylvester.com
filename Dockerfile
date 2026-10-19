@@ -1,12 +1,15 @@
 # syntax=docker/dockerfile:1
 
-FROM node:24-bookworm-slim AS dependency-installer
+FROM node:24-bookworm-slim AS dependency-tools
 
 RUN apt-get update \
     && apt-get install --yes --no-install-recommends ca-certificates git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /site
+
+
+FROM dependency-tools AS dependency-installer
 
 COPY package.json package-lock.json ./
 RUN npm ci
@@ -35,6 +38,8 @@ USER 10001:10001
 
 
 FROM runtime AS development
+
+COPY --chown=10001:10001 scripts ./scripts
 
 COPY --chown=10001:10001 .browserslistrc ./
 COPY --chown=10001:10001 eslint.config.js ./

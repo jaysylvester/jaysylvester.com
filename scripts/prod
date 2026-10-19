@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eu
+cd "$(dirname "$0")/.."
 
 usage() {
   cat <<'EOF'
@@ -14,6 +15,7 @@ Commands:
   status                  Show all service states
   logs                    Follow app, proxy, and database logs
   test                    Run the production smoke test
+  app-password            Change the DB_USER password through a hidden prompt
   postgres-password       Change the postgres password through a hidden prompt
   compose [arguments]     Run Docker Compose against the production project
 
@@ -48,12 +50,19 @@ case "$command" in
     exec ./scripts/deploy-production
     ;;
   start)
-    compose up -d "$@"
+    compose up -d "$@" --no-build --pull never --no-recreate
     ;;
   stop)
     compose stop "$@"
     ;;
   restart)
+    if test "$#" -eq 0; then set -- app proxy; fi
+    for service do
+      case "$service" in
+        app|proxy|db) ;;
+        *) echo "Unknown production service: $service" >&2; exit 1 ;;
+      esac
+    done
     compose restart "$@"
     ;;
   status)
@@ -65,6 +74,21 @@ case "$command" in
   test)
     export SMOKE_PRODUCTION=true
     exec ./scripts/smoke-test https://jaysylvester.com "$@"
+    ;;
+  app-password)
+    if test "$#" -ne 0; then
+      echo 'app-password does not accept arguments; enter the password at the hidden prompt.' >&2
+      exit 1
+    fi
+    app_user=$(compose config --environment | sed -n 's/^DB_USER=//p')
+    case "$app_user" in
+      ''|postgres|*[!a-zA-Z0-9_.-]*)
+        echo 'DB_USER must name an application role using letters, numbers, underscores, dots, or hyphens; it must not be postgres.' >&2
+        exit 1
+        ;;
+    esac
+    compose exec db \
+      psql --username postgres --dbname postgres --command "\password \"$app_user\""
     ;;
   postgres-password)
     compose exec db \

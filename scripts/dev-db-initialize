@@ -1,27 +1,42 @@
 #!/bin/sh
 
 set -eu
+cd "$(dirname "$0")/.."
 
 if ! docker info >/dev/null 2>&1; then
   echo 'Docker Desktop is not running or not ready. Start Docker Desktop and try again.' >&2
   exit 1
 fi
 
-volume=$(./scripts/dev compose config | awk '
+compose_value() {
+  ./scripts/dev compose config --environment \
+    | awk -v name="$1" 'index($0, name "=") == 1 { print substr($0, length(name) + 2); exit }'
+}
+
+compose_config=$(./scripts/dev compose config)
+volume=$(printf '%s\n' "$compose_config" | awk '
   $0 == "volumes:" { in_volumes = 1; next }
   in_volumes && $0 == "  postgres-data:" { in_postgres_data = 1; next }
   in_postgres_data && $1 == "name:" { print $2; exit }
 ')
-initializer=
-echo_disabled=false
-created_volume=false
-
 if test -z "$volume"; then
   echo 'Could not resolve the development PostgreSQL volume name from Compose.' >&2
   exit 1
 fi
+app_password=$(compose_value DB_PASSWORD)
+
+if test -z "$app_password"; then
+  echo 'DB_PASSWORD is missing from .env.' >&2
+  exit 1
+fi
+
+initializer=
+echo_disabled=false
+created_volume=false
 
 cleanup() {
+  status=$?
+  trap - EXIT HUP INT TERM
   if test "$echo_disabled" = true; then
     stty echo
   fi
@@ -33,9 +48,13 @@ cleanup() {
   if test "$created_volume" = true; then
     docker volume rm "$volume" >/dev/null 2>&1 || true
   fi
+  exit "$status"
 }
 
-trap cleanup EXIT HUP INT TERM
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 if docker volume inspect "$volume" >/dev/null 2>&1; then
   exit 0
@@ -70,18 +89,21 @@ echo 'Initializing PostgreSQL with the supplied administrator password...'
 initializer="jaysylvester-db-initializer-$$"
 docker volume create "$volume" >/dev/null
 created_volume=true
+DB_PASSWORD=$app_password
 POSTGRES_PASSWORD=$password
-export POSTGRES_PASSWORD
+export DB_PASSWORD POSTGRES_PASSWORD
 
 ./scripts/dev compose run \
   --detach \
   --no-deps \
   --name "$initializer" \
+  --env DB_PASSWORD \
   --env POSTGRES_PASSWORD \
+  --volume "$PWD/docker/postgres/init-app-role.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro" \
   db \
   >/dev/null
 
-unset POSTGRES_PASSWORD password confirmation
+unset DB_PASSWORD POSTGRES_PASSWORD app_password password confirmation
 
 attempt=0
 while test "$(docker inspect --format '{{.State.Health.Status}}' "$initializer" 2>/dev/null || true)" != healthy; do
@@ -96,6 +118,8 @@ while test "$(docker inspect --format '{{.State.Health.Status}}' "$initializer" 
   sleep 1
 done
 
+# Initialization succeeded; preserve the populated volume if later startup fails.
+created_volume=false
 docker stop "$initializer" >/dev/null
 docker rm "$initializer" >/dev/null
 initializer=
@@ -104,11 +128,10 @@ initializer=
 
 database_container=$(./scripts/dev compose ps --quiet db)
 if docker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' "$database_container" \
-  | grep -q '^POSTGRES_PASSWORD='; then
-  echo 'The normal database container retained a PostgreSQL administrator password input.' >&2
+  | grep -Eq '^(DB_PASSWORD|DB_PASSWORD_FILE|POSTGRES_PASSWORD|POSTGRES_PASSWORD_FILE)='; then
+  echo 'The normal database container retained a database password input.' >&2
   exit 1
 fi
 
 trap - EXIT HUP INT TERM
-created_volume=false
-echo 'PostgreSQL initialized; the one-off initializer was removed and no administrator password remains in Compose or a project file.'
+echo 'PostgreSQL initialized; the one-off initializer was removed and the normal database container has no password input.'

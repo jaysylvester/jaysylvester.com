@@ -47,7 +47,7 @@ if ( development ) {
     service: app.config.mail.service,
     auth: {
       user: app.config.mail.auth.user,
-      pass: fs.readFileSync(process.env.MAIL_AUTH_PASS_FILE, 'utf8').replace(/\r?\n$/, '')
+      pass: app.helpers.secrets.readSecret('MAIL_AUTH_PASS')
     }
   })
 }
@@ -66,9 +66,7 @@ app.toolbox.pg.types.setTypeParser(1114, function (stringValue) {
 // Create a connection pool
 app.toolbox.dbPool = new app.toolbox.pg.Pool({
   ...app.config.db,
-  password: development
-    ? process.env.DB_PASSWORD
-    : fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf8').replace(/\r?\n$/, '')
+  password: app.helpers.secrets.readSecret('DB_PASSWORD')
 })
 // Log errors in the connection pool
 app.toolbox.dbPool.on('error', function (err) {

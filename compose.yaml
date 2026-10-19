@@ -2,6 +2,8 @@ services:
   db:
     image: ${POSTGRES_IMAGE:?Set the inventoried and tested POSTGRES_IMAGE in .env}
     environment:
+      DB_USER: ${DB_USER:?Set DB_USER in .env}
+      POSTGRES_TIMEZONE: ${POSTGRES_TIMEZONE:?Set POSTGRES_TIMEZONE in .env}
       POSTGRES_DB: ${DB_DATABASE:?Set DB_DATABASE in .env}
       # Administrator, used by local-socket administration and readiness checks.
       # No admin password is needed to start an initialized database volume.
@@ -9,17 +11,17 @@ services:
       POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:?Set POSTGRES_INITDB_ARGS in .env}
       TZ: ${POSTGRES_TIMEZONE:?Set the inventoried POSTGRES_TIMEZONE in .env}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
       interval: 5s
       timeout: 5s
       retries: 12
+      start_period: 30s
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
   app:
-    build:
-      context: .
-      target: production
+    image: jaysylvester-app:production
+    pull_policy: never
     command: ["node", "app/start.js"]
     depends_on:
       db:
@@ -32,9 +34,8 @@ services:
       - app-logs:/site/logs
 
   proxy:
-    build:
-      context: .
-      dockerfile: docker/nginx/Dockerfile
+    image: jaysylvester-proxy:production
+    pull_policy: never
     depends_on:
       app:
         condition: service_started
@@ -44,6 +45,6 @@ services:
 
 volumes:
   app-logs:
-    name: ${COMPOSE_PROJECT_NAME}-logs
+    name: ${APP_LOG_VOLUME:-jaysylvester-logs}
   postgres-data:
-    name: ${COMPOSE_PROJECT_NAME}-postgres
+    name: ${POSTGRES_VOLUME:-jaysylvester-postgres}

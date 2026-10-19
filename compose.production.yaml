@@ -19,9 +19,6 @@ services:
       - mail-auth-pass
 
   proxy:
-    build:
-      args:
-        NGINX_CONFIG: production.conf
     ports:
       - "80:80"
       - "443:443"

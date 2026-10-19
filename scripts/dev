@@ -15,7 +15,7 @@ compose() {
   fi
 
   if test ! -f .env; then
-    echo 'Missing .env. Copy .env.example and migrate the protected development values first.' >&2
+    echo 'Missing .env. Migrate the protected source config first.' >&2
     exit 1
   fi
 
@@ -81,13 +81,66 @@ prepare_routing() {
 }
 
 start() {
+  update_dependencies=
+  expect_update=false
+  for argument do
+    shift
+    if test "$expect_update" = true; then
+      case "$argument" in
+        ''|-*|*[!a-zA-Z0-9@._/-]*)
+          echo '--update requires a dependency name, such as citizen or @scope/package.' >&2
+          return 1
+          ;;
+      esac
+      update_dependencies="$update_dependencies --update $argument"
+      expect_update=false
+      continue
+    fi
+    case "$argument" in
+      --update) expect_update=true ;;
+      --build) ;; # The wrapper already builds before Compose up.
+      *) set -- "$@" "$argument" ;;
+    esac
+  done
+  if test "$expect_update" = true; then
+    echo '--update requires a dependency name.' >&2
+    return 1
+  fi
+
   require_docker
   compose config --quiet
+  # Names are validated above; splitting these build arguments is intentional.
+  ./scripts/build $update_dependencies
   prepare_routing
   mkdir -p logs
   ./scripts/dev-cert
   ./scripts/dev-db-initialize
-  compose up "$@"
+  compose up --no-build "$@"
+}
+
+restart() {
+  if test "$#" -eq 0; then set -- app proxy assets; fi
+  restart_database=false
+  recreate_services=
+  for service do
+    case "$service" in
+      app|proxy|assets) recreate_services="$recreate_services $service" ;;
+      db) restart_database=true ;;
+      *) echo "Unknown development service: $service" >&2; return 1 ;;
+    esac
+  done
+
+  require_docker
+  compose config --quiet
+  if test -n "$recreate_services"; then
+    ./scripts/build
+    prepare_routing
+  fi
+  if test "$restart_database" = true; then compose restart db; fi
+  if test -n "$recreate_services"; then
+    # Service names are validated above; splitting this list is intentional.
+    compose up --detach --no-build --no-deps --force-recreate $recreate_services
+  fi
 }
 
 usage() {
@@ -95,17 +148,20 @@ usage() {
 Usage: ./scripts/dev COMMAND [ARGUMENTS]
 
 Commands:
-  start [arguments]        Start attached (use --build to rebuild)
-  stop [services]          Stop without removing containers
-  restart [arguments]      Stop, then start attached
-  status                   Show all service states
-  logs                     Follow app, proxy, assets, and database logs
-  test                     Run the development smoke test
-  destroy                  Remove containers/network; preserve volumes
-  db-backup                Create and verify a logical database backup
-  db-restore ARCHIVE       Restore one verified development database backup
-  postgres-password       Change the postgres password through a hidden prompt
-  compose [arguments]      Run development Docker Compose directly
+  build [arguments]             Prepare dependencies and build development images
+  start [arguments]             Sync dependencies, build, and start attached
+                                --update PACKAGE refreshes a declared dependency
+                                -d runs detached; other arguments go to Compose
+  stop [services]               Stop without removing containers
+  restart [services]            Sync, build, and recreate selected services
+  status                        Show all service states
+  logs                          Follow app, proxy, assets, and database logs
+  test                          Run the development smoke test
+  destroy                       Remove containers/network; preserve volumes
+  db-backup                     Create and verify a logical database backup
+  db-restore ARCHIVE            Restore into an empty development database
+  postgres-password             Change the postgres password through a hidden prompt
+  compose [arguments]           Run development Docker Compose directly
 EOF
 }
 
@@ -119,6 +175,9 @@ fi
 shift
 
 case "$subcommand" in
+  build)
+    exec ./scripts/build "$@"
+    ;;
   start)
     start "$@"
     ;;
@@ -126,8 +185,7 @@ case "$subcommand" in
     compose stop "$@"
     ;;
   restart)
-    compose stop
-    start "$@"
+    restart "$@"
     ;;
   status)
     compose ps --all "$@"
@@ -139,7 +197,11 @@ case "$subcommand" in
     exec ./scripts/smoke-test https://dev.jaysylvester.com "$@"
     ;;
   destroy)
-    compose down "$@"
+    if test "$#" -ne 0; then
+      echo 'destroy does not accept arguments; named volumes are always preserved.' >&2
+      exit 1
+    fi
+    compose down
     ;;
   db-backup)
     exec ./scripts/dev-db-backup "$@"

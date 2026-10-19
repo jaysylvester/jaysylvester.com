@@ -16,8 +16,9 @@
   "scripts": {
     "assets:build": "gulp all",
     "assets:watch": "gulp",
+    "test:dev": "node --test scripts/test-dev.mjs scripts/test-secrets.mjs",
     "test:compose": "./scripts/check-compose-boundaries.mjs",
-    "dev:build": "./scripts/dev start --build",
+    "dev:build": "./scripts/dev build",
     "dev:db:backup": "./scripts/dev db-backup",
     "dev:db:restore": "./scripts/dev db-restore",
     "dev:destroy": "./scripts/dev destroy",
@@ -27,7 +28,10 @@
     "dev:start": "./scripts/dev start",
     "dev:status": "./scripts/dev status",
     "dev:stop": "./scripts/dev stop",
-    "dev:test": "./scripts/dev test"
+    "dev:test": "./scripts/dev test",
+    "lint": "eslint app gulpfile.js citizen.config.js scripts/*.mjs",
+    "test:db": "node --test scripts/test-db.mjs",
+    "test:prod": "node --test scripts/test-prod.mjs"
   },
   "dependencies": {
     "@ladjs/consolidate": "^1.0.x",

@@ -47,10 +47,10 @@ the `citizen` member, while typed application configuration is exposed alongside
 | Log rotation watcher | `citizen.config.js` `citizen.logs.watcher` | Poll bind-mounted development logs; use the normal production watcher on the named volume. |
 | `citizen.cors` | Do not migrate without a real cross-origin browser consumer | The initial implementation preserved the global policy. The completed follow-up removed it and `CORS_ALLOW_ORIGIN`; cross-origin requests/preflights now receive `403` with no allow headers. |
 | `db.*` | `citizen.config.js` top-level `db` | Keep host, port, pool size, and timeout typed. Read database and role names from `.env` because Compose also supplies them to PostgreSQL. |
-| Database password | Development `.env`; production Compose secret | Development reads `DB_PASSWORD`; production reads the file at `DB_PASSWORD_FILE`. |
+| Database password | Environment-specific `.env`; optional Compose secret delivery | `readSecret('DB_PASSWORD')` uses `DB_PASSWORD_FILE` when supplied, otherwise `DB_PASSWORD`, in either mode. |
 | PostgreSQL server timezone | `.env` `POSTGRES_TIMEZONE` | Passed only to `db` as `TZ` before first initialization. |
 | Nonsecret `mail.*` | `citizen.config.js` top-level `mail` | Service, user, sender name, and addresses are typed application configuration. |
-| Mail password | Development `.env`; production Compose secret | Development reads `MAIL_AUTH_PASS`; production reads the file at `MAIL_AUTH_PASS_FILE`. |
+| Mail password | Retain configured `MAIL_AUTH_PASS` in local `.env`, including for production-mode tests | Log-only development does not consume the key; sending uses `readSecret('MAIL_AUTH_PASS')`, with an optional `_FILE` path in either mode. |
 
 No CORS configuration is needed for the current same-origin application and BrowserSync
 proxy. If a future external browser client is inventoried, add only its required origin,

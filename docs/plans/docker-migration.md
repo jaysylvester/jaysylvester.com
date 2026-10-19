@@ -1,5 +1,21 @@
 # Docker and Citizen 2.0 Migration Plan
 
+Credential-loading follow-up (2026-10-19; implemented locally): application-owned
+`app.helpers.secrets.readSecret(name)` prefers an optional `name + '_FILE'` path,
+otherwise the direct environment value, independently of mode. Keep configured mail
+credentials in local `.env` for production-mode tests. The historical mode-specific
+password-source instructions below are superseded by this [acceptance record](../alignment-acceptance.md#portable-credential-loading--2026-10-19).
+Production rollout remains separate.
+
+Production database password follow-up (2026-10-19): rotate only the legacy
+`jaysylvester` app password, coordinate production `DB_PASSWORD` and app/proxy
+recreation, and verify fresh TCP login plus rejection of the replaced value. Retain
+the `postgres` administrator password set during the accepted role migration.
+The historical credential-preservation/exclusion passages below describe that
+completed migration, not this separately authorized rotation. See the
+[current acceptance record](../alignment-acceptance.md#production-app-password-rotation--2026-10-19)
+and [operator steps](../../README.md#production-database-passwords).
+
 Database-role correction (development accepted 2026-09-13; production accepted
 2026-09-14): the application uses a separate CRUD-only login in each environment.
 The bootstrap superuser is for administration only.
