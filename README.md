@@ -164,7 +164,7 @@ The test command uses the dependency-tools image because the offline Git test ne
 Git and npm there; lint uses the development dependencies in the app image.
 `test:compose` renders configuration through the host Docker CLI; it also needs Node
 available where that CLI runs. See the [alignment acceptance record](docs/alignment-acceptance.md)
-for checks, exceptions, and pending production work.
+for checks, exceptions, and completed production acceptance.
 
 ### Database backup and restore
 
@@ -221,13 +221,12 @@ Both production images must build successfully before app is recreated, followed
 by proxy and the existing retrying smoke test. PostgreSQL is left in place.
 A failed check/build prevents replacement and reports relevant state/logs.
 
-These script changes have local mocked/image/config verification. Live adoption
-requires its own authorized deployment; `prod test` targets the real site.
-
-During authorized live adoption, record `sudo docker compose version` and verify
-that the server supports `config --environment` and
-`up --no-build --pull never --no-recreate`. Local checks used Compose 5.5.1; they do
-not establish server compatibility. Resolve unsupported flags before deployment.
+Production adoption and the credential follow-ups were verified by the operator on
+2026-10-19; see the [acceptance record](docs/alignment-acceptance.md#production-acceptance--2026-10-19).
+Use `./scripts/prod deploy` for normal deployments. It builds
+`jaysylvester-app:production` and `jaysylvester-proxy:production` itself before
+recreating services; no separate first-build command is needed. `prod test` targets
+the real site.
 
 Operational commands:
 
@@ -252,13 +251,14 @@ use `dev:start` to start the stack.
 
 ### Production database passwords
 
-The role migration retained the old application password. The approved follow-up
-rotates only production `jaysylvester`; keep the separately established `postgres`
-administrator password. See the [acceptance record](docs/alignment-acceptance.md#production-app-password-rotation--2026-10-19)
-for execution status. Development credentials stay unchanged.
+The production application-password follow-up is complete as of the operator's
+2026-10-19 verification. Only the `jaysylvester` application password was rotated;
+the separately established `postgres` administrator password was retained.
+See the [acceptance record](docs/alignment-acceptance.md#production-app-password-rotation--2026-10-19).
+Development credentials stay unchanged.
 
-For a separately authorized rotation, retain recovery access and the current images.
-Stop app, then use PostgreSQL's hidden password prompt:
+For future separately authorized rotations, retain recovery access and the current
+images, then use PostgreSQL's hidden password prompt:
 
 ```sh
 ./scripts/prod compose stop app
@@ -269,16 +269,15 @@ Enter the new password twice at psql's hidden prompts. The command reads the rol
 name from configured `DB_USER`; it does not change `postgres`, edit `.env`, or manage
 services. It accepts no password arguments. Update only `DB_PASSWORD` in production
 `/var/www/jaysylvester.com/.env` to the same value, preserving its protected
-permissions and other values. Then recreate app followed by proxy:
+permissions and other values. Then use the normal deployment workflow:
 
 ```sh
-./scripts/prod compose up -d --no-build --pull never --no-deps --force-recreate app
-./scripts/prod compose up -d --no-build --pull never --no-deps --force-recreate proxy
-./scripts/prod test
+./scripts/prod deploy
 ```
 
-The wrapper uses `sudo docker`, like `postgres-password`; no Python helper is needed.
-No database recreation, image build, pull, or code deployment is needed for rotation.
+Deployment builds both production images, recreates app followed by proxy, and runs
+the smoke test. The database container remains in place. The password wrapper uses
+`sudo docker`, like `postgres-password`; no Python helper is needed.
 Verify fresh TCP app authentication accepts the new password and rejects the old
 one; trusted socket access and existing connections do not establish this.
 Any image rollback must retain the new `DB_PASSWORD`.

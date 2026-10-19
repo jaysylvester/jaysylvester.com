@@ -4,13 +4,14 @@ Status: applied and accepted in development on 2026-09-13 and production on
 2026-09-14. This supersedes the original shared-superuser setup and the earlier
 assumption that the existing application role could be demoted in place.
 
-Production password follow-up (2026-10-19): the app-password preservation below
-records the completed role separation. A separately authorized follow-up now requires
-a new production `jaysylvester` password; retain the existing `postgres` administrator
-password. Development passwords are unchanged. See the
+Production password follow-up (2026-10-19; complete): the operator confirmed
+production verification after the `jaysylvester` application password and production
+`DB_PASSWORD` update. The existing `postgres` administrator password was retained;
+development passwords are unchanged. The app-password preservation below records
+the original role separation and is superseded by this follow-up. See the
 [current acceptance record](../alignment-acceptance.md#production-app-password-rotation--2026-10-19).
 
-## Target
+## Original role-separation target
 
 - `postgres`: administrator and database/table owner. Choose its password
   interactively and keep it only in Postico/password manager.

@@ -1,18 +1,22 @@
 # Docker and Citizen 2.0 Migration Plan
 
-Credential-loading follow-up (2026-10-19; implemented locally): application-owned
+Status: **Complete.** The operator confirmed production verification on 2026-10-19,
+including the alignment and credential follow-ups recorded in the
+[production acceptance record](../alignment-acceptance.md#production-acceptance--2026-10-19).
+The original migration milestones and procedures below remain historical context.
+
+Credential-loading follow-up (2026-10-19; accepted in production): application-owned
 `app.helpers.secrets.readSecret(name)` prefers an optional `name + '_FILE'` path,
 otherwise the direct environment value, independently of mode. Keep configured mail
 credentials in local `.env` for production-mode tests. The historical mode-specific
 password-source instructions below are superseded by this [acceptance record](../alignment-acceptance.md#portable-credential-loading--2026-10-19).
-Production rollout remains separate.
+Production acceptance is complete based on the operator's verification.
 
-Production database password follow-up (2026-10-19): rotate only the legacy
-`jaysylvester` app password, coordinate production `DB_PASSWORD` and app/proxy
-recreation, and verify fresh TCP login plus rejection of the replaced value. Retain
-the `postgres` administrator password set during the accepted role migration.
-The historical credential-preservation/exclusion passages below describe that
-completed migration, not this separately authorized rotation. See the
+Production database password follow-up (2026-10-19; complete): the legacy
+`jaysylvester` app password and production `DB_PASSWORD` were updated; the `postgres`
+administrator password set during the accepted role migration was retained.
+The historical credential-preservation/exclusion passages below describe the
+original migration and are superseded by this completed follow-up. See the
 [current acceptance record](../alignment-acceptance.md#production-app-password-rotation--2026-10-19)
 and [operator steps](../../README.md#production-database-passwords).
 
@@ -24,8 +28,8 @@ supersedes all shared DB_USER/POSTGRES_USER/password guidance below, including
 the historical shared-secret snippets. Do not execute those old snippets for a
 new installation or this corrective migration.
 
-Status: Phase 1 development Docker acceptance completed on 2026-08-09. The revised
-Citizen configuration contract and fail-closed CORS default were accepted on
+Original migration milestones: Phase 1 development Docker acceptance completed on
+2026-08-09. The revised Citizen configuration contract and fail-closed CORS default were accepted on
 2026-08-10. Phase 2 completed on 2026-08-12: the existing Droplet was rebuilt with
 Debian 13, the verified PostgreSQL 11 dump was restored into PostgreSQL 17, and the
 Citizen 2.0 app and Nginx entered production through Docker Compose. Automated and
