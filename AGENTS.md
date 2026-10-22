@@ -7,6 +7,12 @@
 - You may run read-only queries on the development database without asking.
 
 
+## Writing code
+
+- Match other code in the project in terms of style (spacing, newlines, semicolons, etc.).
+- Make the smallest possible edits. Do not conduct wholesale rewrites of files or functions unless asked to do so.
+
+
 ## Terminal commands
 
 - You may run any command that involves simple file reads (grep, git diff, etc.) or returning content for your review (echo).
