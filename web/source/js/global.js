@@ -240,6 +240,7 @@ JAY.global = ( function () {
             closeButton = dialog.querySelector('.zoom-close'),
             progress = dialog.querySelector('.zoom-progress'),
             progressThumb = progress.querySelector('span'),
+            pendingRatios = new Map(),
             previewLoadTimeout = 15000
 
       let activeTrigger,
@@ -248,10 +249,12 @@ JAY.global = ( function () {
           slides = [],
           inerted = [],
           draggingProgress = false,
+          holdingTrack = false,
           positioningTrack = false,
           openRequest = 0,
           pageScrollX = 0,
           pageScrollY = 0,
+          sizingTimer,
           resizeFrame
 
       // Return an image's decoded source ratio, excluding the placeholder used by lazy-loaded thumbnails.
@@ -279,6 +282,51 @@ JAY.global = ( function () {
 
         track.scrollLeft = slides[activeIndex].offsetLeft - track.offsetLeft - ( track.clientWidth - slides[activeIndex].clientWidth ) / 2
         updateProgress()
+      }
+
+      // Batch late dimensions after scrolling settles, preserving the visible slide's position instead of centering it.
+      const scheduleSizes = function () {
+        window.clearTimeout(sizingTimer)
+        if ( !pendingRatios.size || dialog.hidden ) return
+
+        sizingTimer = window.setTimeout(function () {
+          if ( positioningTrack || holdingTrack || draggingProgress || !slides.length ) return
+
+          const anchor = slides[activeIndex],
+                center = anchor.offsetLeft + anchor.clientWidth / 2,
+                scrollLeft = track.scrollLeft,
+                request = openRequest
+
+          positioningTrack = true
+          dialog.classList.add('is-direct-scroll')
+          pendingRatios.forEach((ratio, slide) => {
+            slide.dataset.ratio = ratio
+            sizeSlide(slide)
+          })
+          pendingRatios.clear()
+
+          let left = scrollLeft + anchor.offsetLeft + anchor.clientWidth / 2 - center
+          const maxScroll = track.scrollWidth - track.clientWidth
+
+          // Retain room for the same image position when a slide shrinks at either end of the track.
+          if ( left < 0 ) {
+            track.style.paddingLeft = ( parseFloat(getComputedStyle(track).paddingLeft) - left ) + 'px'
+            left = 0
+          } else if ( left > maxScroll ) {
+            track.style.paddingRight = ( parseFloat(getComputedStyle(track).paddingRight) + left - maxScroll ) + 'px'
+          }
+          track.scrollLeft = left
+          updateProgress()
+
+          requestAnimationFrame(() => {
+            if ( request !== openRequest || dialog.hidden ) return
+            requestAnimationFrame(() => {
+              if ( request !== openRequest || dialog.hidden ) return
+              positioningTrack = false
+              scheduleSizes()
+            })
+          })
+        }, 150)
       }
 
       // Clear the loading state for a pending viewer request without affecting a newer request.
@@ -341,6 +389,7 @@ JAY.global = ( function () {
         const left = slides[next].offsetLeft - track.offsetLeft - ( track.clientWidth - slides[next].clientWidth ) / 2
         track.scrollTo({ left: left, behavior: 'smooth' })
         update(next)
+        scheduleSizes()
       }
 
       // Reset the reusable viewer, restore page interaction, and return focus to the originating thumbnail.
@@ -353,7 +402,12 @@ JAY.global = ( function () {
         dialog.classList.remove('is-single', 'is-direct-scroll')
         progress.classList.remove('is-dragging')
         draggingProgress = false
+        holdingTrack = false
+        window.clearTimeout(sizingTimer)
+        pendingRatios.clear()
         activeIndex = 0
+        track.style.removeProperty('padding-left')
+        track.style.removeProperty('padding-right')
         track.scrollLeft = 0
         track.innerHTML = ''
         slides = []
@@ -415,7 +469,7 @@ JAY.global = ( function () {
               fallbackRatio = loadedRatio || sourceRatio(triggerImage),
               width = Math.min(Math.max(Math.ceil(window.innerWidth * window.devicePixelRatio), 1200), 2400)
 
-        // Delay track construction until the clicked Cloudinary image provides a trustworthy source ratio.
+        // Only the clicked image needs a trustworthy source ratio before the viewer opens.
         if ( !fallbackRatio ) {
           const preview = new Image(),
                 previewSource = triggerImage?.dataset.src
@@ -477,6 +531,18 @@ JAY.global = ( function () {
           figure.className = 'zoom-slide'
           figure.dataset.ratio = imageRatio
           sizeSlide(figure)
+          if ( !sourceImageRatio && item !== trigger ) {
+            const measure = function () {
+              const ratio = sourceRatio(image)
+              if ( !figure.isConnected || !ratio ) return
+
+              image.removeEventListener('load', measure)
+              if ( ratio === Number(figure.dataset.ratio) ) return
+              pendingRatios.set(figure, ratio)
+              scheduleSizes()
+            }
+            image.addEventListener('load', measure)
+          }
           image.src = preview
           image.dataset.fullSrc = sourceImage?.dataset.src ? sourceImage.dataset.src.replace('[parameters]', 'f_auto,q_80,w_' + width) : item.href
           image.dataset.original = item.href
@@ -503,7 +569,10 @@ JAY.global = ( function () {
         requestAnimationFrame(() => {
           centerActiveSlide()
           closeButton.focus()
-          requestAnimationFrame(() => { positioningTrack = false })
+          requestAnimationFrame(() => {
+            positioningTrack = false
+            scheduleSizes()
+          })
         })
       }
 
@@ -527,7 +596,10 @@ JAY.global = ( function () {
           positioningTrack = true
           slides.forEach(sizeSlide)
           centerActiveSlide()
-          requestAnimationFrame(() => { positioningTrack = false })
+          requestAnimationFrame(() => {
+            positioningTrack = false
+            scheduleSizes()
+          })
         })
       }
 
@@ -542,10 +614,18 @@ JAY.global = ( function () {
       window.addEventListener('resize', resize, { passive: true })
       track.addEventListener('pointerdown', function () {
         // Native pointer scrolling must remain free of scroll snapping on touch-capable input devices.
+        holdingTrack = true
         dialog.classList.add('is-direct-scroll')
       })
+      const releaseTrack = function () {
+        holdingTrack = false
+        scheduleSizes()
+      }
+      window.addEventListener('pointerup', releaseTrack)
+      window.addEventListener('pointercancel', releaseTrack)
       track.addEventListener('wheel', function (event) {
         dialog.classList.add('is-direct-scroll')
+        scheduleSizes()
 
         // Translate a conventional vertical mouse wheel into horizontal track movement.
         if ( slides.length > 1 && Math.abs(event.deltaY) > Math.abs(event.deltaX) ) {
@@ -560,6 +640,7 @@ JAY.global = ( function () {
         const travel = bounds.width - progressThumb.offsetWidth
         const offset = Math.max(0, Math.min(event.clientX - bounds.left - progressThumb.offsetWidth / 2, travel))
         track.scrollLeft = travel > 0 ? ( offset / travel ) * ( track.scrollWidth - track.clientWidth ) : 0
+        scheduleSizes()
       }
       progress.addEventListener('pointerdown', function (event) {
         if ( slides.length <= 1 ) return
@@ -581,6 +662,7 @@ JAY.global = ( function () {
         draggingProgress = false
         progress.classList.remove('is-dragging')
         if ( progress.hasPointerCapture(event.pointerId) ) progress.releasePointerCapture(event.pointerId)
+        scheduleSizes()
       }
       progress.addEventListener('pointerup', stopProgressDrag)
       progress.addEventListener('pointercancel', stopProgressDrag)
@@ -588,6 +670,7 @@ JAY.global = ( function () {
         // Ignore the synthetic scroll events produced while opening or clearing the reusable track.
         if ( !slides.length || positioningTrack ) return
         updateProgress()
+        scheduleSizes()
 
         // Find the slide whose center is nearest the viewport center after native scrolling.
         const center = track.scrollLeft + track.clientWidth / 2
